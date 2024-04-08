@@ -5,9 +5,9 @@
 <!-- project philosophy -->
 <img src="./readme/title2.svg"/>
 
-> An app designed for musicians who want to easily find others to play music with and perform at local venues.
+> An app where musicians can discover new talents, showcase their skills, and make music together effortlessly.
 >
-> A platform where musicians can discover new talents, showcase their skills, and make music together effortlessly.
+> Designed for musicians seeking seamless connections to form bands, play music and perform at nearby venues.
 
 ### User Stories
 
