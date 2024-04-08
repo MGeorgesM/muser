@@ -5,16 +5,19 @@
 <!-- project philosophy -->
 <img src="./readme/title2.svg"/>
 
-> A mobile app designed for musicians seeking seamless collaboration and band formation.
+> An app designed for musicians who want to easily find others to play music with and perform at local venues.
 >
-> Connect with local musicians, form bands and jam at nearby venues.
+> A platform where musicians can discover new talents, showcase their skills, and make music together effortlessly.
 
 ### User Stories
 
--   As a user, I want to browse available musicians.
--   As a user, I want to message other musicians to form a band.
--   As a user, I want to view and book available venues.
--   As a user, I want to live stream my band performance.
+-   As a user, I want to browse and message musicians to form a band so that I can connect with like-minded individuals and create music together easily.
+-   As a user, I want to view and book available venues so that I can find suitable places to showcase my band's performances and reach a wider audience.
+-   As a user, I want to live stream my band performance so that fans and potential collaborators can watch us play in real-time, regardless of their location.
+
+-   As a venue, I want to receive notifications and requests from bands interested in performing so that I can organize exiting events for my customers.
+-   As a venue, I want to easily manage bookings through the app so that I can streamline the process and focus on providing a great experience.
+-   As a venue, I want feedback from bands so that I can continuously improve and offer better services to future performers.
 
 <br><br>
 
