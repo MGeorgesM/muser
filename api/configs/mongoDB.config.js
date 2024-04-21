@@ -4,7 +4,7 @@ const connect =  () => {
     mongoose.connect(process.env.MONGODB_URI);
 
     mongoose.connection.on('connected', () => {
-        console.log('MongoDB connected');
+        console.log('Connected to Mongodb!');
     });
 
     mongoose.connection.on('error', (error) => {
