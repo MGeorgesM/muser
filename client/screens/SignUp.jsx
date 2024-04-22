@@ -15,18 +15,12 @@ import {
 const logoImg = require('../assets/logo.png');
 const { styles } = require('./SignIn');
 
-const SignUp = () => {
+const SignUp = ({ navigation }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSignIn = async () => {
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            navigation.navigate('Chat');
-        } catch (error) {
-            console.error('Error signing in:', error);
-        }
+    const handleRegister = async () => {
     };
 
     return (
@@ -65,12 +59,12 @@ const SignUp = () => {
 
                 <View style={styles.bottomInnerContainer}>
                     <TouchableOpacity style={styles.primaryBtn} onPress={handleSignIn}>
-                        <Text style={styles.primaryBtnText}>Log In</Text>
+                        <Text style={styles.primaryBtnText}>Register</Text>
                     </TouchableOpacity>
                     <Text style={styles.promptText}>
                         Have an account?{' '}
                         <Text style={styles.promptLink} onPress={() => navigation.navigate('SignUp')}>
-                            Login
+                            Log In
                         </Text>
                     </Text>
                 </View>

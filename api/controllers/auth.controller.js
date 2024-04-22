@@ -4,24 +4,24 @@ const { User } = require('../models/user.model');
 const register = async (req, res) => {
     const { email, password, fullName, userType, location, biography, profilePicture } = req.body;
 
-    if (!email || !password || !fullName || !userType || !location) {
-        return res.status(400).json({ error: 'All fields are required.' });
-    }
+    // if (!email || !password || !fullName || !userType || !location) {
+    //     return res.status(400).json({ error: 'All fields are required.' });
+    // }
 
     try {
         const firebaseUser = await admin.auth().createUser({
             email,
             password,
         });
-        
+
         const newUser = new User({
             firebaseUserId: firebaseUser.uid,
             email,
             fullName,
-            userType,
-            location,
-            biography,
-            profilePicture,
+            userType: 'musician',
+            // location,
+            // biography,
+            // profilePicture,
         });
 
         await newUser.save();
