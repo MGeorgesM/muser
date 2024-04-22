@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import {
-    StyleSheet,
     Platform,
     Image,
     View,
@@ -23,19 +22,24 @@ const SignUp = ({ navigation }) => {
     const handleRegister = async () => {
         console.log('Registering:', name, email, password);
 
-        navigation.navigate('Chat');
+        const response = await sendRequest('auth/register', requestMethods.POST, {
+            name,
+            email,
+            password,
+        });
 
-        // const response = await sendRequest('auth/register', requestMethods.POST, {
-        //     name,
-        //     email,
-        //     password,
-        // });
+        console.log('Response:', response);
 
-        // if (response.error) {
-        //     console.error('Error registering:', response.error);
-        // } else {
-        //     navigation.navigate('Chat');
-        // }
+        if (response.status === 200) {
+            navigation.navigate('ChatStack', {
+                screen: 'Chat',
+            });
+        }
+        if (response.error) {
+            console.error('Error registering:', response.error);
+        } else {
+            navigation.navigate('SignIn');
+        }
     };
 
     return (
@@ -59,7 +63,7 @@ const SignUp = ({ navigation }) => {
                             value={email}
                             keyboardType="email-address"
                             textContentType="emailAddress"
-                            autoCapitalize='none'
+                            autoCapitalize="none"
                             onChangeText={(text) => setEmail(text)}
                         />
                         <Text style={styles.label}>Password</Text>
@@ -68,7 +72,7 @@ const SignUp = ({ navigation }) => {
                             placeholder="********"
                             value={password}
                             onChangeText={(text) => setPassword(text)}
-                            autoCapitalize='none'
+                            autoCapitalize="none"
                             secureTextEntry
                         />
                     </View>

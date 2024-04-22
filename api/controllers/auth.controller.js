@@ -29,10 +29,10 @@ const register = async (req, res) => {
         return res.status(201).json({ message: 'User registered successfully.', user: newUser });
     } catch (error) {
         console.log('Registration error:', error);
-        if (error.code === 'auth/email-already-in-use') {
+        if (error.code === 'auth/email-already-exists') {
             res.status(400).json({ error: 'Email already in use.' });
         } else {
-            res.status(500).json({ error: 'Failed to register user.' });
+            res.status(500).json({ error: 'Failed to register user.' , error });
         }
     }
 };

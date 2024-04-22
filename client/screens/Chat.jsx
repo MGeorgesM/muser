@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useLayoutEffect, useCallback } from 'react';
+import React, { useState, useLayoutEffect, useCallback } from 'react';
 
-import { collection, addDoc, orderBy, query, onSnapshot } from 'firebase/firestore';
 import { auth, fireStoreDb } from '../config/firebase';
+import { collection, addDoc, orderBy, query, onSnapshot } from 'firebase/firestore';
 
 import { GiftedChat } from 'react-native-gifted-chat';
+
+const avatarLocalImg = require('../assets/avatar.png');
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
@@ -13,7 +15,6 @@ const Chat = () => {
         const q = query(collectionRef, orderBy('createdAt', 'desc'));
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            console.log('snapshot:', snapshot);
             setMessages(
                 snapshot.docs.map((doc) => ({
                     _id: doc.id,
@@ -45,8 +46,9 @@ const Chat = () => {
             onSend={(messages) => onSend(messages)}
             user={{
                 _id: auth.currentUser.uid,
-                avatar: 'https://placeimg.com/140/140/any',
+                avatar: avatarLocalImg,
             }}
+            messagesContainerStyle={{ backgroundColor: '#dbdbdb' }}
         />
     );
 };
