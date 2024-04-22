@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import * as KeyChain from 'react-native-keychain';
 import { auth } from '../config/firebase';
 import {
     StyleSheet,
@@ -27,7 +26,9 @@ const SignIn = ({ navigation }) => {
             const user = response.user;
             const token = await user.getIdToken();
             await AsyncStorage.setItem('token', token);
-            navigation.navigate('Chat');
+            navigation.navigate('ChatStack', {
+                screen: 'Chat',
+            });
         } catch (error) {
             console.error('Error signing in:', error);
         }
