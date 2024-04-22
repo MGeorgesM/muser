@@ -5,6 +5,8 @@ import { CirclePlus, Plus } from 'lucide-react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
 
+import { useRegister } from '../contexts/RegisterContext';
+
 const UserInfo = () => {
     const availableInstruments = ['Guitar', 'Bass', 'Drums', 'Vocals', 'Keyboard', 'Strings', 'Other'];
     const availableVenues = ['Bar', 'Club', 'Restaurant', 'Cafe', 'Hotel', 'Other'];
@@ -31,7 +33,7 @@ const UserInfo = () => {
         'Other',
     ];
 
-    const {UserInfo, } = useRegister();
+    const { UserInfo } = useRegister();
 
     return (
         <View style={styles.container}>
@@ -45,37 +47,47 @@ const UserInfo = () => {
             </View>
             <View>
                 <Text style={styles.inputTextProfile}>Bio</Text>
-                <TextInput />
+                <TextInput placeholder='Tell us about yourself!' style={{marginBottom:20}} />
+                <View style={{borderBottomWidth:0.5, marginBottom:20}} >
                 <Text style={styles.inputTextProfile}>Location</Text>
-                <Picker>
-                    {availableLocations.map((location) => (
-                        <Picker.Item key={location} label={location} value={location} />
-                    ))}
-                </Picker>
+                    <Picker style={{ marginHorizontal: -16, marginBottom:-12 }}>
+                        {availableLocations.map((location) => (
+                            <Picker.Item key={location} label={location} value={location} />
+                        ))}
+                    </Picker>
+                </View>
+                <View style={{borderBottomWidth:0.5, marginBottom:20}} >
                 <Text style={styles.inputTextProfile}>Instrument</Text>
-                <Picker>
-                    {availableInstruments.map((instrument) => (
-                        <Picker.Item key={instrument} label={instrument} value={instrument} />
-                    ))}
-                </Picker>
+                    <Picker style={{ marginHorizontal: -16, marginBottom:-12 }}>
+                        {availableInstruments.map((instrument) => (
+                            <Picker.Item key={instrument} label={instrument} value={instrument} />
+                        ))}
+                    </Picker>
+                </View>
+                <View style={{borderBottomWidth:0.5, marginBottom:20}} >
                 <Text style={styles.inputTextProfile}>Music Genres</Text>
-                <Picker>
-                    {availableGenres.map((genre) => (
-                        <Picker.Item key={genre} label={genre} value={genre} />
-                    ))}
-                </Picker>
+                    <Picker style={{ marginHorizontal: -16, marginBottom:-12 }}>
+                        {availableGenres.map((genre) => (
+                            <Picker.Item key={genre} label={genre} value={genre} />
+                        ))}
+                    </Picker>
+                </View>
+                <View style={{borderBottomWidth:0.5, marginBottom:20}} >
                 <Text style={styles.inputTextProfile}>Experience</Text>
-                <Picker>
-                    {availableExperiences.map((experience) => (
-                        <Picker.Item key={experience} label={experience} value={experience} />
-                    ))}
-                </Picker>
+                    <Picker style={{ marginHorizontal: -16, marginBottom:-12 }}>
+                        {availableExperiences.map((experience) => (
+                            <Picker.Item key={experience} label={experience} value={experience} />
+                        ))}
+                    </Picker>
+                </View>
+                <View style={{borderBottomWidth:0.5, marginBottom:20}} >
                 <Text style={styles.inputTextProfile}>Availability</Text>
-                <Picker>
-                    {availableAvailabilities.map((availability) => (
-                        <Picker.Item key={availability} label={availability} value={availability} />
-                    ))}
-                </Picker>
+                    <Picker style={{ marginHorizontal: -16, marginBottom:-12 }}>
+                        {availableAvailabilities.map((availability) => (
+                            <Picker.Item key={availability} label={availability} value={availability} />
+                        ))}
+                    </Picker>
+                </View>
             </View>
             <View style={styles.bottomInnerContainer}>
                 <TouchableOpacity style={styles.primaryBtn}>
