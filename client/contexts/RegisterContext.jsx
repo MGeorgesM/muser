@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, createContext, useContext } from 'react';
 
 const RegisterContext = createContext();
 
@@ -13,6 +13,8 @@ export const RegisterProvider = ({ children }) => {
         phoneNumber: '',
         profilePicture: '',
     });
+
+    console.log('RegisterProvider:', userInfo)
 
     const register = async () => {
         console.log('Registering:', userInfo);
@@ -42,4 +44,4 @@ export const RegisterProvider = ({ children }) => {
     );
 };
 
-export const useUser = () => useContext(RegisterContext);
+export const useRegister = () => useContext(RegisterContext);

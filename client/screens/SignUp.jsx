@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { useRegister } from '../contexts/RegisterContext';
+
 import {
     Platform,
     Image,
@@ -19,8 +20,17 @@ const SignUp = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleRegister = async () => {
+    const { setCurrentUserInfo } = useRegister();
 
+    const handleRegister = async () => {
+        if (!name || !email || !password) return;
+        setCurrentUserInfo({
+            name,
+            email,
+            password,
+        });
+
+        navigation.navigate('UserRole');
     };
 
     return (
