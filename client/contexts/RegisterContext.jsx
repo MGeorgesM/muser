@@ -3,7 +3,7 @@ import React, { useState, createContext, useContext } from 'react';
 const RegisterContext = createContext();
 
 export const RegisterProvider = ({ children }) => {
-    const [userInfo, setCurrentUserInfo] = useState({
+    const [userInfo, setUserInfo] = useState({
         name: '',
         email: '',
         password: '',
@@ -38,7 +38,7 @@ export const RegisterProvider = ({ children }) => {
     };
 
     return (
-        <RegisterContext.Provider value={{ userInfo, setCurrentUserInfo, register }}>
+        <RegisterContext.Provider value={{ userInfo, setUserInfo, register }}>
             {children}
         </RegisterContext.Provider>
     );

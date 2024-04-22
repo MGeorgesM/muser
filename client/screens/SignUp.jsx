@@ -20,15 +20,11 @@ const SignUp = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { setCurrentUserInfo } = useRegister();
+    const { setUserInfo } = useRegister();
 
     const handleRegister = async () => {
         if (!name || !email || !password) return;
-        setCurrentUserInfo({
-            name,
-            email,
-            password,
-        });
+        setUserInfo((prev) => ({ ...prev, name, email, password }));
 
         navigation.navigate('UserRole');
     };
