@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import * as KeyChain from 'react-native-keychain';
 import { auth } from '../config/firebase';
 import {
     StyleSheet,
@@ -12,6 +13,7 @@ import {
     KeyboardAvoidingView,
     ScrollView,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const logoImg = require('../assets/logo.png');
 
@@ -24,7 +26,7 @@ const SignIn = ({ navigation }) => {
             const response = await signInWithEmailAndPassword(auth, email, password);
             const user = response.user;
             const token = await user.getIdToken();
-            console.log(response, token)
+            await AsyncStorage.setItem('token', token);
             navigation.navigate('Chat');
         } catch (error) {
             console.error('Error signing in:', error);
@@ -44,8 +46,8 @@ const SignIn = ({ navigation }) => {
                             placeholder="user@muser.com"
                             value={email}
                             keyboardType="email-address"
-                            textContentType='emailAddress'
-                            autoCapitalize='none'
+                            textContentType="emailAddress"
+                            autoCapitalize="none"
                             onChangeText={(text) => setEmail(text)}
                         />
                         <Text style={styles.label}>Password</Text>
@@ -54,7 +56,7 @@ const SignIn = ({ navigation }) => {
                             placeholder="********"
                             value={password}
                             onChangeText={(text) => setPassword(text)}
-                            autoCapitalize='none'
+                            autoCapitalize="none"
                             secureTextEntry
                         />
                     </View>
