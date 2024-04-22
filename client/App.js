@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { auth } from './config/firebase';
 
-import { StatusBar, Platform } from 'react-native';
+import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Chat from './screens/Chat';
 import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
+import MainTabs from './screens/MainTabs';
 
 const Stack = createStackNavigator();
 
@@ -19,27 +21,43 @@ const AuthenticationStack = () => {
     );
 };
 
-const ChatStack = () => {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name="Chat" component={Chat} options={{ headerShown: false }} />
-        </Stack.Navigator>
-    );
-};
+// const ChatStack = () => {
+//     return (
+//         <Stack.Navigator>
+//             <Stack.Screen name="Chat" component={Chat} />
+//         </Stack.Navigator>
+//     );
+// };
 
-const RootNavigator = () => {
-    return (
-    
-        <NavigationContainer>
-            <StatusBar translucent={true} backgroundColor='transparent' barStyle={'dark-content'}/>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="AuthenticationStack" component={AuthenticationStack} />
-                <Stack.Screen name="ChatStack" component={ChatStack} />
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
-};
+// const RootNavigator = () => {
+//     return (
+//         <NavigationContainer>
+//             <StatusBar translucent={true} backgroundColor="transparent" barStyle={'dark-content'} />
+
+//             <Stack.Screen name="AuthenticationStack" component={AuthenticationStack} />
+
+//             <MainTabs />
+//         </NavigationContainer>
+//     );
+// };
 
 export default function App() {
-    return <RootNavigator />;
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setUser(user);
+            if(user) {
+                console.log('User:', user);
+            }
+        });
+
+        return unsubscribe;
+    }, []);
+    return (
+        <NavigationContainer>
+            <StatusBar translucent={true} backgroundColor="transparent" barStyle={'dark-content'} />
+            {user ? <MainTabs /> : <AuthenticationStack />}
+        </NavigationContainer>
+    );
 }

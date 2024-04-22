@@ -1,4 +1,5 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
+import { Text, TouchableOpacity } from 'react-native';
 
 import { auth, fireStoreDb } from '../config/firebase';
 import { collection, addDoc, orderBy, query, onSnapshot } from 'firebase/firestore';
@@ -7,10 +8,22 @@ import { GiftedChat } from 'react-native-gifted-chat';
 
 const avatarLocalImg = require('../assets/avatar.png');
 
-const Chat = () => {
+const Chat = ({ navigation }) => {
     const [messages, setMessages] = useState([]);
+    
+    const handleLogout = async () => {
+        await auth.signOut();
+        navigation.navigate('authenticationStack', 'SignIn');
+    };
 
     useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity onPress={handleLogout}>
+                    <Text>Logout</Text>
+                </TouchableOpacity>
+            ),
+        });
         const collectionRef = collection(fireStoreDb, 'chats');
         const q = query(collectionRef, orderBy('createdAt', 'desc'));
 
