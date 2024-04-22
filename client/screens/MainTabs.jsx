@@ -4,8 +4,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MessagesSquare, Store, Radio, AudioWaveform, UserRound } from 'lucide-react-native';
 
 import Chat from './Chat';
-import SignIn from './SignIn';
-import SignUp from './SignUp';
 
 const Tab = createBottomTabNavigator();
 

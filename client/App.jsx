@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { auth } from './config/firebase';
+import React from 'react';
 
 import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Chat from './screens/Chat';
+import { UserProvider, useUser } from './contexts/UserContext';
+
 import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
 import MainTabs from './screens/MainTabs';
@@ -41,23 +41,34 @@ const AuthenticationStack = () => {
 //     );
 // };
 
-export default function App() {
-    const [user, setUser] = useState(null);
+const AppNavigator = () => {
+    const { currentUser } = useUser();
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            setUser(user);
-            if(user) {
-                console.log('User:', user);
-            }
-        });
+    return currentUser ? <MainTabs /> : <AuthenticationStack />;
+};
 
-        return unsubscribe;
-    }, []);
+const App = () => {
+    // const [user, setUser] = useState(null);
+
+    // useEffect(() => {
+    //     const unsubscribe = auth.onAuthStateChanged((user) => {
+    //         setUser(user);
+    //         if (user) {
+    //             console.log('User:', user);
+    //         }
+    //     });
+
+    //     return unsubscribe;
+    // }, []);
+
     return (
-        <NavigationContainer>
-            <StatusBar translucent={true} backgroundColor="transparent" barStyle={'dark-content'} />
-            {user ? <MainTabs /> : <AuthenticationStack />}
-        </NavigationContainer>
+        <UserProvider>
+            <NavigationContainer>
+                <StatusBar translucent={true} backgroundColor="transparent" barStyle={'dark-content'} />
+                <AppNavigator />
+            </NavigationContainer>
+        </UserProvider>
     );
-}
+};
+
+export default App;

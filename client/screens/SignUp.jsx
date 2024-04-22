@@ -20,26 +20,7 @@ const SignUp = ({ navigation }) => {
     const [password, setPassword] = useState('');
 
     const handleRegister = async () => {
-        console.log('Registering:', name, email, password);
 
-        const response = await sendRequest('auth/register', requestMethods.POST, {
-            name,
-            email,
-            password,
-        });
-
-        console.log('Response:', response);
-
-        if (response.status === 200) {
-            navigation.navigate('ChatStack', {
-                screen: 'Chat',
-            });
-        }
-        if (response.error) {
-            console.error('Error registering:', response.error);
-        } else {
-            navigation.navigate('SignIn');
-        }
     };
 
     return (

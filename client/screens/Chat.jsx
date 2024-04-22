@@ -13,7 +13,7 @@ const Chat = ({ navigation }) => {
     
     const handleLogout = async () => {
         await auth.signOut();
-        navigation.navigate('authenticationStack', 'SignIn');
+        navigation.navigate('SignIn');
     };
 
     useLayoutEffect(() => {
