@@ -10,7 +10,8 @@ export const RegisterProvider = ({ children }) => {
         userType: 'musician',
         location: '',
         biography: '',
-        phoneNumber: '',
+        insturment: '',
+        genre:'',
         profilePicture: '',
     });
 
