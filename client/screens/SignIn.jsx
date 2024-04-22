@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { StyleSheet, Image, View, Text, TextInput, Button, TouchableOpacity } from 'react-native';
 
-cosnt logoImg = require('../assets/');
+const logoImg = require('../assets/logo.png');
 
 const SignIn = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -20,23 +20,34 @@ const SignIn = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Welcome Back!</Text>
-            <Text style={styles.label}>Email</Text>
-            <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} />
-            <Text style={styles.label}>Password</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
-            <TouchableOpacity style={styles.primaryBtn} onPress={handleSignIn}>
-                <Text style={styles.primaryBtnText}>Log In</Text>
-            </TouchableOpacity>
-            <Text style={styles.promptText}>
-                Don't have an account? <Text style={styles.promptLink} onPress={() => navigation.navigate('SignUp')}>Register</Text>
-            </Text>
+            <View style={styles.topInnerContainer}>
+                <Image style={styles.welcomeLogo} source={logoImg} />
+                <Text style={styles.header}>Welcome Back!</Text>
+                <View>
+                    <Text style={styles.label}>Email</Text>
+                    <TextInput style={styles.input} placeholder="user@muser.com" value={email} onChangeText={setEmail} />
+                    <Text style={styles.label}>Password</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="password"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry
+                    />
+                </View>
+            </View>
+
+            <View style={styles.bottomInnerContainer}>
+                <TouchableOpacity style={styles.primaryBtn} onPress={handleSignIn}>
+                    <Text style={styles.primaryBtnText}>Log In</Text>
+                </TouchableOpacity>
+                <Text style={styles.promptText}>
+                    Don't have an account?{' '}
+                    <Text style={styles.promptLink} onPress={() => navigation.navigate('SignUp')}>
+                        Register
+                    </Text>
+                </Text>
+            </View>
         </View>
     );
 };
@@ -45,12 +56,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
-        justifyContent: 'center',
+        justifyContent: 'space-between',
     },
     header: {
         textAlign: 'center',
         fontSize: 32,
         fontWeight: 'bold',
+        marginTop: 24,
         marginBottom: 44,
     },
     label: {
@@ -89,8 +101,21 @@ const styles = StyleSheet.create({
     promptLink: {
         color: 'blue',
         textDecorationLine: 'underline',
-    },  
+    },
 
+    welcomeLogo: {
+        width: 130,
+        height: 130,
+        alignSelf: 'center',
+    },
+
+    topInnerContainer: {
+        marginTop: 128,
+    },
+
+    bottomInnerContainer: {
+        marginBottom: 64,
+    },
 });
 
 export default SignIn;
