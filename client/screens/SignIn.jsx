@@ -42,6 +42,7 @@ const SignIn = ({ navigation }) => {
                             value={email}
                             keyboardType="email-address"
                             textContentType='emailAddress'
+                            autoCapitalize='none'
                             onChangeText={(text) => setEmail(text)}
                         />
                         <Text style={styles.label}>Password</Text>

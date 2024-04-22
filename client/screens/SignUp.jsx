@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { auth } from '../config/firebase';
+import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import {
     StyleSheet,
     Platform,
@@ -21,6 +21,21 @@ const SignUp = ({ navigation }) => {
     const [password, setPassword] = useState('');
 
     const handleRegister = async () => {
+        console.log('Registering:', name, email, password);
+
+        navigation.navigate('Chat');
+
+        // const response = await sendRequest('auth/register', requestMethods.POST, {
+        //     name,
+        //     email,
+        //     password,
+        // });
+
+        // if (response.error) {
+        //     console.error('Error registering:', response.error);
+        // } else {
+        //     navigation.navigate('Chat');
+        // }
     };
 
     return (
@@ -44,6 +59,7 @@ const SignUp = ({ navigation }) => {
                             value={email}
                             keyboardType="email-address"
                             textContentType="emailAddress"
+                            autoCapitalize='none'
                             onChangeText={(text) => setEmail(text)}
                         />
                         <Text style={styles.label}>Password</Text>
@@ -58,7 +74,7 @@ const SignUp = ({ navigation }) => {
                 </View>
 
                 <View style={styles.bottomInnerContainer}>
-                    <TouchableOpacity style={styles.primaryBtn} onPress={handleSignIn}>
+                    <TouchableOpacity style={styles.primaryBtn} onPress={handleRegister}>
                         <Text style={styles.primaryBtnText}>Register</Text>
                     </TouchableOpacity>
                     <Text style={styles.promptText}>

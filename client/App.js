@@ -9,7 +9,7 @@ import SignUp from './screens/SignUp';
 
 const Stack = createStackNavigator();
 
-const ChatStack = () => {
+const AuthenticationStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name="SignIn" component={SignIn} options={{headerShown:false}}/>

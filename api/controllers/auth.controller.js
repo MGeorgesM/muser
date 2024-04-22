@@ -2,7 +2,7 @@ const admin = require('../configs/firebaseAdmin.config');
 const { User } = require('../models/user.model');
 
 const register = async (req, res) => {
-    const { email, password, fullName, userType, location, biography, profilePicture } = req.body;
+    const { email, password, name, userType, location, biography, profilePicture } = req.body;
 
     // if (!email || !password || !fullName || !userType || !location) {
     //     return res.status(400).json({ error: 'All fields are required.' });
@@ -17,7 +17,7 @@ const register = async (req, res) => {
         const newUser = new User({
             firebaseUserId: firebaseUser.uid,
             email,
-            fullName,
+            name,
             userType: 'musician',
             // location,
             // biography,
