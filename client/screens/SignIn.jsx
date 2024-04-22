@@ -21,7 +21,10 @@ const SignIn = ({ navigation }) => {
 
     const handleSignIn = async () => {
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const response = await signInWithEmailAndPassword(auth, email, password);
+            const user = response.user;
+            const token = await user.getIdToken();
+            console.log(response, token)
             navigation.navigate('Chat');
         } catch (error) {
             console.error('Error signing in:', error);
@@ -48,9 +51,10 @@ const SignIn = ({ navigation }) => {
                         <Text style={styles.label}>Password</Text>
                         <TextInput
                             style={styles.input}
-                            placeholder="password"
+                            placeholder="********"
                             value={password}
                             onChangeText={(text) => setPassword(text)}
+                            autoCapitalize='none'
                             secureTextEntry
                         />
                     </View>

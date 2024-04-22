@@ -43,7 +43,7 @@ const SignUp = ({ navigation }) => {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.topInnerContainer}>
                     <Image style={styles.welcomeLogo} source={logoImg} />
-                    <Text style={styles.header}>Welcome Back!</Text>
+                    <Text style={styles.header}>Join Muser</Text>
                     <View>
                         <Text style={styles.label}>Name</Text>
                         <TextInput
@@ -65,9 +65,10 @@ const SignUp = ({ navigation }) => {
                         <Text style={styles.label}>Password</Text>
                         <TextInput
                             style={styles.input}
-                            placeholder="password"
+                            placeholder="********"
                             value={password}
                             onChangeText={(text) => setPassword(text)}
+                            autoCapitalize='none'
                             secureTextEntry
                         />
                     </View>
@@ -79,7 +80,7 @@ const SignUp = ({ navigation }) => {
                     </TouchableOpacity>
                     <Text style={styles.promptText}>
                         Have an account?{' '}
-                        <Text style={styles.promptLink} onPress={() => navigation.navigate('SignUp')}>
+                        <Text style={styles.promptLink} onPress={() => navigation.navigate('SignIn')}>
                             Log In
                         </Text>
                     </Text>
