@@ -1,34 +1,50 @@
 require('dotenv').config();
 
 export default {
-  "expo": {
-    "name": "client",
-    "slug": "client",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+  expo: {
+    name: "client",
+    slug: "client",
+    version: "1.0.0",
+    orientation: "portrait",
+    icon: "./assets/icon.png",
+    userInterfaceStyle: "light",
+    splash: {
+      image: "./assets/splash.png",
+      resizeMode: "contain",
+      backgroundColor: "#ffffff"
     },
-    "assetBundlePatterns": [
+    assetBundlePatterns: [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
+    ios: {
+      supportsTablet: true
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+    android: {
+      adaptiveIcon: {
+        foregroundImage: "./assets/adaptive-icon.png",
+        backgroundColor: "#ffffff"
+      },
+      package: "com.sef.muser" 
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    web: {
+      favicon: "./assets/favicon.png"
     },
-    "extra": {
+    plugins: [
+      "expo-build-properties",
+      ["expo-build-properties", {
+        android: {
+          minSdkVersion: 24,
+          compileSdkVersion: 34,
+          targetSdkVersion: 33
+        }
+      }],
+      "@stream-io/video-react-native-sdk",
+      ["@config-plugins/react-native-webrtc", {
+        cameraPermission: "Allow $(PRODUCT_NAME) to access your camera",
+        microphonePermission: "Allow $(PRODUCT_NAME) to access your microphone"
+      }],
+    ],
+    extra: {
       apiKey: process.env.API_KEY,
       authDomain: process.env.AUTH_DOMAIN,
       projectId: process.env.PROJECT_ID,

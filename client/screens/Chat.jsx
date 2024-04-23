@@ -27,13 +27,23 @@ const avatarLocalImg = require('../assets/avatar.png');
 const Chat = ({ navigation }) => {
     const [messages, setMessages] = useState([]);
     const [isPopupVisible, setIsPopupVisible] = useState(false);
-    const [participants, setParticipants] = useState([auth.currentUser.uid, 'tycoJeTqx2gdJJoyj1MvoE2pFpj1'].sort());
+    // const [participants, setParticipants] = useState([auth.currentUser.uid, 'tycoJeTqx2gdJJoyj1MvoE2pFpj1'].sort());
+    // const [participants, setParticipants] = useState([auth.currentUser.uid, other].sort());
     const [newParticipantUid, setNewParticipantUid] = useState('');
 
-    const { handleSignOut } = useUser();
-
-    const otherUserId2 = 'au2B1vguBTOA2zZQp6VVcGoMt1C2';
+    const otherUserId2 = 'tycoJeTqx2gdJJoyj1MvoE2pFpj1';
+    const otherUserId = 'au2B1vguBTOA2zZQp6VVcGoMt1C2';
     const currentUser = auth.currentUser.uid;
+    const participants = [currentUser];
+
+    if (currentUser !== otherUserId) {
+        participants.push(otherUserId);
+    } else {
+        participants.push(otherUserId2);
+    }
+
+    participants.sort();
+    const { handleSignOut } = useUser();
 
     console.log('current user sending chat', currentUser);
     console.log('participants', participants);
@@ -61,7 +71,6 @@ const Chat = ({ navigation }) => {
 
     const addParticipant = async () => {
         if (newParticipantUid && !participants.includes(newParticipantUid)) {
-            
             const chatRef = getChat();
 
             if (chatRef) {

@@ -55,6 +55,7 @@ export const UserProvider = ({ children }) => {
 
     const handleSignOut = async () => {
         await auth.signOut();
+        await AsyncStorage.removeItem('token');
         navigation.navigate('SignIn');
     };
 
