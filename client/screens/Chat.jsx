@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, TextInput, Button, Modal } from 'react-native';
 
 import { auth, fireStoreDb } from '../config/firebase';
 import {
@@ -19,43 +19,41 @@ import { useUser } from '../contexts/UserContext';
 
 import { GiftedChat } from 'react-native-gifted-chat';
 
+import { LogOut, PlusIcon } from 'lucide-react-native';
+
 const avatarLocalImg = require('../assets/avatar.png');
 
 const Chat = ({ navigation }) => {
     const [messages, setMessages] = useState([]);
+    const [participants, setParticipants] = useState([auth.currentUser.uid, 'tycoJeTqx2gdJJoyj1MvoE2pFpj1'].sort());
     const { handleSignOut } = useUser();
-    const otherUserId = 'tycoJeTqx2gdJJoyj1MvoE2pFpj1';
+
     const otherUserId2 = 'au2B1vguBTOA2zZQp6VVcGoMt1C2';
     const currentUser = auth.currentUser.uid;
 
-    const getOrCreateChat = async () => {
-        const participants = [currentUser];
-        if (otherUserId !== currentUser) {
-            participants.push(otherUserId);
-        } else if (otherUserId2) {
-            participants.push(otherUserId2);
-        }
-
-        participants.sort();
-
+    const getChat = async () => {
         const chatRef = collection(fireStoreDb, 'chats');
 
-        console.log('currentuser chat', currentUser);
+        console.log('current user sending chat', currentUser);
 
         const q = query(chatRef, where('participant_ids', '==', participants));
 
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
-            const newChatRef = doc(collection(fireStoreDb, 'chats'));
-            await setDoc(newChatRef, {
-                participant_ids: participants,
-                createdAt: serverTimestamp(),
-            });
-            return newChatRef;
+            return;
         } else {
             return querySnapshot.docs[0].ref;
         }
+    };
+
+    const createChat = async () => {
+        const newChatRef = doc(collection(fireStoreDb, 'chats'));
+        await setDoc(newChatRef, {
+            participant_ids: participants,
+            createdAt: serverTimestamp(),
+        });
+        return newChatRef;
     };
 
     useLayoutEffect(() => {
@@ -68,7 +66,10 @@ const Chat = ({ navigation }) => {
         });
 
         const setupMessagesListener = async () => {
-            const chatRef = await getOrCreateChat();
+            const chatRef = await getChat();
+
+            if (!chatRef) return;
+
             const messagesRef = collection(chatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
 
@@ -86,40 +87,16 @@ const Chat = ({ navigation }) => {
             return unsubscribe;
         };
 
-        // const collectionRef = collection(fireStoreDb, 'chats');
-        // const q = query(collectionRef, orderBy('createdAt', 'desc'));
-
-        // const unsubscribe = onSnapshot(q, (snapshot) => {
-        //     setMessages(
-        //         snapshot.docs.map((doc) => ({
-        //             _id: doc.id,
-        //             text: doc.data().text,
-        //             createdAt: doc.data().createdAt.toDate(),
-        //             user: doc.data().user,
-        //         }))
-        //     );
-        // });
-
-        // return unsubscribe;
-
         const unsubscribe = setupMessagesListener();
         return () => unsubscribe.then((unsub) => unsub());
     }, []);
 
     const onSend = useCallback(async (messages = []) => {
-        // setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
+        let chatRef = await getChat();
 
-        // const { _id, text, createdAt, user } = messages[0];
-        // addDoc(collection(fireStoreDb, 'chats'), {
-        //     _id,
-        //     text,
-        //     createdAt,
-        //     user,
-        // });
-
-        const chatRef = await getOrCreateChat();
-
-        if (!chatRef) return;
+        if (!chatRef) {
+            chatRef = await createChat();
+        }
 
         const messagesRef = collection(chatRef, 'messages');
 
