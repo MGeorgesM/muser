@@ -2,11 +2,20 @@ const admin = require('../configs/firebaseAdmin.config');
 const { User } = require('../models/user.model');
 
 const register = async (req, res) => {
-    const { email, password, name, userType, location, biography, profilePicture } = req.body;
-
-    // if (!email || !password || !fullName || !userType || !location) {
-    //     return res.status(400).json({ error: 'All fields are required.' });
-    // }
+    const {
+        name,
+        email,
+        password,
+        userType,
+        about,
+        venueType,
+        location,
+        instrument,
+        genre,
+        experience,
+        availability,
+        profilePicture,
+    } = req.body;
 
     try {
         const firebaseUser = await admin.auth().createUser({
@@ -18,11 +27,24 @@ const register = async (req, res) => {
             firebaseUserId: firebaseUser.uid,
             email,
             name,
-            userType: 'musician',
-            // location,
-            // biography,
-            // profilePicture,
+            userType,
+            about,
+            location,
+            profilePicture,
         });
+
+        if (userType === 'musician') {
+            newUser.musicianProfile = {
+                instrument,
+                genre,
+                experience,
+                availability,
+            };
+        } else if (userType === 'venue') {
+            newUser.venueProfile = {
+                venueType,
+            };
+        }
 
         await newUser.save();
 
@@ -32,7 +54,7 @@ const register = async (req, res) => {
         if (error.code === 'auth/email-already-exists') {
             res.status(400).json({ error: 'Email already in use.' });
         } else {
-            res.status(500).json({ error: 'Failed to register user.' , error });
+            res.status(500).json({ error: 'Failed to register user.', error });
         }
     }
 };

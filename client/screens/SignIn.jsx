@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../config/firebase';
+import { useUser } from '../contexts/UserContext';
 import {
     StyleSheet,
     Platform,
@@ -12,7 +11,6 @@ import {
     KeyboardAvoidingView,
     ScrollView,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const logoImg = require('../assets/logo.png');
 
@@ -20,19 +18,21 @@ const SignIn = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSignIn = async () => {
-        try {
-            const response = await signInWithEmailAndPassword(auth, email, password);
-            const user = response.user;
-            const token = await user.getIdToken();
-            await AsyncStorage.setItem('token', token);
-            navigation.navigate('ChatStack', {
-                screen: 'Chat',
-            });
-        } catch (error) {
-            console.error('Error signing in:', error);
-        }
-    };
+    const { handleSignIn } = useUser();
+
+    // const handleSignIn = async () => {
+    //     try {
+    //         const response = await signInWithEmailAndPassword(auth, email, password);
+    //         const user = response.user;
+    //         const token = await user.getIdToken();
+    //         await AsyncStorage.setItem('token', token);
+    //         navigation.navigate('ChatStack', {
+    //             screen: 'Chat',
+    //         });
+    //     } catch (error) {
+    //         console.error('Error signing in:', error);
+    //     }
+    // };
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -64,7 +64,7 @@ const SignIn = ({ navigation }) => {
                 </View>
 
                 <View style={styles.bottomInnerContainer}>
-                    <TouchableOpacity style={styles.primaryBtn} onPress={handleSignIn}>
+                    <TouchableOpacity style={styles.primaryBtn} onPress={() => handleSignIn(email, password)}>
                         <Text style={styles.primaryBtnText}>Log In</Text>
                     </TouchableOpacity>
                     <Text style={styles.promptText}>

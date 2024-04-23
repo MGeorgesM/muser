@@ -4,7 +4,7 @@ const musicianProfileSchema = new mongoose.Schema({
     experience: { type: String, enum: ['Beginner', 'Intermediate', 'Advanced'] },
     availability: { type: String, enum: ['Morning', 'Afternoon', 'Evening'] },
     genre: {
-        type: [String],
+        type: String,
         enum: [
             'Rock',
             'Pop',
@@ -55,17 +55,17 @@ const userSchema = new mongoose.Schema({
         index: true,
         enum: ['musician', 'venue'],
     },
-    biography: {
-        type: String,
-        required: false,
-    },
-    profilePicture: {
+    about: {
         type: String,
         required: false,
     },
     location: {
         type: String,
         enum: ['North', 'South', 'Beirut', 'Mount Lebanon', 'Bekaa', 'Baalbek-Hermel', 'Other'],
+    },
+    profilePicture: {
+        type: String,
+        required: false,
     },
     venueProfile: venueProfileSchema,
     musicianProfile: musicianProfileSchema,

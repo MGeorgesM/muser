@@ -28,26 +28,6 @@ const AuthenticationStack = () => {
     );
 };
 
-// const ChatStack = () => {
-//     return (
-//         <Stack.Navigator>
-//             <Stack.Screen name="Chat" component={Chat} />
-//         </Stack.Navigator>
-//     );
-// };
-
-// const RootNavigator = () => {
-//     return (
-//         <NavigationContainer>
-//             <StatusBar translucent={true} backgroundColor="transparent" barStyle={'dark-content'} />
-
-//             <Stack.Screen name="AuthenticationStack" component={AuthenticationStack} />
-
-//             <MainTabs />
-//         </NavigationContainer>
-//     );
-// };
-
 const AppNavigator = () => {
     const { currentUser } = useUser();
 
@@ -55,26 +35,13 @@ const AppNavigator = () => {
 };
 
 const App = () => {
-    // const [user, setUser] = useState(null);
-
-    // useEffect(() => {
-    //     const unsubscribe = auth.onAuthStateChanged((user) => {
-    //         setUser(user);
-    //         if (user) {
-    //             console.log('User:', user);
-    //         }
-    //     });
-
-    //     return unsubscribe;
-    // }, []);
-
     return (
-        <UserProvider>
-            <NavigationContainer>
+        <NavigationContainer>
+            <UserProvider>
                 <StatusBar translucent={true} backgroundColor="transparent" barStyle={'dark-content'} />
                 <AppNavigator />
-            </NavigationContainer>
-        </UserProvider>
+            </UserProvider>
+        </NavigationContainer>
     );
 };
 
