@@ -35,6 +35,11 @@ const UserInfo = () => {
 
     const { userInfo, setUserInfo, register } = useRegister();
 
+
+    const handlePickerChange = (key, value) => {
+        setUserInfo((prev) => ({ ...prev, [key]: value }));
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.headerProfile}>Complete Your Profile</Text>
@@ -47,10 +52,19 @@ const UserInfo = () => {
             </View>
             <View>
                 <Text style={styles.inputTextProfile}>Bio</Text>
-                <TextInput placeholder="Tell us about yourself!" style={{ marginBottom: 20 }} />
+                <TextInput
+                    placeholder="Tell us about yourself!"
+                    style={{ marginBottom: 20 }}
+                    value={userInfo.biography}
+                    onChangeText={(text) => setUserInfo((prev) => ({ ...prev, biography: text }))}
+                />
                 <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
                     <Text style={styles.inputTextProfile}>Location</Text>
-                    <Picker style={{ marginHorizontal: -16, marginBottom: -12 }} selectedValue={userInfo.location} onValueChange={}>
+                    <Picker
+                        style={{ marginHorizontal: -16, marginBottom: -12 }}
+                        selectedValue={userInfo.location}
+                        onValueChange={(newValue) => handlePickerChange('location', newValue)}
+                    >
                         {availableLocations.map((location) => (
                             <Picker.Item key={location} value={location} />
                         ))}
@@ -58,7 +72,11 @@ const UserInfo = () => {
                 </View>
                 <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
                     <Text style={styles.inputTextProfile}>Instrument</Text>
-                    <Picker style={{ marginHorizontal: -16, marginBottom: -12 }} selectedValue={userInfo.location} onValueChange={}>
+                    <Picker
+                        style={{ marginHorizontal: -16, marginBottom: -12 }}
+                        selectedValue={userInfo.instrument}
+                        onValueChange={(newValue) => handlePickerChange('instrument', newValue)}
+                    >
                         {availableInstruments.map((instrument) => (
                             <Picker.Item key={instrument} value={instrument} />
                         ))}
@@ -66,7 +84,11 @@ const UserInfo = () => {
                 </View>
                 <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
                     <Text style={styles.inputTextProfile}>Music Genres</Text>
-                    <Picker style={{ marginHorizontal: -16, marginBottom: -12 }} selectedValue={userInfo.location} onValueChange={}>
+                    <Picker
+                        style={{ marginHorizontal: -16, marginBottom: -12 }}
+                        selectedValue={userInfo.genre}
+                        onValueChange={(newValue) => handlePickerChange('genre', newValue)}
+                    >
                         {availableGenres.map((genre) => (
                             <Picker.Item key={genre} value={genre} />
                         ))}
@@ -74,7 +96,11 @@ const UserInfo = () => {
                 </View>
                 <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
                     <Text style={styles.inputTextProfile}>Experience</Text>
-                    <Picker style={{ marginHorizontal: -16, marginBottom: -12 }} selectedValue={userInfo.location} onValueChange={}>
+                    <Picker
+                        style={{ marginHorizontal: -16, marginBottom: -12 }}
+                        selectedValue={userInfo.experience}
+                        onValueChange={(newValue) => handlePickerChange('experience', newValue)}
+                    >
                         {availableExperiences.map((experience) => (
                             <Picker.Item key={experience} value={experience} />
                         ))}
@@ -82,7 +108,11 @@ const UserInfo = () => {
                 </View>
                 <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
                     <Text style={styles.inputTextProfile}>Availability</Text>
-                    <Picker style={{ marginHorizontal: -16, marginBottom: -12 }} selectedValue={userInfo.location} onValueChange={}>
+                    <Picker
+                        style={{ marginHorizontal: -16, marginBottom: -12 }}
+                        selectedValue={userInfo.availability}
+                        onValueChange={(newValue) => handlePickerChange('availability', newValue)}
+                    >
                         {availableAvailabilities.map((availability) => (
                             <Picker.Item key={availability} value={availability} />
                         ))}
@@ -91,7 +121,7 @@ const UserInfo = () => {
             </View>
             <View style={styles.bottomInnerContainer}>
                 <TouchableOpacity style={styles.primaryBtn}>
-                    <Text style={styles.primaryBtnText}>Register</Text>
+                    <Text style={styles.primaryBtnText} onPress={register}>Register</Text>
                 </TouchableOpacity>
             </View>
         </View>

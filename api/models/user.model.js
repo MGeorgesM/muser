@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const musicianProfileSchema = new mongoose.Schema({
     experience: { type: String, enum: ['Beginner', 'Intermediate', 'Advanced'] },
     availability: { type: String, enum: ['Morning', 'Afternoon', 'Evening'] },
-    genres: {
+    genre: {
         type: [String],
         enum: [
             'Rock',

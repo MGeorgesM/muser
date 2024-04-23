@@ -11,6 +11,7 @@ export const RegisterProvider = ({ children }) => {
         location: '',
         biography: '',
         insturment: '',
+        availability: '', 
         genre:'',
         profilePicture: '',
     });
