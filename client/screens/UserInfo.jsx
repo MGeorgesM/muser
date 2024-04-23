@@ -1,7 +1,6 @@
 import React from 'react';
-
-import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { StyleSheet, Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
+// import { TextInput } from 'react-native-gesture-handler';
 
 import { useRegister } from '../contexts/RegisterContext';
 
@@ -56,16 +55,16 @@ const UserInfo = ({ navigation }) => {
                 </TouchableOpacity>
                 <Text style={styles.headerProfile}>Complete Your Profile</Text>
             </View>
-            <View
-                style={[styles.addPhotoPrompt, { justifyContent: !userInfo.profilePicture ? 'space-between' : 'left' }]}
-            >
+            <View style={styles.addPhotoPrompt}>
                 {userInfo.profilePicture ? (
                     <>
                         <Image
                             source={{ uri: userInfo.profilePicture }}
                             style={{ width: 100, height: 100, borderRadius: 50 }}
                         />
-                        <Text>{userInfo.name ?? 'Muser'}</Text>
+                        <TouchableOpacity onPress={handleImagePicker}>
+                            <CirclePlus size={50} color={'black'} />
+                        </TouchableOpacity>
                     </>
                 ) : (
                     <>
@@ -77,12 +76,12 @@ const UserInfo = ({ navigation }) => {
                 )}
             </View>
             <View>
-                <Text style={styles.inputTextProfile}>Bio</Text>
+                <Text style={styles.inputTextProfile}>{userInfo.userType === 'venue' ? 'Description' : 'Bio'}</Text>
                 <TextInput
                     placeholder="Tell us about yourself!"
                     style={{ marginBottom: 20 }}
-                    value={userInfo.biography}
-                    onChangeText={(text) => setUserInfo((prev) => ({ ...prev, biography: text }))}
+                    value={userInfo.about}
+                    onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
                 />
                 <View>
                     <EditProfilePicker
@@ -212,6 +211,7 @@ const styles = StyleSheet.create({
     addPhotoPrompt: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
         marginBottom: 32,
     },
     addPhotoText: {

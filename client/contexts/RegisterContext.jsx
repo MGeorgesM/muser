@@ -1,4 +1,6 @@
 import React, { useState, createContext, useContext } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 const RegisterContext = createContext();
 
@@ -8,42 +10,36 @@ export const RegisterProvider = ({ children }) => {
         email: '',
         password: '',
         userType: 'musician',
+        about: '',
+        venueType: '',
         location: '',
-        biography: '',
         instrument: '',
-        availability: '', 
-        genre:'',
+        genre: '',
+        experience: '',
+        availability: '',
         profilePicture: '',
     });
 
-    console.log('RegisterProvider:', userInfo)
+    const navigation = useNavigation();
+
+    console.log('RegisterProvider:', userInfo);
 
     const register = async () => {
         console.log('Registering:', userInfo);
 
-        // const response = await sendRequest('auth/register', requestMethods.POST, {
-        //     userInfo,
-        // });
+        const response = await sendRequest(requestMethods.POST, 'auth/register', userInfo);
 
-        // console.log('Response:', response);
+        console.log('Response:', response);
 
-        // if (response.status === 200) {
-        //     navigation.navigate('ChatStack', {
-        //         screen: 'Chat',
-        //     });
-        // }
-        // if (response.error) {
-        //     console.error('Error registering:', response.error);
-        // } else {
-        //     navigation.navigate('SignIn');
-        // }
+        if (response.status === 201) {
+            navigation.navigate('Chat');
+        } else if (response.error) {
+            console.error('Error registering:', response.error);
+            navigation.navigate('SignIn');
+        }
     };
 
-    return (
-        <RegisterContext.Provider value={{ userInfo, setUserInfo, register }}>
-            {children}
-        </RegisterContext.Provider>
-    );
+    return <RegisterContext.Provider value={{ userInfo, setUserInfo, register }}>{children}</RegisterContext.Provider>;
 };
 
 export const useRegister = () => useContext(RegisterContext);

@@ -19,10 +19,10 @@ const AuthenticationStack = () => {
     return (
         <RegisterProvider>
             <Stack.Navigator>
-                <Stack.Screen name="UserInfo" component={userInfo} options={{ headerShown: false }} />
                 <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
                 <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
                 <Stack.Screen name="UserRole" component={UserRole} options={{ headerShown: false }} />
+                <Stack.Screen name="UserInfo" component={userInfo} options={{ headerShown: false }} />
             </Stack.Navigator>
         </RegisterProvider>
     );
