@@ -1,54 +1,80 @@
 import React from 'react';
-import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native';
 
-import { CirclePlus, Plus } from 'lucide-react-native';
+import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import { Picker } from '@react-native-picker/picker';
 
 import { useRegister } from '../contexts/RegisterContext';
 
-const UserInfo = () => {
-    const availableInstruments = ['Guitar', 'Bass', 'Drums', 'Vocals', 'Keyboard', 'Strings', 'Other'];
-    const availableVenues = ['Bar', 'Club', 'Restaurant', 'Cafe', 'Hotel', 'Other'];
-    const availableExperiences = ['Beginner', 'Intermediate', 'Advanced'];
-    const availableAvailabilities = ['Morning', 'Afternoon', 'Evening'];
-    const availableLocations = ['North', 'South', 'Beirut', 'Mount Lebanon', 'Bekaa', 'Baalbek-Hermel', 'Other'];
-    const availableGenres = [
-        'Rock',
-        'Pop',
-        'Jazz',
-        'Blues',
-        'Metal',
-        'Folk',
-        'Country',
-        'Classical',
-        'Electronic',
-        'Hip-Hop',
-        'Rap',
-        'Reggae',
-        'R&B',
-        'Soul',
-        'Punk',
-        'Indie',
-        'Other',
-    ];
+import { CirclePlus, Plus, ArrowLeft } from 'lucide-react-native';
 
+import EditProfilePicker from '../components/EditProfilePicker/EditProfilePicker';
+
+import * as ImagePicker from 'expo-image-picker';
+
+import {
+    availableLocations,
+    availableInstruments,
+    availableGenres,
+    availableExperiences,
+    availableAvailabilities,
+} from '../core/enums/userDetails';
+
+const UserInfo = ({ navigation }) => {
     const { userInfo, setUserInfo, register } = useRegister();
-
 
     const handlePickerChange = (key, value) => {
         setUserInfo((prev) => ({ ...prev, [key]: value }));
-    }
+    };
+
+    const handleImagePicker = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            console.error('Permission to access media library was denied');
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.cancelled && result.assets && result.assets.length > 0) {
+            const uri = result.assets[0].uri;
+            setUserInfo((prev) => ({ ...prev, profilePicture: uri }));
+        }
+    };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.headerProfile}>Complete Your Profile</Text>
-            <View style={styles.addPhotoPrompt}>
-                <Text style={styles.addPhotoText}>Add a Photo</Text>
-                <TouchableOpacity>
-                    <CirclePlus size={50} color={'black'} />
+            <View style={styles.headerContainer}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <ArrowLeft size={24} color="black" />
                 </TouchableOpacity>
-                {/* Add a circle with the plus icon inside of it when clicked should open up the phone gallery */}
+                <Text style={styles.headerProfile}>Complete Your Profile</Text>
+            </View>
+            <View
+                style={[styles.addPhotoPrompt, { justifyContent: !userInfo.profilePicture ? 'space-between' : 'left' }]}
+            >
+                {userInfo.profilePicture ? (
+                    <>
+                        <Image
+                            source={{ uri: userInfo.profilePicture }}
+                            style={{ width: 100, height: 100, borderRadius: 50 }}
+                        />
+                        <Text>{userInfo.name ?? 'Muser'}</Text>
+                    </>
+                ) : (
+                    <>
+                        <Text style={styles.addPhotoText}>Add a Photo</Text>
+                        <TouchableOpacity onPress={handleImagePicker}>
+                            <CirclePlus size={50} color={'black'} />
+                        </TouchableOpacity>
+                    </>
+                )}
             </View>
             <View>
                 <Text style={styles.inputTextProfile}>Bio</Text>
@@ -58,7 +84,39 @@ const UserInfo = () => {
                     value={userInfo.biography}
                     onChangeText={(text) => setUserInfo((prev) => ({ ...prev, biography: text }))}
                 />
-                <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
+                <View>
+                    <EditProfilePicker
+                        label="Location"
+                        items={availableLocations}
+                        selectedValue={userInfo.location}
+                        onValueChange={(value) => handlePickerChange('location', value)}
+                    />
+                    <EditProfilePicker
+                        label="Instrument"
+                        items={availableInstruments}
+                        selectedValue={userInfo.instrument}
+                        onValueChange={(value) => handlePickerChange('instrument', value)}
+                    />
+                    <EditProfilePicker
+                        label="Music Genres"
+                        items={availableGenres}
+                        selectedValue={userInfo.genre}
+                        onValueChange={(value) => handlePickerChange('genre', value)}
+                    />
+                    <EditProfilePicker
+                        label="Experience"
+                        items={availableExperiences}
+                        selectedValue={userInfo.experience}
+                        onValueChange={(value) => handlePickerChange('experience', value)}
+                    />
+                    <EditProfilePicker
+                        label="Availability"
+                        items={availableAvailabilities}
+                        selectedValue={userInfo.availability}
+                        onValueChange={(value) => handlePickerChange('availability', value)}
+                    />
+                </View>
+                {/* <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
                     <Text style={styles.inputTextProfile}>Location</Text>
                     <Picker
                         style={{ marginHorizontal: -16, marginBottom: -12 }}
@@ -66,7 +124,7 @@ const UserInfo = () => {
                         onValueChange={(newValue) => handlePickerChange('location', newValue)}
                     >
                         {availableLocations.map((location) => (
-                            <Picker.Item key={location} value={location} />
+                            <Picker.Item key={location} value={location} label={location} />
                         ))}
                     </Picker>
                 </View>
@@ -78,7 +136,7 @@ const UserInfo = () => {
                         onValueChange={(newValue) => handlePickerChange('instrument', newValue)}
                     >
                         {availableInstruments.map((instrument) => (
-                            <Picker.Item key={instrument} value={instrument} />
+                            <Picker.Item key={instrument} value={instrument} label={instrument} />
                         ))}
                     </Picker>
                 </View>
@@ -90,7 +148,7 @@ const UserInfo = () => {
                         onValueChange={(newValue) => handlePickerChange('genre', newValue)}
                     >
                         {availableGenres.map((genre) => (
-                            <Picker.Item key={genre} value={genre} />
+                            <Picker.Item key={genre} value={genre} label={genre} />
                         ))}
                     </Picker>
                 </View>
@@ -102,7 +160,7 @@ const UserInfo = () => {
                         onValueChange={(newValue) => handlePickerChange('experience', newValue)}
                     >
                         {availableExperiences.map((experience) => (
-                            <Picker.Item key={experience} value={experience} />
+                            <Picker.Item key={experience} value={experience} label={experience} />
                         ))}
                     </Picker>
                 </View>
@@ -114,14 +172,16 @@ const UserInfo = () => {
                         onValueChange={(newValue) => handlePickerChange('availability', newValue)}
                     >
                         {availableAvailabilities.map((availability) => (
-                            <Picker.Item key={availability} value={availability} />
+                            <Picker.Item key={availability} value={availability} label={availability} />
                         ))}
                     </Picker>
-                </View>
+                </View> */}
             </View>
             <View style={styles.bottomInnerContainer}>
                 <TouchableOpacity style={styles.primaryBtn}>
-                    <Text style={styles.primaryBtnText} onPress={register}>Register</Text>
+                    <Text style={styles.primaryBtnText} onPress={register}>
+                        Register
+                    </Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -134,17 +194,23 @@ const styles = StyleSheet.create({
     container: {
         height: '100%',
         paddingHorizontal: 20,
+        marginTop: 32,
         justifyContent: 'center',
+    },
+
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 16,
+        gap: 16,
     },
     headerProfile: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'left',
-        marginBottom: 32,
     },
     addPhotoPrompt: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 32,
     },

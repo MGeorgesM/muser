@@ -4,13 +4,13 @@ const RegisterContext = createContext();
 
 export const RegisterProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState({
-        name: '',
+        name: null,
         email: '',
         password: '',
         userType: 'musician',
         location: '',
         biography: '',
-        insturment: '',
+        instrument: '',
         availability: '', 
         genre:'',
         profilePicture: '',
@@ -21,22 +21,22 @@ export const RegisterProvider = ({ children }) => {
     const register = async () => {
         console.log('Registering:', userInfo);
 
-        const response = await sendRequest('auth/register', requestMethods.POST, {
-            userInfo,
-        });
+        // const response = await sendRequest('auth/register', requestMethods.POST, {
+        //     userInfo,
+        // });
 
-        console.log('Response:', response);
+        // console.log('Response:', response);
 
-        if (response.status === 200) {
-            navigation.navigate('ChatStack', {
-                screen: 'Chat',
-            });
-        }
-        if (response.error) {
-            console.error('Error registering:', response.error);
-        } else {
-            navigation.navigate('SignIn');
-        }
+        // if (response.status === 200) {
+        //     navigation.navigate('ChatStack', {
+        //         screen: 'Chat',
+        //     });
+        // }
+        // if (response.error) {
+        //     console.error('Error registering:', response.error);
+        // } else {
+        //     navigation.navigate('SignIn');
+        // }
     };
 
     return (
