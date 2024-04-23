@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
-import { Text, TouchableOpacity, TextInput, Button, Modal } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, TextInput, Button, Modal } from 'react-native';
 
 import { auth, fireStoreDb } from '../config/firebase';
 import {
@@ -13,33 +13,36 @@ import {
     doc,
     setDoc,
     getDocs,
+    updateDoc,
 } from 'firebase/firestore';
 
 import { useUser } from '../contexts/UserContext';
 
 import { GiftedChat } from 'react-native-gifted-chat';
 
-import { LogOut, PlusIcon } from 'lucide-react-native';
+import { LogOut, PlusIcon, View } from 'lucide-react-native';
 
 const avatarLocalImg = require('../assets/avatar.png');
 
 const Chat = ({ navigation }) => {
     const [messages, setMessages] = useState([]);
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [participants, setParticipants] = useState([auth.currentUser.uid, 'tycoJeTqx2gdJJoyj1MvoE2pFpj1'].sort());
+    const [newParticipantUid, setNewParticipantUid] = useState('');
+
     const { handleSignOut } = useUser();
 
     const otherUserId2 = 'au2B1vguBTOA2zZQp6VVcGoMt1C2';
     const currentUser = auth.currentUser.uid;
 
+    console.log('current user sending chat', currentUser);
+    console.log('participants', participants);
+
     const getChat = async () => {
         const chatRef = collection(fireStoreDb, 'chats');
-
-        console.log('current user sending chat', currentUser);
-
         const q = query(chatRef, where('participant_ids', '==', participants));
 
         const querySnapshot = await getDocs(q);
-
         if (querySnapshot.empty) {
             return;
         } else {
@@ -56,18 +59,45 @@ const Chat = ({ navigation }) => {
         return newChatRef;
     };
 
+    const addParticipant = async () => {
+        if (newParticipantUid && !participants.includes(newParticipantUid)) {
+            
+            const chatRef = getChat();
+
+            if (chatRef) {
+                try {
+                    await updateDoc(chatRef, {
+                        participant_ids: [...participants, newParticipantUid].sort(),
+                    });
+                } catch (error) {
+                    console.error('Error adding participant', error);
+                }
+            }
+
+            setParticipants([...participants, newParticipantUid]);
+            setIsPopupVisible(false);
+            setNewParticipantUid('');
+        }
+
+        console.log('participants', participants);
+    };
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <TouchableOpacity onPress={handleSignOut}>
-                    <Text>Logout</Text>
-                </TouchableOpacity>
+                <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={handleSignOut}>
+                        <LogOut size={30} color={'black'} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setIsPopupVisible(true)}>
+                        <PlusIcon size={30} color={'black'} />
+                    </TouchableOpacity>
+                </View>
             ),
         });
 
         const setupMessagesListener = async () => {
             const chatRef = await getChat();
-
             if (!chatRef) return;
 
             const messagesRef = collection(chatRef, 'messages');
@@ -114,16 +144,65 @@ const Chat = ({ navigation }) => {
     });
 
     return (
-        <GiftedChat
-            messages={messages}
-            onSend={(messages) => onSend(messages)}
-            user={{
-                _id: auth.currentUser.uid,
-                avatar: avatarLocalImg,
-            }}
-            messagesContainerStyle={{ backgroundColor: '#dbdbdb' }}
-        />
+        <>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isPopupVisible}
+                onRequestClose={() => setIsPopupVisible(false)}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={setNewParticipantUid}
+                            value={newParticipantUid}
+                            placeholder="Enter User UID"
+                        />
+                        {/* <TouchableOpacity title="Add Participant" onPress={addParticipant} /> */}
+                        <TouchableOpacity style={{ margin: 64, height: 32, width: 64 }} onPress={addParticipant}>
+                            <Text>Add Participant</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            <GiftedChat
+                messages={messages}
+                onSend={(messages) => onSend(messages)}
+                user={{
+                    _id: auth.currentUser.uid,
+                    avatar: avatarLocalImg,
+                }}
+                messagesContainerStyle={{ backgroundColor: '#dbdbdb' }}
+            />
+        </>
     );
 };
+
+const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        flex: 1,
+        marginTop: 64,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 5,
+    },
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+        width: '80%',
+    },
+});
 
 export default Chat;
