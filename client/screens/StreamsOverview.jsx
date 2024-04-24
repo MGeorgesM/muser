@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
 
 import { ChevronLeft } from 'lucide-react-native';
-import { utilities } from '../styles/utilities';
+import { colors, utilities } from '../styles/utilities';
 
 import shows from '../core/tools/fakeShows';
-const StreamsOverview = () => {
+const StreamsOverview = ({ navigation }) => {
     const StreamCard = ({ show }) => {
         return (
             <View style={styles.cardContainer}>
@@ -26,17 +26,20 @@ const StreamsOverview = () => {
         );
     };
     return (
-        <View style={[utilities.container, styles.overviewContainer]}>
-            <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
-                <ChevronLeft size={24} color="black" style={{ position: 'absolute', left: 0 }} />
-                <Text style={[utilities.textL, utilities.textBold]}>Shows</Text>
-            </View>
+        <View style={styles.main}>
+            <View style={[utilities.container, styles.overviewContainer]}>
+                <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
+                    <ChevronLeft size={24} color="black" style={{ position: 'absolute', left: 0 }} 
+                    onPress={() => navigation.goBack()}/>
+                    <Text style={[utilities.textL, utilities.textBold]}>Shows</Text>
+                </View>
 
-            <FlatList
-                data={shows}
-                keyExtractor={(item) => item.name}
-                renderItem={({ item }) => <StreamCard show={item} />}
-            ></FlatList>
+                <FlatList
+                    data={shows}
+                    keyExtractor={(item) => item.name}
+                    renderItem={({ item }) => <StreamCard show={item} />}
+                ></FlatList>
+            </View>
         </View>
     );
 };
@@ -44,9 +47,13 @@ const StreamsOverview = () => {
 export default StreamsOverview;
 
 const styles = StyleSheet.create({
+    main: {
+        flex: 1,
+        backgroundColor: colors.darkGray,
+    },
     overviewContainer: {
         marginTop: 64,
-        backgroundColor: '#dbdbdb',
+        backgroundColor: 'white',
         borderTopEndRadius: utilities.borderRadius.xl,
         borderTopLeftRadius: utilities.borderRadius.xl,
         paddingTop: 24,
