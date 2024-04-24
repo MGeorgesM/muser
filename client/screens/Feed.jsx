@@ -12,10 +12,10 @@ import randomUsers from '../core/tools/fakeUsers';
 const Feed = ({ navigation }) => {
     const [users, setUsers] = useState(randomUsers);
 
-    const CustomHeader = ({ username, avatarUri }) => {
+    const CustomHeader = ({ username, avatar }) => {
         return (
             <View style={styles.headerContainer}>
-                <Image source={avatarUri} style={styles.avatar} />
+                <Image source={avatar} style={styles.avatar} />
                 <View style={styles.textContainer}>
                     <Text style={[styles.welcomeDisplay, utilities.textM, utilities.noMb]}>Welcome</Text>
                     <Text style={[utilities.textL, utilities.textBold]}>{username}</Text>
@@ -24,10 +24,10 @@ const Feed = ({ navigation }) => {
         );
     };
 
-    const MemberCard = ({ username, photoUri }) => {
+    const MemberCard = ({ username, photo, height }) => {
         return (
-            <View style={styles.cardContainer}>
-                <Image source={photoUri} style={styles.photo} />
+            <View style={[styles.cardContainer, { height: height || 180 }]}>
+                <Image source={photo} style={styles.photo} />
                 <View style={styles.overlay}>
                     <Text style={styles.username}>{username}</Text>
                     <Guitar size={20} color="white" />
@@ -38,16 +38,28 @@ const Feed = ({ navigation }) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: () => <CustomHeader username="Johny Mouawad" avatarUri={avatar} />,
+            headerTitle: () => <CustomHeader username="Johny Mouawad" avatar={avatar} />,
         });
     });
 
     return (
-        <FlatList style={styles.cardsContainer} contentContainerStyle={{justifyContent:'center'}}>
-            {users && users.length > 0 && users.map((user) => 
-                (<MemberCard key={user.firebaseUserId} username={user.name} photoUri={user.profilePicture} />)
-            )}
-        </FlatList>
+        // <View style={styles.cardsContainer}>
+        //     {users && users.length > 0 && users.map((user) =>
+        //         (<MemberCard key={user.firebaseUserId} username={user.name} photo={user.profilePicture} />)
+        //     )}
+        // </View>
+
+        <FlatList
+            data={users}
+            renderItem={({ item }) => {
+                const randomHeight = Math.random() < 0.5 ? 290 : 180;
+                return <MemberCard username={item.name} photo={item.profilePicture} height={randomHeight} />;
+            }}
+            keyExtractor={(item) => item.firebaseUserId}
+            numColumns={2}
+            style={{ flex: 1 }}
+            contentContainerStyle={styles.cardsContainer}
+        />
     );
 };
 
@@ -69,16 +81,21 @@ const styles = StyleSheet.create({
     },
 
     cardsContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
+        // flexDirection: 'row',
+        // flexWrap: 'wrap',
+        // justifyContent: 'center',
+        // gap: 16,
 
-        gap: 16,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingTop: 8,
     },
     cardContainer: {
         width: 170,
-        height: 180,
         borderRadius: utilities.borderRadius.m,
         overflow: 'hidden',
+        margin: 8,
     },
     photo: {
         width: '100%',
