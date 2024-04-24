@@ -34,9 +34,8 @@ export const UserProvider = ({ children }) => {
     const handleSignIn = async (email, password) => {
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
-            navigation.navigate('Chat');
             if (response.status === 200) {
-                navigation.navigate('Chat');
+                navigation.navigate('Feed');
             }
         } catch (error) {
             console.error('Error signing in:', error);
@@ -46,7 +45,7 @@ export const UserProvider = ({ children }) => {
     const handleSignUp = async (userInfo) => {
         const response = await sendRequest(requestMethods.POST, 'auth/register', userInfo);
         if (response.status === 201) {
-            navigation.navigate('Chat');
+            navigation.navigate('Feed');
         } else if (response.error) {
             console.error('Error registering:', response.error);
             navigation.navigate('SignIn');

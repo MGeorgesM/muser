@@ -3,7 +3,11 @@ import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MessagesSquare, Store, Radio, AudioWaveform, UserRound } from 'lucide-react-native';
 
+import Profile from './Profile';
+import Venues from './Venues';
 import Chat from './Chat';
+import Feed from './Feed';
+import Live from './Live';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,10 +20,14 @@ const MainTabs = () => {
 
                     if (route.name === 'Chat') {
                         IconComponent = MessagesSquare;
-                    } else if (route.name === 'SignIn') {
-                        IconComponent = UserRound;
-                    } else if (route.name === 'SignUp') {
+                    } else if (route.name === 'Feed') {
+                        IconComponent = AudioWaveform;
+                    } else if (route.name === 'Live') {
+                        IconComponent = Radio;
+                    } else if (route.name === 'Venues') {
                         IconComponent = Store;
+                    } else if (route.name === 'Profile') {
+                        IconComponent = UserRound;
                     }
 
                     return <IconComponent color={color} size={24} />;
@@ -38,7 +46,11 @@ const MainTabs = () => {
                 },
             })}
         >
+            <Tab.Screen name="Venues" component={Venues} />
             <Tab.Screen name="Chat" component={Chat} />
+            <Tab.Screen name="Feed" component={Feed} />
+            <Tab.Screen name="Live" component={Live} />
+            <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>
     );
 };

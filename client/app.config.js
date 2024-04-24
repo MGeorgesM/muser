@@ -29,21 +29,21 @@ export default {
     web: {
       favicon: "./assets/favicon.png"
     },
-    plugins: [
-      "expo-build-properties",
-      ["expo-build-properties", {
-        android: {
-          minSdkVersion: 24,
-          compileSdkVersion: 34,
-          targetSdkVersion: 33
-        }
-      }],
-      "@stream-io/video-react-native-sdk",
-      ["@config-plugins/react-native-webrtc", {
-        cameraPermission: "Allow $(PRODUCT_NAME) to access your camera",
-        microphonePermission: "Allow $(PRODUCT_NAME) to access your microphone"
-      }],
-    ],
+    // plugins: [
+    //   "expo-build-properties",
+    //   ["expo-build-properties", {
+    //     android: {
+    //       minSdkVersion: 24,
+    //       compileSdkVersion: 34,
+    //       targetSdkVersion: 33
+    //     }
+    //   }],
+    //   "@stream-io/video-react-native-sdk",
+    //   ["@config-plugins/react-native-webrtc", {
+    //     cameraPermission: "Allow $(PRODUCT_NAME) to access your camera",j
+    //     microphonePermission: "Allow $(PRODUCT_NAME) to access your microphone"
+    //   }],
+    // ],
     extra: {
       apiKey: process.env.API_KEY,
       authDomain: process.env.AUTH_DOMAIN,

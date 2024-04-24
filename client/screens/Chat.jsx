@@ -91,20 +91,39 @@ const Chat = ({ navigation }) => {
         console.log('participants', participants);
     };
 
+    const onSend = useCallback(async (messages = []) => {
+        let chatRef = await getChat();
+
+        if (!chatRef) {
+            chatRef = await createChat();
+        }
+
+        const messagesRef = collection(chatRef, 'messages');
+
+        messages.forEach(async (message) => {
+            const { _id, text, createdAt, user } = message;
+            await addDoc(messagesRef, {
+                _id,
+                text,
+                createdAt,
+                user,
+            });
+        });
+
+        setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
+    });
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={handleSignOut}>
-                        <LogOut size={30} color={'black'} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setIsPopupVisible(true)}>
-                        <PlusIcon size={30} color={'black'} />
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={handleSignOut}>
+                    <LogOut size={30} color={'black'} />
+                </TouchableOpacity>
             ),
         });
+    }, []);
 
+    useLayoutEffect(() => {
         const setupMessagesListener = async () => {
             const chatRef = await getChat();
             if (!chatRef) return;
@@ -129,28 +148,6 @@ const Chat = ({ navigation }) => {
         const unsubscribe = setupMessagesListener();
         return () => unsubscribe.then((unsub) => unsub());
     }, []);
-
-    const onSend = useCallback(async (messages = []) => {
-        let chatRef = await getChat();
-
-        if (!chatRef) {
-            chatRef = await createChat();
-        }
-
-        const messagesRef = collection(chatRef, 'messages');
-
-        messages.forEach(async (message) => {
-            const { _id, text, createdAt, user } = message;
-            await addDoc(messagesRef, {
-                _id,
-                text,
-                createdAt,
-                user,
-            });
-        });
-
-        setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
-    });
 
     return (
         <>
