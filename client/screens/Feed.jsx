@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, Image, ScrollView, FlatList } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
+import { StyleSheet, Text, View, Image, ScrollView, FlatList } from 'react-native';
 
+import MasonryList from '@react-native-seoul/masonry-list';
 import { colors, utilities, borderRadius } from '../styles/utilities';
 
 import { Guitar } from 'lucide-react-native';
@@ -49,10 +50,10 @@ const Feed = ({ navigation }) => {
         //     )}
         // </View>
 
-        <FlatList
+        <MasonryList
             data={users}
             renderItem={({ item }) => {
-                const randomHeight = Math.random() < 0.5 ? 290 : 180;
+                const randomHeight = Math.random() < 0.4 ? 290 : 180;
                 return <MemberCard username={item.name} photo={item.profilePicture} height={randomHeight} />;
             }}
             keyExtractor={(item) => item.firebaseUserId}
