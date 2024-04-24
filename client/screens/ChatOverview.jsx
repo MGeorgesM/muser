@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
 import { colors, utilities } from '../styles/utilities';
 
@@ -9,6 +9,14 @@ import chatsData from '../core/tools/fakeChats';
 
 
 const ChatOverview = ({ navigation }) => {
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+        headerTitle: 'Chats',
+    });
+  })
+
+
   console.log(chatsData)
     const ChatCard = ({ chat }) => {
         return (

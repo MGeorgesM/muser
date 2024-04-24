@@ -17,9 +17,6 @@ const MainTabs = () => {
         <Tab.Navigator
             initialRouteName="Chat"
             screenOptions={({ route }) => ({
-                headerStyle: {
-                    height: 128,
-                },
                 tabBarIcon: ({ focused, color, size }) => {
                     let IconComponent;
 
@@ -54,7 +51,7 @@ const MainTabs = () => {
             <Tab.Screen name="Venues" component={Venues} />
             <Tab.Screen name="Chat" component={ChatNavigator} options={{ headerShown: false }} />
             <Tab.Screen name="Feed" component={FeedNavigator} options={{ headerShown: false }} />
-            <Tab.Screen name="Live" component={Live} />
+            <Tab.Screen name="Live" component={Live} options={{ headerShown: false }} />
             <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>
     );

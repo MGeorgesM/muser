@@ -22,7 +22,7 @@ import { LogOut, PlusIcon, View } from 'lucide-react-native';
 
 const avatarLocalImg = require('../assets/avatar.png');
 
-const Chat = ({ params }) => {
+const Chat = ({ route }) => {
     const [messages, setMessages] = useState([]);
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     // const [participants, setParticipants] = useState([auth.currentUser.uid, 'tycoJeTqx2gdJJoyj1MvoE2pFpj1'].sort());
