@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const colors = {
     primary: '#212529',
+    black: '#212529',
     darkGray: '#495057',
     lightGray: '#D9D9D9',
     gray: '#ADB5BD',
@@ -15,8 +16,21 @@ export const colors = {
 export const utilities = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        paddingHorizontal:20,
+    },
+
+    flexRow: {
+        flexDirection: 'row',
+    },
+
+    center: {
         alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    spaceBetween:{
+      alignItems: 'center',
+        justifyContent: 'space-between',  
     },
 
     textCenter: {
@@ -75,18 +89,12 @@ export const utilities = StyleSheet.create({
         elevation: 10,
     },
 
-
-
     borderRadius: {
         s: 12,
         m: 18,
         l: 24,
         xl: 36,
     },
-
-
-
-
 
     border: {
         borderWidth: 0.5,
