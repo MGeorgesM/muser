@@ -1,26 +1,42 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
 
+import { ChevronLeft } from 'lucide-react-native';
 import { utilities } from '../styles/utilities';
 
-showImage = require('../assets/show.jpg');
-
+import shows from '../core/tools/fakeShows';
 const StreamsOverview = () => {
-    const StreamCard = ({ streamName, date, imageUrl }) => {
+    const StreamCard = ({ show }) => {
         return (
             <View style={styles.cardContainer}>
-                <Image source={imageUrl} style={styles.backgroundImage} />
+                <Image source={show.imageUrl} style={styles.backgroundImage} />
                 <View style={styles.overlay}>
-                    <Text style={styles.streamName}>{streamName}</Text>
-                    <Text style={styles.date}>{date}</Text>
+                    <View>
+                        <Text style={[styles.streamName]}>{show.name}</Text>
+
+                        <Text style={styles.date}>{show.date}</Text>
+                    </View>
+                    <View style={styles.avatarsDisplay}>
+                        {show.band.members.map((member) => (
+                            <Image source={member.avatar} style={{ width: 32, height: 32, borderRadius: 16 }} />
+                        ))}
+                    </View>
                 </View>
             </View>
         );
     };
     return (
         <View style={[utilities.container, styles.overviewContainer]}>
-            <Text style={[utilities.textL, utilities.textBold, utilities.textCenter, { marginBottom: 36 }]}>Shows</Text>
-            <StreamCard streamName={'The Jazzy Show'} date={'24/03/2024'} imageUrl={showImage} />
+            <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
+                <ChevronLeft size={24} color="black" style={{ position: 'absolute', left: 0 }} />
+                <Text style={[utilities.textL, utilities.textBold]}>Shows</Text>
+            </View>
+
+            <FlatList
+                data={shows}
+                keyExtractor={(item) => item.name}
+                renderItem={({ item }) => <StreamCard show={item} />}
+            ></FlatList>
         </View>
     );
 };
@@ -29,7 +45,7 @@ export default StreamsOverview;
 
 const styles = StyleSheet.create({
     overviewContainer: {
-        marginTop: 63,
+        marginTop: 64,
         backgroundColor: '#dbdbdb',
         borderTopEndRadius: utilities.borderRadius.xl,
         borderTopLeftRadius: utilities.borderRadius.xl,
@@ -50,22 +66,28 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     overlay: {
+        flexDirection: 'row',
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
-        height: '33%',
+        height: '50%',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        padding: 10,
-        justifyContent: 'center',
+        padding: 20,
+        justifyContent: 'space-between',
+    },
+    avatarsDisplay: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
     },
     streamName: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'white',
     },
     date: {
-        fontSize: 14,
+        fontSize: 16,
         color: 'white',
     },
 });
