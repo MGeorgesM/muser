@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
 const MainTabs = () => {
     return (
         <Tab.Navigator
-            initialRouteName="Chat"
+            initialRouteName="Live"
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let IconComponent;
