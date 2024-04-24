@@ -9,6 +9,13 @@ const locations = ['North', 'South', 'Beirut', 'Mount Lebanon', 'Bekaa', 'Baalbe
 const girlimage = require('../../assets/girlimage.jpg');
 const guyimage = require('../../assets/guyimage.jpg');
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+        [array[i], array[j]] = [array[j], array[i]]; // swap elements
+    }
+    return array;
+}
 
 const users = Array.from({ length: 10 }, (_, i) => ({
     firebaseUserId: `user${i + 1}`,
@@ -27,6 +34,6 @@ const users = Array.from({ length: 10 }, (_, i) => ({
     venueProfile: undefined
 }));
 
-export default users;
+export default shuffleArray(users);
 
 console.log(users);

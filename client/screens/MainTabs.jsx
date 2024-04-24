@@ -3,10 +3,11 @@ import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MessagesSquare, Store, Radio, AudioWaveform, UserRound } from 'lucide-react-native';
 
+import FeedNavigator from '../navigators/FeedNavigator';
+
 import Profile from './Profile';
 import Venues from './Venues';
 import Chat from './Chat';
-import Feed from './Feed';
 import Live from './Live';
 
 const Tab = createBottomTabNavigator();
@@ -52,7 +53,7 @@ const MainTabs = () => {
         >
             <Tab.Screen name="Venues" component={Venues} />
             <Tab.Screen name="Chat" component={Chat} />
-            <Tab.Screen name="Feed" component={Feed} />
+            <Tab.Screen name="Feed" component={FeedNavigator} options={{headerShown:false}} />
             <Tab.Screen name="Live" component={Live} />
             <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>

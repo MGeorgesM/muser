@@ -1,14 +1,15 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, FlatList } from 'react-native';
-
-import MasonryList from '@react-native-seoul/masonry-list';
-import { colors, utilities, borderRadius } from '../styles/utilities';
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 
 import { Guitar } from 'lucide-react-native';
 
-const avatar = require('../assets/avatar.png');
+import { colors, utilities } from '../styles/utilities';
+
+import MasonryList from '@react-native-seoul/masonry-list';
 
 import randomUsers from '../core/tools/fakeUsers';
+
+const avatar = require('../assets/avatar.png');
 
 const Feed = ({ navigation }) => {
     const [users, setUsers] = useState(randomUsers);
@@ -25,15 +26,16 @@ const Feed = ({ navigation }) => {
         );
     };
 
-    const MemberCard = ({ username, photo, height }) => {
+    const MemberCard = ({ username, photo, height, navigation }) => {
         return (
-            <View style={[styles.cardContainer, { height: height || 180 }]}>
+            <TouchableOpacity style={[styles.cardContainer, { height: height || 180 }]}
+            onPress={() => navigation.navigate('ProfileDetails', {username, photo})}>
                 <Image source={photo} style={styles.photo} />
                 <View style={styles.overlay}>
                     <Text style={styles.username}>{username}</Text>
                     <Guitar size={20} color="white" />
                 </View>
-            </View>
+            </TouchableOpacity>
         );
     };
 
