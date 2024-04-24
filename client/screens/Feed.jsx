@@ -1,13 +1,17 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
-import React, { useLayoutEffect } from 'react';
+import { StyleSheet, Text, View, Image, ScrollView, FlatList } from 'react-native';
+import React, { useLayoutEffect, useState } from 'react';
 
 import { colors, utilities, borderRadius } from '../styles/utilities';
 
 import { Guitar } from 'lucide-react-native';
 
-const avatar = require('../assets/user.jpg');
+const avatar = require('../assets/avatar.png');
+
+import randomUsers from '../core/tools/fakeUsers';
 
 const Feed = ({ navigation }) => {
+    const [users, setUsers] = useState(randomUsers);
+
     const CustomHeader = ({ username, avatarUri }) => {
         return (
             <View style={styles.headerContainer}>
@@ -39,9 +43,11 @@ const Feed = ({ navigation }) => {
     });
 
     return (
-        <View style={utilities.container}>
-            <MemberCard username={'Jane Doe'} photoUri={avatar} />
-        </View>
+        <FlatList style={styles.cardsContainer} contentContainerStyle={{justifyContent:'center'}}>
+            {users && users.length > 0 && users.map((user) => 
+                (<MemberCard key={user.firebaseUserId} username={user.name} photoUri={user.profilePicture} />)
+            )}
+        </FlatList>
     );
 };
 
@@ -62,6 +68,12 @@ const styles = StyleSheet.create({
         marginBottom: -2,
     },
 
+    cardsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+
+        gap: 16,
+    },
     cardContainer: {
         width: 170,
         height: 180,
