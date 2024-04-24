@@ -56,7 +56,7 @@ const Feed = ({ navigation }) => {
             data={users}
             renderItem={({ item }) => {
                 const randomHeight = Math.random() < 0.4 ? 290 : 180;
-                return <MemberCard username={item.name} photo={item.profilePicture} height={randomHeight} />;
+                return <MemberCard username={item.name} photo={item.profilePicture} height={randomHeight} navigation={navigation} />;
             }}
             keyExtractor={(item) => item.firebaseUserId}
             numColumns={2}

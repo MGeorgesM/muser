@@ -72,8 +72,10 @@ export const utilities = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-        elevation: 5,
+        elevation: 10,
     },
+
+
 
     borderRadius: {
         s: 12,
@@ -81,6 +83,10 @@ export const utilities = StyleSheet.create({
         l: 24,
         xl: 36,
     },
+
+
+
+
 
     border: {
         borderWidth: 0.5,
@@ -100,9 +106,25 @@ export const utilities = StyleSheet.create({
         justifyContent: 'center',
     },
 
+    secondaryBtn: {
+        height: 48,
+        borderRadius: 24,
+        borderWidth: 2,
+        borderColor: colors.primary,
+        backgroundColor: colors.offWhite,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
     primaryBtnText: {
-        color: '#fff',
-        fontSize: 36,
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+
+    secondaryBtnText: {
+        color: colors.primary,
+        fontSize: 20,
         fontWeight: 'bold',
     },
 });
