@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import React from 'react';
 const { height } = Dimensions.get('window');
-const girlimage = require('../assets/girlimage.jpg');
+const photo = require('../assets/girlimage.jpg');
 import { colors, utilities } from '../styles/utilities';
 
 const ProfileDetails = ({ route }) => {
@@ -9,7 +9,7 @@ const ProfileDetails = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <Image source={girlimage} style={styles.avatar} />
+            <Image source={photo} style={styles.avatar} />
             <View style={[styles.detailContainer]}>
                 <View>
                     <Text style={[utilities.textXL, utilities.textBold, {marginTop:12}]}>Johny Mouawad</Text>

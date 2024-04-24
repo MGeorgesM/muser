@@ -16,8 +16,6 @@ import {
     updateDoc,
 } from 'firebase/firestore';
 
-import { useUser } from '../contexts/UserContext';
-
 import { GiftedChat } from 'react-native-gifted-chat';
 
 import { LogOut, PlusIcon, View } from 'lucide-react-native';
@@ -43,7 +41,6 @@ const Chat = ({ navigation }) => {
     }
 
     participants.sort();
-    const { handleSignOut } = useUser();
 
     console.log('current user sending chat', currentUser);
     console.log('participants', participants);
@@ -112,16 +109,6 @@ const Chat = ({ navigation }) => {
 
         setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
     });
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <TouchableOpacity onPress={handleSignOut}>
-                    <LogOut size={30} color={'black'} />
-                </TouchableOpacity>
-            ),
-        });
-    }, []);
 
     useLayoutEffect(() => {
         const setupMessagesListener = async () => {

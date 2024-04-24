@@ -8,10 +8,10 @@ const FeedStack = createStackNavigator();
 
 const FeedNavigator = () => {
     return (
-        <FeedStack.Navigator initialRouteName='ProfileDetails' screenOptions={{headerStyle: {
+        <FeedStack.Navigator initialRouteName='FeedMain' screenOptions={{headerStyle: {
             height: 128,
         }}}>
-            <FeedStack.Screen name="Feed" component={Feed}/>
+            <FeedStack.Screen name="FeedMain" component={Feed}/>
             <FeedStack.Screen name="ProfileDetails" component={ProfileDetails} options={{ headerShown: false }} />
         </FeedStack.Navigator>
     );

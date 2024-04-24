@@ -7,15 +7,15 @@ import FeedNavigator from '../navigators/FeedNavigator';
 
 import Profile from './Profile';
 import Venues from './Venues';
-import Chat from './Chat';
 import Live from './Live';
+import ChatOverview from './ChatOverview';
 
 const Tab = createBottomTabNavigator();
 
 const MainTabs = () => {
     return (
         <Tab.Navigator
-            initialRouteName="Feed"
+            initialRouteName="Chat"
             screenOptions={({ route }) => ({
                 headerStyle: {
                     height: 128,
@@ -52,8 +52,8 @@ const MainTabs = () => {
             })}
         >
             <Tab.Screen name="Venues" component={Venues} />
-            <Tab.Screen name="Chat" component={Chat} />
-            <Tab.Screen name="Feed" component={FeedNavigator} options={{headerShown:false}} />
+            <Tab.Screen name="Chat" component={ChatOverview} />
+            <Tab.Screen name="Feed" component={FeedNavigator} options={{ headerShown: false }} />
             <Tab.Screen name="Live" component={Live} />
             <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>
