@@ -14,7 +14,11 @@ const Tab = createBottomTabNavigator();
 const MainTabs = () => {
     return (
         <Tab.Navigator
+            initialRouteName="Feed"
             screenOptions={({ route }) => ({
+                headerStyle: {
+                    height: 128,
+                },
                 tabBarIcon: ({ focused, color, size }) => {
                     let IconComponent;
 
