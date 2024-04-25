@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('picture');
+            $table->date('date');
             $table->unsignedBigInteger('band_id');
             $table->foreign('band_id')->references('id')->on('bands')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('venue_id');
