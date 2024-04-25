@@ -44,9 +44,9 @@ return new class extends Migration
             $table->string('about', 120);
             $table->string('picture');
             $table->string('location');
-            $table->foreignId('availability_id')->constrained('availabilities')->onDelete('cascade')->nullable();
-            $table->foreignId('experience_id')->constrained('experiences')->onDelete('cascade')->nullable();
-            $table->foreignId('instrument_id')->constrained('instruments')->onDelete('cascade')->nullable();
+            $table->foreignId('availability_id')->nullable()->constrained('availabilities')->onDelete('cascade');
+            $table->foreignId('experience_id')->nullable()->constrained('experiences')->onDelete('cascade');
+            $table->foreignId('instrument_id')->nullable()->constrained('instruments')->onDelete('cascade');
             $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade');
             $table->boolean('is_active')->default(1);
             $table->timestamps();
