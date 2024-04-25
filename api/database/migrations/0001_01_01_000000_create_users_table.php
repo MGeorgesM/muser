@@ -21,6 +21,21 @@ return new class extends Migration
             $table->string('name');
         });
 
+        // Schema::create('availability', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        // });
+
+        // Schema::create('experience', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        // });
+
+        // Schema::create('instrument', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        // });
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -29,7 +44,7 @@ return new class extends Migration
             $table->string('about', 100);
             $table->string('picture');
             $table->string('location');
-            $table->enum('availability', ['mornings', 'afternoons', 'evenings'])->nullable();
+            $table->enum('availability', ['mornings', 'afternoons', 'evenings']);
             $table->enum('experience', ['beginner', 'intermediate', 'advanced'])->nullable();
             $table->enum('instrument', ['strings', 'bass', 'drums', 'vocals', 'keyboard'])->nullable();
             $table->enum('venue_type', ['bar', 'restaurant', 'club', 'theater', 'other'])->nullable();
