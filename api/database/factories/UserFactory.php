@@ -46,7 +46,7 @@ class UserFactory extends Factory
                 'experience_id' => null,
                 'instrument_id' => null,
                 'venue_type_id' => $this->faker->numberBetween(1,4),
-                'role_id' => 1,
+                'role_id' => 2,
                 'is_active' => $this->faker->boolean
             ];
         });

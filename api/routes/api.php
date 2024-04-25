@@ -23,6 +23,10 @@ Route::group([
 
 Route::get('/users/{id}', [UserController::class, 'getUser']);
 Route::get('/users/type/{role}', [UserController::class, 'getUsersByRole']);
+Route::put('/users/{id}', [UserController::class, 'updateUser']);
+Route::delete('/users/{id}', [UserController::class, 'disableUser']);
+
+
 
 Route::get('/venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
 
