@@ -1,14 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 
 import { ChevronLeft } from 'lucide-react-native';
 import { colors, utilities } from '../styles/utilities';
 
 import shows from '../core/tools/fakeShows';
+
 const StreamsOverview = ({ navigation }) => {
     const StreamCard = ({ show }) => {
         return (
-            <View style={styles.cardContainer}>
+            <TouchableOpacity style={styles.cardContainer} onPress={navigation.navigate}>
                 <Image source={show.imageUrl} style={styles.backgroundImage} />
                 <View style={styles.overlay}>
                     <View>
@@ -22,7 +23,7 @@ const StreamsOverview = ({ navigation }) => {
                         ))}
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         );
     };
     return (
