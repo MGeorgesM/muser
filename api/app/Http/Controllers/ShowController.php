@@ -55,4 +55,21 @@ class ShowController extends Controller
         $shows = Show::with(['band.members'])->get();
         return response()->json($shows);
     }
+
+    public function deleteShow($showId)
+    {
+        $show = Show::find($showId);
+
+        if (!$show) {
+            return response()->json(['message' => 'Show not found'], 404);
+        }
+
+        if (File::exists(public_path('/show-pictures/') . $show->picture)) {
+            File::delete(public_path('/show-pictures/') . $show->picture);
+        }
+
+        $show->delete();
+
+        return response()->json(['message' => 'Show deleted'], 200);
+    }
 }

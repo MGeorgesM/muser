@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BandController;
 use App\Http\Controllers\ShowController;
@@ -27,5 +27,4 @@ Route::delete('/bands/{id}', [BandController::class, 'deleteBand']);
 
 Route::post('/shows', [ShowController::class, 'store']);
 Route::get('/shows/{showId?}', [ShowController::class, 'getShow']);
-
-
+Route::delete('/shows', [ShowController::class, 'deleteShow']);
