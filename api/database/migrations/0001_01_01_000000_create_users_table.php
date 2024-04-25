@@ -91,14 +91,14 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
-        Schema::dropIfExists('insturments');
+        Schema::dropIfExists('venue_details');
+        Schema::dropIfExists('musician_details');
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('instruments');
         Schema::dropIfExists('genres');
         Schema::dropIfExists('experiences');
-        Schema::dropIfExists('availabilities');
         Schema::dropIfExists('venue_types');
-        Schema::dropIfExists('musician_details');
-        Schema::dropIfExists('venue_details');
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('roles');
     }
+    
 };
