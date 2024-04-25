@@ -26,7 +26,7 @@ return new class extends Migration
         Schema::create('shows', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description', 100);
+            $table->string('description', 120);
             $table->string('picture');
             $table->dateTime('date');
             $table->integer('duration');
@@ -36,15 +36,6 @@ return new class extends Migration
 
             $table->enum('status', ['pending', 'set', 'live', 'cancelled']);
         });
-        
-        // Schema::create('bookings', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->enum('status', ['pending', 'accepted', 'rejected']);
-        //     $table->foreignId('show_id')->constrained('shows')->onDelete('cascade');
-        //     $table->foreignId('band_id')->constrained('bands')->onDelete('cascade');
-        //     $table->foreignId('venue_id')->constrained('users')->onDelete('cascade');
-        //     $table->timestamps();
-        // });
     }
 
 
@@ -53,7 +44,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Schema::dropIfExists('bookings');
+        Schema::dropIfExists('bookings');
         Schema::dropIfExists('shows');
         Schema::dropIfExists('band_members');
         Schema::dropIfExists('bands');
