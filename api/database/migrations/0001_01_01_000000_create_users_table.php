@@ -54,11 +54,11 @@ return new class extends Migration
             $table->string('picture');
             $table->string('location');
             $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade');
-            $table->boolean('is_active')->default(1);
             $table->enum('availability', ['mornings', 'afternoons', 'evenings'])->nullable();
             $table->enum('experience', ['beginner', 'intermediate', 'advanced'])->nullable();
             $table->enum('instrument', ['strings', 'bass', 'drums', 'vocals', 'keyboard', 'other'])->nullable();
-            $table->enum('venue_type', ['bar', 'restaurant', 'club', 'theater', 'arena', 'other'])->nullable();
+            $table->enum('venue_type', ['bar', 'restaurant', 'club', 'theater', 'other'])->nullable();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
 
