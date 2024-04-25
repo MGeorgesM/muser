@@ -27,12 +27,12 @@ return new class extends Migration
             $table->string('location');
             $table->unsignedBigInteger('role_id')->default(1);
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade')->onUpdate('cascade');
-            $table->int('is_active')->default(1);
+            $table->boolean('is_active')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });
 
-        Schema::create('insturments', function (Blueprint $table) {
+        Schema::create('instruments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
@@ -66,8 +66,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('insturment_id');
-            $table->foreign('insturment_id')->references('id')->on('insturments')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('instrument_id');
+            $table->foreign('instrument_id')->references('id')->on('instruments')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('genre_id');
             $table->foreign('genre_id')->references('id')->on('genres')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('experience_id');
@@ -80,23 +80,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('venue_name');
-            $table->string('venue_type');
+            $table->unsignedBigInteger('venue_type_id');
+            $table->foreign('venue_type_id')->references('id')->on('venue_types')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
-        });
-
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
-
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
         });
     }
 
@@ -105,8 +91,14 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('roles');
+        Schema::dropIfExists('insturments');
+        Schema::dropIfExists('genres');
+        Schema::dropIfExists('experiences');
+        Schema::dropIfExists('availabilities');
+        Schema::dropIfExists('venue_types');
+        Schema::dropIfExists('musician_details');
+        Schema::dropIfExists('venue_details');
         Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
     }
 };
