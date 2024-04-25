@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\VenuesRatingFactory;
 use Illuminate\Database\Seeder;
 
 class VenuesRatingsSeeder extends Seeder
@@ -12,6 +12,6 @@ class VenuesRatingsSeeder extends Seeder
      */
     public function run(): void
     {
-        VenueRatingFactory::new()->count(20)->create();
+        VenuesRatingFactory::new()->count(20)->create();
     }
 }

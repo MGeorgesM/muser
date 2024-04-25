@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\VenuesRating>
  */
-class VenueRatingFactory extends Factory
+class VenuesRatingFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'venue_id' => $this->faker->numberBetween(11, 15),
