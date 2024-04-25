@@ -7,10 +7,12 @@ use App\Models\User;
 
 class VenueController extends Controller
 {
-    public function getShowsByVenueStatus($venueId, $status)
+    public function getShowsByVenueStatus($venueId, $status = null)
     {
         $venue = User::with(['bookingsAsVenue.show' => function ($query) use ($status) {
-            $query->where('status', $status);
+            if ($status) {
+                $query->where('status', $status);
+            }
         }])->find($venueId);
 
         if (!$venue) {
