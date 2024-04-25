@@ -9,6 +9,8 @@ class Genre extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;  
+
     public function musicians()
     {
         return $this->belongsToMany(User::class, 'musician_genres');

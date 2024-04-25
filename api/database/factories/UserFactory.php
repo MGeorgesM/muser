@@ -27,10 +27,10 @@ class UserFactory extends Factory
             'about' => $this->faker->text(120),
             'picture' => $this->faker->imageUrl(),
             'location' => $this->faker->city,
-            'availability_id' => Availability::factory(),
-            'experience_id' => Experience::factory(),
-            'instrument_id' => Instrument::factory(),
-            'role_id' => Role::factory(),
+            'availability_id' => $this->faker->numberBetween(1,4),
+            'experience_id' => $this->faker->numberBetween(1,3),
+            'instrument_id' => $this->faker->numberBetween(1,6),
+            'role_id' => $this->faker->numberBetween(1,3),
             'is_active' => $this->faker->boolean
         ];
     }

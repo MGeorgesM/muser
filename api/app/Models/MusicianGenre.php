@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class MusicianGenre extends Model
 {
     use HasFactory;
+    public $timestamps = false;
 }
