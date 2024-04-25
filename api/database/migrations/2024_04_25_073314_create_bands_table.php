@@ -19,10 +19,8 @@ return new class extends Migration
 
         Schema::create('band_members', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('band_id');
-            $table->foreign('band_id')->references('id')->on('bands')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('band_id')->constrained('bands')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
         });
 
         Schema::create('shows', function (Blueprint $table) {
@@ -31,19 +29,15 @@ return new class extends Migration
             $table->string('description');
             $table->string('picture');
             $table->date('date');
-            $table->unsignedBigInteger('band_id');
-            $table->foreign('band_id')->references('id')->on('bands')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('venue_id');
-            $table->foreign('venue_id')->references('id')->on('venues')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('band_id')->constrained('bands')->onDelete('cascade');
+            $table->foreignId('venue_id')->constrained('venues')->onDelete('cascade');
         });
 
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->enum('status', ['pending', 'accepted', 'rejected']);
-            $table->unsignedBigInteger('show_id');
-            $table->foreign('show_id')->references('id')->on('shows')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('band_id');
-            $table->foreign('band_id')->references('id')->on('bands')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('show_id')->constrained('shows')->onDelete('cascade');
+            $table->foreignId('band_id')->constrained('bands')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -54,6 +48,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('bookings');
+        Schema::dropIfExists('shows');
+        Schema::dropIfExists('band_members');
         Schema::dropIfExists('bands');
     }
 };
