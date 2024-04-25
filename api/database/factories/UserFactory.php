@@ -26,6 +26,7 @@ class UserFactory extends Factory
             'availability_id' => $this->faker->numberBetween(1, 4),
             'experience_id' => $this->faker->numberBetween(1, 3),
             'instrument_id' => $this->faker->numberBetween(1, 6),
+            'venue_type' => null,
             'role_id' => 1,
             'is_active' => $this->faker->boolean
         ];
@@ -44,6 +45,7 @@ class UserFactory extends Factory
                 'availability_id' => $this->faker->numberBetween(1, 4),
                 'experience_id' => null,
                 'instrument_id' => null,
+                'venue_type' => $this->faker->numberBetween(1,4),
                 'role_id' => 1,
                 'is_active' => $this->faker->boolean
             ];

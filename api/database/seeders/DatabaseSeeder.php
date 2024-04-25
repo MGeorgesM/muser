@@ -16,11 +16,12 @@ class DatabaseSeeder extends Seeder
         $this->call(AvailabilitiesTableSeeder::class);
         $this->call(ExperiencesTableSeeder::class);
         $this->call(InstrumentsTableSeeder::class);
+        $this->call(VenueTypesTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(BandsTableSeeder::class);
         $this->call(BandMembersTableSeeder::class);
         $this->call(ShowsTableSeeder::class);
         $this->call(MusicianGenresTableSeed::class);
-        $this->call(VenuesRatingsSeeder::class);
+        $this->call(VenuesRatingsTableSeeder::class);
     }
 }

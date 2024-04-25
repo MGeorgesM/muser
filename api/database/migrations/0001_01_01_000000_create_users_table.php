@@ -35,6 +35,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
         });
+
+        Schema::create('venue_types',function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+        });
         
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -47,6 +52,7 @@ return new class extends Migration
             $table->foreignId('availability_id')->nullable()->constrained('availabilities')->onDelete('cascade');
             $table->foreignId('experience_id')->nullable()->constrained('experiences')->onDelete('cascade');
             $table->foreignId('instrument_id')->nullable()->constrained('instruments')->onDelete('cascade');
+            $table->foreignId('venue_type_id')->nullable()->constrained('venue_types')->onDelete('cascade');
             $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade');
             $table->boolean('is_active')->default(1);
             $table->timestamps();
