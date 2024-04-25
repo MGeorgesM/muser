@@ -17,15 +17,15 @@ class VenueFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
+            'name' => $this->faker->company,
             'email' => $this->faker->unique()->safeEmail,
             'password' => bcrypt('useruser'),
             'about' => $this->faker->text(120),
             'picture' => $this->faker->imageUrl(),
             'location' => $this->faker->city,
             'availability_id' => $this->faker->numberBetween(1,4),
-            'experience_id' => $this->faker->numberBetween(1,3),
-            'instrument_id' => $this->faker->numberBetween(1,6),
+            'experience_id' => null,
+            'instrument_id' => null,
             'role_id' => 1,
             'is_active' => $this->faker->boolean
         ];

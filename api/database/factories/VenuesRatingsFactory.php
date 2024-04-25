@@ -17,8 +17,8 @@ class VenuesRatingsFactory extends Factory
     public function definition()
     {
         return [
-            'venue_id' => $this->faker->numberBetween(1,10),
-            'user_id' => $this->faker->numberBetween(1,10),
+            'venue_id' => $this->faker->numberBetween(11, 15),
+            'user_id' => $this->faker->numberBetween(1, 10),
             'rating' => $this->faker->numberBetween(1, 5)
         ];
     }

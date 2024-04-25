@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Database\Factories\UserFactory;
+use Database\Factories\VenueFactory;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -13,5 +14,6 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         UserFactory::new()->count(20)->create();
+        VenueFactory::new()->count(5)->create();
     }
 }
