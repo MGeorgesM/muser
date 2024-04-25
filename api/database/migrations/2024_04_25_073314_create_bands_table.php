@@ -23,10 +23,9 @@ return new class extends Migration
             $table->foreign('band_id')->references('id')->on('bands')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->timestamps();
         });
 
-        schema::create('shows', function (Blueprint $table) {
+        Schema::create('shows', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('description');
@@ -36,6 +35,15 @@ return new class extends Migration
             $table->foreign('band_id')->references('id')->on('bands')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('venue_id');
             $table->foreign('venue_id')->references('id')->on('venues')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::create('bookings', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('show_id');
+            $table->foreign('show_id')->references('id')->on('shows')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('band_id');
+            $table->foreign('band_id')->references('id')->on('bands')->onDelete('cascade')->onUpdate('cascade');
+            $table->timestamps();
         });
     }
 
