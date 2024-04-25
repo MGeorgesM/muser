@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('description', 100);
             $table->string('picture');
             $table->dateTime('date');
-            $table->int('duration');
+            $table->integer('duration');
 
             $table->foreignId('band_id')->constrained('bands')->onDelete('cascade');
             $table->foreignId('venue_id')->constrained('users')->onDelete('cascade');

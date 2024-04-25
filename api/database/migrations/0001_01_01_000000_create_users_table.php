@@ -21,21 +21,26 @@ return new class extends Migration
             $table->string('name');
         });
 
-        // Schema::create('availability', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->string('name');
-        // });
+        Schema::create('availability', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+        });
 
-        // Schema::create('experience', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->string('name');
-        // });
+        Schema::create('experience', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+        });
 
-        // Schema::create('instrument', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->string('name');
-        // });
+        Schema::create('instrument', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+        });
 
+        // $table->enum('availability', ['mornings', 'afternoons', 'evenings']);
+        // $table->enum('experience', ['beginner', 'intermediate', 'advanced'])->nullable();
+        // $table->enum('instrument', ['strings', 'bass', 'drums', 'vocals', 'keyboard'])->nullable();
+        // $table->enum('venue_type', ['bar', 'restaurant', 'club', 'theater', 'other'])->nullable();
+        
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -44,11 +49,10 @@ return new class extends Migration
             $table->string('about', 100);
             $table->string('picture');
             $table->string('location');
-            $table->enum('availability', ['mornings', 'afternoons', 'evenings']);
-            $table->enum('experience', ['beginner', 'intermediate', 'advanced'])->nullable();
-            $table->enum('instrument', ['strings', 'bass', 'drums', 'vocals', 'keyboard'])->nullable();
-            $table->enum('venue_type', ['bar', 'restaurant', 'club', 'theater', 'other'])->nullable();
-            $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade');
+            $table->foreignId('availability_id')->constrained('availability')->onDelete('cascade')->nullable();
+            $table->foreignId('experience_id')->constrained('experience')->onDelete('cascade')->nullable();
+            $table->foreignId('instrument_id')->constrained('instrument')->onDelete('cascade')->nullable();
+            $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade')->nullable();
             $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
