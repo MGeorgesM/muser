@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -12,6 +12,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        UserFactory::new()->count(20)->create();
     }
 }
