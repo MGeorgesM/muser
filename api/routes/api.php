@@ -19,9 +19,11 @@ Route::group([
     Route::post('register', [AuthController::class, 'register']);
 });
 
-Route::get('/venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenueStatus']);
-Route::get('/venues/{venueId}/shows', [VenueController::class, 'getShowsByVenueId']);
+Route::get('/venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
+
 Route::get('/bands/{id}/members', [BandController::class, 'getBandMembers']);
+
+Route::post('/shows', [ShowController::class, 'store']);
 Route::get('/shows/{showId?}', [ShowController::class, 'getShow']);
 
 
