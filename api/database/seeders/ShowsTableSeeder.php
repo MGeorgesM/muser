@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\ShowFactory;
 use Illuminate\Database\Seeder;
 
 class ShowsTableSeeder extends Seeder
@@ -12,6 +12,6 @@ class ShowsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        ShowFactory::new()->count(10)->create();
     }
 }

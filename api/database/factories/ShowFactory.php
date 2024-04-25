@@ -24,8 +24,8 @@ class ShowFactory extends Factory
             'picture' => $this->faker->imageUrl(),
             'date' => $this->faker->dateTimeBetween('+1 week', '+1 year'),
             'duration' => $this->faker->numberBetween(60, 180),
-            'band_id' => Band::factory(),
-            'venue_id' => User::factory(),
+            'band_id' => $this->faker->numberBetween(1,10),
+            'venue_id' => $this->faker->numberBetween(11,15),
             'status' => $this->faker->randomElement(['pending', 'set', 'live', 'cancelled']),
         ];
     }
