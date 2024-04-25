@@ -17,11 +17,11 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('instruments', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+        // Schema::create('instruments', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        //     $table->timestamps();
+        // });
 
         Schema::create('genres', function (Blueprint $table) {
             $table->id();
@@ -29,23 +29,23 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('experiences', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+        // Schema::create('experiences', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        //     $table->timestamps();
+        // });
 
-        Schema::create('availabilities', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+        // Schema::create('availabilities', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        //     $table->timestamps();
+        // });
 
-        Schema::create('venue_types', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+        // Schema::create('venue_types', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        //     $table->timestamps();
+        // });
 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -55,10 +55,12 @@ return new class extends Migration
             $table->string('about');
             $table->string('picture');
             $table->string('location');
-            $table->foreignId('availability_id')->constrained('availabilities')->onDelete('cascade')->nullable();
-            $table->foreignId('instrument_id')->constrained('instruments')->onDelete('cascade')->nullable();
             $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade');
             $table->boolean('is_active')->default(1);
+            $table->enum('availability', ['mornings', 'afternoons', 'evenings'])->nullable();
+            $table->enum('experience', ['beginner', 'intermediate', 'advanced'])->nullable();
+            $table->enum('instrument', ['strings', 'bass', 'drums', 'vocals', 'keyboard', 'other'])->nullable();
+            $table->enum('venue_type', ['bar', 'restaurant', 'club', 'theater', 'arena', 'other'])->nullable();
             $table->timestamps();
         });
 
@@ -68,19 +70,19 @@ return new class extends Migration
             $table->primary(['musician_id', 'genre_id']);
         });
 
-        Schema::create('musician_experiences', function (Blueprint $table) {
-            $table->foreignId('musician_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('experience_id')->constrained('experiences')->onDelete('cascade');
-            $table->primary(['musician_id', 'experience_id']);
-        });
+        // Schema::create('musician_experiences', function (Blueprint $table) {
+        //     $table->foreignId('musician_id')->constrained('users')->onDelete('cascade');
+        //     $table->foreignId('experience_id')->constrained('experiences')->onDelete('cascade');
+        //     $table->primary(['musician_id', 'experience_id']);
+        // });
 
-        Schema::create('venue_details', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('venue_name');
-            $table->foreignId('venue_type_id')->constrained('venue_types')->onDelete('cascade');
-            $table->timestamps();
-        });
+        // Schema::create('venue_details', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('venue_id')->constrained('users')->onDelete('cascade');
+        //     $table->string('venue_name');
+        //     $table->foreignId('venue_type_id')->constrained('venue_types')->onDelete('cascade');
+        //     $table->timestamps();
+        // });
     }
 
     /**

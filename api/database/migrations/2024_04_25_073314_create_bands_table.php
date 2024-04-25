@@ -29,15 +29,14 @@ return new class extends Migration
             $table->string('description');
             $table->string('picture');
             $table->date('date');
-            $table->foreignId('band_id')->constrained('bands')->onDelete('cascade');
-            $table->foreignId('venue_id')->constrained('venues')->onDelete('cascade');
         });
-
+        
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->enum('status', ['pending', 'accepted', 'rejected']);
             $table->foreignId('show_id')->constrained('shows')->onDelete('cascade');
             $table->foreignId('band_id')->constrained('bands')->onDelete('cascade');
+            $table->foreignId('venue_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
