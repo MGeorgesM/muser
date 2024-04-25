@@ -9,6 +9,11 @@ class Show extends Model
 {
     use HasFactory;
 
+    public function venue()
+    {
+        return $this->belongsTo(User::class, 'venue_id');
+    }
+
     public function band()
     {
         return $this->belongsTo(Band::class);
