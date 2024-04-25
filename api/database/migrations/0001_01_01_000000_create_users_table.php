@@ -25,10 +25,10 @@ return new class extends Migration
             $table->string('about');
             $table->string('picture');
             $table->string('location');
-            $table->unsignedBigInteger('role_id')->default(1);
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('availability_id')->constrained('availabilities')->onDelete('cascade')->nullable();
+            $table->foreignId('instrument_id')->constrained('instruments')->onDelete('cascade')->nullable();
+            $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade');
             $table->boolean('is_active')->default(1);
-            $table->rememberToken();
             $table->timestamps();
         });
 
@@ -62,26 +62,23 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('musician_details', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('instrument_id');
-            $table->foreign('instrument_id')->references('id')->on('instruments')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('genre_id');
-            $table->foreign('genre_id')->references('id')->on('genres')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('experience_id');
-            $table->foreign('experience_id')->references('id')->on('experiences')->onDelete('cascade')->onUpdate('cascade');
-            $table->timestamps();
+        Schema::create('musician_genres', function (Blueprint $table) {
+            $table->foreignId('musician_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('genre_id')->constrained('genres')->onDelete('cascade');
+            $table->primary(['musician_id', 'genre_id']);
+        });
+
+        Schema::create('musician_experiences', function (Blueprint $table) {
+            $table->foreignId('musician_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('experience_id')->constrained('experiences')->onDelete('cascade');
+            $table->primary(['musician_id', 'experience_id']);
         });
 
         Schema::create('venue_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('venue_name');
-            $table->unsignedBigInteger('venue_type_id');
-            $table->foreign('venue_type_id')->references('id')->on('venue_types')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('venue_type_id')->constrained('venue_types')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -92,13 +89,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('venue_details');
-        Schema::dropIfExists('musician_details');
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('instruments');
-        Schema::dropIfExists('genres');
-        Schema::dropIfExists('experiences');
+        Schema::dropIfExists('musician_experiences');
+        Schema::dropIfExists('musician_genres');
         Schema::dropIfExists('venue_types');
+        Schema::dropIfExists('availabilities');
+        Schema::dropIfExists('experiences');
+        Schema::dropIfExists('genres');
+        Schema::dropIfExists('instruments');
+        Schema::dropIfExists('users');
         Schema::dropIfExists('roles');
     }
-    
 };
