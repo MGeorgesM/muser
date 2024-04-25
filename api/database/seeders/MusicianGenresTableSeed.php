@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Database\Factories\MusicianGenreFactory;
 use Illuminate\Database\Seeder;
 
-class MusiciansGenresTableSeed extends Seeder
+class MusicianGenresTableSeed extends Seeder
 {
     /**
      * Run the database seeds.

@@ -13,6 +13,6 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         UserFactory::new()->count(10)->create();
-        UserFactory::new()->venue()->count(10)->create();
+        UserFactory::new()->venue()->count(5)->create();
     }
 }

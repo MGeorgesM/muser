@@ -53,9 +53,9 @@ return new class extends Migration
         });
 
         Schema::create('musician_genres', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('musician_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('genre_id')->constrained('genres')->onDelete('cascade');
-            $table->primary(['musician_id', 'genre_id']);
         });
     }
 
