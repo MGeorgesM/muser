@@ -26,9 +26,10 @@ return new class extends Migration
         Schema::create('shows', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
+            $table->string('description', 100);
             $table->string('picture');
-            $table->date('date');
+            $table->dateTime('date');
+            $table->int('duration');
         });
         
         Schema::create('bookings', function (Blueprint $table) {

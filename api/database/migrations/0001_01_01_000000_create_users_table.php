@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('about');
+            $table->string('about', 100);
             $table->string('picture');
             $table->string('location');
             $table->enum('availability', ['mornings', 'afternoons', 'evenings'])->nullable();
