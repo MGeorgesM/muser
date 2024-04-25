@@ -9,21 +9,18 @@ class UserController extends Controller
 {
     public function getUser($id)
     {
-        $user = User::with('role', 'bands', 'genres', 'instrument', 'venueType')->findOrFail($id);
+        $user = User::findOrFail($id);
         
-        return response()->json(['user' => $user->append('full_details')]);
+        return response()->json(['user' => $user->full_details]);
     }
 
     public function getUsersByRole($role)
     {
-            
-       
-        $users = User::with(['role', 'genres', 'instrument', 'venueType', 'shows', 'givenRatings', 'receivedRatings', 'availability', 'experience'])
-                    ->whereHas('role', function ($query) use ($roleName) {
-                        $query->where('name', $roleName);
+        $users = User::whereHas('role', function ($query) use ($role) {
+                        $query->where('name', $role);
                     })
                     ->get();
 
-        return response()->json($users);
+        return response()->json($users->map->full_details);
     }
 }

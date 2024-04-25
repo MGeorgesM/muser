@@ -70,14 +70,14 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(VenuesRating::class, 'venue_id');
     }
 
-    // public function getFullDetailsAttribute()
-    // {
-    //     return [
-    //         'role' => $this->role,
-    //         'bands' => $this->bands,
-    //         'genres' => $this->genres,
-    //         'instrument' => $this->instrument,
-    //         'venueType' => $this->venueType,
-    //     ];
-    // }
+    public function getFullDetailsAttribute()
+    {
+        return [
+            'role' => $this->role,
+            'bands' => $this->bands,
+            'genres' => $this->genres,
+            'instrument' => $this->instrument,
+            'venueType' => $this->venueType,
+        ];
+    }
 }

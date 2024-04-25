@@ -22,6 +22,7 @@ Route::group([
 });
 
 Route::get('/users/{id}', [UserController::class, 'getUser']);
+Route::get('/users/type/{role}', [UserController::class, 'getUsersByRole']);
 
 Route::get('/venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
 
