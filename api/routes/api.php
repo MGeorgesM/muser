@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BandController;
 use App\Http\Controllers\ShowController;
 use App\Http\Controllers\VenueController;
+use App\Http\Controllers\UserController;
+
 
 Route::group([
 
@@ -18,6 +20,8 @@ Route::group([
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('register', [AuthController::class, 'register']);
 });
+
+Route::get('/users/{id}', [UserController::class, 'getUser']);
 
 Route::get('/venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
 

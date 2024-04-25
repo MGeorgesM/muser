@@ -35,18 +35,49 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Role::class);
     }
 
-    public function genres()
-    {
-        return $this->belongsToMany(Genre::class, 'musician_genres');
-    }
-
     public function bands()
     {
-        return $this->belongsToMany(Band::class, 'band_members', 'user_id', 'band_id');
+        return $this->belongsToMany(Band::class, 'band_members');
     }
 
-    public function ratings()
+    public function genres()
     {
-        return $this->hasMany(VenueRating::class, 'venue_id');
+        return $this->belongsToMany(Genre::class, 'musician_genres', 'musician_id', 'genre_id');
     }
+
+    public function instrument()
+    {
+        return $this->belongsTo(Instrument::class);
+    }
+
+    public function venueType()
+    {
+        return $this->belongsTo(VenueType::class);
+    }
+
+    public function shows()
+    {
+        return $this->hasMany(Show::class, 'venue_id');
+    }
+
+    public function givenRatings()
+    {
+        return $this->hasMany(VenuesRating::class, 'user_id');
+    }
+
+    public function receivedRatings()
+    {
+        return $this->hasMany(VenuesRating::class, 'venue_id');
+    }
+
+    // public function getFullDetailsAttribute()
+    // {
+    //     return [
+    //         'role' => $this->role,
+    //         'bands' => $this->bands,
+    //         'genres' => $this->genres,
+    //         'instrument' => $this->instrument,
+    //         'venueType' => $this->venueType,
+    //     ];
+    // }
 }

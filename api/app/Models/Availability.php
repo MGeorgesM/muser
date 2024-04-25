@@ -10,4 +10,9 @@ class Availability extends Model
     use HasFactory;
     
     public $timestamps = false;  
+
+    public function availability()
+    {
+        return $this->belongsTo(Availability::class);
+    }
 }
