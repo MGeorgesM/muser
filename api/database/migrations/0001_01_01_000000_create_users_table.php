@@ -17,21 +17,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('about');
-            $table->string('picture');
-            $table->string('location');
-            $table->foreignId('availability_id')->constrained('availabilities')->onDelete('cascade')->nullable();
-            $table->foreignId('instrument_id')->constrained('instruments')->onDelete('cascade')->nullable();
-            $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade');
-            $table->boolean('is_active')->default(1);
-            $table->timestamps();
-        });
-
         Schema::create('instruments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -59,6 +44,21 @@ return new class extends Migration
         Schema::create('venue_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->timestamps();
+        });
+
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('about');
+            $table->string('picture');
+            $table->string('location');
+            $table->foreignId('availability_id')->constrained('availabilities')->onDelete('cascade')->nullable();
+            $table->foreignId('instrument_id')->constrained('instruments')->onDelete('cascade')->nullable();
+            $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade');
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
 
@@ -91,12 +91,12 @@ return new class extends Migration
         Schema::dropIfExists('venue_details');
         Schema::dropIfExists('musician_experiences');
         Schema::dropIfExists('musician_genres');
+        Schema::dropIfExists('users');
         Schema::dropIfExists('venue_types');
         Schema::dropIfExists('availabilities');
         Schema::dropIfExists('experiences');
         Schema::dropIfExists('genres');
         Schema::dropIfExists('instruments');
-        Schema::dropIfExists('users');
         Schema::dropIfExists('roles');
     }
 };
