@@ -18,5 +18,6 @@ Route::group([
 });
 
 Route::get('/bands/{id}/members', [BandController::class, 'getBandMembers']);
+Route::get('/shows', [BandController::class, 'getAllShows']);
 
 

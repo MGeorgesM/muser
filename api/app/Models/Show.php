@@ -9,8 +9,13 @@ class Show extends Model
 {
     use HasFactory;
 
+    public function band()
+    {
+        return $this->belongsTo(Band::class);
+    }
+
     public function bookings()
     {
-        return $this->hasMany(Booking::class);
+        return $this->belongsTo(Booking::class);
     }
 }

@@ -13,4 +13,9 @@ class Band extends Model
     {
         return $this->belongsToMany(User::class, 'band_members', 'band_id', 'user_id');
     }
+
+    public function shows()
+    {
+        return $this->hasMany(Show::class);
+    }
 }

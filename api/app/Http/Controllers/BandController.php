@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Show;
 use App\Models\Band;
 
 class BandController extends Controller
 {
+    public function getAllShows()
+    {
+        $shows = Show::with(['band.members'])->get();
+
+        return response()->json($shows);
+    }
+
     public function getBandMembers($bandId)
     {
         $band = Band::with('members')->find($bandId);
