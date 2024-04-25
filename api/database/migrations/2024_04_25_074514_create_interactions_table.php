@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('venue_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->integer('rating');
             $table->timestamps();
         });
     }
