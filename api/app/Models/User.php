@@ -50,6 +50,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Instrument::class);
     }
 
+    public function availability()
+    {
+        return $this->belongsTo(Availability::class);
+    }
+
+    public function experience()
+    {
+        return $this->belongsTo(Experience::class);
+    }
+
     public function venueType()
     {
         return $this->belongsTo(VenueType::class);
@@ -73,10 +83,17 @@ class User extends Authenticatable implements JWTSubject
     public function getFullDetailsAttribute()
     {
         return [
-            'role' => $this->role,
-            'bands' => $this->bands,
-            'genres' => $this->genres,
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'about' => $this->about,
+            'picture' => $this->picture,
+            'location' => $this->location,
+            'genres' => $this->genres->pluck('name','id'),
             'instrument' => $this->instrument,
+            'availability' => $this->availability,
+            'experience' => $this->experience,
+            'role' => $this->role,
             'venueType' => $this->venueType,
         ];
     }
