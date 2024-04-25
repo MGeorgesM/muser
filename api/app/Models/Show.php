@@ -14,8 +14,8 @@ class Show extends Model
         return $this->belongsTo(Band::class);
     }
 
-    public function bookings()
+    public function booking()
     {
-        return $this->belongsTo(Booking::class);
+        return $this->hasOne(Booking::class);
     }
 }

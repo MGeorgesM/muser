@@ -45,7 +45,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Band::class, 'band_members', 'user_id', 'band_id');
     }
 
-    public function bookings()
+    public function bookingsAsVenue()
     {
         return $this->hasMany(Booking::class, 'venue_id');
     }
