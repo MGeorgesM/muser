@@ -39,6 +39,7 @@ return new class extends Migration
 
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
+            $table->enum('status', ['pending', 'accepted', 'rejected']);
             $table->unsignedBigInteger('show_id');
             $table->foreign('show_id')->references('id')->on('shows')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('band_id');
