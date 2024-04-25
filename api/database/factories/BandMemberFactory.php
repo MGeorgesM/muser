@@ -19,8 +19,8 @@ class BandMemberFactory extends Factory
     public function definition()
     {
         return [
-            'band_id' => Band::factory(),
-            'user_id' => User::factory(),
+            'band_id' => $this->faker->numberBetween(1, 10),
+            'user_id' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

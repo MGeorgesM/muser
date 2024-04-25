@@ -12,6 +12,6 @@ class BandsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        BandFactory::new()->count(20)->create();
+        BandFactory::new()->count(10)->create();
     }
 }
