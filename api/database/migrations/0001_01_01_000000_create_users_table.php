@@ -16,34 +16,10 @@ return new class extends Migration
             $table->string('name');
         });
 
-        // Schema::create('instruments', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->string('name');
-        //     $table->timestamps();
-        // });
-
         Schema::create('genres', function (Blueprint $table) {
             $table->id();
             $table->string('name');
         });
-
-        // Schema::create('experiences', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->string('name');
-        //     $table->timestamps();
-        // });
-
-        // Schema::create('availabilities', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->string('name');
-        //     $table->timestamps();
-        // });
-
-        // Schema::create('venue_types', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->string('name');
-        //     $table->timestamps();
-        // });
 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -67,20 +43,6 @@ return new class extends Migration
             $table->foreignId('genre_id')->constrained('genres')->onDelete('cascade');
             $table->primary(['musician_id', 'genre_id']);
         });
-
-        // Schema::create('musician_experiences', function (Blueprint $table) {
-        //     $table->foreignId('musician_id')->constrained('users')->onDelete('cascade');
-        //     $table->foreignId('experience_id')->constrained('experiences')->onDelete('cascade');
-        //     $table->primary(['musician_id', 'experience_id']);
-        // });
-
-        // Schema::create('venue_details', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->foreignId('venue_id')->constrained('users')->onDelete('cascade');
-        //     $table->string('venue_name');
-        //     $table->foreignId('venue_type_id')->constrained('venue_types')->onDelete('cascade');
-        //     $table->timestamps();
-        // });
     }
 
     /**
@@ -88,15 +50,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('venue_details');
-        Schema::dropIfExists('musician_experiences');
         Schema::dropIfExists('musician_genres');
         Schema::dropIfExists('users');
-        Schema::dropIfExists('venue_types');
-        Schema::dropIfExists('availabilities');
-        Schema::dropIfExists('experiences');
         Schema::dropIfExists('genres');
-        Schema::dropIfExists('instruments');
         Schema::dropIfExists('roles');
     }
 };
