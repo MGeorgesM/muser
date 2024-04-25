@@ -29,4 +29,29 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->attributes['password'] = bcrypt($value);
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function genres()
+    {
+        return $this->belongsToMany(Genre::class, 'musician_genres');
+    }
+
+    public function bands()
+    {
+        return $this->belongsToMany(Band::class, 'band_members');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'venue_id');
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(VenueRating::class, 'venue_id');
+    }
 }

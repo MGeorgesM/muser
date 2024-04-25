@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class VenueRating extends Model
 {
     use HasFactory;
+
+    public function venue()
+    {
+        return $this->belongsTo(User::class, 'venue_id');
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Band extends Model
 {
     use HasFactory;
+
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'band_members');
+    }
 }
