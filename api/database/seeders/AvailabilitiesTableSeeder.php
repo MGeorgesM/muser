@@ -12,11 +12,20 @@ class AvailabilitiesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        Availability::trunicate();
-        
-        Availability::create(['name' => 'Mornings']);
-        Availability::create(['name' => 'Afternoons']);
-        Availability::create(['name' => 'Evenings']);
-        Availability::create(['name' => 'Nights']);
+        $availability = new Availability();
+        $availability->name = 'mornings';
+        $availability->save();
+
+        $availability = new Availability();
+        $availability->name = 'afternoons';
+        $availability->save();
+
+        $availability = new Availability();
+        $availability->name = 'evenings';
+        $availability->save();
+
+        $availability = new Availability();
+        $availability->name = 'nights';
+        $availability->save();
     }
 }

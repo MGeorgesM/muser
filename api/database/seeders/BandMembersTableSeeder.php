@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\BandMemberFactory;
 use Illuminate\Database\Seeder;
 
 class BandMembersTableSeeder extends Seeder
@@ -12,6 +12,6 @@ class BandMembersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        BandMemberFactory::new()->count(20)->create();
     }
 }
