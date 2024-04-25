@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Availability;
 use Illuminate\Database\Seeder;
 
 class AvailabilitiesTableSeeder extends Seeder
@@ -12,6 +12,11 @@ class AvailabilitiesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Availability::trunicate();
+        
+        Availability::create(['name' => 'Mornings']);
+        Availability::create(['name' => 'Afternoons']);
+        Availability::create(['name' => 'Evenings']);
+        Availability::create(['name' => 'Nights']);
     }
 }
