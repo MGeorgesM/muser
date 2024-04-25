@@ -21,6 +21,7 @@ Route::group([
 
 Route::get('/venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
 
+Route::post('/bands', [BandController::class, 'addBand']);
 Route::get('/bands/{id}/members', [BandController::class, 'getBandMembers']);
 
 Route::post('/shows', [ShowController::class, 'store']);
