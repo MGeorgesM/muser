@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BandController;
+use App\Http\Controllers\ShowController;
 
 Route::group([
 
@@ -18,6 +19,6 @@ Route::group([
 });
 
 Route::get('/bands/{id}/members', [BandController::class, 'getBandMembers']);
-Route::get('/shows', [BandController::class, 'getAllShows']);
+Route::get('/shows/{showId?}', [ShowController::class, 'getShow']);
 
 
