@@ -23,6 +23,7 @@ Route::get('/venues/{venueId}/shows/{status?}', [VenueController::class, 'getSho
 
 Route::post('/bands', [BandController::class, 'addBand']);
 Route::get('/bands/{id}/members', [BandController::class, 'getBandMembers']);
+Route::delete('/bands/{id}', [BandController::class, 'deleteBand']);
 
 Route::post('/shows', [ShowController::class, 'store']);
 Route::get('/shows/{showId?}', [ShowController::class, 'getShow']);
