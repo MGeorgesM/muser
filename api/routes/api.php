@@ -34,4 +34,4 @@ Route::delete('/bands/{id}', [BandController::class, 'deleteBand']);
 
 Route::post('/shows', [ShowController::class, 'addShow']);
 Route::get('/shows/{showId?}', [ShowController::class, 'getShow']);
-Route::delete('/shows', [ShowController::class, 'deleteShow']);
+Route::delete('/shows/{showId}', [ShowController::class, 'deleteShow']);
