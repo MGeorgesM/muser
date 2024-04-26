@@ -22,4 +22,8 @@ class VenueController extends Controller
 
         return response()->json($venue->shows, 200);
     }
+
+    
+
+
 }
