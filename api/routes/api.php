@@ -35,7 +35,7 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
     Route::middleware([VenueMiddleware::class])->group(function () {
         Route::put('/shows', [ShowController::class, 'updateShow']);
     });
-    
+
     Route::get('/users/{id}', [UserController::class, 'getUser']);
     Route::get('/users/type/{role}', [UserController::class, 'getUsersByRole']);
     Route::put('/users/{id}', [UserController::class, 'updateUser']);
@@ -49,6 +49,5 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
     Route::post('/shows', [ShowController::class, 'addShow']);
     Route::get('/shows/{showId?}', [ShowController::class, 'getShow']);
-
-
+    
 });
