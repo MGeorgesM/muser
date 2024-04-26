@@ -37,6 +37,8 @@ class UserController extends Controller
             'experience_id' => 'exists:experiences,id',
             'instrument_id' => 'exists:instruments,id',
             'venue_type_id' => 'exists:venue_types,id',
+            'genres' => 'array',
+            'genres.*' => 'exists:genres,id',
         ]);
 
         $user = User::find($id);
@@ -51,6 +53,8 @@ class UserController extends Controller
         $request->experience_id && $user->experience_id = $request->input('experience_id');
         $request->instrument_id && $user->instrument_id = $request->input('instrument_id');
         $request->venue_type_id && $user->venue_type_id = $request->input('venue_type_id');
+
+        $request->genres && $user->genres()->sync($request->input('genres'));
 
         if ($request->hasFile('picture')) {
             $file = $request->file('picture');

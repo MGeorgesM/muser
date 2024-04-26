@@ -47,6 +47,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|min:6',
             'about' => 'required|string|max:120',
             'picture' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'location' => 'required|string',
@@ -63,13 +64,14 @@ class AuthController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->password = $request->password;
         $user->about = $request->about;
         $user->location = $request->location;
         $user->availability_id = $request->availability_id;
         $user->experience_id = $request->experience_id;
         $user->instrument_id = $request->instrument_id;
         $user->venue_type_id = $request->venue_type_id;
-        $user->role_id = $request->role_id;
+        $user->role_id = $request->role_id ?? 1;
 
         $file = $request->file('picture');
         $extension = $file->getClientOriginalExtension();
@@ -78,9 +80,9 @@ class AuthController extends Controller
 
         $user->picture = $filename;
 
-        $user->genres()->attach($request->genres);
-
         $user->save();
+
+        $user->genres()->attach($request->genres);
 
         $token = auth()->login($user);
 
