@@ -34,7 +34,7 @@ return new class extends Migration
             $table->foreignId('band_id')->constrained('bands')->onDelete('cascade');
             $table->foreignId('venue_id')->constrained('users')->onDelete('cascade');
 
-            $table->enum('status', ['pending', 'set', 'live', 'cancelled']);
+            $table->enum('status', ['pending', 'set', 'live', 'cancelled'])->default('pending');
             $table->timestamps();
         });
     }

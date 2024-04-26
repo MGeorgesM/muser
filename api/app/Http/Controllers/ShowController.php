@@ -11,18 +11,22 @@ class ShowController extends Controller
     public function addShow(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:100',
-            'picture' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'date' => 'required|date',
+            'name' => 'required|max:60',
+            'description' => 'required|max:120',
+            'band_id' => 'required|exists:bands,id',
+            'venue_id' => 'required|exists:users,id',
+            'date' => 'required|date_format:Y-m-d\TH:i:s',
             'duration' => 'required|integer',
+            'picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $show = new Show();
         $show->name = $request->name;
         $show->description = $request->description;
+        $show->band_id = $request->band_id;
+        $show->venue_id = $request->venue_id;
         $show->date = $request->date;
-        $show->duration = $request->duration;
+        $show->duration = $request->duration;  
 
         if ($request->hasFile('picture')) {
             $file = $request->file('picture');
