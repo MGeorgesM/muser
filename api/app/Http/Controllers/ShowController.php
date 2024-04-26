@@ -26,7 +26,7 @@ class ShowController extends Controller
         $show->band_id = $request->band_id;
         $show->venue_id = $request->venue_id;
         $show->date = $request->date;
-        $show->duration = $request->duration;  
+        $show->duration = $request->duration;
 
         if ($request->hasFile('picture')) {
             $file = $request->file('picture');
@@ -46,10 +46,10 @@ class ShowController extends Controller
         return response()->json($show, 201);
     }
 
-    public function getShow(Request $request ,$showId = null)
+    public function getShow(Request $request, $showId = null)
     {
         if ($showId) {
-            $show = Show::with(['band.members'])->find($showId);
+            $show = Show::with(['band.members:id,name,picture'])->find($showId);
             if (!$show) {
                 return response()->json(['message' => 'Show not found'], 404);
             }
@@ -59,12 +59,38 @@ class ShowController extends Controller
         $status = $request->query('status');
 
         if ($status) {
-            $shows = Show::with(['band.members'])->where('status', $status)->get();
+            $shows = Show::with(['band.members:id,name,picture'])->where('status', $status)->get();
             return response()->json($shows);
         }
 
-        $shows = Show::with(['band.members'])->get();
+        $shows = Show::with(['band.members:id,name,picture'])->get();
         return response()->json($shows);
+    }
+
+    public function updateShow(Request $request)
+    {
+        $request->validate([
+            'show_id' => 'required|exists:shows,id',
+            'status' => 'required|in:pending,set,live,cancelled',
+        ]);
+
+        $show = Show::find($request->show_id);
+
+        if (!$show) {
+            return response()->json(['message' => 'Show not found'], 404);
+        }
+
+        // $show_venue_id = $show->venu_id;
+
+        // if ($show_venue_id !== auth()->user()->id) {
+        //     return response()->json(['message' => 'Unauthorized'], 401);
+        // }
+
+        $show->status = $request->status;
+
+        $show->save();
+
+        return response()->json($show, 200);
     }
 
     public function deleteShow($showId)

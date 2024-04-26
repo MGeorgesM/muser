@@ -15,6 +15,12 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        if (auth()->user()->role === 3) {
+            return $next($request);
+        } else {
+            return response()->json([
+                'message' => "Unauthorized, You're not an Admin"
+            ]);
+        }
     }
 }

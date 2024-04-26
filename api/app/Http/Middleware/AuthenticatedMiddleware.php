@@ -15,6 +15,12 @@ class AuthenticatedMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        if (auth()->check()) {
+            return $next($request);
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized, Please Sign In'
+            ]);
+        }
     }
 }
