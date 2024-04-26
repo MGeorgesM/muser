@@ -46,7 +46,7 @@ class ShowController extends Controller
         return response()->json($show, 201);
     }
 
-    public function getShow(Request $request, $showId = null)
+    public function getShow(Request $request ,$showId = null)
     {
         if ($showId) {
             $show = Show::with(['band.members'])->find($showId);
@@ -54,6 +54,13 @@ class ShowController extends Controller
                 return response()->json(['message' => 'Show not found'], 404);
             }
             return response()->json($show);
+        }
+
+        $status = $request->query('status');
+
+        if ($status) {
+            $shows = Show::with(['band.members'])->where('status', $status)->get();
+            return response()->json($shows);
         }
 
         $shows = Show::with(['band.members'])->get();
