@@ -27,6 +27,8 @@ Route::put('/users/{id}', [UserController::class, 'updateUser']);
 Route::delete('/users/{id}', [UserController::class, 'disableUser']);
 
 Route::get('/venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
+Route::post('/venues/{venueId}/rating', [VenueController::class, 'addUpdateRating']);
+Route::get('/venues/{venueId}/rating', [VenueController::class, 'getVenueAverageRating']);
 
 Route::post('/bands', [BandController::class, 'addBand']);
 Route::get('/bands/{id?}', [BandController::class, 'getBand']);
