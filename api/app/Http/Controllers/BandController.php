@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Band;
+use App\Models\User;
 
 class BandController extends Controller
 {
@@ -16,6 +17,26 @@ class BandController extends Controller
             'members.*' => 'exists:users,id',
         ]);
 
+        $members = $request->members;
+
+        $non_musicians = User::whereIn('id', $members)->where('role_id', '!=', 1)->get();
+
+        if ($non_musicians->count() > 0){
+            return response()->json(['message' => 'All band members must be musicians'], 400);
+        }
+
+        if (count($members) < 2 || count($members) > 10 ) {
+            return response()->json(['message' => 'A band must have at least 2 members and 10 members at most'], 400);
+        }
+
+        if (count($members) !== count(array_unique($members))) {
+            return response()->json(['message' => 'A band cannot have duplicate members'], 400);
+        }
+
+        if (count($non_musicians) > 0) {
+            return response()->json(['message' => 'A band can only have musicians as members'], 400);
+        }
+
         $band = new Band();
         $band->name = $request->name;
         $band->save();
@@ -25,15 +46,21 @@ class BandController extends Controller
         return response()->json($band, 201);
     }
 
-    public function getBandMembers($bandId)
+    public function getBand($bandId = null)
     {
-        $band = Band::with('members')->find($bandId);
 
-        if (!$band) {
-            return response()->json(['message' => 'Band not found'], 404);
+        if ($bandId) {
+            $band = Band::with('members')->find($bandId);
+
+            if (!$band) {
+                return response()->json(['message' => 'Band not found'], 404);
+            }
+
+            return response()->json($band);
+        } else {
+            $bands = Band::with('members')->get();
+            return response()->json($bands);
         }
-
-        return response()->json($band->members);
     }
 
     public function deleteBand($bandId)

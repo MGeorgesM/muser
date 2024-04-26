@@ -29,7 +29,7 @@ Route::delete('/users/{id}', [UserController::class, 'disableUser']);
 Route::get('/venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
 
 Route::post('/bands', [BandController::class, 'addBand']);
-Route::get('/bands/{id}/members', [BandController::class, 'getBandMembers']);
+Route::get('/bands/{id?}', [BandController::class, 'getBand']);
 Route::delete('/bands/{id}', [BandController::class, 'deleteBand']);
 
 Route::post('/shows', [ShowController::class, 'addShow']);
