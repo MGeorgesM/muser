@@ -19,7 +19,7 @@ class UserFactory extends Factory
         return [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => bcrypt('useruser'),
+            'password' => 'password',
             'about' => $this->faker->text(120),
             'picture' => $this->faker->imageUrl(),
             'location' => $this->faker->city,
@@ -38,7 +38,7 @@ class UserFactory extends Factory
             return [
                 'name' => $this->faker->company,
                 'email' => $this->faker->unique()->safeEmail,
-                'password' => bcrypt('useruser'),
+                'password' => 'password',
                 'about' => $this->faker->text(120),
                 'picture' => $this->faker->imageUrl(),
                 'location' => $this->faker->city,
