@@ -25,7 +25,7 @@ class UserController extends Controller
         return response()->json($users->map->full_details);
     }
 
-    public function updateUser(Request $request, $id)
+    public function updateUser(Request $request, $id = null)
     {
         $request->validate([
             'name' => 'string|max:255',
