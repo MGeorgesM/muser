@@ -28,12 +28,13 @@ const Chat = ({ route }) => {
     const { user } = route.params;
     const [messages, setMessages] = useState([]);
     const [isPopupVisible, setIsPopupVisible] = useState(false);
-    const [participants, setParticipants] = useState([currentUser?.id, user.id]);
+    const [participants, setParticipants] = useState([currentUser.id, user.id].sort());
     // const [participants, setParticipants] = useState([auth.currentUser.uid, 'tycoJeTqx2gdJJoyj1MvoE2pFpj1'].sort());
     // const [participants, setParticipants] = useState([auth.currentUser.uid, other].sort());
     const [newParticipantUid, setNewParticipantUid] = useState('');
 
     console.log('User:', user.id);
+    console.log('Current User:', currentUser.id);
     // const otherUserId2 = 'tycoJeTqx2gdJJoyj1MvoE2pFpj1';
     // const otherUserId = 'au2B1vguBTOA2zZQp6VVcGoMt1C2';
     // const participants = [currentUser];
@@ -115,6 +116,16 @@ const Chat = ({ route }) => {
     });
 
     useLayoutEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <ArrowLeft size={24} color="black" />
+            </TouchableOpacity>
+            ),
+        });
+    }, []);
+
+    useLayoutEffect(() => {
         const setupMessagesListener = async () => {
             const chatRef = await getChat();
             if (!chatRef) return;
@@ -167,7 +178,7 @@ const Chat = ({ route }) => {
                 messages={messages}
                 onSend={(messages) => onSend(messages)}
                 user={{
-                    _id: currentUser?.id,
+                    _id: currentUser.id,
                     avatar: avatarLocalImg,
                 }}
                 messagesContainerStyle={{ backgroundColor: '#dbdbdb' }}
