@@ -9,6 +9,7 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import { Guitar } from 'lucide-react-native';
 import { colors, utilities } from '../styles/utilities';
 import MasonryList from '@react-native-seoul/masonry-list';
+import { useUser } from '../contexts/UserContext';
 
 const avatar = require('../assets/avatar.png');
 
@@ -22,20 +23,22 @@ const Feed = ({ navigation }) => {
                 const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
                 if (response.status !== 200) throw new Error('Failed to fetch users');
                 dispatch(setUsers(response.data));
+                console.log('Users fetched:', response.data);
             } catch (error) {
                 console.log('Error fetching users:', error);
             }
         };
         getUsers();
-    });
+    },[]);
 
-    const CustomHeader = ({ username, avatar }) => {
+    const CustomHeader = () => {
+        const { currentUser } = useUser();
         return (
             <View style={styles.headerContainer}>
                 <Image source={avatar} style={styles.avatar} />
                 <View style={styles.textContainer}>
                     <Text style={[styles.welcomeDisplay, utilities.textM, utilities.noMb]}>Welcome</Text>
-                    <Text style={[utilities.textL, utilities.textBold]}>{username}</Text>
+                    <Text style={[utilities.textL, utilities.textBold]}>{currentUser?.name}</Text>
                 </View>
             </View>
         );

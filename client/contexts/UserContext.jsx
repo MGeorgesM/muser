@@ -114,19 +114,15 @@ export const UserProvider = ({ children }) => {
     };
 
     const handleSignOut = async () => {
-
-        setCurrentUser(null);
         navigation.navigate('Authentication');
+        setCurrentUser(null);
         await AsyncStorage.removeItem('token');
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/logout', null);
-            if (response.status === 200) {
-                console.log('User logged out:', response.data);
-            }
+            if (response.status !== 200) throw new Error('Failed to log out');
         } catch (error) {
             console.error('Error logging out:', error);
         }
-        
     };
 
     return (
