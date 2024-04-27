@@ -45,9 +45,9 @@ const UserInfo = ({ navigation }) => {
 
     const handlePickerChange = (key, value) => {
         if (key === 'Location') {
-            setUserInfo((prev) => ({ ...prev, key: value }));
+            setUserInfo((prev) => ({ ...prev, [`${key.toLowerCase()}`]: value }));
             return;
-        } else if (key === 'Genre') {
+        } else if (key === 'Music Genres') {
             setUserInfo((prev) => ({ ...prev, genres: [...prev.genres, value] }));
         } else {
             setUserInfo((prev) => ({ ...prev, [`${key.toLowerCase()}_id`]: value }));

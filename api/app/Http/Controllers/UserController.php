@@ -32,7 +32,7 @@ class UserController extends Controller
             'email' => 'string|email|max:255|unique:users,email,' . $id,
             'about' => 'string|max:120',
             'picture' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'location' => 'integer|exists:locations,id',
+            'location_id' => 'integer|exists:locations,id',
             'availability_id' => 'exists:availabilities,id',
             'experience_id' => 'exists:experiences,id',
             'instrument_id' => 'exists:instruments,id',
@@ -48,7 +48,7 @@ class UserController extends Controller
         $request->name && $user->name = $request->input('name');
         $request->email && $user->email = $request->input('email');
         $request->about && $user->about = $request->input('about');
-        $request->location && $user->location = $request->input('location');
+        $request->location_id && $user->location_id = $request->input('location_id');
         $request->availability_id && $user->availability_id = $request->input('availability_id');
         $request->experience_id && $user->experience_id = $request->input('experience_id');
         $request->instrument_id && $user->instrument_id = $request->input('instrument_id');
