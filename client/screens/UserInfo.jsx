@@ -44,7 +44,14 @@ const UserInfo = ({ navigation }) => {
     }, []);
 
     const handlePickerChange = (key, value) => {
-        setUserInfo((prev) => ({ ...prev, [key]: value }));
+        if (key === 'Location') {
+            setUserInfo((prev) => ({ ...prev, key: value }));
+            return;
+        } else if (key === 'Genre') {
+            setUserInfo((prev) => ({ ...prev, genres: [...prev.genres, value] }));
+        } else {
+            setUserInfo((prev) => ({ ...prev, [`${key.toLowerCase()}_id`]: value }));
+        }
     };
 
     const handleImagePicker = async () => {
@@ -84,18 +91,13 @@ const UserInfo = ({ navigation }) => {
                             source={{ uri: userInfo.profilePicture }}
                             style={{ width: 100, height: 100, borderRadius: 50 }}
                         />
-                        <TouchableOpacity onPress={handleImagePicker}>
-                            <CirclePlus size={50} color={'black'} />
-                        </TouchableOpacity>
                     </>
                 ) : (
-                    <>
-                        <Text style={styles.addPhotoText}>Add a Photo</Text>
-                        <TouchableOpacity onPress={handleImagePicker}>
-                            <CirclePlus size={50} color={'black'} />
-                        </TouchableOpacity>
-                    </>
+                    <Text style={styles.addPhotoText}>Add a Photo</Text>
                 )}
+                <TouchableOpacity onPress={handleImagePicker}>
+                    <CirclePlus size={50} color={'black'} />
+                </TouchableOpacity>
             </View>
             <View>
                 <Text style={styles.inputTextProfile}>{userInfo.userType === 'venue' ? 'Description' : 'Bio'}</Text>
@@ -114,7 +116,9 @@ const UserInfo = ({ navigation }) => {
                                     label={key}
                                     items={profileProperties[key]}
                                     selectedValue={
-                                        userInfo[`${key.toLowerCase()}`] ?? userInfo[`${key.toLowerCase()}_id` ?? 'Select an option']
+                                        userInfo[key.toLowerCase()] ??
+                                        userInfo[key.toLowerCase() + '_id'] ??
+                                        'Select an option'
                                     }
                                     onValueChange={(value) => handlePickerChange(key, value)}
                                 />
