@@ -115,7 +115,7 @@ export const UserProvider = ({ children }) => {
 
     const handleSignOut = async () => {
         try {
-            const response = await sendRequest(requestMethods.POST, 'auth/logout', null);
+            const response = await sendRequest(requestMethods.POST, 'auth/logout');
             if (response.status !== 200) throw new Error('Failed to log out');
             setCurrentUser(null);
             await AsyncStorage.removeItem('token');
