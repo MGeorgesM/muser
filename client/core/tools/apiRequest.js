@@ -14,7 +14,6 @@ export const sendRequest = async (method, route, body) => {
             Accept: 'application/json',
         },
     });
-    console.log('Response:', response);
     return response;
     // try {
     // } catch (error) {

@@ -10,6 +10,7 @@ const EditProfilePicker = ({ label, items, selectedValue, onValueChange }) => (
             selectedValue={selectedValue}
             onValueChange={onValueChange}
         >
+            <Picker.Item label="Select an option" value="" />
             {items.map((item) => (
                 <Picker.Item key={item.id} value={item.id} label={item.name} />
             ))}

@@ -10,7 +10,6 @@ import { CirclePlus, Plus, ArrowLeft } from 'lucide-react-native';
 
 import EditProfilePicker from '../components/EditProfilePicker/EditProfilePicker';
 
-
 const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserInfo = ({ navigation }) => {
@@ -21,15 +20,12 @@ const UserInfo = ({ navigation }) => {
     useEffect(() => {
         const getProperties = async () => {
             try {
-                console.log('Getting properties');
-                const response = await sendRequest(requestMethods.GET, 'auth/properties', null);
-                console.log('Properties: HERE');
+                const response = await sendRequest(requestMethods.GET, 'auth/properties');
                 if (response.status === 200) {
                     setProfileProperties(response.data.general);
                     userInfo.role_id === 1
                         ? setProfileProperties((prev) => ({ ...prev, ...response.data.musician }))
                         : setProfileProperties((prev) => ({ ...prev, ...response.data.venue }));
-                    console.log('Properties:', response.data);
                 }
             } catch (error) {
                 console.error('Error getting properties:', error);
@@ -109,11 +105,7 @@ const UserInfo = ({ navigation }) => {
                                     key={key}
                                     label={key}
                                     items={profileProperties[key]}
-                                    selectedValue={
-                                        userInfo[key.toLowerCase()] ??
-                                        userInfo[key.toLowerCase() + '_id'] ??
-                                        'Select an option'
-                                    }
+                                    selectedValue={userInfo[key.toLowerCase() + '_id']}
                                     onValueChange={(value) => handlePickerChange(key, value)}
                                 />
                             );

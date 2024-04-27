@@ -17,10 +17,14 @@ const Authentication = ({ navigation }) => {
 
     const handleProceed = () => {
         console.log('Form:', userInfo);
+        console.log('Error:', error);
+        console.log('authError:', authError);
         if (switchHandler) {
-            userInfo.name.length > 0 && authError === null ? navigation.navigate('UserRole') : setError('Please fill out all fields');
+            userInfo.name.length > 0 ? navigation.navigate('UserRole') : setError('Please fill out all fields');
+            return;
         } else {
             handleSignIn();
+            setError(authError);
         }
 
         authError && setError(authError);

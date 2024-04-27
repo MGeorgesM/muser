@@ -24,10 +24,10 @@ use App\Http\Middleware\VenueMiddleware;
         Route::post('login', [AuthController::class, 'login']);
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('register', [AuthController::class, 'register']);
-
         Route::get('properties', [AuthController::class, 'getProperties']);
-    });
 
+    });
+    
 
     Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
