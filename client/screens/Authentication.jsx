@@ -13,7 +13,7 @@ const Authentication = ({ navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
     const [error, setError] = useState(null);
 
-    const { handleSignIn, userInfo, setUserInfo, authError } = useUser();
+    const { handleSignIn, userInfo, setUserInfo, authError, loggedIn } = useUser();
 
     const handleProceed = () => {
         console.log('Form:', userInfo);

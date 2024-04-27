@@ -73,6 +73,7 @@ export const UserProvider = ({ children }) => {
 
             if (response.status === 200) {
                 await AsyncStorage.setItem('token', response.data.token);
+                setLoggedIn(true);
                 setCurrentUser(response.data.user);
                 setAuthError(null);
                 console.log('User login successful:', response.data.user);
@@ -106,7 +107,9 @@ export const UserProvider = ({ children }) => {
             });
             if (response.status === 201) {
                 await AsyncStorage.setItem('token', response.data.token);
+                setLoggedIn(true);
                 setCurrentUser(response.data.user);
+                setAuthError(null);
                 navigation.navigate('Feed');
             }
         } catch (error) {
