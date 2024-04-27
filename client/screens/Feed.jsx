@@ -69,24 +69,26 @@ const Feed = ({ navigation }) => {
         //     )}
         // </View>
 
-        <MasonryList
-            data={users}
-            renderItem={({ item }) => {
-                const randomHeight = Math.random() < 0.4 ? 290 : 180;
-                return (
-                    <MemberCard
-                        username={item.name}
-                        photo={item.profilePicture}
-                        height={randomHeight}
-                        navigation={navigation}
-                    />
-                );
-            }}
-            keyExtractor={(item) => item.firebaseUserId}
-            numColumns={2}
-            style={{ flex: 1 }}
-            contentContainerStyle={styles.cardsContainer}
-        />
+        users.length > 0 && (
+            <MasonryList
+                data={users}
+                renderItem={({ item }) => {
+                    const randomHeight = Math.random() < 0.4 ? 290 : 180;
+                    return (
+                        <MemberCard
+                            username={item.name}
+                            photo={item.profilePicture}
+                            height={randomHeight}
+                            navigation={navigation}
+                        />
+                    );
+                }}
+                keyExtractor={(item) => item.firebaseUserId}
+                numColumns={2}
+                style={{ flex: 1 }}
+                contentContainerStyle={styles.cardsContainer}
+            />
+        )
     );
 };
 

@@ -4,8 +4,9 @@ import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import store from './store/store';
+import { Provider } from 'react-redux';
 import { UserProvider, useUser } from './contexts/UserContext';
-
 
 import MainTabs from './screens/MainTabs';
 import UserRole from './screens/UserRole';
@@ -34,12 +35,14 @@ const AppNavigator = () => {
 
 const App = () => {
     return (
-        <NavigationContainer>
-            <UserProvider>
-                <StatusBar translucent={true} backgroundColor="transparent" barStyle={'dark-content'} />
-                <AppNavigator />
-            </UserProvider>
-        </NavigationContainer>
+        <Provider store={store}>
+            <NavigationContainer>
+                <UserProvider>
+                    <StatusBar translucent={true} backgroundColor="transparent" barStyle={'dark-content'} />
+                    <AppNavigator />
+                </UserProvider>
+            </NavigationContainer>
+        </Provider>
     );
 };
 
