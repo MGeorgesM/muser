@@ -21,7 +21,7 @@ class ShowFactory extends Factory
         return [
             'name' => $this->faker->sentence,
             'description' => $this->faker->text(120),
-            'picture' => $this->faker->imageUrl(),
+            'picture' => 'show.jpg',
             'date' => $this->faker->dateTimeBetween('+1 week', '+1 year'),
             'duration' => $this->faker->numberBetween(60, 180),
             'band_id' => $this->faker->numberBetween(1,10),
