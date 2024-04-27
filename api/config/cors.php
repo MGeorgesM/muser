@@ -30,8 +30,9 @@ return [
     // 'max_age' => 0,
 
     // 'supports_credentials' => false,
+    // 'paths' => ['api/getList', 'api/getDetails/*'],
 
-    'paths' => ['api/getList', 'api/getDetails/*'],
+    'paths' => ['*'],
     'allowed_methods' => ['*'],
     'allowed_origins' => ['*'],
     'allowed_origins_patterns' => [],

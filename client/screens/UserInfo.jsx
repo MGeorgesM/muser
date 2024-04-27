@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
+import { Platform, Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
 
@@ -14,6 +14,7 @@ const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserInfo = ({ navigation }) => {
     const [profileProperties, setProfileProperties] = useState({});
+    const [selectedPicture, setSelectedPicture] = useState(null);
 
     const { userInfo, setUserInfo, handleSignUp } = useUser();
 
@@ -56,14 +57,26 @@ const UserInfo = ({ navigation }) => {
             quality: 1,
         });
 
-        console.log(result);
-
         if (!result.cancelled && result.assets && result.assets.length > 0) {
-            const uri = result.assets[0].uri;
-            const type = result.assets[0].type;
-            const name = uri.split('/').pop();
-            setUserInfo((prev) => ({ ...prev, profilePicture: uri, picture: { uri, name, type } }));
+            // const uri = result.assets[0].uri;
+            // const fileType = uri.substring(uri.lastIndexOf('.') + 1);
+            // const type = `image/${fileType}`;
+            // const name = `picture.${fileType}`;
+
+            const uri = Platform.OS === 'android' ? result.assets[0].uri : result.assets[0].uri.replace('file://', '');
+            const filename = result.assets[0].uri.split('/').pop();
+            const match = /\.(\w+)$/.exec(filename);
+            const ext = match?.[1];
+            const type = match ? `image/${match[1]}` : `image`;
+            const name = `image.${ext}`
+
+
+            console.log('Image:', { uri, name, type });
+
+            setUserInfo((prev) => ({ ...prev, picture: { uri, name, type } }));
         }
+
+        setSelectedPicture(result);
     };
 
     return (
@@ -75,10 +88,10 @@ const UserInfo = ({ navigation }) => {
                 <Text style={styles.headerProfile}>Complete Your Profile</Text>
             </View>
             <View style={styles.addPhotoPrompt}>
-                {userInfo.profilePicture ? (
+                {selectedPicture ? (
                     <>
                         <Image
-                            source={{ uri: userInfo.profilePicture }}
+                            source={{ uri: selectedPicture.assets[0].uri }}
                             style={{ width: 100, height: 100, borderRadius: 50 }}
                         />
                     </>
