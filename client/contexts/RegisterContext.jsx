@@ -5,7 +5,7 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 const RegisterContext = createContext();
 
 export const RegisterProvider = ({ children }) => {
-    const [userInfo, setUserInfo] = useState({
+    const [signUpForm, setSignUpForm] = useState({
         name: null,
         email: '',
         password: '',

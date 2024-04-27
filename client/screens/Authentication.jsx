@@ -18,6 +18,8 @@ const Authentication = ({ navigation }) => {
 
     const { handleSignIn, handleSignUp } = useUser();
 
+
+
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.topInnerContainer}>
@@ -26,7 +28,7 @@ const Authentication = ({ navigation }) => {
                 {switchHandler ? <SignUpForm /> : <SignInForm signInForm={signInForm} setSignInForm={setSignInForm} />}
             </View>
             <View style={styles.bottomInnerContainer}>
-                <TouchableOpacity style={styles.primaryBtn} onPress={() => handleSignIn(email, password)}>
+                <TouchableOpacity style={styles.primaryBtn} onPress={() => handleSignIn(signInForm)}>
                     <Text style={styles.primaryBtnText}>Log In</Text>
                 </TouchableOpacity>
                 <Text style={styles.promptText}>
