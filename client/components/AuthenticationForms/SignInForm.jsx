@@ -1,25 +1,27 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { Text, View, TextInput } from 'react-native';
 
-const SignInForm = ({ setEmail, setPassword }) => {
+const { styles } = require('./styles');
+
+const SignInForm = ({ signInForm, setSignInForm }) => {
     return (
         <View>
             <Text style={styles.label}>Email</Text>
             <TextInput
                 style={styles.input}
                 placeholder="user@muser.com"
-                value={email}
+                value={signInForm?.email}
                 keyboardType="email-address"
                 textContentType="emailAddress"
                 autoCapitalize="none"
-                onChangeText={(text) => setEmail(text)}
+                onChangeText={(text) => setSignInForm({ ...signInForm, email: text.toLowerCase() })}
             />
             <Text style={styles.label}>Password</Text>
             <TextInput
                 style={styles.input}
                 placeholder="********"
-                value={password}
-                onChangeText={(text) => setPassword(text)}
+                value={signInForm?.password}
+                onChangeText={(text) => setSignInForm({ ...signInForm, password: text })}
                 autoCapitalize="none"
                 secureTextEntry
             />
@@ -28,5 +30,3 @@ const SignInForm = ({ setEmail, setPassword }) => {
 };
 
 export default SignInForm;
-
-const styles = StyleSheet.create({});

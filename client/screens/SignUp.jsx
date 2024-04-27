@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 const logoImg = require('../assets/logo.png');
-const { styles } = require('./SignIn');
+const { styles } = require('./Authentication');
 
 const SignUp = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -35,7 +35,6 @@ const SignUp = ({ navigation }) => {
                 <View style={styles.topInnerContainer}>
                     <Image style={styles.welcomeLogo} source={logoImg} />
                     <Text style={styles.header}>Join Muser</Text>
-
                 </View>
 
                 <View style={styles.bottomInnerContainer}>

@@ -6,7 +6,7 @@ import { Picker } from '@react-native-picker/picker';
 import { StyleSheet, Platform, Image, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
 
 const logoImg = require('../assets/logo.png');
-const { styles } = require('./SignIn');
+const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserRole = ({ navigation }) => {
     const { userInfo, setUserInfo } = useRegister();
