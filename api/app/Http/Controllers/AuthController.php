@@ -3,9 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+
+use App\Models\User;
+use App\Models\Location;
+use App\Models\Availability;
+use App\Models\Experience;
+use App\Models\Instrument;
+use App\Models\VenueType;
+use App\Models\Genre;
+
 
 class AuthController extends Controller
 {
@@ -118,5 +125,17 @@ class AuthController extends Controller
         auth()->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function getProperties()
+    {
+        return response()->json([
+            'locations' => Location::all(),
+            'availabilities' => Availability::all(),
+            'experiences' => Experience::all(),
+            'instruments' => Instrument::all(),
+            'venue_types' => VenueType::all(),
+            'genres' => Genre::all(),
+        ]);
     }
 }
