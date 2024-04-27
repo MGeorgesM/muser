@@ -3,25 +3,25 @@ import { Text, View, TextInput } from 'react-native';
 
 const { styles } = require('./styles');
 
-const SignInForm = ({ signInForm, setSignInForm }) => {
+const SignInForm = ({ userInfo, setUserInfo }) => {
     return (
         <View>
             <Text style={styles.label}>Email</Text>
             <TextInput
                 style={styles.input}
                 placeholder="user@muser.com"
-                value={signInForm?.email}
+                value={userInfo?.email}
                 keyboardType="email-address"
                 textContentType="emailAddress"
                 autoCapitalize="none"
-                onChangeText={(text) => setSignInForm({ ...signInForm, email: text.toLowerCase() })}
+                onChangeText={(text) => setUserInfo({ ...userInfo, email: text.toLowerCase() })}
             />
             <Text style={styles.label}>Password</Text>
             <TextInput
                 style={styles.input}
                 placeholder="********"
-                value={signInForm?.password}
-                onChangeText={(text) => setSignInForm({ ...signInForm, password: text })}
+                value={userInfo?.password}
+                onChangeText={(text) => setUserInfo({ ...userInfo, password: text })}
                 autoCapitalize="none"
                 secureTextEntry
             />

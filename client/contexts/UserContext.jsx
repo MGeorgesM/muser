@@ -14,10 +14,10 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [authError, setAuthError] = useState(null);
-    const [signUpForm, setSignUpForm] = useState({
-        name: '',
-        email: '',
-        password: '',
+    const [userInfo, setUserInfo] = useState({
+        name: 'May',
+        email: 'may@mail.com',
+        password: 'password',
         about: '',
         picture: '',
         location_id: '',
@@ -56,7 +56,7 @@ export const UserProvider = ({ children }) => {
         checkUser();
     }, []);
 
-    const handleSignIn = async (signInForm) => {
+    const handleSignIn = async () => {
         // try {
         //     const response = await signInWithEmailAndPassword(auth, email, password);
         //     if (response.status === 200) {
@@ -65,14 +65,18 @@ export const UserProvider = ({ children }) => {
         // } catch (error) {
         //     console.error('Error signing in:', error);
         // }
-
-        console.log('sign in form',signInForm)
         try {
-            const response = await sendRequest(requestMethods.POST, 'auth/login', signInForm);
-            console.log('response',response)
+            const response = await sendRequest(requestMethods.POST, 'auth/login', {
+                email: userInfo.email,
+                password: userInfo.password,
+            });
+
             if (response && response.status === 200) {
+
                 await AsyncStorage.setItem('token', response.data.token);
+
                 setCurrentUser(response.data.user);
+                
                 navigation.navigate('Feed');
             }
         } catch (error) {
@@ -81,8 +85,8 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    const handleSignUp = async (signUpForm) => {
-        const response = await sendRequest(requestMethods.POST, 'auth/register', signUpForm);
+    const handleSignUp = async (userInfo) => {
+        const response = await sendRequest(requestMethods.POST, 'auth/register', userInfo);
         if (response.status === 201) {
             await AsyncStorage.setItem('token', response.data.token);
             setCurrentUser(response.data.user);
@@ -102,13 +106,13 @@ export const UserProvider = ({ children }) => {
         <UserContext.Provider
             value={{
                 authError,
-                signUpForm,
+                userInfo,
                 currentUser,
-                setSignUpForm,
-                setCurrentUser,
                 handleSignIn,
                 handleSignUp,
                 handleSignOut,
+                setUserInfo,
+                setCurrentUser,
             }}
         >
             {children}
