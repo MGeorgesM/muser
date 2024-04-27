@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
 import { colors, utilities } from '../styles/utilities';
 
@@ -17,11 +17,9 @@ import {
     updateDoc,
 } from 'firebase/firestore';
 
-import chatsData from '../core/tools/fakeChats';
-
 const ChatOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);
-    const currentUserID = '16';
+    const currentUserID = 16;
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -35,17 +33,26 @@ const ChatOverview = ({ navigation }) => {
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chatsArray = [];
+            console.log("Snapshot size:", querySnapshot.size); 
             querySnapshot.forEach((doc) => {
                 chatsArray.push({ id: doc.id, ...doc.data() });
             });
 
             setChats(chatsArray);
+            console.log(currentUserID);
+            console.log(chatsArray)
+
+            if (querySnapshot.empty) {
+                return;
+            } else {
+                return querySnapshot.docs[0].ref;
+            }
         });
+
 
         return () => unsubscribe;
     },[]);
 
-    console.log(chatsData);
     const ChatCard = ({ chat }) => {
         return (
             <TouchableOpacity
@@ -53,12 +60,12 @@ const ChatOverview = ({ navigation }) => {
                 onPress={() => navigation.navigate('ChatDetails', { chat })}
             >
                 <View style={[utilities.flexRow, utilities.center]}>
-                    <Image source={chat.photo} style={styles.photo} />
+                    <Image source={{ uri: chat.photo }} style={styles.photo} /> 
                     <View>
-                        <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>
-                            {chat.username}
+                        <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>{chat.username}</Text>
+                        <Text style={[utilities.textXS, { color: colors.gray }]}>
+                            {chat.lastMessage.text}
                         </Text>
-                        <Text style={[utilities.textXS, { color: colors.gray }]}>{chat.lastMessage.text}</Text>
                     </View>
                 </View>
                 <View>
@@ -69,12 +76,16 @@ const ChatOverview = ({ navigation }) => {
     };
 
     return (
-        <FlatList
-            style={utilities.container}
-            data={chatsData}
-            renderItem={({ item }) => <ChatCard chat={item} />}
-            keyExtractor={(item) => item.username}
-        ></FlatList>
+        // <FlatList
+        //     style={utilities.container}
+        //     data={chats}
+        //     renderItem={({ item }) => <ChatCard chat={item} />}
+        //     keyExtractor={(item) => item?.username}
+        // ></FlatList>
+
+        <View style={utilities.container}>
+            <Text>Chats</Text>
+        </View>
     );
 };
 
