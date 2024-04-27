@@ -29,7 +29,7 @@ const Feed = ({ navigation }) => {
             }
         };
         getUsers();
-    },[]);
+    }, []);
 
     const CustomHeader = () => {
         const { currentUser } = useUser();
@@ -44,15 +44,19 @@ const Feed = ({ navigation }) => {
         );
     };
 
-    const MemberCard = ({ username, photo, height, navigation }) => {
+    const MemberCard = ({ user, height, navigation }) => {
+        console.log('userpicture',user.picture)
         return (
             <TouchableOpacity
                 style={[styles.cardContainer, { height: height || 180 }]}
                 onPress={() => navigation.navigate('ProfileDetails', { username, photo })}
             >
-                <Image source={photo} style={styles.photo} />
+                <Image
+                    source={`http://192.168.1.107:8000/profile-pictures/musician.jpg`}
+                    style={styles.photo}
+                />
                 <View style={styles.overlay}>
-                    <Text style={styles.username}>{username}</Text>
+                    <Text style={styles.username}>{user.name}</Text>
                     <Guitar size={20} color="white" />
                 </View>
             </TouchableOpacity>
@@ -77,14 +81,7 @@ const Feed = ({ navigation }) => {
                 data={users}
                 renderItem={({ item }) => {
                     const randomHeight = Math.random() < 0.4 ? 290 : 180;
-                    return (
-                        <MemberCard
-                            username={item.name}
-                            photo={item.profilePicture}
-                            height={randomHeight}
-                            navigation={navigation}
-                        />
-                    );
+                    return <MemberCard user={item} height={randomHeight} navigation={navigation} />;
                 }}
                 keyExtractor={(item) => item.firebaseUserId}
                 numColumns={2}

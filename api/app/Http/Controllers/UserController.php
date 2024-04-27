@@ -10,15 +10,25 @@ class UserController extends Controller
 {
     public function getUser($id)
     {
-        $user = User::findOrFail($id);
+        // if ($id) {
+        //     $user = User::find($id);
+        //     if (!$user) return response()->json(['message' => 'User not found'], 404);
+        //     return response()->json(['user' => $user->full_details]);
+        // } else {
+        //     $current_user_id = auth()->id();
+        //     $all_users = User::where('id', '!=', $current_user_id)->get();
+        //     return response()->json($all_users->map->full_details);
+        // }
 
+        $user = User::find($id);
+        if (!$user) return response()->json(['message' => 'User not found'], 404);
         return response()->json(['user' => $user->full_details]);
     }
 
     public function getUsersByRole($role)
     {
         $users = User::whereHas('role', function ($query) use ($role) {
-            $query->where('name', $role);
+            $query->where('name', $role)->where('is_active', 0)->where('id', '!=', auth()->id());
         })
             ->get();
 
@@ -43,7 +53,7 @@ class UserController extends Controller
 
         $user = User::find($id);
 
-        if(!$user) return response()->json(['message' => 'User not found'], 404);
+        if (!$user) return response()->json(['message' => 'User not found'], 404);
 
         $request->name && $user->name = $request->input('name');
         $request->email && $user->email = $request->input('email');
@@ -78,7 +88,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        if(!$user) return response()->json(['message' => 'User not found'], 404);
+        if (!$user) return response()->json(['message' => 'User not found'], 404);
 
         $user->is_active = 1;
         $user->save();

@@ -32,7 +32,7 @@ return [
     // 'supports_credentials' => false,
     // 'paths' => ['api/getList', 'api/getDetails/*'],
 
-    'paths' => ['*'],
+    'paths' => ['profile-pictures/*', 'api/*', 'sanctum/csrf-cookie'],
     'allowed_methods' => ['*'],
     'allowed_origins' => ['*'],
     'allowed_origins_patterns' => [],
