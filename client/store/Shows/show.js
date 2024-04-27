@@ -5,7 +5,7 @@ const initialState = {
 };
 
 const showsSlice = createSlice({
-    name: 'shows',
+    name: 'showsSlice',
     initialState,
     reducers: {
         setShows(state, action) {

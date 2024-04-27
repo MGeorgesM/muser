@@ -5,7 +5,7 @@ const initialState = {
 };
 
 const usersSlice = createSlice({
-    name: 'users',
+    name: 'usersSlice',
     initialState,
     reducers: {
         setUsers(state, action) {

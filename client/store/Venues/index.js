@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const venuesSlice = createSlice({
-    name: 'venues',
+    name: 'venuesSlice',
     initialState,
     reducers: {
         setVenues(state, action) {
