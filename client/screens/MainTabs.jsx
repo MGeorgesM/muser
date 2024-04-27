@@ -8,7 +8,6 @@ import FeedNavigator from '../navigators/FeedNavigator';
 import ChatNavigator from '../navigators/ChatNavigator';
 import Profile from './Profile';
 import Venues from './Venues';
-import Live from './Stream';
 import LiveStreamNavigator from '../navigators/LiveStreamNavigator';
 
 const Tab = createBottomTabNavigator();
