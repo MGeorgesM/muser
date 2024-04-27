@@ -1,23 +1,26 @@
 import React, { useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
-import { useDispatch, useSelector } from 'react-redux';
 import { setUsers } from '../store/Users';
+import { useUser } from '../contexts/UserContext';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import { Guitar } from 'lucide-react-native';
 import { colors, utilities } from '../styles/utilities';
 import MasonryList from '@react-native-seoul/masonry-list';
-import { useUser } from '../contexts/UserContext';
 
 const avatar = require('../assets/avatar.png');
 
 const Feed = ({ navigation }) => {
     const dispatch = useDispatch();
+    const { currentUser } = useUser();
     const users = useSelector((global) => global.usersSlice.users);
+    console.log('Users:', users);
 
     useLayoutEffect(() => {
+        console.log('Fetching users');
         const getUsers = async () => {
             try {
                 const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
@@ -45,16 +48,14 @@ const Feed = ({ navigation }) => {
     };
 
     const MemberCard = ({ user, height, navigation }) => {
-        console.log('userpicture',user.picture)
+        console.log('userpicture', user.picture);
+        const imageUrl = `http://192.168.1.107:8000/profile-pictures/${user.picture}`;
         return (
             <TouchableOpacity
                 style={[styles.cardContainer, { height: height || 180 }]}
-                onPress={() => navigation.navigate('ProfileDetails', { username, photo })}
+                onPress={() => navigation.navigate('ProfileDetails', { user })}
             >
-                <Image
-                    source={`http://192.168.1.107:8000/profile-pictures/musician.jpg`}
-                    style={styles.photo}
-                />
+                <Image source={{ uri: imageUrl }} style={styles.photo} />
                 <View style={styles.overlay}>
                     <Text style={styles.username}>{user.name}</Text>
                     <Guitar size={20} color="white" />
@@ -65,7 +66,7 @@ const Feed = ({ navigation }) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: () => <CustomHeader username="Johny Mouawad" avatar={avatar} />,
+            headerTitle: () => <CustomHeader username={currentUser?.name} avatar={avatar} />,
         });
     });
 
@@ -83,7 +84,7 @@ const Feed = ({ navigation }) => {
                     const randomHeight = Math.random() < 0.4 ? 290 : 180;
                     return <MemberCard user={item} height={randomHeight} navigation={navigation} />;
                 }}
-                keyExtractor={(item) => item.firebaseUserId}
+                keyExtractor={(item) => item.id}
                 numColumns={2}
                 style={{ flex: 1 }}
                 contentContainerStyle={styles.cardsContainer}

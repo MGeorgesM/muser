@@ -4,29 +4,33 @@ const { height } = Dimensions.get('window');
 const photo = require('../assets/girlimage.jpg');
 import { colors, utilities } from '../styles/utilities';
 
+import { useNavigation } from '@react-navigation/native';
 const ProfileDetails = ({ route }) => {
-    // const { username, photo } = route.params;
+    const { user } = route.params;
+    // const { id, name, instrument, location, about } = route.params;
+    console.log('User Details:', user);
+    const navigation = useNavigation();
+
 
     return (
         <View style={styles.container}>
             <Image source={photo} style={styles.avatar} />
             <View style={[styles.detailContainer]}>
                 <View>
-                    <Text style={[utilities.textXL, utilities.textBold, {marginTop:12}]}>Johny Mouawad</Text>
-                    <Text style={[utilities.textS, { color: colors.darkGray }]}>Keyboardist</Text>
-                    <Text style={[utilities.textXS, { color: colors.gray }]}>Beirut, Lebanon</Text>
+                    <Text style={[utilities.textXL, utilities.textBold, {marginTop:12}]}>{user.name}</Text>
+                    <Text style={[utilities.textS, { color: colors.darkGray }]}>{user.instrument.name}</Text>
+                    <Text style={[utilities.textXS, { color: colors.gray }]}>{user.location.name}</Text>
                 </View>
                 <View>
                     <Text style={[utilities.textS, utilities.textBold, styles.profileDetailsHeader]}>Bio</Text>
                     <Text style={[utilities.textM, { color: colors.darkGray }]}>
-                        I am a keyboardist and I love to play music. I have been playing for 10 years now and I am
-                        looking for a band to join.
+                        {user.about}
                     </Text>
                     <Text style={[utilities.textS, utilities.textBold, styles.profileDetailsHeader]}>Details</Text>
                     <Text style={[utilities.textM, { color: colors.darkGray }]}>Skils and Details</Text>
                 </View>
                 <TouchableOpacity style={[utilities.secondaryBtn, { marginTop: 32 }]}>
-                    <Text style={utilities.secondaryBtnText}>Say Hello!</Text>
+                    <Text style={utilities.secondaryBtnText} onPress={() => navigation.navigate('Chat', { screen: 'ChatDetails', params: { user } })}>Say Hello!</Text>
                 </TouchableOpacity>
             </View>
         </View>
