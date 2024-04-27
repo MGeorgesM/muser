@@ -13,35 +13,35 @@ class GenresTableSeeder extends Seeder
     public function run(): void
     {
         $genre = new Genre();
-        $genre->name = 'rock';
+        $genre->name = 'Rock';
         $genre->save();
 
         $genre = new Genre();
-        $genre->name = 'pop';
+        $genre->name = 'Pop';
         $genre->save();
 
         $genre = new Genre();
-        $genre->name = 'jazz';
+        $genre->name = 'Jazz';
         $genre->save();
 
         $genre = new Genre();
-        $genre->name = 'blues';
+        $genre->name = 'Blues';
         $genre->save();
 
         $genre = new Genre();
-        $genre->name = 'classical';
+        $genre->name = 'Classical';
         $genre->save();
 
         $genre = new Genre();
-        $genre->name = 'country';
+        $genre->name = 'Country';
         $genre->save();
 
         $genre = new Genre();
-        $genre->name = 'hip hop';
+        $genre->name = 'Hip hop';
         $genre->save();
 
         $genre = new Genre();
-        $genre->name = 'metal';
+        $genre->name = 'Oriental';
         $genre->save();
     }
 }

@@ -106,50 +106,20 @@ const UserInfo = ({ navigation }) => {
                     onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
                 />
                 <View>
-                    {profileProperties &&
-                        userInfo.role_id === 1 &&
+                    {Object.keys(profileProperties).length > 0 &&
                         Object.keys(profileProperties).map((key) => {
-                            console.log('Rendering picker for key:', key, 'with items:', profileProperties[key]);
                             return (
                                 <EditProfilePicker
                                     key={key}
                                     label={key}
                                     items={profileProperties[key]}
-                                    selectedValue={userInfo[key]}
+                                    selectedValue={
+                                        userInfo[`${key.toLowerCase()}`] ?? userInfo[`${key.toLowerCase()}_id` ?? 'Select an option']
+                                    }
                                     onValueChange={(value) => handlePickerChange(key, value)}
                                 />
                             );
                         })}
-                    {/* <EditProfilePicker
-                        label="Location"
-                        items={locations}
-                        selectedValue={userInfo.location}
-                        onValueChange={(value) => handlePickerChange('location', value)}
-                    />
-                    <EditProfilePicker
-                        label="Instrument"
-                        items={instruments}
-                        selectedValue={userInfo.instrument}
-                        onValueChange={(value) => handlePickerChange('instrument', value)}
-                    />
-                    <EditProfilePicker
-                        label="Music Genres"
-                        items={genres}
-                        selectedValue={userInfo.genre}
-                        onValueChange={(value) => handlePickerChange('genre', value)}
-                    />
-                    <EditProfilePicker
-                        label="Experience"
-                        items={experiences}
-                        selectedValue={userInfo.experience}
-                        onValueChange={(value) => handlePickerChange('experience', value)}
-                    />
-                    <EditProfilePicker
-                        label="Availability"
-                        items={availabilities}
-                        selectedValue={userInfo.availability}
-                        onValueChange={(value) => handlePickerChange('availability', value)}
-                    /> */}
                 </View>
             </View>
             <View style={styles.bottomInnerContainer}>

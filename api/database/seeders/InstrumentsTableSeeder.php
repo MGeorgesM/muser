@@ -12,28 +12,29 @@ class InstrumentsTableSeeder extends Seeder
      */
     public function run(): void
     {
+
         $intrument = new Instrument();
-        $intrument->name = 'strings';
+        $intrument->name = 'Percussion';
+        $intrument->save();
+        
+        $intrument = new Instrument();
+        $intrument->name = 'Strings';
         $intrument->save();
 
         $intrument = new Instrument();
-        $intrument->name = 'brass';
+        $intrument->name = 'Brass';
         $intrument->save();
 
         $intrument = new Instrument();
-        $intrument->name = 'bass';
+        $intrument->name = 'Bass';
         $intrument->save();
 
         $intrument = new Instrument();
-        $intrument->name = 'percussion';
+        $intrument->name = 'Keyboard';
         $intrument->save();
 
         $intrument = new Instrument();
-        $intrument->name = 'keyboard';
-        $intrument->save();
-
-        $intrument = new Instrument();
-        $intrument->name = 'vocal';
+        $intrument->name = 'Vocals';
         $intrument->save();
     }
 }
