@@ -24,11 +24,11 @@ export const UserProvider = ({ children }) => {
         availability_id: '',
         experience_id: '',
         instrument_id: '',
-        venue_type_id: '',
         role_id: 1,
         genres: [],
     });
     const navigation = useNavigation();
+    console.log(userInfo)
 
     useEffect(() => {
         // const subscriber = auth.onAuthStateChanged(async (user) => {

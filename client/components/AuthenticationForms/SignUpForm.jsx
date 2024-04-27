@@ -9,7 +9,7 @@ const SignUpForm = ({ userInfo, setUserInfo }) => {
             <Text style={styles.label}>Name</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Georges Mouawad"
+                placeholder="your name"
                 value={userInfo?.name}
                 onChangeText={(text) => setUserInfo({ ...userInfo, name: text })}
             />

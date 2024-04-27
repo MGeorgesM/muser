@@ -19,7 +19,7 @@ const Authentication = ({ navigation }) => {
         console.log('Sign In Form:', userInfo);
         console.log('Sign Up Form:', userInfo);
         if (switchHandler) {
-            navigation.navigate('UserRole');
+            userInfo.name.length > 0 && authError === null ? navigation.navigate('UserRole') : setError('Please fill out all fields');
         } else {
             handleSignIn(userInfo);
         }

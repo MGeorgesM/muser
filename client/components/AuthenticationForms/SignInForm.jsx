@@ -9,7 +9,7 @@ const SignInForm = ({ userInfo, setUserInfo }) => {
             <Text style={styles.label}>Email</Text>
             <TextInput
                 style={styles.input}
-                placeholder="user@muser.com"
+                placeholder="user@mail.com"
                 value={userInfo?.email}
                 keyboardType="email-address"
                 textContentType="emailAddress"
@@ -19,7 +19,7 @@ const SignInForm = ({ userInfo, setUserInfo }) => {
             <Text style={styles.label}>Password</Text>
             <TextInput
                 style={styles.input}
-                placeholder="********"
+                placeholder="password"
                 value={userInfo?.password}
                 onChangeText={(text) => setUserInfo({ ...userInfo, password: text })}
                 autoCapitalize="none"

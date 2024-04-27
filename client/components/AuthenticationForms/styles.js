@@ -67,17 +67,48 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         alignSelf: 'center',
     },
-
     userTypePrompt: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
     },
-
     userTypePicker: {
         fontSize: 24,
         width: 200,
         alignSelf: 'center',
+    },
+    userInfoContainer: {
+        height: '100%',
+        paddingHorizontal: 20,
+        marginTop: 32,
+        justifyContent: 'center',
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 16,
+        gap: 16,
+    },
+    headerProfile: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'left',
+    },
+    addPhotoPrompt: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 32,
+    },
+    addPhotoText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    inputTextProfile: {
+        color: 'black',
+        fontSize: 14,
+        fontWeight: 'bold',
+        textAlign: 'left',
     },
 });

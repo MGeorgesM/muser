@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
-// import { TextInput } from 'react-native-gesture-handler';
+import { Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
 
-import { useRegister } from '../contexts/RegisterContext';
+import { useUser } from '../contexts/UserContext';
 
 import { CirclePlus, Plus, ArrowLeft } from 'lucide-react-native';
 
@@ -18,8 +17,14 @@ import {
     availableAvailabilities,
 } from '../core/enums/userDetails';
 
+const { styles } = require('../components/AuthenticationForms/styles');
+
+
 const UserInfo = ({ navigation }) => {
-    const { userInfo, setUserInfo, register } = useRegister();
+    const { userInfo, setUserInfo, handleSignUp } = useUser();
+    const [profileProperties, setProfileProperties] = useState([
+
+    ]);
 
     const handlePickerChange = (key, value) => {
         setUserInfo((prev) => ({ ...prev, [key]: value }));
@@ -48,7 +53,7 @@ const UserInfo = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={styles.userInfoContainer}>
             <View style={styles.headerContainer}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <ArrowLeft size={24} color="black" />
@@ -115,70 +120,10 @@ const UserInfo = ({ navigation }) => {
                         onValueChange={(value) => handlePickerChange('availability', value)}
                     />
                 </View>
-                {/* <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
-                    <Text style={styles.inputTextProfile}>Location</Text>
-                    <Picker
-                        style={{ marginHorizontal: -16, marginBottom: -12 }}
-                        selectedValue={userInfo.location}
-                        onValueChange={(newValue) => handlePickerChange('location', newValue)}
-                    >
-                        {availableLocations.map((location) => (
-                            <Picker.Item key={location} value={location} label={location} />
-                        ))}
-                    </Picker>
-                </View>
-                <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
-                    <Text style={styles.inputTextProfile}>Instrument</Text>
-                    <Picker
-                        style={{ marginHorizontal: -16, marginBottom: -12 }}
-                        selectedValue={userInfo.instrument}
-                        onValueChange={(newValue) => handlePickerChange('instrument', newValue)}
-                    >
-                        {availableInstruments.map((instrument) => (
-                            <Picker.Item key={instrument} value={instrument} label={instrument} />
-                        ))}
-                    </Picker>
-                </View>
-                <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
-                    <Text style={styles.inputTextProfile}>Music Genres</Text>
-                    <Picker
-                        style={{ marginHorizontal: -16, marginBottom: -12 }}
-                        selectedValue={userInfo.genre}
-                        onValueChange={(newValue) => handlePickerChange('genre', newValue)}
-                    >
-                        {availableGenres.map((genre) => (
-                            <Picker.Item key={genre} value={genre} label={genre} />
-                        ))}
-                    </Picker>
-                </View>
-                <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
-                    <Text style={styles.inputTextProfile}>Experience</Text>
-                    <Picker
-                        style={{ marginHorizontal: -16, marginBottom: -12 }}
-                        selectedValue={userInfo.experience}
-                        onValueChange={(newValue) => handlePickerChange('experience', newValue)}
-                    >
-                        {availableExperiences.map((experience) => (
-                            <Picker.Item key={experience} value={experience} label={experience} />
-                        ))}
-                    </Picker>
-                </View>
-                <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
-                    <Text style={styles.inputTextProfile}>Availability</Text>
-                    <Picker
-                        style={{ marginHorizontal: -16, marginBottom: -12 }}
-                        selectedValue={userInfo.availability}
-                        onValueChange={(newValue) => handlePickerChange('availability', newValue)}
-                    >
-                        {availableAvailabilities.map((availability) => (
-                            <Picker.Item key={availability} value={availability} label={availability} />
-                        ))}
-                    </Picker>
-                </View> */}
             </View>
             <View style={styles.bottomInnerContainer}>
                 <TouchableOpacity style={styles.primaryBtn}>
-                    <Text style={styles.primaryBtnText} onPress={register}>
+                    <Text style={styles.primaryBtnText} onPress={handleSignUp}>
                         Register
                     </Text>
                 </TouchableOpacity>
@@ -188,57 +133,3 @@ const UserInfo = ({ navigation }) => {
 };
 
 export default UserInfo;
-
-const styles = StyleSheet.create({
-    container: {
-        height: '100%',
-        paddingHorizontal: 20,
-        marginTop: 32,
-        justifyContent: 'center',
-    },
-
-    headerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 16,
-        gap: 16,
-    },
-    headerProfile: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'left',
-    },
-    addPhotoPrompt: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 32,
-    },
-    addPhotoText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    inputTextProfile: {
-        color: 'black',
-        fontSize: 14,
-        fontWeight: 'bold',
-        textAlign: 'left',
-    },
-
-    primaryBtn: {
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: '#212529',
-        borderRadius: 24,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    primaryBtnText: {
-        color: '#fff',
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    bottomInnerContainer: {
-        marginBottom: 64,
-    },
-});
