@@ -11,7 +11,7 @@ const Profile = ({ navigation }) => {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <TouchableOpacity onPress={handleSignOut}>
+                <TouchableOpacity onPress={() => handleSignOut(navigation)}>
                     <LogOut size={30} color={'black'} style={{ marginEnd: 20 }} />
                 </TouchableOpacity>
             ),

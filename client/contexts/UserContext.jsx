@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CommonActions } from '@react-navigation/native';
 
 import { createContext, useContext, useEffect, useState } from 'react';
 
@@ -114,12 +115,21 @@ export const UserProvider = ({ children }) => {
     };
 
     const handleSignOut = async () => {
+        console.log(navigation.getState())
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/logout');
             if (response.status !== 200) throw new Error('Failed to log out');
             setCurrentUser(null);
+            setLoggedIn(false);
             await AsyncStorage.removeItem('token');
-            navigation.navigate('Authentication');
+            navigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [
+                        { name: 'Authentication' }, // Ensure this is the correct name of your auth stack or screen
+                    ],
+                })
+            );
         } catch (error) {
             console.error('Error logging out:', error);
         }
