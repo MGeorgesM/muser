@@ -132,8 +132,9 @@ export const UserProvider = ({ children }) => {
     return (
         <UserContext.Provider
             value={{
-                authError,
+                loggedIn,
                 userInfo,
+                authError,
                 currentUser,
                 handleSignIn,
                 handleSignUp,

@@ -1,18 +1,33 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
+import React, { useLayoutEffect } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { setUsers } from '../store/Users';
+
+import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import { Guitar } from 'lucide-react-native';
-
 import { colors, utilities } from '../styles/utilities';
-
 import MasonryList from '@react-native-seoul/masonry-list';
-
-import randomUsers from '../core/tools/fakeUsers';
 
 const avatar = require('../assets/avatar.png');
 
 const Feed = ({ navigation }) => {
-    const [users, setUsers] = useState(randomUsers);
+    const dispatch = useDispatch();
+    const users = useSelector((global) => global.usersSlice.users);
+
+    useLayoutEffect(() => {
+        const getUsers = async () => {
+            try {
+                const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
+                if (response.status !== 200) throw new Error('Failed to fetch users');
+                dispatch(setUsers(response.data));
+            } catch (error) {
+                console.log('Error fetching users:', error);
+            }
+        };
+        getUsers();
+    });
 
     const CustomHeader = ({ username, avatar }) => {
         return (
@@ -28,8 +43,10 @@ const Feed = ({ navigation }) => {
 
     const MemberCard = ({ username, photo, height, navigation }) => {
         return (
-            <TouchableOpacity style={[styles.cardContainer, { height: height || 180 }]}
-            onPress={() => navigation.navigate('ProfileDetails', {username, photo})}>
+            <TouchableOpacity
+                style={[styles.cardContainer, { height: height || 180 }]}
+                onPress={() => navigation.navigate('ProfileDetails', { username, photo })}
+            >
                 <Image source={photo} style={styles.photo} />
                 <View style={styles.overlay}>
                     <Text style={styles.username}>{username}</Text>
@@ -56,7 +73,14 @@ const Feed = ({ navigation }) => {
             data={users}
             renderItem={({ item }) => {
                 const randomHeight = Math.random() < 0.4 ? 290 : 180;
-                return <MemberCard username={item.name} photo={item.profilePicture} height={randomHeight} navigation={navigation} />;
+                return (
+                    <MemberCard
+                        username={item.name}
+                        photo={item.profilePicture}
+                        height={randomHeight}
+                        navigation={navigation}
+                    />
+                );
             }}
             keyExtractor={(item) => item.firebaseUserId}
             numColumns={2}

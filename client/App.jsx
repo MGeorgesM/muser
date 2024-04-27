@@ -27,9 +27,9 @@ const AuthenticationStack = () => {
 };
 
 const AppNavigator = () => {
-    const { currentUser } = useUser();
+    const { loggedIn } = useUser();
 
-    return currentUser ? <MainTabs /> : <AuthenticationStack />;
+    return loggedIn ? <MainTabs /> : <AuthenticationStack />;
 };
 
 const App = () => {
