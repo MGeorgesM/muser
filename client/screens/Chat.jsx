@@ -19,31 +19,35 @@ import {
 import { GiftedChat } from 'react-native-gifted-chat';
 
 import { LogOut, PlusIcon, View } from 'lucide-react-native';
+import { useUser } from '../contexts/UserContext';
 
 const avatarLocalImg = require('../assets/avatar.png');
 
 const Chat = ({ route }) => {
+    const { currentUser } = useUser();
+    const { user } = route.params;
     const [messages, setMessages] = useState([]);
     const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [participants, setParticipants] = useState([currentUser?.id, user.id]);
     // const [participants, setParticipants] = useState([auth.currentUser.uid, 'tycoJeTqx2gdJJoyj1MvoE2pFpj1'].sort());
     // const [participants, setParticipants] = useState([auth.currentUser.uid, other].sort());
     const [newParticipantUid, setNewParticipantUid] = useState('');
 
-    const otherUserId2 = 'tycoJeTqx2gdJJoyj1MvoE2pFpj1';
-    const otherUserId = 'au2B1vguBTOA2zZQp6VVcGoMt1C2';
-    const currentUser = auth.currentUser.uid;
-    const participants = [currentUser];
+    console.log('User:', user.id);
+    // const otherUserId2 = 'tycoJeTqx2gdJJoyj1MvoE2pFpj1';
+    // const otherUserId = 'au2B1vguBTOA2zZQp6VVcGoMt1C2';
+    // const participants = [currentUser];
 
-    if (currentUser !== otherUserId) {
-        participants.push(otherUserId);
-    } else {
-        participants.push(otherUserId2);
-    }
+    // if (currentUser !== otherUserId) {
+    //     participants.push(otherUserId);
+    // } else {
+    //     participants.push(otherUserId2);
+    // }
 
-    participants.sort();
+    // participants.sort();
 
     console.log('current user sending chat', currentUser);
-    console.log('participants', participants);
+    // console.log('participants', participants);
 
     const getChat = async () => {
         const chatRef = collection(fireStoreDb, 'chats');
@@ -163,7 +167,7 @@ const Chat = ({ route }) => {
                 messages={messages}
                 onSend={(messages) => onSend(messages)}
                 user={{
-                    _id: auth.currentUser.uid,
+                    _id: currentUser?.id,
                     avatar: avatarLocalImg,
                 }}
                 messagesContainerStyle={{ backgroundColor: '#dbdbdb' }}
