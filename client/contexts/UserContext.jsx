@@ -13,8 +13,8 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
-    const [userRegistrationInfo, setUserRegistrationInfo] = useState({
-        name: null,
+    const [signUpForm, setSignUpForm] = useState({
+        name: '',
         email: '',
         password: '',
         about: '',
@@ -79,8 +79,8 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    const handleSignUp = async (userRegistrationInfo) => {
-        const response = await sendRequest(requestMethods.POST, 'auth/register', userRegistrationInfo);
+    const handleSignUp = async (signUpForm) => {
+        const response = await sendRequest(requestMethods.POST, 'auth/register', signUpForm);
         if (response.status === 201) {
             await AsyncStorage.setItem('token', response.data.token);
             setCurrentUser(response.data.user);
@@ -97,7 +97,17 @@ export const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ currentUser, setCurrentUser, handleSignIn, handleSignUp, handleSignOut }}>
+        <UserContext.Provider
+            value={{
+                signUpForm,
+                currentUser,
+                setSignUpForm,
+                setCurrentUser,
+                handleSignIn,
+                handleSignUp,
+                handleSignOut,
+            }}
+        >
             {children}
         </UserContext.Provider>
     );

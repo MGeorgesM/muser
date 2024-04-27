@@ -5,26 +5,24 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { UserProvider, useUser } from './contexts/UserContext';
-import { RegisterProvider } from './contexts/RegisterContext';
+
 
 import MainTabs from './screens/MainTabs';
 import UserRole from './screens/UserRole';
 import userInfo from './screens/UserInfo';
 import Authentication from './screens/Authentication';
 
-// import { utilities, colors } from './styles/utilities';
+// const { utilities, colors } from './styles/utilities';
 
 const Stack = createStackNavigator();
 
 const AuthenticationStack = () => {
     return (
-        <RegisterProvider>
-            <Stack.Navigator>
-                <Stack.Screen name="Authentication" component={Authentication} options={{ headerShown: false }} />
-                <Stack.Screen name="UserRole" component={UserRole} options={{ headerShown: false }} />
-                <Stack.Screen name="UserInfo" component={userInfo} options={{ headerShown: false }} />
-            </Stack.Navigator>
-        </RegisterProvider>
+        <Stack.Navigator>
+            <Stack.Screen name="Authentication" component={Authentication} options={{ headerShown: false }} />
+            <Stack.Screen name="UserRole" component={UserRole} options={{ headerShown: false }} />
+            <Stack.Screen name="UserInfo" component={userInfo} options={{ headerShown: false }} />
+        </Stack.Navigator>
     );
 };
 

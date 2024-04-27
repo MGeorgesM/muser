@@ -32,7 +32,7 @@ const Authentication = ({ navigation }) => {
                     <Text style={styles.primaryBtnText}>Log In</Text>
                 </TouchableOpacity>
                 <Text style={styles.promptText}>
-                    {switchHandler ? 'Have an account?' : "Don't have an account? "}
+                    {switchHandler ? 'Have an account? ' : "Don't have an account? "}
                     <Text style={styles.promptLink} onPress={() => setSwitchHandler(!switchHandler)}>
                         {switchHandler ? 'Log In' : 'Register'}
                     </Text>
