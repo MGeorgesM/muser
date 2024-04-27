@@ -13,6 +13,7 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
+    const [authError, setAuthError] = useState(null);
     const [signUpForm, setSignUpForm] = useState({
         name: '',
         email: '',
@@ -65,15 +66,18 @@ export const UserProvider = ({ children }) => {
         //     console.error('Error signing in:', error);
         // }
 
+        console.log('sign in form',signInForm)
         try {
-            const response = await sendRequest(requestMethods.POST, 'auth/login', { signInForm });
-            if (response.status === 200) {
+            const response = await sendRequest(requestMethods.POST, 'auth/login', signInForm);
+            console.log('response',response)
+            if (response && response.status === 200) {
                 await AsyncStorage.setItem('token', response.data.token);
                 setCurrentUser(response.data.user);
                 navigation.navigate('Feed');
             }
         } catch (error) {
-            console.error(response);
+            console.error('Error signing in usercontext:', error);
+            setAuthError('Invalid email or password');
         }
     };
 
@@ -97,6 +101,7 @@ export const UserProvider = ({ children }) => {
     return (
         <UserContext.Provider
             value={{
+                authError,
                 signUpForm,
                 currentUser,
                 setSignUpForm,

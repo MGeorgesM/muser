@@ -12,13 +12,15 @@ const Authentication = ({ navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
     const [error, setError] = useState(null);
     const [signInForm, setSignInForm] = useState({
-        email: '',
-        password: '',
+        email: 'user@mail.com',
+        password: 'useruser',
     });
 
-    const { handleSignIn,signUpForm, setSignUpForm } = useUser();
+    const { handleSignIn, signUpForm, setSignUpForm, authError } = useUser();
 
     const handleProceed = () => {
+        console.log('Sign In Form:', signInForm);
+        console.log('Sign Up Form:', signUpForm);
         if (switchHandler) {
             navigation.navigate('UserRole');
         } else {
@@ -27,15 +29,14 @@ const Authentication = ({ navigation }) => {
     };
 
     useEffect(() => {
-        if (!signInForm.email.includes('@') || !signInForm.email.includes('.')) {
+        if ((!signInForm.email.includes('@') || !signInForm.email.includes('.')) && signInForm.email.length > 0) {
             setError('Please enter a valid email address');
-        } else if (signInForm.password.length < 6) {
+        } else if (signInForm.password.length < 6 && signInForm.password.length > 0) {
             setError('Password must be at least 6 characters long');
         } else {
             setError(null);
         }
-    }, []);
-
+    }, [signInForm]);
 
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -46,6 +47,7 @@ const Authentication = ({ navigation }) => {
             </View>
             <View style={styles.bottomInnerContainer}>
                 <Text style={styles.errorText}>{error}</Text>
+                <Text style={styles.errorText}>{authError}</Text>
                 <TouchableOpacity style={styles.primaryBtn} onPress={handleProceed}>
                     <Text style={styles.primaryBtnText}>Log In</Text>
                 </TouchableOpacity>
