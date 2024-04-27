@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
@@ -8,23 +8,40 @@ import { CirclePlus, Plus, ArrowLeft } from 'lucide-react-native';
 import EditProfilePicker from '../components/EditProfilePicker/EditProfilePicker';
 
 import * as ImagePicker from 'expo-image-picker';
+import { requestMethods, sendRequest } from '../core/tools/apiRequest';
 
-import {
-    availableLocations,
-    availableInstruments,
-    availableGenres,
-    availableExperiences,
-    availableAvailabilities,
-} from '../core/enums/userDetails';
+// import {
+//     Locations,
+//     Instruments,
+//     Genres,
+//     Experiences,
+//     Availabilities,
+// } from '../core/enums/userDetails';
 
 const { styles } = require('../components/AuthenticationForms/styles');
 
-
 const UserInfo = ({ navigation }) => {
-    const { userInfo, setUserInfo, handleSignUp } = useUser();
-    const [profileProperties, setProfileProperties] = useState([
+    const [profileProperties, setProfileProperties] = useState({});
 
-    ]);
+    const { userInfo, setUserInfo, handleSignUp } = useUser();
+
+    useEffect(() => {
+        const getProperties = async () => {
+            try {
+                const response = await sendRequest(requestMethods.GET, 'auth/properties');
+                if (response.status === 200) {
+                    setProfileProperties(response.data.general);
+                    userInfo.role_id === 1
+                        ? setProfileProperties((prev) => ({ ...prev, ...response.data.musician }))
+                        : setProfileProperties((prev) => ({ ...prev, ...response.data.venue }));
+                    console.log('Properties:', response.data);
+                }
+            } catch (error) {
+                console.error('Error getting properties:', error);
+            }
+        };
+        getProperties();
+    }, []);
 
     const handlePickerChange = (key, value) => {
         setUserInfo((prev) => ({ ...prev, [key]: value }));
@@ -89,36 +106,50 @@ const UserInfo = ({ navigation }) => {
                     onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
                 />
                 <View>
-                    <EditProfilePicker
+                    {profileProperties &&
+                        userInfo.role_id === 1 &&
+                        Object.keys(profileProperties).map((key) => {
+                            console.log('Rendering picker for key:', key, 'with items:', profileProperties[key]);
+                            return (
+                                <EditProfilePicker
+                                    key={key}
+                                    label={key}
+                                    items={profileProperties[key]}
+                                    selectedValue={userInfo[key]}
+                                    onValueChange={(value) => handlePickerChange(key, value)}
+                                />
+                            );
+                        })}
+                    {/* <EditProfilePicker
                         label="Location"
-                        items={availableLocations}
+                        items={locations}
                         selectedValue={userInfo.location}
                         onValueChange={(value) => handlePickerChange('location', value)}
                     />
                     <EditProfilePicker
                         label="Instrument"
-                        items={availableInstruments}
+                        items={instruments}
                         selectedValue={userInfo.instrument}
                         onValueChange={(value) => handlePickerChange('instrument', value)}
                     />
                     <EditProfilePicker
                         label="Music Genres"
-                        items={availableGenres}
+                        items={genres}
                         selectedValue={userInfo.genre}
                         onValueChange={(value) => handlePickerChange('genre', value)}
                     />
                     <EditProfilePicker
                         label="Experience"
-                        items={availableExperiences}
+                        items={experiences}
                         selectedValue={userInfo.experience}
                         onValueChange={(value) => handlePickerChange('experience', value)}
                     />
                     <EditProfilePicker
                         label="Availability"
-                        items={availableAvailabilities}
+                        items={availabilities}
                         selectedValue={userInfo.availability}
                         onValueChange={(value) => handlePickerChange('availability', value)}
-                    />
+                    /> */}
                 </View>
             </View>
             <View style={styles.bottomInnerContainer}>

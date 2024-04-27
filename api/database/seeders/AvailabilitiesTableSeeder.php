@@ -13,19 +13,19 @@ class AvailabilitiesTableSeeder extends Seeder
     public function run(): void
     {
         $availability = new Availability();
-        $availability->name = 'mornings';
+        $availability->name = 'Mornings';
         $availability->save();
 
         $availability = new Availability();
-        $availability->name = 'afternoons';
+        $availability->name = 'Afternoons';
         $availability->save();
 
         $availability = new Availability();
-        $availability->name = 'evenings';
+        $availability->name = 'Evenings';
         $availability->save();
 
         $availability = new Availability();
-        $availability->name = 'nights';
+        $availability->name = 'Nights';
         $availability->save();
     }
 }

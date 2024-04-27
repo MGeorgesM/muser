@@ -37,7 +37,7 @@ class AuthController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
-        
+
         $credentials = request(['email', 'password']);
 
         if (!$token = auth()->attempt($credentials)) {
@@ -130,12 +130,18 @@ class AuthController extends Controller
     public function getProperties()
     {
         return response()->json([
-            'locations' => Location::all(),
-            'availabilities' => Availability::all(),
-            'experiences' => Experience::all(),
-            'instruments' => Instrument::all(),
-            'venue_types' => VenueType::all(),
-            'genres' => Genre::all(),
+            'musician' => [
+                'Experience' => Experience::all(),
+                'Instrument' => Instrument::all(),
+                'Music Genres' => Genre::all(),
+            ],
+            'venue' => [
+                'Venue Type' => VenueType::all(),
+            ],
+            'general' => [
+                'Location' => Location::all(),
+                'Availability' => Availability::all(),
+            ],
         ]);
     }
 }

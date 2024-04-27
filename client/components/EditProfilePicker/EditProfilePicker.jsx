@@ -11,7 +11,7 @@ const EditProfilePicker = ({ label, items, selectedValue, onValueChange }) => (
             onValueChange={onValueChange}
         >
             {items.map((item) => (
-                <Picker.Item key={item} value={item} label={item} />
+                <Picker.Item key={item.id} value={item.id} label={item.name} />
             ))}
         </Picker>
     </View>
