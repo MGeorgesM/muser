@@ -26,6 +26,7 @@ class AuthController extends Controller
      */
     public function login()
     {
+        
         $credentials = request(['email', 'password']);
 
         if (!$token = auth()->attempt($credentials)) {
@@ -51,7 +52,7 @@ class AuthController extends Controller
             'password' => 'required|string|min:6',
             'about' => 'required|string|max:120',
             'picture' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'location' => 'required|string',
+            'location_id' => 'required|int|exists:locations,id',
             'availability_id' => 'exists:availabilities,id',
             'experience_id' => 'exists:experiences,id',
             'instrument_id' => 'exists:instruments,id',
@@ -67,7 +68,7 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->password = $request->password;
         $user->about = $request->about;
-        $user->location = $request->location;
+        $user->location_id = $request->location_id;
         $user->availability_id = $request->availability_id;
         $user->experience_id = $request->experience_id;
         $user->instrument_id = $request->instrument_id;

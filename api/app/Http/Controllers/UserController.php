@@ -32,7 +32,7 @@ class UserController extends Controller
             'email' => 'string|email|max:255|unique:users,email,' . $id,
             'about' => 'string|max:120',
             'picture' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'location' => 'string',
+            'location' => 'integer|exists:locations,id',
             'availability_id' => 'exists:availabilities,id',
             'experience_id' => 'exists:experiences,id',
             'instrument_id' => 'exists:instruments,id',
