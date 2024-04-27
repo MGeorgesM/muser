@@ -50,6 +50,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Instrument::class);
     }
 
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
+
     public function availability()
     {
         return $this->belongsTo(Availability::class);

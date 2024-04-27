@@ -40,6 +40,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
         });
+
+        Schema::create('locations', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+        });
         
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -48,7 +53,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('about', 120);
             $table->string('picture');
-            $table->string('location');
+            $table->foreignId('location_id')->constrained('locations')->onDelete('cascade');
             $table->foreignId('availability_id')->nullable()->constrained('availabilities')->onDelete('cascade');
             $table->foreignId('experience_id')->nullable()->constrained('experiences')->onDelete('cascade');
             $table->foreignId('instrument_id')->nullable()->constrained('instruments')->onDelete('cascade');

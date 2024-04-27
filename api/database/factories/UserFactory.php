@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Location;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,7 +23,7 @@ class UserFactory extends Factory
             'password' => 'password',
             'about' => $this->faker->text(120),
             'picture' => 'musician.jpg',
-            'location' => $this->faker->city,
+            'location_id' => Location::all()->random()->id,
             'availability_id' => $this->faker->numberBetween(1, 4),
             'experience_id' => $this->faker->numberBetween(1, 3),
             'instrument_id' => $this->faker->numberBetween(1, 6),
@@ -41,7 +42,7 @@ class UserFactory extends Factory
                 'password' => 'password',
                 'about' => $this->faker->text(120),
                 'picture' => 'venue.jpg',
-                'location' => $this->faker->city,
+                'location_id' => Location::all()->random()->id,
                 'availability_id' => $this->faker->numberBetween(1, 4),
                 'experience_id' => null,
                 'instrument_id' => null,
