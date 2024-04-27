@@ -1,11 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 axios.defaults.baseURL = 'http://10.0.2.2:8000/api/';
 
 export const sendRequest = async (method, route, body) => {
     const token = await AsyncStorage.getItem('token');
-    // console.log('token in request', token);
     const response = await axios.request({
         method: method,
         url: route,
@@ -15,6 +14,7 @@ export const sendRequest = async (method, route, body) => {
             Accept: 'application/json',
         },
     });
+    console.log('Response:', response);
     return response;
     // try {
     // } catch (error) {

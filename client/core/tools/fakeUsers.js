@@ -35,5 +35,3 @@ const users = Array.from({ length: 10 }, (_, i) => ({
 }));
 
 export default shuffleArray(users);
-
-console.log(users);

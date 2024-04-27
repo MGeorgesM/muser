@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
 
+import * as ImagePicker from 'expo-image-picker';
+
 import { useUser } from '../contexts/UserContext';
+import { requestMethods, sendRequest } from '../core/tools/apiRequest';
 
 import { CirclePlus, Plus, ArrowLeft } from 'lucide-react-native';
 
 import EditProfilePicker from '../components/EditProfilePicker/EditProfilePicker';
 
-import * as ImagePicker from 'expo-image-picker';
-import { requestMethods, sendRequest } from '../core/tools/apiRequest';
-
-// import {
-//     Locations,
-//     Instruments,
-//     Genres,
-//     Experiences,
-//     Availabilities,
-// } from '../core/enums/userDetails';
 
 const { styles } = require('../components/AuthenticationForms/styles');
 
@@ -28,7 +21,9 @@ const UserInfo = ({ navigation }) => {
     useEffect(() => {
         const getProperties = async () => {
             try {
-                const response = await sendRequest(requestMethods.GET, 'auth/properties');
+                console.log('Getting properties');
+                const response = await sendRequest(requestMethods.GET, 'auth/properties', null);
+                console.log('Properties: HERE');
                 if (response.status === 200) {
                     setProfileProperties(response.data.general);
                     userInfo.role_id === 1
@@ -44,10 +39,7 @@ const UserInfo = ({ navigation }) => {
     }, []);
 
     const handlePickerChange = (key, value) => {
-        if (key === 'Location') {
-            setUserInfo((prev) => ({ ...prev, [`${key.toLowerCase()}`]: value }));
-            return;
-        } else if (key === 'Music Genres') {
+        if (key === 'Music Genres') {
             setUserInfo((prev) => ({ ...prev, genres: [...prev.genres, value] }));
         } else {
             setUserInfo((prev) => ({ ...prev, [`${key.toLowerCase()}_id`]: value }));
@@ -72,7 +64,9 @@ const UserInfo = ({ navigation }) => {
 
         if (!result.cancelled && result.assets && result.assets.length > 0) {
             const uri = result.assets[0].uri;
-            setUserInfo((prev) => ({ ...prev, profilePicture: uri }));
+            const type = result.assets[0].type;
+            const name = uri.split('/').pop();
+            setUserInfo((prev) => ({ ...prev, profilePicture: uri, picture: { uri, name, type } }));
         }
     };
 

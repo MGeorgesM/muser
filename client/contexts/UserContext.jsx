@@ -13,6 +13,7 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
+    const [loggedIn, setLoggedIn] = useState(false);
     const [authError, setAuthError] = useState(null);
     const [userInfo, setUserInfo] = useState({
         name: 'May',
@@ -28,7 +29,7 @@ export const UserProvider = ({ children }) => {
         genres: [],
     });
     const navigation = useNavigation();
-    console.log(userInfo)
+    console.log(userInfo);
 
     useEffect(() => {
         // const subscriber = auth.onAuthStateChanged(async (user) => {
@@ -48,6 +49,7 @@ export const UserProvider = ({ children }) => {
         const checkUser = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
+                token && setLoggedIn(true);
                 console.log('Token in UserContext:', token);
             } catch (error) {
                 console.log('Error getting token:', error);
@@ -66,40 +68,64 @@ export const UserProvider = ({ children }) => {
         //     console.error('Error signing in:', error);
         // }
         try {
-            const response = await sendRequest(requestMethods.POST, 'auth/login', {
-                email: userInfo.email,
-                password: userInfo.password,
-            });
+            const response = await sendRequest(requestMethods.POST, 'auth/login', userInfo);
 
-            if (response && response.status === 200) {
-
+            if (response.status === 200) {
                 await AsyncStorage.setItem('token', response.data.token);
-
                 setCurrentUser(response.data.user);
-
+                console.log('User login successful:', response.data.user);
                 navigation.navigate('Feed');
             }
         } catch (error) {
-            console.error('Error signing in usercontext:', error);
+            console.log('Error signing in:', error);
             setAuthError('Invalid email or password');
         }
     };
 
-    const handleSignUp = async (userInfo) => {
-        const response = await sendRequest(requestMethods.POST, 'auth/register', userInfo);
-        if (response.status === 201) {
-            await AsyncStorage.setItem('token', response.data.token);
-            setCurrentUser(response.data.user);
-            navigation.navigate('Feed');
-        } else if (response.error) {
-            console.log('Error registering:', response.error);
+    const handleSignUp = async () => {
+        const formData = new FormData();
+
+        for (const key in userInfo) {
+            if (key === 'picture' && userInfo.picture) {
+                formData.append('picture', {
+                    uri: userInfo[key].uri,
+                    name: userInfo[key].name,
+                    type: userInfo[key].type,
+                });
+            }
+            formData.append(key, userInfo[key]);
+        }
+        console.log('User Info:', userInfo);
+        try {
+            const response = await sendRequest(requestMethods.POST, 'auth/register', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (response.status === 201) {
+                await AsyncStorage.setItem('token', response.data.token);
+                setCurrentUser(response.data.user);
+                navigation.navigate('Feed');
+            }
+        } catch (error) {
+            console.error('Error registering:', error);
         }
     };
 
     const handleSignOut = async () => {
-        await auth.signOut();
+
+        setCurrentUser(null);
+        navigation.navigate('Authentication');
         await AsyncStorage.removeItem('token');
-        navigation.navigate('SignIn');
+        try {
+            const response = await sendRequest(requestMethods.POST, 'auth/logout', null);
+            if (response.status === 200) {
+                console.log('User logged out:', response.data);
+            }
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+        
     };
 
     return (
