@@ -35,7 +35,7 @@ export const UserProvider = ({ children }) => {
         const checkUser = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
-                console.log('token in context:', token);
+                console.log('Token in UserContext:', token);
             } catch (error) {
                 console.log('Error getting token:', error);
             }

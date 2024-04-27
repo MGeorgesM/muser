@@ -9,15 +9,15 @@ export const RegisterProvider = ({ children }) => {
         name: null,
         email: '',
         password: '',
-        userType: 'musician',
         about: '',
-        venueType: '',
-        location: '',
-        instrument: '',
-        genre: '',
-        experience: '',
-        availability: '',
-        profilePicture: '',
+        picture: '',
+        location_id: '',
+        availability_id: '',
+        experience_id: '',
+        instrument_id: '',
+        venue_type_id: '',
+        role_id: 1,
+        genres: [],
     });
 
     const navigation = useNavigation();
