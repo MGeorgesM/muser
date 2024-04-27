@@ -35,34 +35,7 @@ const SignUp = ({ navigation }) => {
                 <View style={styles.topInnerContainer}>
                     <Image style={styles.welcomeLogo} source={logoImg} />
                     <Text style={styles.header}>Join Muser</Text>
-                    <View>
-                        <Text style={styles.label}>Name</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Georges Mouawad"
-                            value={name}
-                            onChangeText={(text) => setName(text)}
-                        />
-                        <Text style={styles.label}>Email</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="user@muser.com"
-                            value={email}
-                            keyboardType="email-address"
-                            textContentType="emailAddress"
-                            autoCapitalize="none"
-                            onChangeText={(text) => setEmail(text)}
-                        />
-                        <Text style={styles.label}>Password</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="********"
-                            value={password}
-                            onChangeText={(text) => setPassword(text)}
-                            autoCapitalize="none"
-                            secureTextEntry
-                        />
-                    </View>
+
                 </View>
 
                 <View style={styles.bottomInnerContainer}>

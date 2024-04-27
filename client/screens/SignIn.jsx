@@ -1,81 +1,40 @@
 import React, { useState } from 'react';
 import { useUser } from '../contexts/UserContext';
-import {
-    StyleSheet,
-    Platform,
-    Image,
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    ScrollView,
-} from 'react-native';
+import { Image, View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import SignInForm from '../components/AuthenticationForms/SignInForm';
 
 const logoImg = require('../assets/logo.png');
 
-const SignIn = ({ navigation }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const Authentication = ({ navigation }) => {
+    const [switchHandler, setSwitchHandler] = useState(false);
+    const [signInForm, setSignInForm] = useState({
+        email: '',
+        password: '',
+    });
+    const [error, setError] = useState(null);
 
     const { handleSignIn } = useUser();
 
-    // const handleSignIn = async () => {
-    //     try {
-    //         const response = await signInWithEmailAndPassword(auth, email, password);
-    //         const user = response.user;
-    //         const token = await user.getIdToken();
-    //         await AsyncStorage.setItem('token', token);
-    //         navigation.navigate('ChatStack', {
-    //             screen: 'Chat',
-    //         });
-    //     } catch (error) {
-    //         console.error('Error signing in:', error);
-    //     }
-    // };
-
     return (
-        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <View style={styles.topInnerContainer}>
-                    <Image style={styles.welcomeLogo} source={logoImg} />
-                    <Text style={styles.header}>Welcome Back!</Text>
-                    <View>
-                        <Text style={styles.label}>Email</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="user@muser.com"
-                            value={email}
-                            keyboardType="email-address"
-                            textContentType="emailAddress"
-                            autoCapitalize="none"
-                            onChangeText={(text) => setEmail(text)}
-                        />
-                        <Text style={styles.label}>Password</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="********"
-                            value={password}
-                            onChangeText={(text) => setPassword(text)}
-                            autoCapitalize="none"
-                            secureTextEntry
-                        />
-                    </View>
-                </View>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <View style={styles.topInnerContainer}>
+                <Image style={styles.welcomeLogo} source={logoImg} />
+                <Text style={styles.header}>Welcome Back!</Text>
+                {switchHandler ? <SignInForm signInForm={signInForm} setSignInForm={setSignInForm} /> : <SignUpForm />}
+            </View>
 
-                <View style={styles.bottomInnerContainer}>
-                    <TouchableOpacity style={styles.primaryBtn} onPress={() => handleSignIn(email, password)}>
-                        <Text style={styles.primaryBtnText}>Log In</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.promptText}>
-                        Don't have an account?{' '}
-                        <Text style={styles.promptLink} onPress={() => navigation.navigate('SignUp')}>
-                            Register
-                        </Text>
+            <View style={styles.bottomInnerContainer}>
+                <TouchableOpacity style={styles.primaryBtn} onPress={() => handleSignIn(email, password)}>
+                    <Text style={styles.primaryBtnText}>Log In</Text>
+                </TouchableOpacity>
+                <Text style={styles.promptText}>
+                    Don't have an account?{' '}
+                    <Text style={styles.promptLink} onPress={() => setSwitchHandler(false)}>
+                        Register
                     </Text>
-                </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+                </Text>
+            </View>
+        </ScrollView>
     );
 };
 
@@ -121,31 +80,26 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
-
     promptText: {
         fontSize: 16,
         marginTop: 10,
         textAlign: 'center',
     },
-
     promptLink: {
         color: 'blue',
         textDecorationLine: 'underline',
     },
-
     welcomeLogo: {
         width: 130,
         height: 130,
         alignSelf: 'center',
     },
-
     topInnerContainer: {
         marginTop: 128,
     },
-
     bottomInnerContainer: {
         marginBottom: 64,
     },
 });
 
-export default SignIn;
+export default Authentication;

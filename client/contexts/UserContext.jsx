@@ -13,8 +13,20 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [userRegistrationInfo, setUserRegistrationInfo] = useState({
+        name: null,
+        email: '',
+        password: '',
+        about: '',
+        picture: '',
+        location_id: '',
+        availability_id: '',
+        experience_id: '',
+        instrument_id: '',
+        venue_type_id: '',
+        role_id: 1,
+        genres: [],
+    });
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -53,7 +65,7 @@ export const UserProvider = ({ children }) => {
         //     console.error('Error signing in:', error);
         // }
 
-        if (!email || !password) return
+        if (!email || !password) return;
 
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/login', { email, password });
@@ -67,8 +79,8 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    const handleSignUp = async (userInfo) => {
-        const response = await sendRequest(requestMethods.POST, 'auth/register', userInfo);
+    const handleSignUp = async (userRegistrationInfo) => {
+        const response = await sendRequest(requestMethods.POST, 'auth/register', userRegistrationInfo);
         if (response.status === 201) {
             await AsyncStorage.setItem('token', response.data.token);
             setCurrentUser(response.data.user);
