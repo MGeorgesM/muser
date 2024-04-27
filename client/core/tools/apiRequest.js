@@ -29,7 +29,12 @@ export const sendRequest = async (method, route, body) => {
         // }
         // console.log(error.config);
 
-        console.log('error in request', error);
+        console.log('Error in Request', error);
+
+        if (error.response) {
+            console.log('Error Details', error.response.data.errors);
+            console.log('Error Message', error.response.data.message);
+        }
     }
 };
 

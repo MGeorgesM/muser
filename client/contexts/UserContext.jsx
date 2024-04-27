@@ -53,6 +53,8 @@ export const UserProvider = ({ children }) => {
         //     console.error('Error signing in:', error);
         // }
 
+        if (!email || !password) return
+
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/login', { email, password });
             if (response.status === 200) {
