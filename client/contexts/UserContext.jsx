@@ -76,7 +76,7 @@ export const UserProvider = ({ children }) => {
                 await AsyncStorage.setItem('token', response.data.token);
 
                 setCurrentUser(response.data.user);
-                
+
                 navigation.navigate('Feed');
             }
         } catch (error) {
@@ -92,7 +92,7 @@ export const UserProvider = ({ children }) => {
             setCurrentUser(response.data.user);
             navigation.navigate('Feed');
         } else if (response.error) {
-            console.error('Error registering:', response.error);
+            console.log('Error registering:', response.error);
         }
     };
 

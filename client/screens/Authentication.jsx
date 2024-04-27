@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useUser } from '../contexts/UserContext';
 import { Image, View, Text, ScrollView, TouchableOpacity } from 'react-native';
+
+import { useUser } from '../contexts/UserContext';
 
 import SignInForm from '../components/AuthenticationForms/SignInForm';
 import SignUpForm from '../components/AuthenticationForms/SignUpForm';
 
-const { styles } = require('../components/AuthenticationForms/styles');
 const logoImg = require('../assets/logo.png');
+const { styles } = require('../components/AuthenticationForms/styles');
 
 const Authentication = ({ navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
@@ -22,6 +23,8 @@ const Authentication = ({ navigation }) => {
         } else {
             handleSignIn(userInfo);
         }
+
+        authError && setError(authError);
     };
 
     useEffect(() => {
@@ -32,7 +35,7 @@ const Authentication = ({ navigation }) => {
         } else {
             setError(null);
         }
-    }, [userInfo]);
+    }, [userInfo, switchHandler]);
 
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -47,9 +50,8 @@ const Authentication = ({ navigation }) => {
             </View>
             <View style={styles.bottomInnerContainer}>
                 <Text style={styles.errorText}>{error}</Text>
-                <Text style={styles.errorText}>{authError}</Text>
                 <TouchableOpacity style={styles.primaryBtn} onPress={handleProceed}>
-                    <Text style={styles.primaryBtnText}>{!switchHandler ? 'Log In' : 'Register'}</Text>
+                    <Text style={styles.primaryBtnText}>{!switchHandler ? 'Log In' : 'Continue'}</Text>
                 </TouchableOpacity>
                 <Text style={styles.promptText}>
                     {switchHandler ? 'Have an account? ' : "Don't have an account? "}

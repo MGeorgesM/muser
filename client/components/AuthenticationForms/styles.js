@@ -62,4 +62,22 @@ export const styles = StyleSheet.create({
     bottomInnerContainer: {
         marginBottom: 64,
     },
+    userTypeText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        alignSelf: 'center',
+    },
+
+    userTypePrompt: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+    },
+
+    userTypePicker: {
+        fontSize: 24,
+        width: 200,
+        alignSelf: 'center',
+    },
 });

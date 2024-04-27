@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 
-import { useRegister } from '../contexts/RegisterContext';
+import { useUser } from '../contexts/UserContext';
 
 import { Picker } from '@react-native-picker/picker';
 import {
-    StyleSheet,
     Platform,
     Image,
     View,
@@ -18,7 +17,7 @@ const logoImg = require('../assets/logo.png');
 const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserRole = ({ navigation }) => {
-    const { userInfo, setUserInfo } = useRegister();
+    const { userInfo, setUserInfo } = useUser();
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -26,16 +25,16 @@ const UserRole = ({ navigation }) => {
                 <View style={styles.topInnerContainer}>
                     <Image style={styles.welcomeLogo} source={logoImg} />
                     <Text style={styles.header}>What Brings You to Muser?</Text>
-                    <View style={userTypeStyles.userTypePrompt}>
-                        <Text style={userTypeStyles.userTypeText}>I'm a</Text>
+                    <View style={styles.userTypePrompt}>
+                        <Text style={styles.userTypeText}>I'm a</Text>
                         <Picker
-                            style={userTypeStyles.userTypePicker}
+                            style={styles.userTypePicker}
                             selectedValue={userInfo.userType}
                             onValueChange={(itemValue) => setUserInfo((prev) => ({ ...prev, userType: itemValue }))}
                             itemStyle={{ fontSize: 24 }}
                         >
-                            <Picker.Item label="Musician" value="musician" />
-                            <Picker.Item label="Venue" value="venue" />
+                            <Picker.Item label="Musician" value="1" />
+                            <Picker.Item label="Venue" value="2" />
                         </Picker>
                     </View>
                 </View>
@@ -51,26 +50,5 @@ const UserRole = ({ navigation }) => {
         </KeyboardAvoidingView>
     );
 };
-
-const userTypeStyles = StyleSheet.create({
-    userTypeText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        alignSelf: 'center',
-    },
-    
-    userTypePrompt: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex: 1,
-    },
-
-    userTypePicker: {
-        fontSize: 24,
-        width: 200,
-        alignSelf: 'center',
-    },
-});
 
 export default UserRole;
