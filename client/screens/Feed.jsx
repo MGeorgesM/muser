@@ -49,7 +49,7 @@ const Feed = ({ navigation }) => {
 
     const MemberCard = ({ user, height, navigation }) => {
         console.log('userpicture', user.picture);
-        const imageUrl = `http://192.168.1.107:8000/profile-pictures/${user.picture}`;
+        const imageUrl = `http://192.168.1.102:8000/profile-pictures/${user.picture}`;
         return (
             <TouchableOpacity
                 style={[styles.cardContainer, { height: height || 180 }]}

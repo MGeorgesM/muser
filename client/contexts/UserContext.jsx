@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
     const [authError, setAuthError] = useState(null);
     const [userInfo, setUserInfo] = useState({
         name: 'May',
-        email: 'may@mail.com',
+        email: 'georges@mail.com',
         password: 'password',
         about: '',
         picture: '',

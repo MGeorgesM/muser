@@ -27,10 +27,10 @@ class UserController extends Controller
 
     public function getUsersByRole($role)
     {
+        $current_user_id = auth()->id();
         $users = User::whereHas('role', function ($query) use ($role) {
-            $query->where('name', $role)->where('is_active', 0)->where('id', '!=', auth()->id());
-        })
-            ->get();
+            $query->where('name', $role);
+        })->where('is_active', 1)->where('id', '!=', $current_user_id)->get();
 
         return response()->json($users->map->full_details);
     }

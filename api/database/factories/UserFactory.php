@@ -29,10 +29,10 @@ class UserFactory extends Factory
             'instrument_id' => $this->faker->numberBetween(1, 6),
             'venue_type_id' => null,
             'role_id' => 1,
-            'is_active' => $this->faker->boolean
+            'is_active' => 1,
         ];
     }
-    
+
     public function venue()
     {
         return $this->state(function (array $attributes) {
@@ -46,9 +46,9 @@ class UserFactory extends Factory
                 'availability_id' => $this->faker->numberBetween(1, 4),
                 'experience_id' => null,
                 'instrument_id' => null,
-                'venue_type_id' => $this->faker->numberBetween(1,4),
+                'venue_type_id' => $this->faker->numberBetween(1, 4),
                 'role_id' => 2,
-                'is_active' => $this->faker->boolean
+                'is_active' => 1,
             ];
         });
     }
