@@ -29,30 +29,15 @@ const Chat = ({ route }) => {
     const [messages, setMessages] = useState([]);
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [participants, setParticipants] = useState([currentUser.id, user.id].sort());
-    // const [participants, setParticipants] = useState([auth.currentUser.uid, 'tycoJeTqx2gdJJoyj1MvoE2pFpj1'].sort());
-    // const [participants, setParticipants] = useState([auth.currentUser.uid, other].sort());
-    const [newParticipantUid, setNewParticipantUid] = useState('');
+    const [newParticipant, setNewParticipant] = useState('');
 
     console.log('User:', user.id);
     console.log('Current User:', currentUser.id);
-    // const otherUserId2 = 'tycoJeTqx2gdJJoyj1MvoE2pFpj1';
-    // const otherUserId = 'au2B1vguBTOA2zZQp6VVcGoMt1C2';
-    // const participants = [currentUser];
-
-    // if (currentUser !== otherUserId) {
-    //     participants.push(otherUserId);
-    // } else {
-    //     participants.push(otherUserId2);
-    // }
-
-    // participants.sort();
-
-    console.log('current user sending chat', currentUser);
     // console.log('participants', participants);
 
     const getChat = async () => {
         const chatRef = collection(fireStoreDb, 'chats');
-        const q = query(chatRef, where('participant_ids', '==', participants));
+        const q = query(chatRef, where('participantsIds', '==', participants));
 
         const querySnapshot = await getDocs(q);
         if (querySnapshot.empty) {
@@ -64,30 +49,32 @@ const Chat = ({ route }) => {
 
     const createChat = async () => {
         const newChatRef = doc(collection(fireStoreDb, 'chats'));
+
         await setDoc(newChatRef, {
-            participant_ids: participants,
+            participantsIds: participants,
+            chatTitle: 'Chat',
             createdAt: serverTimestamp(),
         });
         return newChatRef;
     };
 
     const addParticipant = async () => {
-        if (newParticipantUid && !participants.includes(newParticipantUid)) {
+        if (newParticipant && !participants.includes(newParticipant)) {
             const chatRef = getChat();
 
             if (chatRef) {
                 try {
                     await updateDoc(chatRef, {
-                        participant_ids: [...participants, newParticipantUid].sort(),
+                        participantsIds: [...participants, newParticipant].sort(),
                     });
                 } catch (error) {
                     console.error('Error adding participant', error);
                 }
             }
 
-            setParticipants([...participants, newParticipantUid]);
+            setParticipants([...participants, newParticipant]);
             setIsPopupVisible(false);
-            setNewParticipantUid('');
+            setNewParticipant('');
         }
 
         console.log('participants', participants);
@@ -108,7 +95,7 @@ const Chat = ({ route }) => {
                 _id,
                 text,
                 createdAt,
-                user,
+                userId: user._id,
             });
         });
 
@@ -163,8 +150,8 @@ const Chat = ({ route }) => {
                     <View style={styles.modalView}>
                         <TextInput
                             style={styles.input}
-                            onChangeText={setNewParticipantUid}
-                            value={newParticipantUid}
+                            onChangeText={setNewParticipant}
+                            value={newParticipant}
                             placeholder="Enter User UID"
                         />
                         {/* <TouchableOpacity title="Add Participant" onPress={addParticipant} /> */}
@@ -179,7 +166,7 @@ const Chat = ({ route }) => {
                 onSend={(messages) => onSend(messages)}
                 user={{
                     _id: currentUser.id,
-                    avatar: avatarLocalImg,
+                    avatar: currentUser.picture,
                 }}
                 messagesContainerStyle={{ backgroundColor: '#dbdbdb' }}
             />

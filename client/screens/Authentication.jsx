@@ -13,7 +13,7 @@ const Authentication = ({ navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
     const [error, setError] = useState(null);
 
-    const { handleSignIn, userInfo, setUserInfo, authError, loggedIn } = useUser();
+    const { handleSignIn, userInfo, setUserInfo, authError } = useUser();
 
     const handleProceed = () => {
         console.log('Form:', userInfo);
@@ -24,11 +24,14 @@ const Authentication = ({ navigation }) => {
             return;
         } else {
             handleSignIn();
-            setError(authError);
         }
-
-        authError && setError(authError);
     };
+
+    useEffect(() => {
+        if (authError) {
+            console.error(authError);
+        }
+    }, [authError]);
 
     useEffect(() => {
         if ((!userInfo.email.includes('@') || !userInfo.email.includes('.')) && userInfo.email.length > 0) {
@@ -38,7 +41,7 @@ const Authentication = ({ navigation }) => {
         } else {
             setError(null);
         }
-    }, [userInfo, switchHandler]);
+    }, [userInfo, switchHandler, authError]);
 
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -52,7 +55,7 @@ const Authentication = ({ navigation }) => {
                 )}
             </View>
             <View style={styles.bottomInnerContainer}>
-                <Text style={styles.errorText}>{error}</Text>
+                <Text style={styles.errorText}>{authError || error}</Text>
                 <TouchableOpacity style={styles.primaryBtn} onPress={handleProceed}>
                     <Text style={styles.primaryBtnText}>{!switchHandler ? 'Log In' : 'Continue'}</Text>
                 </TouchableOpacity>

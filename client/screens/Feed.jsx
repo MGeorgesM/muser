@@ -81,7 +81,7 @@ const Feed = ({ navigation }) => {
             <MasonryList
                 data={users}
                 renderItem={({ item }) => {
-                    const randomHeight = Math.random() < 0.4 ? 290 : 180;
+                    const randomHeight = 180;
                     return <MemberCard user={item} height={randomHeight} navigation={navigation} />;
                 }}
                 keyExtractor={(item) => item.id}

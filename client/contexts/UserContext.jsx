@@ -60,6 +60,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     const handleSignIn = async () => {
+        setAuthError(null);
         // try {
         //     const response = await signInWithEmailAndPassword(auth, email, password);
         //     if (response.status === 200) {
@@ -75,7 +76,6 @@ export const UserProvider = ({ children }) => {
                 await AsyncStorage.setItem('token', response.data.token);
                 setLoggedIn(true);
                 setCurrentUser(response.data.user);
-                setAuthError(null);
                 console.log('User login successful:', response.data.user);
                 navigation.navigate('Feed');
             }
@@ -86,6 +86,7 @@ export const UserProvider = ({ children }) => {
     };
 
     const handleSignUp = async () => {
+        setAuthError(null);
         const formData = new FormData();
 
         for (const key in userInfo) {
@@ -109,11 +110,11 @@ export const UserProvider = ({ children }) => {
                 await AsyncStorage.setItem('token', response.data.token);
                 setLoggedIn(true);
                 setCurrentUser(response.data.user);
-                setAuthError(null);
                 navigation.navigate('Feed');
             }
         } catch (error) {
             console.error('Error registering:', error);
+            setAuthError('Failed to register user');
         }
     };
 

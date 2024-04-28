@@ -1,13 +1,12 @@
 import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import React from 'react';
 const { height } = Dimensions.get('window');
-const photo = require('../assets/girlimage.jpg');
+const photo = require('../assets/guyimage.jpg');
 import { colors, utilities } from '../styles/utilities';
 
 import { useNavigation } from '@react-navigation/native';
 const ProfileDetails = ({ route }) => {
     const { user } = route.params;
-    // const { id, name, instrument, location, about } = route.params;
     console.log('User Details:', user);
     const navigation = useNavigation();
 
