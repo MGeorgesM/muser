@@ -31,6 +31,7 @@ const Chat = ({ navigation, route }) => {
         chatParticipants.length > 1 ? chatParticipants : [currentUser.id, user?.id].sort()
     );
     const [newParticipant, setNewParticipant] = useState(17);
+    const [bandName, setBandName] = useState('The Jazzy Brazzy')
 
     console.log('User:', user?.id);
     console.log('Current User:', currentUser.id);
