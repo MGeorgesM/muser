@@ -4,25 +4,12 @@ import { colors, utilities } from '../styles/utilities';
 
 import { useUser } from '../contexts/UserContext';
 import { fireStoreDb } from '../config/firebase';
-import {
-    collection,
-    query,
-    where,
-    orderBy,
-    onSnapshot,
-    addDoc,
-    serverTimestamp,
-    doc,
-    setDoc,
-    getDocs,
-    updateDoc,
-} from 'firebase/firestore';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { requestMethods, sendRequest } from '../core/tools/apiRequest';
 
 const ChatOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);
     const { currentUser } = useUser();
-
 
     const firebaseChatsResult = [
         {
@@ -49,7 +36,6 @@ const ChatOverview = ({ navigation }) => {
             },
             participantsIds: [16, 2],
         },
-        
     ];
 
     useLayoutEffect(() => {
@@ -84,7 +70,6 @@ const ChatOverview = ({ navigation }) => {
     }, []);
 
     const ChatCard = ({ chat }) => {
-        const []
         const [title, setTitle] = useState(chat.chatTitle);
         const [avatar, setAvatar] = useState(null);
 
@@ -94,37 +79,33 @@ const ChatOverview = ({ navigation }) => {
         //if participatsIds.length > 2, the avatar should be a group icon (fixed image for now)
         //if participatsIds.length === 2, display the avatar of the other participant (api call)
 
-
         useEffect(() => {
+            const getUsersPicutresandNames = async () => {
+                const otherParticipantIds = chat.participantsIds.filter((id) => id !== currentUser.id);
 
-            const getUsersPicutresandNames = async () => { 
-             try {
-                const response = await sendRequest(requestMethods.GET, 'users/details?ids[]=' + chat.participantsIds.join(','), null);
-                if (response.status !== 200) throw new Error('Failed to fetch users');
-                console.log('Users fetched:', response.data);
-             } catch (error) {
-                
-             }
+                if (otherParticipantIds.length === 0) return;
 
-            }
+                const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
+
+                try {
+                    const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
+                    if (response.status !== 200) throw new Error('Failed to fetch users');
+                    console.log('Users fetched:', response.data);
+
+                    setTitle(response.data.map((user) => user.name).join(', '));
+                    setAvatar(response.data[0].picture);
+                } catch (error) {
+                    console.log('Error fetching users:', error);
+                }
+            };
 
             if (!chat.chatTitle) {
-                // Fetch names of other participants
-                getParticipantNames(chat.participantsIds.filter(id => id !== currentUser.id))
-                    .then(names => setTitle(names.join(', ')))
-                    .catch(error => console.log('Error fetching names', error));
-            }
-    
-            if (chat.participantsIds.length === 2) {
-                const otherUserId = chat.participantsIds.find(id => id !== currentUser.id);
-                getAvatar(otherUserId)
-                    .then(avatarUrl => setAvatar(avatarUrl))
-                    .catch(error => console.log('Error fetching avatar', error));
+                getUsersPicutresandNames();
             } else {
+                setTitle(chat.chatTitle);
                 setAvatar('../assets/avatar.png');
             }
-        }, [chat])
-
+        }, [chat]);
 
         return (
             <TouchableOpacity
@@ -132,32 +113,30 @@ const ChatOverview = ({ navigation }) => {
                 onPress={() => navigation.navigate('ChatDetails', { chat })}
             >
                 <View style={[utilities.flexRow, utilities.center]}>
-                    <Image source={{ uri: chat.photo }} style={styles.photo} />
+                    <Image source={{ uri: avatar }} style={styles.photo} />
                     <View>
                         <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>
-                            {chat.chatTitle}
+                            {title || 'Chat'}
                         </Text>
                         <Text style={[utilities.textXS, { color: colors.gray }]}>{chat.lastMessage.text}</Text>
                     </View>
                 </View>
                 <View>
-                    <Text style={[utilities.textXS, { color: colors.gray }]}>{chat.lastMessage.createdAt}</Text>
+                    <Text style={[utilities.textXS, { color: colors.gray }]}>
+                        {new Date(chat.lastMessage.createdAt.seconds * 1000).toLocaleString()}
+                    </Text>
                 </View>
             </TouchableOpacity>
         );
     };
 
     return (
-        // <FlatList
-        //     style={utilities.container}
-        //     data={chats}
-        //     renderItem={({ item }) => <ChatCard chat={item} />}
-        //     keyExtractor={(item) => item?.username}
-        // ></FlatList>
-
-        <View style={utilities.container}>
-            <Text>Chats</Text>
-        </View>
+        <FlatList
+            style={utilities.container}
+            data={chats}
+            renderItem={({ item }) => <ChatCard chat={item} />}
+            keyExtractor={(item) => item._id}
+        />
     );
 };
 
