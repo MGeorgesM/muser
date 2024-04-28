@@ -135,7 +135,7 @@ const ChatOverview = ({ navigation }) => {
             style={utilities.container}
             data={chats}
             renderItem={({ item }) => <ChatCard chat={item} />}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item.id}
         />
     );
 };
