@@ -19,25 +19,31 @@ class UserController extends Controller
         //     $all_users = User::where('id', '!=', $current_user_id)->get();
         //     return response()->json($all_users->map->full_details);
         // }
-        
-        if(!$id) {
+
+        if (!$id) {
             $current_user_id = auth()->id();
             $user = User::find($current_user_id);
-            return response()->json(['user' => $user->full_details]);         
+            return response()->json(['user' => $user->full_details]);
         } else {
             $user = User::find($id);
             if (!$user) return response()->json(['message' => 'User not found'], 404);
             return response()->json(['user' => $user->full_details]);
         }
     }
-    public function getUsersPicturesAndNames($ids)
+    public function getUsersPicturesAndNames(Request $request)
     {
+        $ids = $request->query('ids');
+
+        if (empty($ids)) {
+            return response()->json(['message' => 'No IDs provided'], 400);
+        }
+
         $users = User::whereIn('id', $ids)->get();
-    
+
         if ($users->isEmpty()) {
             return response()->json(['message' => 'No users found'], 404);
         }
-    
+        
         $result = $users->map(function ($user) {
             return [
                 'id' => $user->id,
@@ -45,7 +51,7 @@ class UserController extends Controller
                 'name' => $user->name
             ];
         });
-    
+
         return response()->json($result);
     }
 
