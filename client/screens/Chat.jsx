@@ -54,7 +54,7 @@ const Chat = ({ navigation, route }) => {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
                     <ArrowLeft size={24} color="black" />
                 </TouchableOpacity>
             ),
@@ -64,7 +64,8 @@ const Chat = ({ navigation, route }) => {
                 </TouchableOpacity>
             ),
         });
-        console.log('chatparticipant in chat ', participants);
+        console.log('Chat Participants:', chatParticipants);
+        console.log('Participants:', participants);
     }, []);
 
     useLayoutEffect(() => {
@@ -145,6 +146,7 @@ const Chat = ({ navigation, route }) => {
     };
 
     const addConnection = async () => {
+        const receiverId = participants.find((id) => id !== currentUser.id);
         try {
             const response = await sendRequest(requestMethods.POST, `connections/${receiverId}`, null);
             if (response.status !== 200) throw new Error('Failed to add connection');
