@@ -119,8 +119,8 @@ const Chat = ({ route }) => {
         navigation.setOptions({
             headerLeft: () => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                <ArrowLeft size={24} color="black" />
-            </TouchableOpacity>
+                    <ArrowLeft size={24} color="black" />
+                </TouchableOpacity>
             ),
         });
     }, []);
