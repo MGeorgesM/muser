@@ -52,7 +52,8 @@ const Chat = ({ navigation, route }) => {
 
         await setDoc(newChatRef, {
             participantsIds: participants,
-            chatTitle: 'Chat',
+            chatTitle: null,
+            lastMessage: null,
             createdAt: serverTimestamp(),
         });
         return newChatRef;
@@ -91,11 +92,20 @@ const Chat = ({ navigation, route }) => {
 
         messages.forEach(async (message) => {
             const { _id, text, createdAt, user } = message;
-            await addDoc(messagesRef, {
+            const messageDocRef = await addDoc(messagesRef, {
                 _id,
                 text,
                 createdAt,
                 userId: user._id,
+            });
+
+            await updateDoc(chatRef, {
+                lastMessage: {
+                    messageId: messageDocRef.id,
+                    text,
+                    createdAt,
+                    userId: user._id,
+                },
             });
         });
 
@@ -105,7 +115,7 @@ const Chat = ({ navigation, route }) => {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity onPress={() => navigation.navigate('ChatOverview')}>
                     <ArrowLeft size={24} color="black" />
                 </TouchableOpacity>
             ),
@@ -126,7 +136,10 @@ const Chat = ({ navigation, route }) => {
                         _id: doc.id,
                         text: doc.data().text,
                         createdAt: doc.data().createdAt.toDate(),
-                        user: doc.data().user,
+                        user: {
+                            _id: doc.data().userId,
+                            avatar: null,
+                        }
                     }))
                 );
             });
