@@ -92,8 +92,9 @@ const ChatOverview = ({ navigation }) => {
                     if (response.status !== 200) throw new Error('Failed to fetch users');
                     console.log('Users fetched:', response.data);
 
+
                     setTitle(response.data.map((user) => user.name).join(', '));
-                    setAvatar(response.data[0].picture);
+                    setAvatar(`http://192.168.1.102:8000/profile-pictures/${response.data[0].picture}`);
                 } catch (error) {
                     console.log('Error fetching users:', error);
                 }
