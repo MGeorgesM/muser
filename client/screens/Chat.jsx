@@ -18,10 +18,8 @@ import {
 
 import { GiftedChat } from 'react-native-gifted-chat';
 
-import { LogOut, PlusIcon, View, ArrowLeft } from 'lucide-react-native';
+import { PlusIcon, View, ArrowLeft } from 'lucide-react-native';
 import { useUser } from '../contexts/UserContext';
-
-const avatarLocalImg = require('../assets/avatar.png');
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
@@ -65,20 +63,20 @@ const Chat = ({ navigation, route }) => {
 
             if (chatRef) {
                 try {
+                    const newParticipantsList = [...participants, newParticipant].sort();
                     await updateDoc(chatRef, {
-                        participantsIds: [...participants, newParticipant].sort(),
+                        participantsIds: newParticipantsList,
                     });
+
+                    setParticipants([...participants, newParticipant]);
+                    setIsPopupVisible(false);
+                    setNewParticipant('');
+
                 } catch (error) {
                     console.error('Error adding participant', error);
                 }
             }
-
-            setParticipants([...participants, newParticipant]);
-            setIsPopupVisible(false);
-            setNewParticipant('');
         }
-
-        console.log('participants', participants);
     };
 
     const onSend = useCallback(async (messages = []) => {
@@ -130,26 +128,24 @@ const Chat = ({ navigation, route }) => {
             const messagesRef = collection(chatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
 
-            const unsubscribe = onSnapshot(q, (snapshot) => {
-                setMessages(
-                    snapshot.docs.map((doc) => ({
-                        _id: doc.id,
-                        text: doc.data().text,
-                        createdAt: doc.data().createdAt.toDate(),
-                        user: {
-                            _id: doc.data().userId,
-                            avatar: null,
-                        },
-                    }))
-                );
+            return onSnapshot(q, (snapshot) => {
+                const fetchedMessages = snapshot.docs.map((doc) => ({
+                    _id: doc.id,
+                    text: doc.data().text,
+                    createdAt: doc.data().createdAt.toDate(),
+                    user: {
+                        _id: doc.data().userId,
+                    },
+                }));
+                setMessages(fetchedMessages);
             });
-
-            return unsubscribe;
         };
 
         const unsubscribe = setupMessagesListener();
-        return () => unsubscribe.then((unsub) => unsub());
-    }, []);
+        return () => {
+            unsubscribe && unsubscribe();
+        };
+    }, [chatId]);
 
     return (
         <>
