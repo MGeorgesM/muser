@@ -17,7 +17,7 @@ import {
     updateDoc,
 } from 'firebase/firestore';
 
-import { GiftedChat, Bubble, Send, InputToolbar } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
 
 import { PlusIcon, View, ArrowLeft, Send as SendIcon } from 'lucide-react-native';
 import { useUser } from '../contexts/UserContext';
@@ -31,7 +31,7 @@ const Chat = ({ navigation, route }) => {
         chatParticipants.length > 1 ? chatParticipants : [currentUser.id, user?.id].sort()
     );
     const [newParticipant, setNewParticipant] = useState(17);
-    const [bandName, setBandName] = useState('The Jazzy Brazzy')
+    const [bandName, setBandName] = useState('The Jazzy Brazzy');
 
     console.log('User:', user?.id);
     console.log('Current User:', currentUser.id);
@@ -204,16 +204,15 @@ const Chat = ({ navigation, route }) => {
                         backgroundColor: '#D9D9D9',
                         borderRadius: 12,
                         borderTopLeftRadius: 0,
-                    }
+                    },
                 }}
                 textStyle={{
                     right: {
-                        color: '#fff' // Text color for messages from the current user
+                        color: '#fff', // Text color for messages from the current user
                     },
                     left: {
-                        color: '#1E1E1E' // Text color for messages from other users
-                        
-                    }
+                        color: '#1E1E1E', // Text color for messages from other users
+                    },
                 }}
             />
         );
@@ -221,11 +220,40 @@ const Chat = ({ navigation, route }) => {
 
     function renderSend(props) {
         return (
-            <Send {...props}>
-                <TouchableOpacity style={{marginEnd:8, borderColor:'none'}}>
+            <Send {...props} containerStyle={{
+                borderTopWidth: 0,
+                borderBottomWidth: 0,
+                backgroundColor: 'transparent',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+            >
+                <TouchableOpacity
+                    style={{
+                        marginEnd: 8,
+                        borderTopWidth: 0,
+                        borderBottomWidth: 0,
+                        backgroundColor: 'transparent',
+                    }}
+                >
                     <SendIcon size={24} color="#fff" />
                 </TouchableOpacity>
             </Send>
+        );
+    }
+
+    function renderComposer(props) {
+        return (
+            <Composer
+                {...props}
+                textInputStyle={{
+                    color: '#fff',
+                    marginEnd: 8,
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                    backgroundColor: 'transparent',
+                }}
+            />
         );
     }
 
@@ -234,14 +262,15 @@ const Chat = ({ navigation, route }) => {
             <InputToolbar
                 {...props}
                 containerStyle={{
-                    backgroundColor: '#1E1E1E',  // Change the background color of the entire toolbar
-                    padding: 6,                  // Apply padding to the toolbar
+                    backgroundColor: '#1E1E1E', // Change the background color of the entire toolbar
+                    padding: 6, // Apply padding to the toolbar
                     borderTopColor: '#fff',
                     borderTopWidth: 0.5,
                     borderBottomColor: '#fff',
                     borderBottomWidth: 0.5,
                 }}
-                primaryStyle={{ alignItems: 'center', justifyContent: 'center' }}  // Style for the container of the input field
+                renderComposer={renderComposer}
+                primaryStyle={{ alignItems: 'center', justifyContent: 'center' }} // Style for the container of the input field
             />
         );
     }
@@ -255,8 +284,11 @@ const Chat = ({ navigation, route }) => {
                 // avatar: null,
             }}
             renderBubble={renderBubble}
+            inverted={false}
             renderSend={renderSend}
-            renderInputToolbar={renderInputToolbar}fdfas
+            renderInputToolbar={renderInputToolbar}
+            fdfas
+            messagesContainerStyle={{ backgroundColor: '#1E1E1E', paddingTop: 8 }}
         />
     );
 };
