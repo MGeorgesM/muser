@@ -30,6 +30,24 @@ class UserController extends Controller
             return response()->json(['user' => $user->full_details]);
         }
     }
+    public function getUsersPicturesAndNames($ids)
+    {
+        $users = User::whereIn('id', $ids)->get();
+    
+        if ($users->isEmpty()) {
+            return response()->json(['message' => 'No users found'], 404);
+        }
+    
+        $result = $users->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'picture' => $user->picture,
+                'name' => $user->name
+            ];
+        });
+    
+        return response()->json($result);
+    }
 
     public function getUsersByRole($role)
     {

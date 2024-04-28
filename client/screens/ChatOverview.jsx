@@ -2,6 +2,7 @@ import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
 import { colors, utilities } from '../styles/utilities';
 
+import { useUser } from '../contexts/UserContext';
 import { fireStoreDb } from '../config/firebase';
 import {
     collection,
@@ -16,11 +17,12 @@ import {
     getDocs,
     updateDoc,
 } from 'firebase/firestore';
-import { useUser } from '../contexts/UserContext';
+import { requestMethods, sendRequest } from '../core/tools/apiRequest';
 
 const ChatOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);
     const { currentUser } = useUser();
+
 
     const firebaseChatsResult = [
         {
@@ -82,12 +84,46 @@ const ChatOverview = ({ navigation }) => {
     }, []);
 
     const ChatCard = ({ chat }) => {
+        const []
+        const [title, setTitle] = useState(chat.chatTitle);
+        const [avatar, setAvatar] = useState(null);
 
         //if chatTitle is null get the name of the participants (excluding currentuser) then display the names as the chatTitle (api call)
         //if chatTitle is not null, display the chatTitle
         //display last message text and time
         //if participatsIds.length > 2, the avatar should be a group icon (fixed image for now)
         //if participatsIds.length === 2, display the avatar of the other participant (api call)
+
+
+        useEffect(() => {
+
+            const getUsersPicutresandNames = async () => { 
+             try {
+                const response = await sendRequest(requestMethods.GET, 'users/details?ids[]=' + chat.participantsIds.join(','), null);
+                if (response.status !== 200) throw new Error('Failed to fetch users');
+                console.log('Users fetched:', response.data);
+             } catch (error) {
+                
+             }
+
+            }
+
+            if (!chat.chatTitle) {
+                // Fetch names of other participants
+                getParticipantNames(chat.participantsIds.filter(id => id !== currentUser.id))
+                    .then(names => setTitle(names.join(', ')))
+                    .catch(error => console.log('Error fetching names', error));
+            }
+    
+            if (chat.participantsIds.length === 2) {
+                const otherUserId = chat.participantsIds.find(id => id !== currentUser.id);
+                getAvatar(otherUserId)
+                    .then(avatarUrl => setAvatar(avatarUrl))
+                    .catch(error => console.log('Error fetching avatar', error));
+            } else {
+                setAvatar('../assets/avatar.png');
+            }
+        }, [chat])
 
 
         return (

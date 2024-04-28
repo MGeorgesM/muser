@@ -42,6 +42,7 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
     Route::get('/users/{id}', [UserController::class, 'getUser']);
     Route::get('/users/type/{role}', [UserController::class, 'getUsersByRole']);
+    Route::get('/users/details/{ids}', [UserController::class, 'getUsersPicturesAndNames']);
     Route::put('/users/{id}', [UserController::class, 'updateUser']);
 
     Route::get('/venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
