@@ -76,7 +76,7 @@ const ChatOverview = ({ navigation }) => {
                 setAvatar(defaultAvatar);
             }
 
-            console.log('participants:', participants)
+            console.log('chat card participants:', participants)
         }, [chat]);
 
         return (

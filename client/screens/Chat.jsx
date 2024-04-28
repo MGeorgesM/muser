@@ -27,9 +27,15 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
     const { chatId, chatParticipants } = route.params;
+
     const [messages, setMessages] = useState([]);
     const [participants, setParticipants] = useState(chatParticipants);
     const [newParticipant, setNewParticipant] = useState(16);
+
+    useEffect(() => {
+        setParticipants(chatParticipants);
+        console.log('Chat participants:', chatParticipants);
+    }, [chatParticipants]);
 
     useEffect(() => {
         const getUsersPicutresandNames = async () => {
@@ -49,12 +55,13 @@ const Chat = ({ navigation, route }) => {
         };
 
         getUsersPicutresandNames();
-    });
+
+    }, [participants]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')}>
                     <ArrowLeft size={24} color="black" />
                 </TouchableOpacity>
             ),
@@ -64,9 +71,7 @@ const Chat = ({ navigation, route }) => {
                 </TouchableOpacity>
             ),
         });
-        console.log('Chat Participants:', chatParticipants);
-        console.log('Participants:', participants);
-    }, []);
+    }, [navigation, addParticipant, chatParticipants]);
 
     useLayoutEffect(() => {
         let unsubscribe;
@@ -99,7 +104,7 @@ const Chat = ({ navigation, route }) => {
                 unsubscribe();
             }
         };
-    }, [chatId]);
+    }, [participants, chatId]);
 
     const getChat = async () => {
         if (chatId) {
@@ -118,6 +123,7 @@ const Chat = ({ navigation, route }) => {
         } else {
             const chatRef = collection(fireStoreDb, 'chats');
             const q = query(chatRef, where('participantsIds', '==', participants));
+            // const q = query(chatRef, where(`participantsIds.${participants[0]}`, '==', true));
 
             const querySnapshot = await getDocs(q);
             if (!querySnapshot.empty) return querySnapshot.docs[0].ref;

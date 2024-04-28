@@ -5,7 +5,7 @@ axios.defaults.baseURL = 'http://192.168.1.102:8000/api/';
 
 export const sendRequest = async (method, route, body) => {
     const token = await AsyncStorage.getItem('token');
-    console.log('Token in sendRequest:', token);
+    // console.log('Token in sendRequest:', token);
     const response = await axios.request({
         method: method,
         url: route,
