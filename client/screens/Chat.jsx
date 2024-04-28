@@ -21,6 +21,7 @@ import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-g
 
 import { PlusIcon, View, ArrowLeft, Send as SendIcon } from 'lucide-react-native';
 import { useUser } from '../contexts/UserContext';
+import { defaultAvatar } from '../core/tools/apiRequest';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
@@ -71,7 +72,7 @@ const Chat = ({ navigation, route }) => {
                     createdAt: doc.data().createdAt.toDate(),
                     user: {
                         _id: doc.data().userId,
-                        avatar: null,
+                        avatar: participants.length === 2 ? null : defaultAvatar,
                     },
                 }));
                 setMessages(fetchedMessages);
