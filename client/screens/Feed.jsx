@@ -5,7 +5,7 @@ import { setUsers } from '../store/Users';
 import { useUser } from '../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { sendRequest, requestMethods, profilePicturesUrl } from '../core/tools/apiRequest';
 
 import { Guitar } from 'lucide-react-native';
 import { colors, utilities } from '../styles/utilities';
@@ -17,7 +17,6 @@ const Feed = ({ navigation }) => {
     const dispatch = useDispatch();
     const { currentUser } = useUser();
     const users = useSelector((global) => global.usersSlice.users);
-    console.log('Users:', users);
 
     useLayoutEffect(() => {
         console.log('Fetching users');
@@ -48,8 +47,7 @@ const Feed = ({ navigation }) => {
     };
 
     const MemberCard = ({ user, height, navigation }) => {
-        console.log('userpicture', user.picture);
-        const imageUrl = `http://192.168.1.102:8000/profile-pictures/${user.picture}`;
+        const imageUrl = `${profilePicturesUrl + user.picture}`;
         return (
             <TouchableOpacity
                 style={[styles.cardContainer, { height: height || 180 }]}
