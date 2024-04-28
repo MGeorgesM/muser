@@ -85,9 +85,14 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(VenuesRating::class, 'venue_id');
     }
 
-    public function connections()
+    public function connectionsAsOne()
     {
-        return $this->belongsToMany(User::class, 'connections', 'user_one_id', 'user_two_id');
+        return $this->hasMany(Connection::class, 'user_one_id');
+    }
+    
+    public function connectionsAsTwo()
+    {
+        return $this->hasMany(Connection::class, 'user_two_id');
     }
 
     public function getFullDetailsAttribute()

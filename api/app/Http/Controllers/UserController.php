@@ -117,12 +117,13 @@ class UserController extends Controller
 
     public function getConnections()
     {
-        $user = User::find(auth()->id());
-
-        if (!$user) return response()->json(['message' => 'User not found'], 404);
-
-        $connections = $user->connections;
-
+        $userId = auth()->id();
+        $connections = User::whereHas('connectionsAsOne', function ($query) use ($userId) {
+            $query->where('user_two_id', $userId);
+        })->orWhereHas('connectionsAsTwo', function ($query) use ($userId) {
+            $query->where('user_one_id', $userId);
+        })->select('id', 'name', 'picture')->get();
+    
         return response()->json($connections);
     }
 
