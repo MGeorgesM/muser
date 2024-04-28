@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
-import { StyleSheet, Text, TouchableOpacity, TextInput, Button, Modal } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import { fireStoreDb } from '../config/firebase';
 import {
@@ -12,6 +12,7 @@ import {
     serverTimestamp,
     doc,
     setDoc,
+    getDoc,
     getDocs,
     updateDoc,
 } from 'firebase/firestore';
@@ -23,19 +24,82 @@ import { useUser } from '../contexts/UserContext';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
-    const { user, chatId } = route.params;
+    const { user, chatId, chatParticipants } = route.params;
     const [messages, setMessages] = useState([]);
-    const [isPopupVisible, setIsPopupVisible] = useState(false);
-    const [participants, setParticipants] = useState([currentUser.id, user.id].sort());
-    const [newParticipant, setNewParticipant] = useState('');
+    // const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [participants, setParticipants] = useState(
+        chatParticipants.length > 1 ? chatParticipants : [currentUser.id, user?.id].sort()
+    );
+    const [newParticipant, setNewParticipant] = useState(17);
 
-    console.log('User:', user.id);
+    console.log('User:', user?.id);
     console.log('Current User:', currentUser.id);
+
     // console.log('participants', participants);
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')}>
+                    <ArrowLeft size={24} color="black" />
+                </TouchableOpacity>
+            ),
+            headerRight: () => (
+                <TouchableOpacity onPress={addParticipant}>
+                    <PlusIcon size={24} color="black" />
+                </TouchableOpacity>
+            ),
+        });
+        console.log('chatparticipant in chat ', chatParticipants);
+    }, []);
+
+    useLayoutEffect(() => {
+        let unsubscribe;
+
+        const setupMessagesListener = async () => {
+            const chatRef = await getChat();
+            if (!chatRef) return;
+
+            const messagesRef = collection(chatRef, 'messages');
+            const q = query(messagesRef, orderBy('createdAt', 'desc'));
+
+            unsubscribe = onSnapshot(q, (snapshot) => {
+                const fetchedMessages = snapshot.docs.map((doc) => ({
+                    _id: doc.id,
+                    text: doc.data().text,
+                    createdAt: doc.data().createdAt.toDate(),
+                    user: {
+                        _id: doc.data().userId,
+                        avatar: null,
+                    },
+                }));
+                setMessages(fetchedMessages);
+            });
+        };
+
+        setupMessagesListener();
+
+        return () => {
+            if (unsubscribe) {
+                unsubscribe();
+            }
+        };
+    }, [chatId]);
 
     const getChat = async () => {
         if (chatId) {
-            return doc(fireStoreDb, 'chats', chatId);
+            const chatRef = doc(fireStoreDb, 'chats', chatId);
+            // try {
+            //     const docSnap = await getDoc(chatRef);
+            //     if(docSnap.exists()) {
+            //         const chatData = docSnap.data();
+            //         setParticipants(chatData.participantsIds);
+            //         console.log('participants:', chatData.participantsIds)
+            //     }
+            // } catch (error) {
+            //     console.log('Error getting chat:', error)
+            // }
+            return chatRef;
         } else {
             const chatRef = collection(fireStoreDb, 'chats');
             const q = query(chatRef, where('participantsIds', '==', participants));
@@ -47,18 +111,18 @@ const Chat = ({ navigation, route }) => {
 
     const addParticipant = async () => {
         if (newParticipant && !participants.includes(newParticipant)) {
-            const chatRef = getChat();
-
+            const chatRef = await getChat();
             if (chatRef) {
                 try {
                     const newParticipantsList = [...participants, newParticipant].sort();
+                    console.log('New participants:', newParticipantsList);
                     await updateDoc(chatRef, {
                         participantsIds: newParticipantsList,
                     });
 
                     setParticipants([...participants, newParticipant]);
-                    setIsPopupVisible(false);
-                    setNewParticipant('');
+                    // setIsPopupVisible(false);
+                    // setNewParticipant('');
                 } catch (error) {
                     console.error('Error adding participant', error);
                 }
@@ -123,108 +187,16 @@ const Chat = ({ navigation, route }) => {
         setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
     });
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')}>
-                    <ArrowLeft size={24} color="black" />
-                </TouchableOpacity>
-            ),
-        });
-    }, []);
-
-    useLayoutEffect(() => {
-        let unsubscribe;
-    
-        const setupMessagesListener = async () => {
-            const chatRef = await getChat();
-            if (!chatRef) return;
-    
-            const messagesRef = collection(chatRef, 'messages');
-            const q = query(messagesRef, orderBy('createdAt', 'desc'));
-    
-            unsubscribe = onSnapshot(q, (snapshot) => {
-                const fetchedMessages = snapshot.docs.map((doc) => ({
-                    _id: doc.id,
-                    text: doc.data().text,
-                    createdAt: doc.data().createdAt.toDate(),
-                    user: {
-                        _id: doc.data().userId,
-                    },
-                }));
-                setMessages(fetchedMessages);
-            });
-        };
-    
-        setupMessagesListener();
-        
-        return () => {
-            if (unsubscribe) {
-                unsubscribe();
-            }
-        };
-    }, [chatId]);
-
     return (
-        <>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={isPopupVisible}
-                onRequestClose={() => setIsPopupVisible(false)}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={setNewParticipant}
-                            value={newParticipant}
-                            placeholder="Enter User UID"
-                        />
-                        {/* <TouchableOpacity title="Add Participant" onPress={addParticipant} /> */}
-                        <TouchableOpacity style={{ margin: 64, height: 32, width: 64 }} onPress={addParticipant}>
-                            <Text>Add Participant</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
-            <GiftedChat
-                messages={messages}
-                onSend={(messages) => onSend(messages)}
-                user={{
-                    _id: currentUser.id,
-                    avatar: currentUser.picture,
-                }}
-                messagesContainerStyle={{ backgroundColor: '#dbdbdb' }}
-            />
-        </>
+        <GiftedChat
+            messages={messages}
+            onSend={(messages) => onSend(messages)}
+            user={{
+                _id: currentUser.id,
+                // avatar: null,
+            }}
+            messagesContainerStyle={{ backgroundColor: '#dbdbdb' }}
+        />
     );
 };
-
-const styles = StyleSheet.create({
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22,
-    },
-    modalView: {
-        flex: 1,
-        marginTop: 64,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        justifyContent: 'center',
-        elevation: 5,
-    },
-    input: {
-        height: 40,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-        width: '80%',
-    },
-});
-
 export default Chat;

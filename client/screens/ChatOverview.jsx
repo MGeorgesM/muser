@@ -73,6 +73,7 @@ const ChatOverview = ({ navigation }) => {
     }, []);
 
     const ChatCard = ({ chat }) => {
+        const [participants, setParticipants] = useState(chat?.participantsIds);
         const [title, setTitle] = useState(chat?.chatTitle);
         const [avatar, setAvatar] = useState(null);
 
@@ -101,12 +102,14 @@ const ChatOverview = ({ navigation }) => {
                 setTitle(chat.chatTitle);
                 setAvatar(defaultAvatar);
             }
+
+            console.log('participants:', participants)
         }, [chat]);
 
         return (
             <TouchableOpacity
                 style={styles.chatCardContainer}
-                onPress={() => navigation.navigate('ChatDetails', { chatId: chat.id })}
+                onPress={() => navigation.navigate('ChatDetails', { chatId: chat.id, chatParticipants: participants})}
             >
                 <View style={[utilities.flexRow, utilities.center]}>
                     <Image source={{ uri: avatar }} style={styles.photo} />
