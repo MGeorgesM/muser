@@ -29,7 +29,7 @@ const ProfileDetails = ({ route }) => {
                     <Text style={[utilities.textM, { color: colors.darkGray }]}>Skils and Details</Text>
                 </View>
                 <TouchableOpacity style={[utilities.secondaryBtn, { marginTop: 32 }]}>
-                    <Text style={utilities.secondaryBtnText} onPress={() => navigation.navigate('Chat', { screen: 'ChatDetails', params: { receiverId:user.id } })}>Say Hello!</Text>
+                    <Text style={utilities.secondaryBtnText} onPress={() => navigation.navigate('Chat', { screen: 'ChatDetails', params: { reveiverId:user.id } })}>Say Hello!</Text>
                 </TouchableOpacity>
             </View>
         </View>

@@ -31,10 +31,10 @@ const Chat = ({ navigation, route }) => {
     const [messages, setMessages] = useState([]);
     // const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [participants, setParticipants] = useState(
-        chatParticipants?.length > 1 ? chatParticipants : [currentUser.id, receiverId].sort()
+        receiverId ? [currentUser.id, receiverId].sort() : chatParticipants
     );
-    const [newParticipant, setNewParticipant] = useState(17);
-    const [bandName, setBandName] = useState('The Jazzy Brazzy');
+    const [newParticipant, setNewParticipant] = useState(16);
+    // const [bandName, setBandName] = useState('The Jazzy Brazzy');
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -53,7 +53,6 @@ const Chat = ({ navigation, route }) => {
     }, []);
 
     useEffect(() => {
-
         const getUsersPicutresandNames = async () => {
             const otherParticipantIds = participants.filter((id) => id !== currentUser.id);
 
@@ -65,16 +64,13 @@ const Chat = ({ navigation, route }) => {
                 const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
                 if (response.status !== 200) throw new Error('Failed to fetch users');
                 console.log('Users fetched:', response.data);
-            
             } catch (error) {
                 console.log('Error fetching users:', error);
             }
         };
 
         getUsersPicutresandNames();
-
-
-    })
+    });
 
     useLayoutEffect(() => {
         let unsubscribe;
@@ -84,7 +80,7 @@ const Chat = ({ navigation, route }) => {
             if (!chatRef) return;
 
             const messagesRef = collection(chatRef, 'messages');
-            const q = query(messagesRef, orderBy('createdAt', 'desc'));
+            const q = query(messagesRef, orderBy('createdAt', 'asc'));
 
             unsubscribe = onSnapshot(q, (snapshot) => {
                 const fetchedMessages = snapshot.docs.map((doc) => ({
@@ -154,13 +150,13 @@ const Chat = ({ navigation, route }) => {
     };
     const addConnection = async () => {
         try {
-            const response =  await sendRequest(requestMethods.POST, `connections/${receiverId}`, null );
+            const response = await sendRequest(requestMethods.POST, `connections/${receiverId}`, null);
             if (response.status !== 200) throw new Error('Failed to add connection');
             console.log('Connection added:', response.data);
         } catch (error) {
             console.error('Error adding connection:', error);
         }
-    }
+    };
 
     const createChat = async (initialMessage) => {
         const newChatRef = doc(collection(fireStoreDb, 'chats'));
@@ -185,19 +181,15 @@ const Chat = ({ navigation, route }) => {
             createdAt: serverTimestamp(),
         });
 
-
         return newChatRef;
     };
 
-
-
     const onSend = useCallback(async (messages = []) => {
+        console.log('here!');
         let chatRef = await getChat();
-
         if (!chatRef) {
             const firstMessage = messages[0];
             chatRef = await createChat(firstMessage);
-            await addConnection();
         } else {
             const messagesRef = collection(chatRef, 'messages');
 
@@ -220,7 +212,7 @@ const Chat = ({ navigation, route }) => {
                 });
             });
         }
-        
+
         setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
     });
 
@@ -256,13 +248,15 @@ const Chat = ({ navigation, route }) => {
 
     function renderSend(props) {
         return (
-            <Send {...props} containerStyle={{
-                borderTopWidth: 0,
-                borderBottomWidth: 0,
-                backgroundColor: 'transparent',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
+            <Send
+                {...props}
+                containerStyle={{
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                    backgroundColor: 'transparent',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
             >
                 <TouchableOpacity
                     style={{
@@ -270,6 +264,11 @@ const Chat = ({ navigation, route }) => {
                         borderTopWidth: 0,
                         borderBottomWidth: 0,
                         backgroundColor: 'transparent',
+                    }}
+                    onPress={() => {
+                        if (props.text && props.onSend) {
+                            props.onSend({ text: props.text.trim() }, true); // Ensure onSend is called with trimmed text
+                        }
                     }}
                 >
                     <SendIcon size={24} color="#fff" />
@@ -323,7 +322,6 @@ const Chat = ({ navigation, route }) => {
             inverted={false}
             renderSend={renderSend}
             renderInputToolbar={renderInputToolbar}
-            fdfas
             messagesContainerStyle={{ backgroundColor: '#1E1E1E', paddingTop: 8 }}
         />
     );
