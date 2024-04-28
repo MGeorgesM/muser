@@ -25,7 +25,7 @@ const avatarLocalImg = require('../assets/avatar.png');
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
-    const { user } = route.params;
+    const { user, chatId } = route.params;
     const [messages, setMessages] = useState([]);
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [participants, setParticipants] = useState([currentUser.id, user.id].sort());
@@ -36,14 +36,14 @@ const Chat = ({ navigation, route }) => {
     // console.log('participants', participants);
 
     const getChat = async () => {
-        const chatRef = collection(fireStoreDb, 'chats');
-        const q = query(chatRef, where('participantsIds', '==', participants));
-
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.empty) {
-            return;
+        if (chatId) {
+            return doc(fireStoreDb, 'chats', chatId);
         } else {
-            return querySnapshot.docs[0].ref;
+            const chatRef = collection(fireStoreDb, 'chats');
+            const q = query(chatRef, where('participantsIds', '==', participants));
+
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) return querySnapshot.docs[0].ref;
         }
     };
 
@@ -139,7 +139,7 @@ const Chat = ({ navigation, route }) => {
                         user: {
                             _id: doc.data().userId,
                             avatar: null,
-                        }
+                        },
                     }))
                 );
             });

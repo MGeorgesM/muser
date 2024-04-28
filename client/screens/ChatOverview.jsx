@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react
 
 import { colors, utilities } from '../styles/utilities';
 import { formatDate } from '../core/tools/formatDate';
-import { requestMethods, sendRequest, profilePicturesUrl } from '../core/tools/apiRequest';
+import { requestMethods, sendRequest, profilePicturesUrl, defaultAvatar } from '../core/tools/apiRequest';
 
 import { useUser } from '../contexts/UserContext';
 import { fireStoreDb } from '../config/firebase';
@@ -88,7 +88,6 @@ const ChatOverview = ({ navigation }) => {
                     const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
                     if (response.status !== 200) throw new Error('Failed to fetch users');
                     console.log('Users fetched:', response.data);
-
                     setTitle(response.data.map((user) => user.name).join(', '));
                     setAvatar(`${profilePicturesUrl + response.data[0].picture}`);
                 } catch (error) {
@@ -100,14 +99,14 @@ const ChatOverview = ({ navigation }) => {
                 getUsersPicutresandNames();
             } else {
                 setTitle(chat.chatTitle);
-                setAvatar('../assets/avatar.png');
+                setAvatar(defaultAvatar);
             }
         }, [chat]);
 
         return (
             <TouchableOpacity
                 style={styles.chatCardContainer}
-                onPress={() => navigation.navigate('ChatDetails', { chat })}
+                onPress={() => navigation.navigate('ChatDetails', { chatId: chat.id })}
             >
                 <View style={[utilities.flexRow, utilities.center]}>
                     <Image source={{ uri: avatar }} style={styles.photo} />
