@@ -115,7 +115,7 @@ const Chat = ({ navigation, route }) => {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.navigate('ChatOverview')}>
+                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')}>
                     <ArrowLeft size={24} color="black" />
                 </TouchableOpacity>
             ),

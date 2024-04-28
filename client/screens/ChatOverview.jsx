@@ -16,10 +16,39 @@ import {
     getDocs,
     updateDoc,
 } from 'firebase/firestore';
+import { useUser } from '../contexts/UserContext';
 
 const ChatOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);
-    const currentUserID = 16;
+    const { currentUser } = useUser();
+
+    const firebaseChatsResult = [
+        {
+            chatTitle: null,
+            // createdAt: [Object],
+            id: 'WifCfU3y2PznwQ82hFmd',
+            lastMessage: {
+                // createdAt: [Timestamp],
+                messageId: 'DxB8kOLz3meCskiqqJPk',
+                text: "I don't know",
+                userId: 16,
+            },
+            participantsIds: [16, 17],
+        },
+        {
+            chatTitle: null,
+            // createdAt: [Object],
+            id: 'WifCfU3y2PznwQ82hFmd',
+            lastMessage: {
+                // createdAt: [Timestamp],
+                messageId: 'DxB8kOLz3meCskiqqJPk',
+                text: "I don't know",
+                userId: 16,
+            },
+            participantsIds: [16, 2],
+        },
+        
+    ];
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -29,18 +58,18 @@ const ChatOverview = ({ navigation }) => {
 
     useLayoutEffect(() => {
         const chatRef = collection(fireStoreDb, 'chats');
-        const q = query(chatRef, where('participant_ids', 'array-contains', currentUserID));
+        const q = query(chatRef, where('participantsIds', 'array-contains', currentUser.id));
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chatsArray = [];
-            console.log("Snapshot size:", querySnapshot.size); 
+            console.log('Snapshot size:', querySnapshot.size);
             querySnapshot.forEach((doc) => {
                 chatsArray.push({ id: doc.id, ...doc.data() });
             });
 
             setChats(chatsArray);
-            console.log(currentUserID);
-            console.log(chatsArray)
+            console.log(currentUser.id);
+            console.log(chatsArray);
 
             if (querySnapshot.empty) {
                 return;
@@ -49,23 +78,30 @@ const ChatOverview = ({ navigation }) => {
             }
         });
 
-
         return () => unsubscribe;
-    },[]);
+    }, []);
 
     const ChatCard = ({ chat }) => {
+
+        //if chatTitle is null get the name of the participants (excluding currentuser) then display the names as the chatTitle (api call)
+        //if chatTitle is not null, display the chatTitle
+        //display last message text and time
+        //if participatsIds.length > 2, the avatar should be a group icon (fixed image for now)
+        //if participatsIds.length === 2, display the avatar of the other participant (api call)
+
+
         return (
             <TouchableOpacity
                 style={styles.chatCardContainer}
                 onPress={() => navigation.navigate('ChatDetails', { chat })}
             >
                 <View style={[utilities.flexRow, utilities.center]}>
-                    <Image source={{ uri: chat.photo }} style={styles.photo} /> 
+                    <Image source={{ uri: chat.photo }} style={styles.photo} />
                     <View>
-                        <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>{chat.username}</Text>
-                        <Text style={[utilities.textXS, { color: colors.gray }]}>
-                            {chat.lastMessage.text}
+                        <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>
+                            {chat.chatTitle}
                         </Text>
+                        <Text style={[utilities.textXS, { color: colors.gray }]}>{chat.lastMessage.text}</Text>
                     </View>
                 </View>
                 <View>
