@@ -135,6 +135,8 @@ class UserController extends Controller
         $userOneId = auth()->id();
         $userTwoId = $id;
 
+        if($userOneId == $userTwoId) return response()->json(['message' => 'You cannot connect with yourself'], 400);
+
         $sortedIds = [$userOneId, $userTwoId];
         sort($sortedIds);
 
@@ -143,7 +145,7 @@ class UserController extends Controller
             'user_two_id' => $sortedIds[1]
         ]);
 
-        return response()->json(['message' => 'Connection added or confirmed']);
+        return $this->getConnections();
     }
 
     public function disableUser($id)
