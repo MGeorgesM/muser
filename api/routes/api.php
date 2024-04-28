@@ -26,6 +26,7 @@ Route::group([
     Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('properties', [AuthController::class, 'getProperties']);
+    Route::get('me', [AuthController::class, 'me']);
 });
 
 

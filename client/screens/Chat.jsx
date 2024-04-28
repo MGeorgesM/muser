@@ -17,9 +17,9 @@ import {
     updateDoc,
 } from 'firebase/firestore';
 
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, Send, InputToolbar } from 'react-native-gifted-chat';
 
-import { PlusIcon, View, ArrowLeft } from 'lucide-react-native';
+import { PlusIcon, View, ArrowLeft, Send as SendIcon } from 'lucide-react-native';
 import { useUser } from '../contexts/UserContext';
 
 const Chat = ({ navigation, route }) => {
@@ -188,6 +188,64 @@ const Chat = ({ navigation, route }) => {
         setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
     });
 
+    function renderBubble(props) {
+        return (
+            <Bubble
+                {...props}
+                wrapperStyle={{
+                    right: {
+                        // Background color for messages from the current user
+                        backgroundColor: '#2E2E2E',
+                        borderRadius: 12,
+                        borderTopEndRadius: 0,
+                    },
+                    left: {
+                        // Background color for messages from other users
+                        backgroundColor: '#D9D9D9',
+                        borderRadius: 12,
+                        borderTopLeftRadius: 0,
+                    }
+                }}
+                textStyle={{
+                    right: {
+                        color: '#fff' // Text color for messages from the current user
+                    },
+                    left: {
+                        color: '#1E1E1E' // Text color for messages from other users
+                        
+                    }
+                }}
+            />
+        );
+    }
+
+    function renderSend(props) {
+        return (
+            <Send {...props}>
+                <TouchableOpacity style={{marginEnd:8, borderColor:'none'}}>
+                    <SendIcon size={24} color="#fff" />
+                </TouchableOpacity>
+            </Send>
+        );
+    }
+
+    function renderInputToolbar(props) {
+        return (
+            <InputToolbar
+                {...props}
+                containerStyle={{
+                    backgroundColor: '#1E1E1E',  // Change the background color of the entire toolbar
+                    padding: 6,                  // Apply padding to the toolbar
+                    borderTopColor: '#fff',
+                    borderTopWidth: 0.5,
+                    borderBottomColor: '#fff',
+                    borderBottomWidth: 0.5,
+                }}
+                primaryStyle={{ alignItems: 'center', justifyContent: 'center' }}  // Style for the container of the input field
+            />
+        );
+    }
+
     return (
         <GiftedChat
             messages={messages}
@@ -196,7 +254,9 @@ const Chat = ({ navigation, route }) => {
                 _id: currentUser.id,
                 // avatar: null,
             }}
-            messagesContainerStyle={{ backgroundColor: '#dbdbdb' }}
+            renderBubble={renderBubble}
+            renderSend={renderSend}
+            renderInputToolbar={renderInputToolbar}fdfas
         />
     );
 };

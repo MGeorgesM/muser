@@ -50,6 +50,17 @@ export const UserProvider = ({ children }) => {
         const checkUser = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
+
+                if(token && currentUser === null) {
+                    const response = await sendRequest(requestMethods.GET, 'auth/me');
+                    if (response.status === 200) {
+                        setCurrentUser(response.data);
+                    } else {
+                        await AsyncStorage.removeItem('token');
+                        setLoggedIn(false);
+                        navigation.navigate('Authentication');
+                    }
+                }
                 token && setLoggedIn(true);
                 console.log('Token in UserContext:', token);
             } catch (error) {
