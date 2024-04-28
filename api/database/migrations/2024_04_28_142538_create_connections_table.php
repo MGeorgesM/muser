@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('connections', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id_one')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id_two')->constrained()->cascadeOnDelete();
-            $table->unique(['user_id_one', 'user_id_two']);
+            $table->foreignId('user_one_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_two_id')->constrained('users')->onDelete('cascade');
+            $table->unique(['user_one_id', 'user_two_id']);
             $table->timestamps();
         });
     }
