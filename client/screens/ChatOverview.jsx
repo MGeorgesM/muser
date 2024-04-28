@@ -6,6 +6,7 @@ import { useUser } from '../contexts/UserContext';
 import { fireStoreDb } from '../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { requestMethods, sendRequest } from '../core/tools/apiRequest';
+import { formatDate } from '../core/tools/formatDate';
 
 const ChatOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);
@@ -106,6 +107,7 @@ const ChatOverview = ({ navigation }) => {
                 setTitle(chat.chatTitle);
                 setAvatar('../assets/avatar.png');
             }
+            console.log(formatDate(chat.lastMessage.createdAt))
         }, [chat]);
 
         return (
@@ -124,7 +126,7 @@ const ChatOverview = ({ navigation }) => {
                 </View>
                 <View>
                     <Text style={[utilities.textXS, { color: colors.gray }]}>
-                        {new Date(chat.lastMessage.createdAt.seconds * 1000).toLocaleString()}
+                        {formatDate(chat.lastMessage.createdAt)}
                     </Text>
                 </View>
             </TouchableOpacity>
