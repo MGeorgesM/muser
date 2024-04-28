@@ -45,18 +45,6 @@ const Chat = ({ navigation, route }) => {
         }
     };
 
-    const createChat = async () => {
-        const newChatRef = doc(collection(fireStoreDb, 'chats'));
-
-        await setDoc(newChatRef, {
-            participantsIds: participants,
-            chatTitle: null,
-            lastMessage: null,
-            createdAt: serverTimestamp(),
-        });
-        return newChatRef;
-    };
-
     const addParticipant = async () => {
         if (newParticipant && !participants.includes(newParticipant)) {
             const chatRef = getChat();
@@ -71,7 +59,6 @@ const Chat = ({ navigation, route }) => {
                     setParticipants([...participants, newParticipant]);
                     setIsPopupVisible(false);
                     setNewParticipant('');
-
                 } catch (error) {
                     console.error('Error adding participant', error);
                 }
@@ -79,33 +66,59 @@ const Chat = ({ navigation, route }) => {
         }
     };
 
+    const createChat = async (initialMessage) => {
+        const newChatRef = doc(collection(fireStoreDb, 'chats'));
+        const messageRef = collection(newChatRef, 'messages');
+
+        const messageDocRef = await addDoc(messageRef, {
+            _id: initialMessage._id,
+            text: initialMessage.text,
+            createdAt: initialMessage.createdAt,
+            userId: initialMessage.user._id,
+        });
+
+        await setDoc(newChatRef, {
+            participantsIds: participants,
+            chatTitle: null,
+            lastMessage: {
+                messageId: messageDocRef.id,
+                text: initialMessage.text,
+                createdAt: initialMessage.createdAt,
+                userId: initialMessage.user._id,
+            },
+            createdAt: serverTimestamp(),
+        });
+        return newChatRef;
+    };
+
     const onSend = useCallback(async (messages = []) => {
         let chatRef = await getChat();
 
         if (!chatRef) {
-            chatRef = await createChat();
-        }
+            const firstMessage = messages[0];
+            chatRef = await createChat(firstMessage);
+        } else {
+            const messagesRef = collection(chatRef, 'messages');
 
-        const messagesRef = collection(chatRef, 'messages');
-
-        messages.forEach(async (message) => {
-            const { _id, text, createdAt, user } = message;
-            const messageDocRef = await addDoc(messagesRef, {
-                _id,
-                text,
-                createdAt,
-                userId: user._id,
-            });
-
-            await updateDoc(chatRef, {
-                lastMessage: {
-                    messageId: messageDocRef.id,
+            messages.forEach(async (message) => {
+                const { _id, text, createdAt, user } = message;
+                const messageDocRef = await addDoc(messagesRef, {
+                    _id,
                     text,
                     createdAt,
                     userId: user._id,
-                },
+                });
+
+                await updateDoc(chatRef, {
+                    lastMessage: {
+                        messageId: messageDocRef.id,
+                        text,
+                        createdAt,
+                        userId: user._id,
+                    },
+                });
             });
-        });
+        }
 
         setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
     });
@@ -121,14 +134,16 @@ const Chat = ({ navigation, route }) => {
     }, []);
 
     useLayoutEffect(() => {
+        let unsubscribe;
+    
         const setupMessagesListener = async () => {
             const chatRef = await getChat();
             if (!chatRef) return;
-
+    
             const messagesRef = collection(chatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
-
-            return onSnapshot(q, (snapshot) => {
+    
+            unsubscribe = onSnapshot(q, (snapshot) => {
                 const fetchedMessages = snapshot.docs.map((doc) => ({
                     _id: doc.id,
                     text: doc.data().text,
@@ -140,10 +155,13 @@ const Chat = ({ navigation, route }) => {
                 setMessages(fetchedMessages);
             });
         };
-
-        const unsubscribe = setupMessagesListener();
+    
+        setupMessagesListener();
+        
         return () => {
-            unsubscribe && unsubscribe();
+            if (unsubscribe) {
+                unsubscribe();
+            }
         };
     }, [chatId]);
 
