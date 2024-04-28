@@ -115,6 +115,17 @@ class UserController extends Controller
         return response()->json(['message' => 'User updated successfully', 'user' => $user]);
     }
 
+    public function getUserConnections($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) return response()->json(['message' => 'User not found'], 404);
+
+        $connections = $user->connections;
+
+        return response()->json($connections);
+    }
+
 
     public function addConnection(Request $request) {
         $userOneId = $request->user_one_id;
@@ -124,8 +135,8 @@ class UserController extends Controller
         sort($sortedIds);
 
         Connection::firstOrCreate([
-            'user_id_one' => $sortedIds[0],
-            'user_id_two' => $sortedIds[1]
+            'user_one_id' => $sortedIds[0],
+            'user_two_id' => $sortedIds[1]
         ]);
 
         return response()->json(['message' => 'Connection added or confirmed']);
