@@ -45,3 +45,7 @@ export const requestMethods = {
     PUT: 'PUT',
     DELETE: 'DELETE',
 };
+
+export const profilePicturesUrl = 'http://192.168.1.102:8000/profile-pictures/';
+export const defaultAvatar = require('../../assets/avatar.png');
+export const showsPicturesUrl = 'http://192.168.1.102:8000/show-pictures/'

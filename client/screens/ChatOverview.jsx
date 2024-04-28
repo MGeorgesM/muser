@@ -51,21 +51,21 @@ const ChatOverview = ({ navigation }) => {
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chatsArray = [];
-            console.log('Snapshot size:', querySnapshot.size);
+
+            // console.log('Snapshot size:', querySnapshot.size);
             querySnapshot.forEach((doc) => {
-                console.log('raw data:', doc.data());
+                // console.log('raw data:', doc.data());
                 chatsArray.push({ id: doc.id, ...doc.data() });
             });
-
+            
+            chatsArray.sort((a, b) => b.lastMessage.createdAt - a.lastMessage.createdAt);
             setChats(chatsArray);
-            console.log(currentUser.id);
-            console.log(chatsArray);
 
-            if (querySnapshot.empty) {
-                return;
-            } else {
+            if(!querySnapshot.empty) {
                 return querySnapshot.docs[0].ref;
             }
+
+            return null;
         });
 
         return () => unsubscribe;
@@ -74,12 +74,6 @@ const ChatOverview = ({ navigation }) => {
     const ChatCard = ({ chat }) => {
         const [title, setTitle] = useState(chat?.chatTitle);
         const [avatar, setAvatar] = useState(null);
-
-        //if chatTitle is null get the name of the participants (excluding currentuser) then display the names as the chatTitle (api call)
-        //if chatTitle is not null, display the chatTitle
-        //display last message text and time
-        //if participatsIds.length > 2, the avatar should be a group icon (fixed image for now)
-        //if participatsIds.length === 2, display the avatar of the other participant (api call)
 
         useEffect(() => {
             const getUsersPicutresandNames = async () => {
