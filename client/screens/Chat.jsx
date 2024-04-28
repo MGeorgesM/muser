@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useCallback } from 'react';
+import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { fireStoreDb } from '../config/firebase';
@@ -25,19 +25,14 @@ import { defaultAvatar } from '../core/tools/apiRequest';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
-    const { user, chatId, chatParticipants } = route.params;
+    const { receiverId, chatId, chatParticipants } = route.params;
     const [messages, setMessages] = useState([]);
     // const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [participants, setParticipants] = useState(
-        chatParticipants.length > 1 ? chatParticipants : [currentUser.id, user?.id].sort()
+        chatParticipants?.length > 1 ? chatParticipants : [currentUser.id, receiverId].sort()
     );
     const [newParticipant, setNewParticipant] = useState(17);
     const [bandName, setBandName] = useState('The Jazzy Brazzy');
-
-    console.log('User:', user?.id);
-    console.log('Current User:', currentUser.id);
-
-    // console.log('participants', participants);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -54,6 +49,10 @@ const Chat = ({ navigation, route }) => {
         });
         console.log('chatparticipant in chat ', chatParticipants);
     }, []);
+
+    useEffect(() => {
+
+    })
 
     useLayoutEffect(() => {
         let unsubscribe;
