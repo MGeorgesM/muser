@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Connection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -112,6 +113,22 @@ class UserController extends Controller
         $user->save();
 
         return response()->json(['message' => 'User updated successfully', 'user' => $user]);
+    }
+
+
+    public function addConnection(Request $request) {
+        $userOneId = $request->user_one_id;
+        $userTwoId = $request->user_two_id;
+
+        $sortedIds = [$userOneId, $userTwoId];
+        sort($sortedIds);
+
+        Connection::firstOrCreate([
+            'user_id_one' => $sortedIds[0],
+            'user_id_two' => $sortedIds[1]
+        ]);
+
+        return response()->json(['message' => 'Connection added or confirmed']);
     }
 
     public function disableUser($id)
