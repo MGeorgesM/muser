@@ -46,8 +46,8 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
     Route::get('users/type/{role}', [UserController::class, 'getUsersByRole']);
     Route::put('users/{id}', [UserController::class, 'updateUser']);
 
-    Route::post('connections', [UserController::class, 'getConnections']);
-    Route::post('connections/add', [UserController::class, 'addConnection']);
+    Route::get('connections', [UserController::class, 'getConnections']);
+    Route::post('connections/{id}', [UserController::class, 'addConnection']);
 
     Route::get('venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
     Route::post('venues/{venueId}/rating', [VenueController::class, 'addUpdateRating']);
@@ -58,5 +58,5 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
     Route::post('shows', [ShowController::class, 'addShow']);
     Route::get('shows/{showId?}', [ShowController::class, 'getShow']);
-    
+
 });

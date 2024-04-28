@@ -115,9 +115,9 @@ class UserController extends Controller
         return response()->json(['message' => 'User updated successfully', 'user' => $user]);
     }
 
-    public function getUserConnections($id)
+    public function getConnections()
     {
-        $user = User::find($id);
+        $user = User::find(auth()->id());
 
         if (!$user) return response()->json(['message' => 'User not found'], 404);
 
@@ -127,9 +127,12 @@ class UserController extends Controller
     }
 
 
-    public function addConnection(Request $request) {
-        $userOneId = $request->user_one_id;
-        $userTwoId = $request->user_two_id;
+    public function addConnection($id) {
+
+        if(!$id) return response()->json(['message' => 'No user ID provided'], 400);
+
+        $userOneId = auth()->id();
+        $userTwoId = $id;
 
         $sortedIds = [$userOneId, $userTwoId];
         sort($sortedIds);
