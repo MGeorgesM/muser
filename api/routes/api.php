@@ -31,7 +31,7 @@ Route::group([
 Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
     Route::middleware([AdminMiddleware::class])->group(function () {
-        Route::delete('/users/{id}', [UserController::class, 'disableUser']);
+        Route::delete('/users/{id?}', [UserController::class, 'disableUser']);
         Route::delete('/bands/{id}', [BandController::class, 'deleteBand']);
         Route::delete('/shows/{showId}', [ShowController::class, 'deleteShow']);
     });

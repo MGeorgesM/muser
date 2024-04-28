@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, TextInput, Button, Modal } from 'react-native';
 
-import { auth, fireStoreDb } from '../config/firebase';
+import { fireStoreDb } from '../config/firebase';
 import {
     collection,
     query,
@@ -18,12 +18,12 @@ import {
 
 import { GiftedChat } from 'react-native-gifted-chat';
 
-import { LogOut, PlusIcon, View } from 'lucide-react-native';
+import { LogOut, PlusIcon, View, ArrowLeft } from 'lucide-react-native';
 import { useUser } from '../contexts/UserContext';
 
 const avatarLocalImg = require('../assets/avatar.png');
 
-const Chat = ({ route }) => {
+const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
     const { user } = route.params;
     const [messages, setMessages] = useState([]);

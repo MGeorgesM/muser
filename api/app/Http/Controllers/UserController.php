@@ -19,10 +19,16 @@ class UserController extends Controller
         //     $all_users = User::where('id', '!=', $current_user_id)->get();
         //     return response()->json($all_users->map->full_details);
         // }
-
-        $user = User::find($id);
-        if (!$user) return response()->json(['message' => 'User not found'], 404);
-        return response()->json(['user' => $user->full_details]);
+        
+        if(!$id) {
+            $current_user_id = auth()->id();
+            $user = User::find($current_user_id);
+            return response()->json(['user' => $user->full_details]);         
+        } else {
+            $user = User::find($id);
+            if (!$user) return response()->json(['message' => 'User not found'], 404);
+            return response()->json(['user' => $user->full_details]);
+        }
     }
 
     public function getUsersByRole($role)
