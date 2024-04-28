@@ -12,45 +12,24 @@ import {
     serverTimestamp,
     doc,
     setDoc,
-    getDoc,
     getDocs,
     updateDoc,
 } from 'firebase/firestore';
 
+import { PlusIcon, View, ArrowLeft, Send as SendIcon } from 'lucide-react-native';
 import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
 
-import { PlusIcon, View, ArrowLeft, Send as SendIcon } from 'lucide-react-native';
 import { useUser } from '../contexts/UserContext';
-import { defaultAvatar } from '../core/tools/apiRequest';
 
+import { defaultAvatar } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
-    const { receiverId, chatId, chatParticipants } = route.params;
+    const { chatId, chatParticipants } = route.params;
     const [messages, setMessages] = useState([]);
-    // const [isPopupVisible, setIsPopupVisible] = useState(false);
-    const [participants, setParticipants] = useState(
-        receiverId ? [currentUser.id, receiverId].sort() : chatParticipants
-    );
+    const [participants, setParticipants] = useState(chatParticipants);
     const [newParticipant, setNewParticipant] = useState(16);
-    // const [bandName, setBandName] = useState('The Jazzy Brazzy');
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')}>
-                    <ArrowLeft size={24} color="black" />
-                </TouchableOpacity>
-            ),
-            headerRight: () => (
-                <TouchableOpacity onPress={addParticipant}>
-                    <PlusIcon size={24} color="black" />
-                </TouchableOpacity>
-            ),
-        });
-        console.log('chatparticipant in chat ', participants);
-    }, []);
 
     useEffect(() => {
         const getUsersPicutresandNames = async () => {
@@ -71,6 +50,22 @@ const Chat = ({ navigation, route }) => {
 
         getUsersPicutresandNames();
     });
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')}>
+                    <ArrowLeft size={24} color="black" />
+                </TouchableOpacity>
+            ),
+            headerRight: () => (
+                <TouchableOpacity onPress={addParticipant}>
+                    <PlusIcon size={24} color="black" />
+                </TouchableOpacity>
+            ),
+        });
+        console.log('chatparticipant in chat ', participants);
+    }, []);
 
     useLayoutEffect(() => {
         let unsubscribe;
@@ -148,6 +143,7 @@ const Chat = ({ navigation, route }) => {
             }
         }
     };
+
     const addConnection = async () => {
         try {
             const response = await sendRequest(requestMethods.POST, `connections/${receiverId}`, null);
@@ -185,11 +181,11 @@ const Chat = ({ navigation, route }) => {
     };
 
     const onSend = useCallback(async (messages = []) => {
-        console.log('here!');
         let chatRef = await getChat();
         if (!chatRef) {
             const firstMessage = messages[0];
             chatRef = await createChat(firstMessage);
+            await addConnection();
         } else {
             const messagesRef = collection(chatRef, 'messages');
 
@@ -222,13 +218,11 @@ const Chat = ({ navigation, route }) => {
                 {...props}
                 wrapperStyle={{
                     right: {
-                        // Background color for messages from the current user
                         backgroundColor: '#2E2E2E',
                         borderRadius: 12,
                         borderTopEndRadius: 0,
                     },
                     left: {
-                        // Background color for messages from other users
                         backgroundColor: '#D9D9D9',
                         borderRadius: 12,
                         borderTopLeftRadius: 0,
@@ -236,10 +230,10 @@ const Chat = ({ navigation, route }) => {
                 }}
                 textStyle={{
                     right: {
-                        color: '#fff', // Text color for messages from the current user
+                        color: '#fff',
                     },
                     left: {
-                        color: '#1E1E1E', // Text color for messages from other users
+                        color: '#1E1E1E',
                     },
                 }}
             />
@@ -267,7 +261,7 @@ const Chat = ({ navigation, route }) => {
                     }}
                     onPress={() => {
                         if (props.text && props.onSend) {
-                            props.onSend({ text: props.text.trim() }, true); // Ensure onSend is called with trimmed text
+                            props.onSend({ text: props.text.trim() }, true);
                         }
                     }}
                 >
@@ -297,15 +291,15 @@ const Chat = ({ navigation, route }) => {
             <InputToolbar
                 {...props}
                 containerStyle={{
-                    backgroundColor: '#1E1E1E', // Change the background color of the entire toolbar
-                    padding: 6, // Apply padding to the toolbar
+                    backgroundColor: '#1E1E1E',
+                    padding: 6,
                     borderTopColor: '#fff',
                     borderTopWidth: 0.5,
                     borderBottomColor: '#fff',
                     borderBottomWidth: 0.5,
                 }}
                 renderComposer={renderComposer}
-                primaryStyle={{ alignItems: 'center', justifyContent: 'center' }} // Style for the container of the input field
+                primaryStyle={{ alignItems: 'center', justifyContent: 'center' }}
             />
         );
     }

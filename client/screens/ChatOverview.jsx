@@ -13,33 +13,6 @@ const ChatOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);
     const { currentUser } = useUser();
 
-    const firebaseChatsResult = [
-        {
-            chatTitle: null,
-            // createdAt: [Object],
-            id: 'WifCfU3y2PznwQ82hFmd',
-            lastMessage: {
-                // createdAt: [Timestamp],
-                messageId: 'DxB8kOLz3meCskiqqJPk',
-                text: "I don't know",
-                userId: 16,
-            },
-            participantsIds: [16, 17],
-        },
-        {
-            chatTitle: null,
-            // createdAt: [Object],
-            id: 'WifCfU3y2PznwQ82hFmd',
-            lastMessage: {
-                // createdAt: [Timestamp],
-                messageId: 'DxB8kOLz3meCskiqqJPk',
-                text: "I don't know",
-                userId: 16,
-            },
-            participantsIds: [16, 2],
-        },
-    ];
-
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: 'Chats',
