@@ -23,6 +23,8 @@ import { PlusIcon, View, ArrowLeft, Send as SendIcon } from 'lucide-react-native
 import { useUser } from '../contexts/UserContext';
 import { defaultAvatar } from '../core/tools/apiRequest';
 
+import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
     const { receiverId, chatId, chatParticipants } = route.params;
@@ -47,10 +49,30 @@ const Chat = ({ navigation, route }) => {
                 </TouchableOpacity>
             ),
         });
-        console.log('chatparticipant in chat ', chatParticipants);
+        console.log('chatparticipant in chat ', participants);
     }, []);
 
     useEffect(() => {
+
+        const getUsersPicutresandNames = async () => {
+            const otherParticipantIds = participants.filter((id) => id !== currentUser.id);
+
+            if (otherParticipantIds.length === 0) return;
+
+            const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
+
+            try {
+                const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
+                if (response.status !== 200) throw new Error('Failed to fetch users');
+                console.log('Users fetched:', response.data);
+            
+            } catch (error) {
+                console.log('Error fetching users:', error);
+            }
+        };
+
+        getUsersPicutresandNames();
+
 
     })
 
@@ -130,6 +152,15 @@ const Chat = ({ navigation, route }) => {
             }
         }
     };
+    const addConnection = async () => {
+        try {
+            const response =  await sendRequest(requestMethods.POST, `connections/${receiverId}`, null );
+            if (response.status !== 200) throw new Error('Failed to add connection');
+            console.log('Connection added:', response.data);
+        } catch (error) {
+            console.error('Error adding connection:', error);
+        }
+    }
 
     const createChat = async (initialMessage) => {
         const newChatRef = doc(collection(fireStoreDb, 'chats'));
@@ -153,8 +184,12 @@ const Chat = ({ navigation, route }) => {
             },
             createdAt: serverTimestamp(),
         });
+
+
         return newChatRef;
     };
+
+
 
     const onSend = useCallback(async (messages = []) => {
         let chatRef = await getChat();
@@ -162,6 +197,7 @@ const Chat = ({ navigation, route }) => {
         if (!chatRef) {
             const firstMessage = messages[0];
             chatRef = await createChat(firstMessage);
+            await addConnection();
         } else {
             const messagesRef = collection(chatRef, 'messages');
 
@@ -184,7 +220,7 @@ const Chat = ({ navigation, route }) => {
                 });
             });
         }
-
+        
         setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
     });
 
