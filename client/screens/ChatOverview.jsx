@@ -53,6 +53,7 @@ const ChatOverview = ({ navigation }) => {
             const chatsArray = [];
             console.log('Snapshot size:', querySnapshot.size);
             querySnapshot.forEach((doc) => {
+                console.log('raw data:', doc.data());
                 chatsArray.push({ id: doc.id, ...doc.data() });
             });
 
@@ -71,7 +72,7 @@ const ChatOverview = ({ navigation }) => {
     }, []);
 
     const ChatCard = ({ chat }) => {
-        const [title, setTitle] = useState(chat.chatTitle);
+        const [title, setTitle] = useState(chat?.chatTitle);
         const [avatar, setAvatar] = useState(null);
 
         //if chatTitle is null get the name of the participants (excluding currentuser) then display the names as the chatTitle (api call)
@@ -107,7 +108,6 @@ const ChatOverview = ({ navigation }) => {
                 setTitle(chat.chatTitle);
                 setAvatar('../assets/avatar.png');
             }
-            console.log(formatDate(chat.lastMessage.createdAt))
         }, [chat]);
 
         return (
