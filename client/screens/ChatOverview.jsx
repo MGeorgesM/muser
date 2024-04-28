@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
+
 import { colors, utilities } from '../styles/utilities';
+import { formatDate } from '../core/tools/formatDate';
+import { requestMethods, sendRequest, profilePicturesUrl } from '../core/tools/apiRequest';
 
 import { useUser } from '../contexts/UserContext';
 import { fireStoreDb } from '../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
-import { requestMethods, sendRequest } from '../core/tools/apiRequest';
-import { formatDate } from '../core/tools/formatDate';
 
 const ChatOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);
@@ -57,11 +58,11 @@ const ChatOverview = ({ navigation }) => {
                 // console.log('raw data:', doc.data());
                 chatsArray.push({ id: doc.id, ...doc.data() });
             });
-            
+
             chatsArray.sort((a, b) => b.lastMessage.createdAt - a.lastMessage.createdAt);
             setChats(chatsArray);
 
-            if(!querySnapshot.empty) {
+            if (!querySnapshot.empty) {
                 return querySnapshot.docs[0].ref;
             }
 
@@ -88,9 +89,8 @@ const ChatOverview = ({ navigation }) => {
                     if (response.status !== 200) throw new Error('Failed to fetch users');
                     console.log('Users fetched:', response.data);
 
-
                     setTitle(response.data.map((user) => user.name).join(', '));
-                    setAvatar(`http://192.168.1.102:8000/profile-pictures/${response.data[0].picture}`);
+                    setAvatar(`${profilePicturesUrl + response.data[0].picture}`);
                 } catch (error) {
                     console.log('Error fetching users:', error);
                 }
