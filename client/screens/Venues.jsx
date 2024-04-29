@@ -8,6 +8,7 @@ import { ChevronLeft } from 'lucide-react-native';
 import { colors, utilities } from '../styles/utilities';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { requestMethods, sendRequest } from '../core/tools/apiRequest';
+import ModalHigh from '../components/Modals/ModalHigh';
 
 const Venues = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -54,43 +55,18 @@ const Venues = ({ navigation }) => {
         );
     };
     return (
-        <View style={styles.main}>
-            <View style={[utilities.container, styles.overviewContainer]}>
-                <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
-                    <ChevronLeft
-                        size={24}
-                        color="black"
-                        style={{ position: 'absolute', left: 0 }}
-                        onPress={() => navigation.goBack()}
-                    />
-                    <Text style={[utilities.textL, utilities.textBold]}>Venues</Text>
-                </View>
-
-                <FlatList
-                    data={venues}
-                    keyExtractor={(item) => item.name}
-                    renderItem={({ item }) => <StreamCard entity={item} navigation={navigation} />}
-                ></FlatList>
-            </View>
-        </View>
+        <ModalHigh
+            title="Venues"
+            navigation={navigation}
+            items={venues}
+            renderItem={({ item }) => <StreamCard entity={item} navigation={navigation} />}
+        />
     );
 };
 
 export default Venues;
 
 const styles = StyleSheet.create({
-    main: {
-        flex: 1,
-        backgroundColor: colors.darkGray,
-    },
-    overviewContainer: {
-        marginTop: 64,
-        backgroundColor: 'white',
-        borderTopEndRadius: utilities.borderRadius.xl,
-        borderTopLeftRadius: utilities.borderRadius.xl,
-        paddingTop: 24,
-    },
-
     cardContainer: {
         width: '100%',
         height: 180,

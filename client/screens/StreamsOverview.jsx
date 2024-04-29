@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react
 import { ChevronLeft } from 'lucide-react-native';
 import { colors, utilities } from '../styles/utilities';
 
+import ModalHigh from '../components/Modals/ModalHigh';
 import shows from '../core/tools/fakeShows';
 
 const StreamsOverview = ({ navigation }) => {
@@ -27,38 +28,18 @@ const StreamsOverview = ({ navigation }) => {
         );
     };
     return (
-        <View style={styles.main}>
-            <View style={[utilities.container, styles.overviewContainer]}>
-                <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
-                    <ChevronLeft size={24} color="black" style={{ position: 'absolute', left: 0 }} 
-                    onPress={() => navigation.goBack()}/>
-                    <Text style={[utilities.textL, utilities.textBold]}>Shows</Text>
-                </View>
-
-                <FlatList
-                    data={shows}
-                    keyExtractor={(item) => item.name}
-                    renderItem={({ item }) => <StreamCard show={item} />}
-                ></FlatList>
-            </View>
-        </View>
+        <ModalHigh
+            title="Upcoming Shows"
+            navigation={navigation}
+            items={shows}
+            renderItem={({ item }) => <StreamCard show={item} />}
+        />
     );
 };
 
 export default StreamsOverview;
 
 const styles = StyleSheet.create({
-    main: {
-        flex: 1,
-        backgroundColor: colors.darkGray,
-    },
-    overviewContainer: {
-        marginTop: 64,
-        backgroundColor: 'white',
-        borderTopEndRadius: utilities.borderRadius.xl,
-        borderTopLeftRadius: utilities.borderRadius.xl,
-        paddingTop: 24,
-    },
 
     cardContainer: {
         width: '100%',

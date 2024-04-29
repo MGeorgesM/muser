@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 
 import { ChevronLeft } from 'lucide-react-native';
-import { utilities } from '../styles/utilities';
+import { colors, utilities } from '../../styles/utilities';
 
 const ModalHigh = ({ title, navigation, items, renderItem }) => {
     return (
@@ -26,4 +26,16 @@ const ModalHigh = ({ title, navigation, items, renderItem }) => {
 
 export default ModalHigh;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    main: {
+        flex: 1,
+        backgroundColor: colors.darkGray,
+    },
+    overviewContainer: {
+        marginTop: 64,
+        backgroundColor: 'white',
+        borderTopEndRadius: utilities.borderRadius.xl,
+        borderTopLeftRadius: utilities.borderRadius.xl,
+        paddingTop: 24,
+    },
+});
