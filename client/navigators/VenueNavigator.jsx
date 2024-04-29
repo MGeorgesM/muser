@@ -8,8 +8,8 @@ const VenueStack = createStackNavigator();
 
 const VenueNavigator = () => {
     return (
-        <VenueStack.Navigator initialRouteName="Venues" screenOptions={{ headerShown: false }}>
-            <VenueStack.Screen name="Venues" component={Venues} />
+        <VenueStack.Navigator initialRouteName="VenuesOverview" screenOptions={{ headerShown: false }}>
+            <VenueStack.Screen name="VenuesOverview" component={Venues} />
             <VenueStack.Screen name="VenueDetails" component={VenueDetails} />
         </VenueStack.Navigator>
     );
