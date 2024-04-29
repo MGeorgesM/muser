@@ -6,7 +6,7 @@ for (let i = 0; i < 24; i++) {
 
     hours.push({
         id: `${i}`,
-        hour: hourString,
+        name: hourString,
     });
 }
 

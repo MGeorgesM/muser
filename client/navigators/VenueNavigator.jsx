@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Venues from '../screens/Venues';
 import VenueDetails from '../screens/VenueDetails';
-import BookingDetails from '../screens/BookingDetails';
+import ShowDetails from '../screens/ShowDetails';
 
 const VenueStack = createStackNavigator();
 
@@ -12,7 +12,7 @@ const VenueNavigator = () => {
         <VenueStack.Navigator initialRouteName="BookingDetails" screenOptions={{ headerShown: false }}>
             <VenueStack.Screen name="VenuesOverview" component={Venues} />
             <VenueStack.Screen name="VenueDetails" component={VenueDetails} />
-            <VenueStack.Screen name="BookingDetails" component={BookingDetails} />
+            <VenueStack.Screen name="ShowDetails" component={ShowDetails} />
         </VenueStack.Navigator>
     );
 };
