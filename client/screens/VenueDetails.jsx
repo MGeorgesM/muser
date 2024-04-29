@@ -2,14 +2,13 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 
 import { setSelectedVenue } from '../store/Venues';
-import { useSelector, useDispatch } from 'react-redux';
 
-import { Play, ChevronLeft, ChevronRight } from 'lucide-react-native';
+import BackBtn from '../components/BackBtn';
+import ShowCard from '../components/ShowCard';
 
 import { utilities, colors } from '../styles/utilities';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
-import BackBtn from '../components/BackBtn';
 
 const VenueDetails = ({ route, navigation }) => {
     // const { entity: venue } = route.params;
@@ -98,13 +97,13 @@ const VenueDetails = ({ route, navigation }) => {
                 console.log('Error fetching venue shows:', error);
             }
         };
-        getVenueDetails();
+        // getVenueDetails();
+        getVenueShows();
     }, [venue]);
-
 
     return (
         <View style={styles.container}>
-            <BackBtn />
+            <BackBtn navigation={navigation} />
             <View>
                 <Image source={{ uri: imageUrl }} style={[styles.venueImage, styles.borderRadiusBottom]} />
 
