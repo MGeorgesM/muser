@@ -200,7 +200,7 @@ const VenueDetails = ({ route, navigation }) => {
                     }
                     showsVerticalScrollIndicator={false}
                 />
-                <TouchableOpacity style={[utilities.primaryBtn, { marginVertical: 20 }]}>
+                <TouchableOpacity style={[utilities.primaryBtn, { marginVertical: 20 }]} onPress={() => navigation.navigate('BookingDetails')}>
                     <Text style={[utilities.primaryBtnText]}>Book your Show!</Text>
                 </TouchableOpacity>
             </View>
