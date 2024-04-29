@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import { ChevronRight, Play } from 'lucide-react-native';
 
-import { colors, utilities } from '../styles/utilities';
+import { colors, utilities } from '../../styles/utilities';
 
 const ShowCard = ({ entity, navigation }) => {
     return (

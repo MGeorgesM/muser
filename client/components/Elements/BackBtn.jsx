@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import { ChevronLeft } from 'lucide-react-native';
-import { colors } from '../styles/utilities';
+import { colors } from '../../styles/utilities';
 
 const BackBtn = ({ navigation }) => {
     return (

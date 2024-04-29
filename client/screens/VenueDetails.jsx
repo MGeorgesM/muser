@@ -3,8 +3,9 @@ import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity }
 
 import { setSelectedVenue } from '../store/Venues';
 
-import BackBtn from '../components/BackBtn';
-import ShowCard from '../components/ShowCard';
+import BackBtn from '../components/Elements/BackBtn';
+import ShowCard from '../components/ShowCard/ShowCard';
+import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
 
 import { utilities, colors } from '../styles/utilities';
 import { profilePicturesUrl, showsPicturesUrl } from '../core/tools/apiRequest';
@@ -167,30 +168,11 @@ const VenueDetails = ({ route, navigation }) => {
         // getVenueShows();
     }, [venue]);
 
-    const BandMemberCard = ({ entity, navigation }) => {
-        const { picture, name, date } = entity;
-        const entityImage = `${profilePicturesUrl + entity.picture}`;
-        console.log(imageUrl);
-        return (
-            <TouchableOpacity style={[utilities.flexRow, { marginBottom: 14 }]}>
-                <View style={[utilities.flexRow, utilities.center]}>
-                    <Image source={{ uri: entityImage }} style={styles.bandMemberPhoto} />
-                    <View style={{ marginStart: 8 }}>
-                        <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>
-                            {entity.name}
-                        </Text>
-                        <Text style={[utilities.textXS, { color: colors.gray }]}>{entity.instrument_id}</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-        );
-    };
-
     return (
         <View style={styles.container}>
             <BackBtn navigation={navigation} />
             <View>
-                <Image source={{ uri: imageUrl }} style={[styles.venueImage, styles.borderRadiusBottom]} />
+                <Image source={{ uri: imageUrl }} style={[styles.venueOrShowImage, styles.borderRadiusBottom]} />
 
                 <View style={[utilities.overlay, styles.borderRadiusBottom, { height: 96, gap: 2 }]}>
                     <Text style={[utilities.textL, utilities.textBold, { color: 'white' }]}>
@@ -240,16 +222,10 @@ const styles = StyleSheet.create({
         // borderBottomRightRadius: 20,
     },
 
-    venueImage: {
+    venueOrShowImage: {
         width: '100%',
         height: height * 0.55,
         resizeMode: 'cover',
         position: 'relative',
-    },
-
-    bandMemberPhoto: {
-        width: 42,
-        height: 42,
-        borderRadius: 21,
     },
 });
