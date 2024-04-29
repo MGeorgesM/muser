@@ -7,13 +7,12 @@ import BackBtn from '../components/BackBtn';
 import ShowCard from '../components/ShowCard';
 
 import { utilities, colors } from '../styles/utilities';
-import { profilePicturesUrl } from '../core/tools/apiRequest';
+import { profilePicturesUrl, showsPicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 const VenueDetails = ({ route, navigation }) => {
     // const { entity: venue } = route.params;
     const [switchHandler, setSwitchHandler] = useState(false);
-    const [selectedShow, setSelectedShow] = useState(null);
 
     const shows = [
         {
@@ -78,8 +77,8 @@ const VenueDetails = ({ route, navigation }) => {
 
     const show = {
         id: 2,
-        name: 'Architecto ullam tenetur debitis odio illum.',
-        description: 'Sed rem ex iure aut. Saepe magnam cumque et. Vel commodi ea voluptatem mollitia vel sed amet.',
+        name: 'Architecto ullam',
+        description: 'Sed rem ex iure aut.',
         picture: 'show.jpg',
         date: '2024-07-18 08:56:02',
         duration: 67,
@@ -137,7 +136,10 @@ const VenueDetails = ({ route, navigation }) => {
             ],
         },
     };
-    const imageUrl = `${profilePicturesUrl + venue.picture}`;
+
+    const imageUrl = switchHandler ? `${showsPicturesUrl + show.picture}` : `${profilePicturesUrl + venue.picture}`;
+
+    const [selectedShow, setSelectedShow] = useState(show);
 
     useEffect(() => {
         const getVenueDetails = async () => {
@@ -162,21 +164,18 @@ const VenueDetails = ({ route, navigation }) => {
             }
         };
         // getVenueDetails();
-        getVenueShows();
+        // getVenueShows();
     }, [venue]);
 
     const BandMemberCard = ({ entity, navigation }) => {
         const { picture, name, date } = entity;
-        const imageUrl = `${profilePicturesUrl + entity.picture}`;
-        console.log(imageUrl)
+        const entityImage = `${profilePicturesUrl + entity.picture}`;
+        console.log(imageUrl);
         return (
-            <TouchableOpacity
-                style={[utilities.flexRow]}
-            
-            >
+            <TouchableOpacity style={[utilities.flexRow, { marginBottom: 14 }]}>
                 <View style={[utilities.flexRow, utilities.center]}>
-                    <Image source={{ uri: imageUrl }} style={styles.photo} />
-                    <View>
+                    <Image source={{ uri: entityImage }} style={styles.bandMemberPhoto} />
+                    <View style={{ marginStart: 8 }}>
                         <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>
                             {entity.name}
                         </Text>
@@ -193,27 +192,30 @@ const VenueDetails = ({ route, navigation }) => {
             <View>
                 <Image source={{ uri: imageUrl }} style={[styles.venueImage, styles.borderRadiusBottom]} />
 
-                <View style={[utilities.overlay, styles.borderRadiusBottom, { height: 96 }]}>
-                    <Text style={[utilities.textL, utilities.textBold, { color: 'white' }]}>{venue.name}</Text>
-                    <Text
-                        style={[utilities.textS, { color: colors.offWhite }]}
-                    >{`${venue.location.name},Lebanon`}</Text>
+                <View style={[utilities.overlay, styles.borderRadiusBottom, { height: 96, gap: 2 }]}>
+                    <Text style={[utilities.textL, utilities.textBold, { color: 'white' }]}>
+                        {!switchHandler ? venue.name : selectedShow.name}
+                    </Text>
+                    <Text style={[utilities.textS, { color: colors.offWhite }]}>
+                        {switchHandler ? selectedShow.date : `${venue.location.name},Lebanon`}
+                    </Text>
                 </View>
             </View>
             <View style={[utilities.container]}>
                 <Text style={[utilities.textM, utilities.textBold, { marginVertical: 18 }]}>
-                    {!switchHandler ? 'Upcoming Shows' : `${selectedShow.name + selectedShow.date}`}
+                    {!switchHandler ? 'Upcoming Shows' : 'Band Members'}
                 </Text>
-                {/* <FlatList
-                    data={shows}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <ShowCard entity={item} navigation={navigation} />}
-                    showsVerticalScrollIndicator={false}
-                /> */}
+
                 <FlatList
-                    data={show.band.members}
+                    data={!switchHandler ? shows : selectedShow.band.members}
                     keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <BandMemberCard entity={item} navigation={navigation} />}
+                    renderItem={({ item }) =>
+                        switchHandler ? (
+                            <BandMemberCard entity={item} navigation={navigation} />
+                        ) : (
+                            <ShowCard entity={item} navigation={navigation} />
+                        )
+                    }
                     showsVerticalScrollIndicator={false}
                 />
                 <TouchableOpacity style={[utilities.primaryBtn, { marginVertical: 20 }]}>
@@ -234,14 +236,20 @@ const styles = StyleSheet.create({
     },
 
     borderRadiusBottom: {
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
+        // borderBottomLeftRadius: 20,
+        // borderBottomRightRadius: 20,
     },
 
     venueImage: {
         width: '100%',
-        height: height * 0.5,
+        height: height * 0.55,
         resizeMode: 'cover',
         position: 'relative',
+    },
+
+    bandMemberPhoto: {
+        width: 42,
+        height: 42,
+        borderRadius: 21,
     },
 });
