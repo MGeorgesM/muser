@@ -13,7 +13,7 @@ class VenueController extends Controller
         $venue = User::with([
             'shows' => function ($query) {
 
-                $query->select('shows.id', 'shows.name', 'shows.date', 'shows.status', 'shows.band_id', 'shows.venue_id');
+                $query->select('shows.id', 'shows.name', 'shows.date', 'shows.status', 'shows.band_id', 'shows.venue_id', 'shows.picture');
             },
             'shows.band' => function ($query) {
 
@@ -26,7 +26,8 @@ class VenueController extends Controller
                         'band_members.id',
                         'band_members.band_id',
                         'members.id as id',
-                        'members.name as name'
+                        'members.name as name',
+                        'members.picture as picture',
                     );
             }
         ])->find($venueId);
