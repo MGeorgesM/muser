@@ -7,7 +7,7 @@ import { MessagesSquare, Store, Radio, AudioWaveform, UserRound } from 'lucide-r
 import FeedNavigator from '../navigators/FeedNavigator';
 import ChatNavigator from '../navigators/ChatNavigator';
 import Profile from './Profile';
-import Venues from './Venues';
+import VenueNavigator from '../navigators/VenueNavigator';
 import LiveStreamNavigator from '../navigators/LiveStreamNavigator';
 
 const Tab = createBottomTabNavigator();
@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 const MainTabs = () => {
     return (
         <Tab.Navigator
-            initialRouteName="Feed"
+            initialRouteName="Venues"
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let IconComponent;
@@ -48,7 +48,7 @@ const MainTabs = () => {
                 },
             })}
         >
-            <Tab.Screen name="Venues" component={Venues} />
+            <Tab.Screen name="Venues" component={VenueNavigator} options={{ headerShown: false }} />
             <Tab.Screen name="Chat" component={ChatNavigator} options={{ headerShown: false }} />
             <Tab.Screen name="Feed" component={FeedNavigator} options={{ headerShown: false }} />
             <Tab.Screen name="Live" component={LiveStreamNavigator} options={{ headerShown: false }} />
