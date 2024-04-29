@@ -11,6 +11,22 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
+    protected $hidden = [
+        'password',
+    ];
+
+    protected $fillable = [
+        'name',
+        'email',
+        'about',
+        'picture',
+        'location_id',
+        'availability_id',
+        'experience_id',
+        'instrument_id',
+        'venue_type_id',
+    ];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -20,10 +36,6 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
-    protected $hidden = [
-        'password',
-    ];
 
     public function setPasswordAttribute($value)
     {
@@ -89,7 +101,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Connection::class, 'user_one_id');
     }
-    
+
     public function connectionsAsTwo()
     {
         return $this->hasMany(Connection::class, 'user_two_id');
@@ -104,7 +116,7 @@ class User extends Authenticatable implements JWTSubject
             'about' => $this->about,
             'picture' => $this->picture,
             'location' => $this->location,
-            'genres' => $this->genres->pluck('name','id'),
+            'genres' => $this->genres->pluck('name', 'id'),
             'instrument' => $this->instrument,
             'availability' => $this->availability,
             'experience' => $this->experience,

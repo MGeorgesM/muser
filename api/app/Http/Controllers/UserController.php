@@ -44,7 +44,7 @@ class UserController extends Controller
         if ($users->isEmpty()) {
             return response()->json(['message' => 'No users found'], 404);
         }
-        
+
         $result = $users->map(function ($user) {
             return [
                 'id' => $user->id,
@@ -68,51 +68,32 @@ class UserController extends Controller
 
     public function updateUser(Request $request, $id = null)
     {
-        $request->validate([
-            'name' => 'string|max:255',
-            'email' => 'string|email|max:255|unique:users,email,' . $id,
-            'about' => 'string|max:120',
-            'picture' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'location_id' => 'integer|exists:locations,id',
-            'availability_id' => 'exists:availabilities,id',
-            'experience_id' => 'exists:experiences,id',
-            'instrument_id' => 'exists:instruments,id',
-            'venue_type_id' => 'exists:venue_types,id',
-            'genres' => 'array',
-            'genres.*' => 'exists:genres,id',
-        ]);
+
+        $this->validateRequest($request, $id);
 
         $user = User::find($id);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
 
-        if (!$user) return response()->json(['message' => 'User not found'], 404);
+        $userData = $request->only([
+            'name', 'email', 'about', 'location_id', 'availability_id',
+            'experience_id', 'instrument_id', 'venue_type_id'
+        ]);
 
-        $request->name && $user->name = $request->input('name');
-        $request->email && $user->email = $request->input('email');
-        $request->about && $user->about = $request->input('about');
-        $request->location_id && $user->location_id = $request->input('location_id');
-        $request->availability_id && $user->availability_id = $request->input('availability_id');
-        $request->experience_id && $user->experience_id = $request->input('experience_id');
-        $request->instrument_id && $user->instrument_id = $request->input('instrument_id');
-        $request->venue_type_id && $user->venue_type_id = $request->input('venue_type_id');
+        $user->fill($userData);
 
-        $request->genres && $user->genres()->sync($request->input('genres'));
+        if ($request->has('genres')) {
+            $user->genres()->sync($request->genres);
+        }
 
         if ($request->hasFile('picture')) {
-            $file = $request->file('picture');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $file->move(public_path('/profile-pictures/'), $filename);
-
-            if (File::exists(public_path('/profile-pictures/') . $user->picture)) {
-                File::delete(public_path('/profile-pictures/') . $user->picture);
-            }
-
-            $user->picture = $filename;
+            $user->picture = $this->updateProfilePicture($request, $user);
         }
 
         $user->save();
 
-        return response()->json(['message' => 'User updated successfully', 'user' => $user]);
+        return response()->json(['message' => 'User updated successfully', 'user' => $user->full_details]);
     }
 
     public function getConnections()
@@ -123,19 +104,20 @@ class UserController extends Controller
         })->orWhereHas('connectionsAsTwo', function ($query) use ($userId) {
             $query->where('user_one_id', $userId);
         })->select('id', 'name', 'picture')->get();
-    
+
         return response()->json($connections);
     }
 
 
-    public function addConnection($id) {
+    public function addConnection($id)
+    {
 
-        if(!$id) return response()->json(['message' => 'No user ID provided'], 400);
+        if (!$id) return response()->json(['message' => 'No user ID provided'], 400);
 
         $userOneId = auth()->id();
         $userTwoId = $id;
 
-        if($userOneId == $userTwoId) return response()->json(['message' => 'You cannot connect with yourself'], 400);
+        if ($userOneId == $userTwoId) return response()->json(['message' => 'You cannot connect with yourself'], 400);
 
         $sortedIds = [$userOneId, $userTwoId];
         sort($sortedIds);
@@ -158,5 +140,38 @@ class UserController extends Controller
         $user->save();
 
         return response()->json(['message' => 'User disabled successfully']);
+    }
+
+    protected function validateRequest($request, $id)
+    {
+        $request->validate([
+            'name' => 'string|max:255',
+            'email' => 'string|email|max:255|unique:users,email,' . $id,
+            'about' => 'string|max:120',
+            'picture' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'location_id' => 'integer|exists:locations,id',
+            'availability_id' => 'exists:availabilities,id',
+            'experience_id' => 'exists:experiences,id',
+            'instrument_id' => 'exists:instruments,id',
+            'venue_type_id' => 'exists:venue_types,id',
+            'genres' => 'array',
+            'genres.*' => 'exists:genres,id',
+        ]);
+    }
+
+    protected function updateProfilePicture(Request $request, User $user)
+    {
+        $file = $request->file('picture');
+        $extension = $file->getClientOriginalExtension();
+        $filename = time() . '.' . $extension;
+        $destinationPath = public_path('/profile-pictures/');
+
+        if (File::exists($destinationPath . $user->picture)) {
+            File::delete($destinationPath . $user->picture);
+        }
+
+        $file->move($destinationPath, $filename);
+
+        return $filename;
     }
 }
