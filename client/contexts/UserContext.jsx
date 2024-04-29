@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
     const [authError, setAuthError] = useState(null);
     const [userInfo, setUserInfo] = useState({
         name: 'May',
-        email: 'georges@mail.com',
+        email: 'may@mail.com',
         password: 'password',
         about: '',
         picture: '',
@@ -26,6 +26,7 @@ export const UserProvider = ({ children }) => {
         availability_id: '',
         experience_id: '',
         instrument_id: '',
+        venue_type_id: '',
         role_id: 1,
         genres: [],
     });
@@ -51,7 +52,7 @@ export const UserProvider = ({ children }) => {
             try {
                 const token = await AsyncStorage.getItem('token');
 
-                if(token && currentUser === null) {
+                if (token && currentUser === null) {
                     const response = await sendRequest(requestMethods.GET, 'auth/me');
                     if (response.status === 200) {
                         setCurrentUser(response.data);
@@ -101,13 +102,13 @@ export const UserProvider = ({ children }) => {
         const formData = new FormData();
 
         for (const key in userInfo) {
-            if (key === 'picture' && userInfo.picture) {
-                formData.append('picture', {
-                    uri: userInfo[key].uri,
-                    name: userInfo[key].name,
-                    type: userInfo[key].type,
-                });
-            }
+            // if (key === 'picture' && userInfo.picture) {
+            //     formData.append('picture', {
+            //         uri: userInfo[key].uri,
+            //         name: userInfo[key].name,
+            //         type: userInfo[key].type,
+            //     });
+            // }
             formData.append(key, userInfo[key]);
         }
         console.log('User Info:', userInfo);
@@ -130,7 +131,7 @@ export const UserProvider = ({ children }) => {
     };
 
     const handleSignOut = async () => {
-        console.log(navigation.getState())
+        console.log(navigation.getState());
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/logout');
             if (response.status !== 200) throw new Error('Failed to log out');

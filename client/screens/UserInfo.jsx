@@ -23,8 +23,9 @@ const UserInfo = ({ navigation }) => {
             try {
                 const response = await sendRequest(requestMethods.GET, 'auth/properties');
                 if (response.status === 200) {
+                    console.log('Properties:', response.data);
                     setProfileProperties(response.data.general);
-                    userInfo.role_id === 1
+                    userInfo.role_id == 1
                         ? setProfileProperties((prev) => ({ ...prev, ...response.data.musician }))
                         : setProfileProperties((prev) => ({ ...prev, ...response.data.venue }));
                 }
@@ -38,6 +39,8 @@ const UserInfo = ({ navigation }) => {
     const handlePickerChange = (key, value) => {
         if (key === 'Music Genres') {
             setUserInfo((prev) => ({ ...prev, genres: [...prev.genres, value] }));
+        } else if (key === 'Venue Type') {
+            setUserInfo((prev) => ({ ...prev, [`venue_type_id`]: value }));
         } else {
             setUserInfo((prev) => ({ ...prev, [`${key.toLowerCase()}_id`]: value }));
         }
@@ -58,25 +61,17 @@ const UserInfo = ({ navigation }) => {
         });
 
         if (!result.cancelled && result.assets && result.assets.length > 0) {
-            // const uri = result.assets[0].uri;
-            // const fileType = uri.substring(uri.lastIndexOf('.') + 1);
-            // const type = `image/${fileType}`;
-            // const name = `picture.${fileType}`;
-
-            const uri = Platform.OS === 'android' ? result.assets[0].uri : result.assets[0].uri.replace('file://', '');
-            const filename = result.assets[0].uri.split('/').pop();
-            const match = /\.(\w+)$/.exec(filename);
-            const ext = match?.[1];
-            const type = match ? `image/${match[1]}` : `image`;
-            const name = `image.${ext}`
-
+            const uri = result.assets[0].uri;
+            const fileType = uri.substring(uri.lastIndexOf('.') + 1);
+            const type = `image/${fileType}`;
+            const name = `picture.${fileType}`;
 
             console.log('Image:', { uri, name, type });
 
             setUserInfo((prev) => ({ ...prev, picture: { uri, name, type } }));
+            setSelectedPicture(result);
         }
 
-        setSelectedPicture(result);
     };
 
     return (

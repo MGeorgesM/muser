@@ -25,7 +25,6 @@ const Feed = ({ navigation }) => {
                 const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
                 if (response.status !== 200) throw new Error('Failed to fetch users');
                 dispatch(setUsers(response.data));
-                console.log('Users fetched:', response.data);
             } catch (error) {
                 console.log('Error fetching users:', error);
             }
