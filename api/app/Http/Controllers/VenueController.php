@@ -8,14 +8,33 @@ use Illuminate\Http\Request;
 
 class VenueController extends Controller
 {
-    public function getShowsByVenue($venueId, $status=null)
+    public function getShowsByVenue($venueId, $status = null)
     {
-        $venue = User::with('shows.band.members')->find($venueId);
-        
+        $venue = User::with([
+            'shows' => function ($query) {
+
+                $query->select('shows.id', 'shows.name', 'shows.date', 'shows.status', 'shows.band_id', 'shows.venue_id');
+            },
+            'shows.band' => function ($query) {
+
+                $query->select('bands.id', 'bands.name');
+            },
+            'shows.band.members' => function ($query) {
+
+                $query->join('users as members', 'band_members.user_id', '=', 'members.id')
+                    ->select(
+                        'band_members.id',
+                        'band_members.band_id',
+                        'members.id as user_id',
+                        'members.name as user_name'
+                    );
+            }
+        ])->find($venueId);
+
         if (!$venue) {
             return response()->json(['error' => 'Venue not found'], 404);
         }
-        
+
         if ($status) {
             $venue->shows = $venue->shows->filter(function ($show) use ($status) {
                 return $show->status === $status;
@@ -25,6 +44,7 @@ class VenueController extends Controller
         return response()->json($venue->shows, 200);
     }
 
+
     public function addUpdateRating(Request $request, $venueId)
     {
         $request->validate([
@@ -33,7 +53,7 @@ class VenueController extends Controller
 
         $rating = VenuesRating::where('venue_id', $venueId)->where('user_id', auth()->user()->id)->first();
 
-        if($rating){
+        if ($rating) {
             $rating->rating = $request->rating;
             $rating->save();
             return response()->json($rating, 200);
