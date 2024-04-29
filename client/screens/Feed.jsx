@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
 import { setUsers } from '../store/Users';
@@ -18,7 +18,7 @@ const Feed = ({ navigation }) => {
     const { currentUser } = useUser();
     const users = useSelector((global) => global.usersSlice.users);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const getUsers = async () => {
             console.log('Fetching users');
             try {
@@ -31,6 +31,12 @@ const Feed = ({ navigation }) => {
         };
         getUsers();
     }, []);
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerTitle: () => <CustomHeader username={currentUser?.name} avatar={avatar} />,
+        });
+    });
 
     const CustomHeader = () => {
         const { currentUser } = useUser();
@@ -61,12 +67,6 @@ const Feed = ({ navigation }) => {
         );
     };
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerTitle: () => <CustomHeader username={currentUser?.name} avatar={avatar} />,
-        });
-    });
-
     return (
         // <View style={styles.cardsContainer}>
         //     {users && users.length > 0 && users.map((user) =>
@@ -77,9 +77,9 @@ const Feed = ({ navigation }) => {
         users.length > 0 && (
             <MasonryList
                 data={users}
-                renderItem={({ item }) => {
-                    const randomHeight = 180;
-                    return <MemberCard user={item} height={randomHeight} navigation={navigation} />;
+                renderItem={({ item, index }) => {
+                    const itemHeight = index % 2 === 1 ? 270 : 180;
+                    return <MemberCard user={item} height={itemHeight} navigation={navigation} />;
                 }}
                 keyExtractor={(item) => item.id}
                 numColumns={2}
