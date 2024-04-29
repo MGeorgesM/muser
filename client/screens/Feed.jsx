@@ -1,16 +1,16 @@
 import React, { useEffect, useLayoutEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 
 import { setUsers } from '../store/Users';
 import { useUser } from '../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { sendRequest, requestMethods, profilePicturesUrl } from '../core/tools/apiRequest';
+import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+
 import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
 import MasonryList from '@react-native-seoul/masonry-list';
 
-import { Guitar } from 'lucide-react-native';
-import { colors, utilities } from '../styles/utilities';
+import { utilities } from '../styles/utilities';
 
 const avatar = require('../assets/avatar.png');
 
@@ -113,7 +113,6 @@ const styles = StyleSheet.create({
         // flexWrap: 'wrap',
         // justifyContent: 'center',
         // gap: 16,
-
         justifyContent: 'space-around',
         alignItems: 'center',
         paddingHorizontal: 16,
