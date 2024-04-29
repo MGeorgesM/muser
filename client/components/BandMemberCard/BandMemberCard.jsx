@@ -1,5 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+
+import { colors, utilities } from '../../styles/utilities';
+import { profilePicturesUrl } from '../../core/tools/apiRequest';
 
 const BandMemberCard = ({ entity, navigation }) => {
     const entityImage = `${profilePicturesUrl + entity.picture}`;
