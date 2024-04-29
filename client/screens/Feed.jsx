@@ -6,10 +6,11 @@ import { useUser } from '../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { sendRequest, requestMethods, profilePicturesUrl } from '../core/tools/apiRequest';
+import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
+import MasonryList from '@react-native-seoul/masonry-list';
 
 import { Guitar } from 'lucide-react-native';
 import { colors, utilities } from '../styles/utilities';
-import MasonryList from '@react-native-seoul/masonry-list';
 
 const avatar = require('../assets/avatar.png');
 
@@ -51,21 +52,21 @@ const Feed = ({ navigation }) => {
         );
     };
 
-    const MemberCard = ({ user, height, navigation }) => {
-        const imageUrl = `${profilePicturesUrl + user.picture}`;
-        return (
-            <TouchableOpacity
-                style={[styles.cardContainer, { height: height || 180 }]}
-                onPress={() => navigation.navigate('ProfileDetails', { user })}
-            >
-                <Image source={{ uri: imageUrl }} style={styles.photo} />
-                <View style={styles.overlay}>
-                    <Text style={styles.username}>{user.name}</Text>
-                    <Guitar size={20} color="white" />
-                </View>
-            </TouchableOpacity>
-        );
-    };
+    // const MemberCard = ({ user, height, navigation }) => {
+    //     const imageUrl = `${profilePicturesUrl + user.picture}`;
+    //     return (
+    //         <TouchableOpacity
+    //             style={[styles.cardContainer, { height: height || 180 }]}
+    //             onPress={() => navigation.navigate('ProfileDetails', { user })}
+    //         >
+    //             <Image source={{ uri: imageUrl }} style={styles.photo} />
+    //             <View style={styles.overlay}>
+    //                 <Text style={styles.username}>{user.name}</Text>
+    //                 <Guitar size={20} color="white" />
+    //             </View>
+    //         </TouchableOpacity>
+    //     );
+    // };
 
     return (
         // <View style={styles.cardsContainer}>
@@ -79,7 +80,7 @@ const Feed = ({ navigation }) => {
                 data={users}
                 renderItem={({ item, index }) => {
                     const itemHeight = index % 2 === 1 ? 270 : 180;
-                    return <MemberCard user={item} height={itemHeight} navigation={navigation} />;
+                    return <FeedMemberCard user={item} height={itemHeight} navigation={navigation} />;
                 }}
                 keyExtractor={(item) => item.id}
                 numColumns={2}
@@ -117,31 +118,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 16,
         paddingTop: 8,
-    },
-    cardContainer: {
-        width: 170,
-        borderRadius: utilities.borderRadius.m,
-        overflow: 'hidden',
-        margin: 8,
-    },
-    photo: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-    },
-    overlay: {
-        position: 'absolute',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: colors.blackTrsp,
-        padding: 10,
-    },
-    username: {
-        color: 'white',
-        fontSize: 16,
-        textAlign: 'center',
     },
 });

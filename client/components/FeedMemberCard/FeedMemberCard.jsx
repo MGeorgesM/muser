@@ -1,5 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+
+import { colors, utilities } from '../../styles/utilities';
+import { profilePicturesUrl } from '../../core/tools/apiRequest';
+
+import { Guitar } from 'lucide-react-native';
 
 const FeedMemberCard = ({ user, height, navigation }) => {
     const imageUrl = `${profilePicturesUrl + user.picture}`;
@@ -19,4 +24,31 @@ const FeedMemberCard = ({ user, height, navigation }) => {
 
 export default FeedMemberCard;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    cardContainer: {
+        width: 170,
+        borderRadius: utilities.borderRadius.m,
+        overflow: 'hidden',
+        margin: 8,
+    },
+    photo: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+    },
+    overlay: {
+        position: 'absolute',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: colors.blackTrsp,
+        padding: 10,
+    },
+    username: {
+        color: 'white',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+});
