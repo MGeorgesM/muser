@@ -25,8 +25,8 @@ class VenueController extends Controller
                     ->select(
                         'band_members.id',
                         'band_members.band_id',
-                        'members.id as user_id',
-                        'members.name as user_name'
+                        'members.id as id',
+                        'members.name as name'
                     );
             }
         ])->find($venueId);
