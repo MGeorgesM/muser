@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Connection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -66,34 +67,58 @@ class UserController extends Controller
         return response()->json($users->map->full_details);
     }
 
-    public function updateUser(Request $request, $id = null)
+    public function updateUser(UpdateUserRequest $request, $id)
     {
-
-        $this->validateRequest($request, $id);
-
         $user = User::find($id);
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        $userData = $request->only([
-            'name', 'email', 'about', 'location_id', 'availability_id',
-            'experience_id', 'instrument_id', 'venue_type_id'
-        ]);
-
-        $user->fill($userData);
-
+        $user->fill($request->validated());
+    
         if ($request->has('genres')) {
             $user->genres()->sync($request->genres);
         }
-
+    
         if ($request->hasFile('picture')) {
             $user->picture = $this->updateProfilePicture($request, $user);
-        }
-
+        }       
+    
         $user->save();
-
+    
         return response()->json(['message' => 'User updated successfully', 'user' => $user->full_details]);
+
+        // $user = User::find($id);
+
+        // if (!$user) return response()->json(['message' => 'User not found'], 404);
+
+        // $request->name && $user->name = $request->input('name');
+        // $request->email && $user->email = $request->input('email');
+        // $request->about && $user->about = $request->input('about');
+        // $request->location_id && $user->location_id = $request->input('location_id');
+        // $request->availability_id && $user->availability_id = $request->input('availability_id');
+        // $request->experience_id && $user->experience_id = $request->input('experience_id');
+        // $request->instrument_id && $user->instrument_id = $request->input('instrument_id');
+        // $request->venue_type_id && $user->venue_type_id = $request->input('venue_type_id');
+
+        // $request->genres && $user->genres()->sync($request->input('genres'));
+
+        // if ($request->hasFile('picture')) {
+        //     $file = $request->file('picture');
+        //     $extension = $file->getClientOriginalExtension();
+        //     $filename = time() . '.' . $extension;
+        //     $file->move(public_path('/profile-pictures/'), $filename);
+
+        //     if (File::exists(public_path('/profile-pictures/') . $user->picture)) {
+        //         File::delete(public_path('/profile-pictures/') . $user->picture);
+        //     }
+
+        //     $user->picture = $filename;
+        // }
+
+        // $user->save();
+
+        // return response()->json(['message' => 'User updated successfully', 'user' => $user]);
     }
 
     public function getConnections()
@@ -142,29 +167,12 @@ class UserController extends Controller
         return response()->json(['message' => 'User disabled successfully']);
     }
 
-    protected function validateRequest($request, $id)
-    {
-        $request->validate([
-            'name' => 'string|max:255',
-            'email' => 'string|email|max:255|unique:users,email,' . $id,
-            'about' => 'string|max:120',
-            'picture' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'location_id' => 'integer|exists:locations,id',
-            'availability_id' => 'exists:availabilities,id',
-            'experience_id' => 'exists:experiences,id',
-            'instrument_id' => 'exists:instruments,id',
-            'venue_type_id' => 'exists:venue_types,id',
-            'genres' => 'array',
-            'genres.*' => 'exists:genres,id',
-        ]);
-    }
-
     protected function updateProfilePicture(Request $request, User $user)
     {
         $file = $request->file('picture');
         $extension = $file->getClientOriginalExtension();
         $filename = time() . '.' . $extension;
-        $destinationPath = public_path('/profile-pictures/');
+        $destinationPath = public_path('/profile_pictures/');
 
         if (File::exists($destinationPath . $user->picture)) {
             File::delete($destinationPath . $user->picture);

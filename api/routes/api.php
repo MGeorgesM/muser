@@ -25,8 +25,8 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('properties', [AuthController::class, 'getProperties']);
     Route::get('me', [AuthController::class, 'me']);
+    Route::get('properties', [AuthController::class, 'getProperties']);
 });
 
 
@@ -45,7 +45,7 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
     Route::get('users/{id?}', [UserController::class, 'getUser'])->where('id', '[0-9]+');
     Route::get('users/details', [UserController::class, 'getUsersPicturesAndNames']);
     Route::get('users/type/{role}', [UserController::class, 'getUsersByRole']);
-    Route::put('users/{id}', [UserController::class, 'updateUser']);
+    Route::post('users/{id}', [UserController::class, 'updateUser']);
 
     Route::get('connections', [UserController::class, 'getConnections']);
     Route::post('connections/{id}', [UserController::class, 'addConnection']);
