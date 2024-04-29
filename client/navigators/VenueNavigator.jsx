@@ -1,18 +1,18 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import StreamsOverview from '../screens/StreamsOverview';
-import Stream from '../screens/Stream';
+import Venues from '../screens/Venues';
+import VenueDetails from '../screens/VenueDetails';
 
-const LiveStreamStack = createStackNavigator();
+const VenueStack = createStackNavigator();
 
-const LiveStreamNavigator = () => {
+const VenueNavigator = () => {
     return (
-        <LiveStreamStack.Navigator initialRouteName="StreamsOverview" screenOptions={{ headerShown: false }}>
-            <LiveStreamStack.Screen name="StreamsOverview" component={StreamsOverview} />
-            <LiveStreamStack.Screen name="Stream" component={Stream} />
-        </LiveStreamStack.Navigator>
+        <VenueStack.Navigator initialRouteName="Venues" screenOptions={{ headerShown: false }}>
+            <VenueStack.Screen name="Venues" component={Venues} />
+            <VenueStack.Screen name="VenueDetails" component={VenueDetails} />
+        </VenueStack.Navigator>
     );
 };
 
-export default LiveStreamNavigator;
+export default VenueNavigator;
