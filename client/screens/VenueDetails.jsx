@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 
 import { setSelectedVenue } from '../store/Venues';
@@ -12,6 +12,8 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 const VenueDetails = ({ route, navigation }) => {
     // const { entity: venue } = route.params;
+    const [switchHandler, setSwitchHandler] = useState(false);
+    const [selectedShow, setSelectedShow] = useState(null);
 
     const shows = [
         {
@@ -73,6 +75,68 @@ const VenueDetails = ({ route, navigation }) => {
             name: 'pub',
         },
     };
+
+    const show = {
+        id: 2,
+        name: 'Architecto ullam tenetur debitis odio illum.',
+        description: 'Sed rem ex iure aut. Saepe magnam cumque et. Vel commodi ea voluptatem mollitia vel sed amet.',
+        picture: 'show.jpg',
+        date: '2024-07-18 08:56:02',
+        duration: 67,
+        band_id: 9,
+        venue_id: 11,
+        status: 'set',
+        created_at: '2024-04-28T14:46:56.000000Z',
+        updated_at: '2024-04-28T14:46:56.000000Z',
+        band: {
+            id: 9,
+            name: 'Cartwright-Price',
+            created_at: '2024-04-28T14:46:56.000000Z',
+            updated_at: '2024-04-28T14:46:56.000000Z',
+            members: [
+                {
+                    id: 3,
+                    name: 'Lawrence Hamill Jr.',
+                    email: 'odurgan@example.org',
+                    about: 'Voluptas illum omnis sunt nulla soluta. Aut illo minima odit nihil impedit. Ea explicabo sit enim magnam.',
+                    picture: 'musician.jpg',
+                    location_id: 1,
+                    availability_id: 4,
+                    experience_id: 1,
+                    instrument_id: 3,
+                    venue_type_id: null,
+                    role_id: 1,
+                    is_active: 1,
+                    created_at: '2024-04-28T14:46:54.000000Z',
+                    updated_at: '2024-04-28T14:46:54.000000Z',
+                    pivot: {
+                        band_id: 9,
+                        user_id: 3,
+                    },
+                },
+                {
+                    id: 10,
+                    name: 'Ludwig Glover I',
+                    email: 'dolores.zieme@example.com',
+                    about: 'Mollitia in nulla ad quisquam sint natus molestiae. Deleniti recusandae fuga qui dolores.',
+                    picture: 'musician.jpg',
+                    location_id: 1,
+                    availability_id: 4,
+                    experience_id: 1,
+                    instrument_id: 3,
+                    venue_type_id: null,
+                    role_id: 1,
+                    is_active: 1,
+                    created_at: '2024-04-28T14:46:54.000000Z',
+                    updated_at: '2024-04-28T14:46:54.000000Z',
+                    pivot: {
+                        band_id: 9,
+                        user_id: 10,
+                    },
+                },
+            ],
+        },
+    };
     const imageUrl = `${profilePicturesUrl + venue.picture}`;
 
     useEffect(() => {
@@ -101,6 +165,28 @@ const VenueDetails = ({ route, navigation }) => {
         getVenueShows();
     }, [venue]);
 
+    const BandMemberCard = ({ entity, navigation }) => {
+        const { picture, name, date } = entity;
+        const imageUrl = `${profilePicturesUrl + entity.picture}`;
+        console.log(imageUrl)
+        return (
+            <TouchableOpacity
+                style={[utilities.flexRow]}
+            
+            >
+                <View style={[utilities.flexRow, utilities.center]}>
+                    <Image source={{ uri: imageUrl }} style={styles.photo} />
+                    <View>
+                        <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>
+                            {entity.name}
+                        </Text>
+                        <Text style={[utilities.textXS, { color: colors.gray }]}>{entity.instrument_id}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
     return (
         <View style={styles.container}>
             <BackBtn navigation={navigation} />
@@ -115,11 +201,19 @@ const VenueDetails = ({ route, navigation }) => {
                 </View>
             </View>
             <View style={[utilities.container]}>
-                <Text style={[utilities.textM, utilities.textBold, { marginVertical: 18 }]}>Upcoming Shows</Text>
-                <FlatList
+                <Text style={[utilities.textM, utilities.textBold, { marginVertical: 18 }]}>
+                    {!switchHandler ? 'Upcoming Shows' : `${selectedShow.name + selectedShow.date}`}
+                </Text>
+                {/* <FlatList
                     data={shows}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => <ShowCard entity={item} navigation={navigation} />}
+                    showsVerticalScrollIndicator={false}
+                /> */}
+                <FlatList
+                    data={show.band.members}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => <BandMemberCard entity={item} navigation={navigation} />}
                     showsVerticalScrollIndicator={false}
                 />
                 <TouchableOpacity style={[utilities.primaryBtn, { marginVertical: 20 }]}>
