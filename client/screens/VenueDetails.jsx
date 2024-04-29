@@ -1,125 +1,53 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 
 import { setSelectedVenue } from '../store/Venues';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { Play, ChevronLeft, ChevronRight } from 'lucide-react-native';
+
 import { utilities, colors } from '../styles/utilities';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import BackBtn from '../components/BackBtn';
 
-const VenueDetails = ({ route }) => {
+const VenueDetails = ({ route, navigation }) => {
     // const { entity: venue } = route.params;
+
     const shows = [
         {
             id: 2,
-            name: 'Architecto ullam tenetur debitis odio illum.',
+            name: 'The Architects Show',
             description:
                 'Sed rem ex iure aut. Saepe magnam cumque et. Vel commodi ea voluptatem mollitia vel sed amet.',
             picture: 'show.jpg',
             date: '2024-07-18 08:56:02',
-            duration: 67,
-            band_id: 9,
-            venue_id: 11,
-            status: 'set',
-            created_at: '2024-04-28T14:46:56.000000Z',
-            updated_at: '2024-04-28T14:46:56.000000Z',
-            band: {
-                id: 9,
-                name: 'Cartwright-Price',
-                created_at: '2024-04-28T14:46:56.000000Z',
-                updated_at: '2024-04-28T14:46:56.000000Z',
-                members: [
-                    {
-                        id: 3,
-                        name: 'Lawrence Hamill Jr.',
-                        email: 'odurgan@example.org',
-                        about: 'Voluptas illum omnis sunt nulla soluta. Aut illo minima odit nihil impedit. Ea explicabo sit enim magnam.',
-                        picture: 'musician.jpg',
-                        location_id: 1,
-                        availability_id: 4,
-                        experience_id: 1,
-                        instrument_id: 3,
-                        venue_type_id: null,
-                        role_id: 1,
-                        is_active: 1,
-                        created_at: '2024-04-28T14:46:54.000000Z',
-                        updated_at: '2024-04-28T14:46:54.000000Z',
-                        pivot: {
-                            band_id: 9,
-                            user_id: 3,
-                        },
-                    },
-                    {
-                        id: 10,
-                        name: 'Ludwig Glover I',
-                        email: 'dolores.zieme@example.com',
-                        about: 'Mollitia in nulla ad quisquam sint natus molestiae. Deleniti recusandae fuga qui dolores.',
-                        picture: 'musician.jpg',
-                        location_id: 1,
-                        availability_id: 4,
-                        experience_id: 1,
-                        instrument_id: 3,
-                        venue_type_id: null,
-                        role_id: 1,
-                        is_active: 1,
-                        created_at: '2024-04-28T14:46:54.000000Z',
-                        updated_at: '2024-04-28T14:46:54.000000Z',
-                        pivot: {
-                            band_id: 9,
-                            user_id: 10,
-                        },
-                    },
-                    {
-                        id: 10,
-                        name: 'Ludwig Glover I',
-                        email: 'dolores.zieme@example.com',
-                        about: 'Mollitia in nulla ad quisquam sint natus molestiae. Deleniti recusandae fuga qui dolores.',
-                        picture: 'musician.jpg',
-                        location_id: 1,
-                        availability_id: 4,
-                        experience_id: 1,
-                        instrument_id: 3,
-                        venue_type_id: null,
-                        role_id: 1,
-                        is_active: 1,
-                        created_at: '2024-04-28T14:46:54.000000Z',
-                        updated_at: '2024-04-28T14:46:54.000000Z',
-                        pivot: {
-                            band_id: 9,
-                            user_id: 10,
-                        },
-                    },
-                ],
-            },
+        },
+        {
+            id: 3,
+            name: 'The Architects Show',
+            description:
+                'Sed rem ex iure aut. Saepe magnam cumque et. Vel commodi ea voluptatem mollitia vel sed amet.',
+            picture: 'show.jpg',
+            date: '2024-07-18 08:56:02',
+        },
+        {
+            id: 4,
+            name: 'The Architects Show',
+            description:
+                'Sed rem ex iure aut. Saepe magnam cumque et. Vel commodi ea voluptatem mollitia vel sed amet.',
+            picture: 'show.jpg',
+            date: '2024-07-18 08:56:02',
+        },
+        {
+            id: 5,
+            name: 'The Architects Show',
+            description:
+                'Sed rem ex iure aut. Saepe magnam cumque et. Vel commodi ea voluptatem mollitia vel sed amet.',
+            picture: 'show.jpg',
+            date: '2024-07-18 08:56:02',
         },
     ];
-
-    useEffect(() => {
-        const getVenueDetails = async () => {
-            try {
-                const response = await sendRequest(requestMethods.GET, `users/${venue.id}`, null);
-                if (response.status !== 200) throw new Error('Failed to fetch venue details');
-                console.log(response.data);
-                dispatch(setSelectedVenue(response.data));
-            } catch (error) {
-                console.log('Error fetching venue details:', error);
-            }
-        };
-
-        const getVenueShows = async () => {
-            try {
-                const response = await sendRequest(requestMethods.GET, `venues/${venue.id}/shows.set`, null);
-                if (response.status !== 200) throw new Error('Failed to fetch venue shows');
-                console.log(response.data);
-                //Set venue shows
-            } catch (error) {
-                console.log('Error fetching venue shows:', error);
-            }
-        };
-        getVenueDetails();
-    }, []);
-
     const venue = {
         id: 12,
         name: 'Paloma',
@@ -146,10 +74,53 @@ const VenueDetails = ({ route }) => {
             name: 'pub',
         },
     };
-
     const imageUrl = `${profilePicturesUrl + venue.picture}`;
+
+    useEffect(() => {
+        const getVenueDetails = async () => {
+            try {
+                const response = await sendRequest(requestMethods.GET, `users/${venue.id}`, null);
+                if (response.status !== 200) throw new Error('Failed to fetch venue details');
+                console.log(response.data);
+                dispatch(setSelectedVenue(response.data));
+            } catch (error) {
+                console.log('Error fetching venue details:', error);
+            }
+        };
+
+        const getVenueShows = async () => {
+            try {
+                const response = await sendRequest(requestMethods.GET, `venues/${venue.id}/shows.set`, null);
+                if (response.status !== 200) throw new Error('Failed to fetch venue shows');
+                console.log(response.data);
+                //Set venue shows
+            } catch (error) {
+                console.log('Error fetching venue shows:', error);
+            }
+        };
+        getVenueDetails();
+    }, [venue]);
+
+    const ShowCard = ({ entity, navigation }) => {
+        return (
+            <View style={styles.showCard}>
+                <View style={styles.showCardInner}>
+                    <View style={styles.showBtn}>
+                        <Play size={16} color={colors.primary} />
+                    </View>
+                    <View style={styles.showDetails}>
+                        <Text style={utilities.textM}>{entity.name}</Text>
+                        <Text style={utilities.textS}>{entity.date}</Text>
+                    </View>
+                </View>
+                <ChevronRight size={24} color={colors.darkGray} />
+            </View>
+        );
+    };
+
     return (
         <View style={styles.container}>
+            <BackBtn />
             <View>
                 <Image source={{ uri: imageUrl }} style={[styles.venueImage, styles.borderRadiusBottom]} />
 
@@ -159,6 +130,18 @@ const VenueDetails = ({ route }) => {
                         style={[utilities.textS, { color: colors.offWhite }]}
                     >{`${venue.location.name},Lebanon`}</Text>
                 </View>
+            </View>
+            <View style={[utilities.container]}>
+                <Text style={[utilities.textM, utilities.textBold, { marginVertical: 18 }]}>Upcoming Shows</Text>
+                <FlatList
+                    data={shows}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => <ShowCard entity={item} navigation={navigation} />}
+                    showsVerticalScrollIndicator={false}
+                />
+                <TouchableOpacity style={[utilities.primaryBtn, { marginVertical: 20 }]}>
+                    <Text style={[utilities.primaryBtnText]}>Book your Show!</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -180,8 +163,37 @@ const styles = StyleSheet.create({
 
     venueImage: {
         width: '100%',
-        height: height * 0.55,
+        height: height * 0.5,
         resizeMode: 'cover',
         position: 'relative',
+    },
+
+    showCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 14,
+        marginBottom: 6,
+        height: 80,
+        backgroundColor: colors.lightGray,
+        borderRadius: utilities.borderRadius.m,
+    },
+
+    showCardInner: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    showBtn: {
+        width: 48,
+        height: 48,
+        borderRadius: utilities.borderRadius.s,
+        backgroundColor: colors.gray,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    showDetails: {
+        marginLeft: 12,
     },
 });

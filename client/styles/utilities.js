@@ -10,6 +10,7 @@ export const colors = {
 
     blackTrsp: 'rgba(0,0,0,0.3)',
     whiteTrsp: 'rgba(255,255,255,0.5)',
+    lightGrayTrsp: '#d9d9d990',
     noColor: 'transparent',
 };
 
