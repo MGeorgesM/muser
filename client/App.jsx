@@ -13,7 +13,7 @@ import MainTabs from './screens/MainTabs';
 import UserRole from './screens/UserRole';
 import UserInfo from './screens/UserInfo';
 
-// const { utilities, colors } from './styles/utilities';
+// import {utilities, colors} from '../styles/utilities';
 
 const Stack = createStackNavigator();
 

@@ -89,6 +89,20 @@ export const utilities = StyleSheet.create({
         elevation: 10,
     },
 
+    cover: {
+        width: '100%',
+        resizeMode: 'cover',
+    },
+    
+    overlay: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: 20,
+    },
+    
     borderRadius: {
         s: 12,
         m: 18,
