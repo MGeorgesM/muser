@@ -10,10 +10,11 @@ import { defaultAvatar } from '../../core/tools/apiRequest';
 import { profilePicturesUrl } from '../../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
-const ChatCard = ({ chat }) => {
+const ChatCard = ({ chat, navigation }) => {
     const [participants, setParticipants] = useState(chat.participantsIds);
     const [title, setTitle] = useState(chat.chatTitle);
     const [avatar, setAvatar] = useState(null);
+    const { currentUser } = useUser();
 
     useEffect(() => {
         const getUsersPicutresandNames = async () => {
@@ -52,7 +53,7 @@ const ChatCard = ({ chat }) => {
             onPress={() => navigation.navigate('ChatDetails', { chatId: chat.id, chatParticipants: participants })}
         >
             <View style={[utilities.flexRow, utilities.center]}>
-                <Image source={{ uri: avatar }} style={styles.photo} />
+                <Image source={{ uri: avatar }} style={styles.chatCardPhoto} />
                 <View>
                     <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>
                         {title || 'Chat'}
@@ -68,4 +69,17 @@ const ChatCard = ({ chat }) => {
 };
 export default ChatCard;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    chatCardContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingTop: 20,
+    },
+    chatCardPhoto: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        marginRight: 10,
+    },
+});
