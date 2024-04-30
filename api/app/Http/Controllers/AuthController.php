@@ -141,7 +141,6 @@ class AuthController extends Controller
             ],
             'general' => [
                 'Location' => Location::all(),
-                'Availability' => Availability::all(),
             ],
         ]);
     }

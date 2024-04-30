@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { ChevronLeft, CircleCheckBig } from 'lucide-react-native';
 
 import { colors, utilities } from '../styles/utilities';
-import EditProfilePicker from '../components/EditProfilePicker/EditProfilePicker';
+import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
 import hours from '../core/data/generateHours';
 
@@ -94,9 +94,9 @@ const ShowDetails = ({ route, navigation }) => {
                     <Text style={[utilities.textL, utilities.textBold]}>{title}</Text>
                 </View>
                 <View>
-                    <EditProfilePicker items={bands} label={'Band'} />
-                    <EditProfilePicker items={hours} label={'Show Starts'} />
-                    <EditProfilePicker items={durations} label={'Duration'} />
+                    <ProfileDetailsPicker items={bands} label={'Band'} />
+                    <ProfileDetailsPicker items={hours} label={'Show Starts'} />
+                    <ProfileDetailsPicker items={durations} label={'Duration'} />
                     <Text style={(utilities.textCenter, utilities.textBold, { fontSize: 18 })}>Availability</Text>
                 </View>
                 <TouchableOpacity style={[utilities.primaryBtn, { marginBottom: 20 }]} onPress={handleProceed}>

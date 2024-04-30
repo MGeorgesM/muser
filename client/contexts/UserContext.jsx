@@ -23,7 +23,7 @@ export const UserProvider = ({ children }) => {
         about: '',
         picture: '',
         location_id: '',
-        availability_id: '',
+        availability_id: 1,
         experience_id: '',
         instrument_id: '',
         venue_type_id: '',
@@ -70,32 +70,6 @@ export const UserProvider = ({ children }) => {
         };
         checkUser();
     }, []);
-
-    const handleSignIn = async () => {
-        setAuthError(null);
-        // try {
-        //     const response = await signInWithEmailAndPassword(auth, email, password);
-        //     if (response.status === 200) {
-        //         navigation.navigate('Feed');
-        //     }
-        // } catch (error) {
-        //     console.error('Error signing in:', error);
-        // }
-        try {
-            const response = await sendRequest(requestMethods.POST, 'auth/login', userInfo);
-
-            if (response.status === 200) {
-                await AsyncStorage.setItem('token', response.data.token);
-                setLoggedIn(true);
-                setCurrentUser(response.data.user);
-                console.log('User login successful:', response.data.user);
-                navigation.navigate('Feed');
-            }
-        } catch (error) {
-            console.log('Error signing in:', error);
-            setAuthError('Invalid email or password');
-        }
-    };
 
     const handleSignUp = async () => {
         setAuthError(null);
@@ -158,7 +132,6 @@ export const UserProvider = ({ children }) => {
                 userInfo,
                 authError,
                 currentUser,
-                handleSignIn,
                 handleSignUp,
                 handleSignOut,
                 setUserInfo,

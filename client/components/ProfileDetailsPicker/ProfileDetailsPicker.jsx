@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-const EditProfilePicker = ({ label, items, selectedValue, onValueChange }) => (
+const ProfileDetailsPicker = ({ label, items, selectedValue, onValueChange }) => (
     <View style={{ borderBottomWidth: 0.5, marginBottom: 20 }}>
         <Text style={styles.inputTextProfile}>{label}</Text>
         <Picker
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default EditProfilePicker;
+export default ProfileDetailsPicker;

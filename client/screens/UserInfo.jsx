@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
+import { Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
 
@@ -8,7 +8,8 @@ import { requestMethods, sendRequest } from '../core/tools/apiRequest';
 
 import { CirclePlus, Plus, ArrowLeft } from 'lucide-react-native';
 
-import EditProfilePicker from '../components/EditProfilePicker/EditProfilePicker';
+import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
+import { colors, utilities } from '../styles/utilities';
 
 const { styles } = require('../components/AuthenticationForms/styles');
 
@@ -21,7 +22,7 @@ const UserInfo = ({ navigation }) => {
     useEffect(() => {
         const getProperties = async () => {
             try {
-                const response = await sendRequest(requestMethods.GET, 'auth/properties');
+                const response = await sendRequest(requestMethods.GET, 'auth/register/userinfo');
                 if (response.status === 200) {
                     console.log('Properties:', response.data);
                     setProfileProperties(response.data.general);
@@ -71,7 +72,6 @@ const UserInfo = ({ navigation }) => {
             setUserInfo((prev) => ({ ...prev, picture: { uri, name, type } }));
             setSelectedPicture(result);
         }
-
     };
 
     return (
@@ -109,7 +109,7 @@ const UserInfo = ({ navigation }) => {
                     {Object.keys(profileProperties).length > 0 &&
                         Object.keys(profileProperties).map((key) => {
                             return (
-                                <EditProfilePicker
+                                <ProfileDetailsPicker
                                     key={key}
                                     label={key}
                                     items={profileProperties[key]}
@@ -118,6 +118,7 @@ const UserInfo = ({ navigation }) => {
                                 />
                             );
                         })}
+
                 </View>
             </View>
             <View style={styles.bottomInnerContainer}>

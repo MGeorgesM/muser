@@ -55,7 +55,6 @@ const Authentication = ({ navigation }) => {
 
     const checkEmail = async () => {
         try {
-            console.log('Checking email:', userInfo.email);
             const response = await sendRequest(requestMethods.POST, 'auth/register/email', { email: userInfo.email });
             if (response.status === 200) {
                 return false;
@@ -64,7 +63,6 @@ const Authentication = ({ navigation }) => {
                 return true;
             }
         } catch (error) {
-            console.log('here');
             setError('Email already in use');
             return true;
         }
@@ -79,7 +77,7 @@ const Authentication = ({ navigation }) => {
             }
             const emailExists = await checkEmail();
             if (!emailExists) {
-                navigation.navigate('UserInfo');
+                navigation.navigate('UserRole');
             }
         } else {
             handleSignIn();
