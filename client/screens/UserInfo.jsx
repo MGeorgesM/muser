@@ -10,6 +10,8 @@ import { CirclePlus, Plus, ArrowLeft } from 'lucide-react-native';
 
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserInfo = ({ navigation }) => {
@@ -49,9 +51,9 @@ const UserInfo = ({ navigation }) => {
     };
 
     const handleImagePicker = async () => {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-            console.error('Permission to access media library was denied');
+        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (permissionResult.granted === false) {
+            console.error('Permission to access camera roll is required!');
             return;
         }
 
@@ -62,17 +64,21 @@ const UserInfo = ({ navigation }) => {
             quality: 1,
         });
 
-        if (!result.cancelled && result.assets && result.assets.length > 0) {
-            const uri = result.assets[0].uri;
-            const fileType = uri.substring(uri.lastIndexOf('.') + 1);
-            const type = `image/${fileType}`;
-            const name = `picture.${fileType}`;
+        if (result.canceled) return;
 
-            console.log('Image:', { uri, name, type });
+        setSelectedPicture(result);
 
-            setUserInfo((prev) => ({ ...prev, picture: { uri, name, type } }));
-            setSelectedPicture(result);
-        }
+        // if (!result.cancelled && result.assets && result.assets.length > 0) {
+        //     const uri = result.assets[0].uri;
+        //     const fileType = uri.substring(uri.lastIndexOf('.') + 1);
+        //     const type = `image/${fileType}`;
+        //     const name = `picture.${fileType}`;
+
+        //     console.log('Image:', { uri, name, type });
+
+        //     setUserInfo((prev) => ({ ...prev, picture: { uri, name, type } }));
+        //     setSelectedPicture(result);
+        // }
     };
 
     const validateForm = () => {
@@ -103,15 +109,27 @@ const UserInfo = ({ navigation }) => {
 
         if (!userInputValid) return;
 
+        console.log('Selected Picture:', selectedPicture);
+
+        const uri = selectedPicture.assets[0].uri;
+        const filename = selectedPicture.assets[0].uri.split('/').pop();
+        const match = /\.(\w+)$/.exec(filename);
+        const ext = match?.[1];
+        const type = match ? `picture/${match[1]}` : `picture`;
+
         const formData = new FormData();
 
         for (const key in userInfo) {
             if (key === 'picture' && userInfo.picture) {
-                console.log('here!')
+                console.log('here!');
                 formData.append('picture', {
-                    uri: userInfo.picture.uri,
-                    name: userInfo.picture.name,
-                    type: userInfo.picture.type,
+                    uri: selectedPicture.assets[0].uri,
+                    name: `photo.${ext}`, // Ensure the extension is correct
+                    type: `image/${ext}`,
+                });
+            } else if (Array.isArray(userInfo[key])) {
+                userInfo[key].forEach((item) => {
+                    formData.append(`${key}[]`, item);
                 });
             } else {
                 formData.append(key, userInfo[key]);
@@ -119,11 +137,7 @@ const UserInfo = ({ navigation }) => {
         }
         console.log('User Info:', userInfo);
         try {
-            const response = await sendRequest(requestMethods.POST, 'auth/register', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            const response = await sendRequest(requestMethods.POST, 'auth/register', formData);
             if (response.status === 201) {
                 await AsyncStorage.setItem('token', response.data.token);
                 setLoggedIn(true);

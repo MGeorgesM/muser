@@ -68,6 +68,8 @@ class AuthController extends Controller
 
         $user->genres()->attach($request->genres);
 
+        $user->save();
+
         $token = auth()->login($user);
 
         return response()->json([
