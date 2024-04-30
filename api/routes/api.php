@@ -11,10 +11,6 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthenticatedMiddleware;
 use App\Http\Middleware\VenueMiddleware;
 
-
-
-
-
 Route::group([
 
     'middleware' => 'api',
@@ -28,7 +24,6 @@ Route::group([
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('me', [AuthController::class, 'me']);
 });
-
 
 Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
@@ -50,7 +45,6 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
     Route::get('connections', [UserController::class, 'getConnections']);
     Route::post('connections/{id}', [UserController::class, 'addConnection']);
 
-    Route::get('venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
     Route::post('venues/{venueId}/rating', [VenueController::class, 'addUpdateRating']);
     Route::get('venues/{venueId}/rating', [VenueController::class, 'getVenueAverageRating']);
 
@@ -59,4 +53,6 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
     Route::post('shows', [ShowController::class, 'addShow']);
     Route::get('shows/{showId?}', [ShowController::class, 'getShow']);
+    // Route::get('venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
+    // Route::get('shows', [VenueController::class, 'getShowsByVenue']);
 });

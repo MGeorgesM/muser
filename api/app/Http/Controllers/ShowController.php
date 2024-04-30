@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Models\Show;
+use App\Models\User;
 
 class ShowController extends Controller
 {
@@ -48,39 +49,76 @@ class ShowController extends Controller
 
     public function getShow(Request $request, $showId = null)
     {
+
+        $venueId = $request->query('venue_id');
+        $showStatus = $request->query('status');
+
         if ($showId) {
             $show = Show::with([
+                'venue:id,name',
                 'band.members' => function ($query) {
-                    $query->select('id', 'name', 'picture', 'instrument_id')
-                        ->with('instrument:id,name');
-                },
-                'band',
-                'venue:id,name'
+                    $query->select('users.id', 'users.name', 'users.picture', 'users.instrument_id')
+                          ->with(['instrument:id,name']);
+                }
             ])->find($showId);
 
             if (!$show) {
                 return response()->json(['message' => 'Show not found'], 404);
             }
 
-            $show->band->members = $show->band->members->map(function ($member) {
-                $member->instrument = $member->instrument->name;
-                return $member;
-            });
-
-            $show->venue_name = $show->venue->name;
-
             return response()->json($show);
         }
 
-        $status = $request->query('status');
-        $shows = Show::with(['band.members:id,name,picture', 'band', 'venue:id,name'])
-            ->when($status, function ($query) use ($status) {
-                $query->where('status', $status);
-            })
-            ->get();
+        $shows = Show::with([
+            'venue:id,name',
+            'band.members' => function ($query) {
+                $query->select('users.id', 'users.name', 'users.picture', 'users.instrument_id')
+                      ->with(['instrument:id,name']);
+            }
+        ])->get();
 
         return response()->json($shows);
     }
+
+    public function getShowsByVenue($venueId, $status = null)
+    {
+        $venue = User::with([
+            'shows' => function ($query) {
+
+                $query->select('shows.id', 'shows.name', 'shows.date', 'shows.status', 'shows.band_id', 'shows.venue_id', 'shows.picture');
+            },
+            'shows.band' => function ($query) {
+
+                $query->select('bands.id', 'bands.name');
+            },
+            'shows.band.members' => function ($query) {
+
+                $query->join('users as members', 'band_members.user_id', '=', 'members.id',)
+                    ->select(
+                        'band_members.id',
+                        'band_members.band_id',
+                        'members.id as id',
+                        'members.name as name',
+                        'members.picture as picture',
+                        'members.instrument_id',
+                    )
+                    ->with('instrument:id,name');
+            }
+        ])->find($venueId);
+
+        if (!$venue) {
+            return response()->json(['error' => 'Venue not found'], 404);
+        }
+
+        if ($status) {
+            $venue->shows = $venue->shows->filter(function ($show) use ($status) {
+                return $show->status === $status;
+            });
+        }
+
+        return response()->json($venue->shows, 200);
+    }
+
 
     public function updateShow(Request $request)
     {

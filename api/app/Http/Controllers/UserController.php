@@ -48,41 +48,40 @@ class UserController extends Controller
         return response()->json($result);
     }
 
-    public function getUsersByRole($role)
-    {
-        $current_user_id = auth()->id();
-        $users = User::whereHas('role', function ($query) use ($role) {
-            $query->where('name', $role);
-        })->where('is_active', 1)->where('id', '!=', $current_user_id)->get();
-
-        return response()->json($users->map->full_details);
-    }
-
     // public function getUsersByRole($role)
     // {
     //     $current_user_id = auth()->id();
-
-    //     $connectedUserIds = [];
-    //     if ($role === 'musician') {
-    //         $connectedUserIds = Connection::where('user_one_id', $current_user_id)
-    //             ->orWhere('user_two_id', $current_user_id)
-    //             ->get()
-    //             ->map(function ($conn) use ($current_user_id) {
-    //                 // Return the connected user's ID
-    //                 return $conn->user_one_id === $current_user_id ? $conn->user_two_id : $conn->user_one_id;
-    //             })->all();
-    //     }
-
-
     //     $users = User::whereHas('role', function ($query) use ($role) {
     //         $query->where('name', $role);
-    //     })->where('is_active', 1)
-    //         ->where('id', '!=', $current_user_id)
-    //         ->whereNotIn('id', $connectedUserIds)  // Exclude connected user IDs
-    //         ->get();
+    //     })->where('is_active', 1)->where('id', '!=', $current_user_id)->get();
 
     //     return response()->json($users->map->full_details);
     // }
+
+    public function getUsersByRole($role)
+    {
+        $current_user_id = auth()->id();
+
+        $connectedUserIds = [];
+        if ($role === 'musician') {
+            $connectedUserIds = Connection::where('user_one_id', $current_user_id)
+                ->orWhere('user_two_id', $current_user_id)
+                ->get()
+                ->map(function ($conn) use ($current_user_id) {
+                    return $conn->user_one_id === $current_user_id ? $conn->user_two_id : $conn->user_one_id;
+                })->all();
+        }
+
+
+        $users = User::whereHas('role', function ($query) use ($role) {
+            $query->where('name', $role);
+        })->where('is_active', 1)
+            ->where('id', '!=', $current_user_id)
+            ->whereNotIn('id', $connectedUserIds)
+            ->get();
+
+        return response()->json($users->map->full_details);
+    }
 
 
     public function updateUser(UpdateUserRequest $request, $id)
