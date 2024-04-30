@@ -24,7 +24,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'getProperties']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'getProperties', 'checkEmail']]);
     }
 
     /**
@@ -61,7 +61,7 @@ class AuthController extends Controller
         $user = User::create($request->validated() + [
             'password' => $request->password,
             'role_id' => $request->role_id ?? 1,
-            
+
         ]);
 
         $user->picture = $this->handleFileUpload($request);
@@ -122,10 +122,10 @@ class AuthController extends Controller
         $user = User::where('email', $email)->first();
 
         if ($user) {
-            return response()->json(['exists' => true]);
+            return response()->json(['message' => 'Email already exists'], 401);
         }
 
-        return response()->json(['exists' => false]);
+        return response()->json(['message' => 'Email is available'], 200);
     }
 
     public function getProperties()

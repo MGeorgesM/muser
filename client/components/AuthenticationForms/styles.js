@@ -111,4 +111,9 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'left',
     },
+    errorText: {
+        fontSize: 16,
+        textAlign:'center',
+        marginBottom: 10,
+    }
 });

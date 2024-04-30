@@ -24,7 +24,7 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
     Route::get('register/userinfo', [AuthController::class, 'getProperties']);
-    Route::get('register/email', [AuthController::class, 'checkEmail']);
+    Route::post('register/email', [AuthController::class, 'checkEmail']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('me', [AuthController::class, 'me']);
 });

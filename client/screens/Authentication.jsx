@@ -5,9 +5,11 @@ import { useUser } from '../contexts/UserContext';
 
 import SignInForm from '../components/AuthenticationForms/SignInForm';
 import SignUpForm from '../components/AuthenticationForms/SignUpForm';
+import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 const logoImg = require('../assets/logo.png');
 const { styles } = require('../components/AuthenticationForms/styles');
+
 
 const Authentication = ({ navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
@@ -51,15 +53,38 @@ const Authentication = ({ navigation }) => {
         }
     };
 
-    const handleProceed = () => {
+    const checkEmail = async () => {
+        try {
+            console.log('Checking email:', userInfo.email);
+            const response = await sendRequest(requestMethods.POST, 'auth/register/email', { email: userInfo.email });
+            if (response.status === 200) {
+                return false;
+            } else if (response.status === 401) {
+                setError('Email already in use');
+                return true;
+            }
+        } catch (error) {
+            console.log('here');
+            setError('Email already in use');
+            return true;
+        }
+    };
+
+    const handleProceed = async () => {
+        setError(null);
         if (switchHandler) {
-            userInfo.name.length > 0 ? navigation.navigate('UserRole') : setError('Please fill out all fields');
-            return;
+            if (userInfo.email.length < 1 || userInfo.password.length < 1 || userInfo.name.length < 1) {
+                setError('Please fill out all fields');
+                return;
+            }
+            const emailExists = await checkEmail();
+            if (!emailExists) {
+                navigation.navigate('UserInfo');
+            }
         } else {
             handleSignIn();
         }
     };
-
 
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
