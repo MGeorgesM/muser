@@ -111,6 +111,23 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
+    public function checkEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email',
+        ]);
+
+        $email = $request->email;
+
+        $user = User::where('email', $email)->first();
+
+        if ($user) {
+            return response()->json(['exists' => true]);
+        }
+
+        return response()->json(['exists' => false]);
+    }
+
     public function getProperties()
     {
         return response()->json([

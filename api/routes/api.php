@@ -21,12 +21,12 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
+    Route::get('register/userinfo', [AuthController::class, 'getProperties']);
+    Route::get('register/email', [AuthController::class, 'checkEmail']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('me', [AuthController::class, 'me']);
-    Route::get('properties', [AuthController::class, 'getProperties']);
 });
 
 
@@ -59,5 +59,4 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
     Route::post('shows', [ShowController::class, 'addShow']);
     Route::get('shows/{showId?}', [ShowController::class, 'getShow']);
-
 });
