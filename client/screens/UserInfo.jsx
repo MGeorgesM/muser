@@ -77,38 +77,45 @@ const UserInfo = ({ navigation }) => {
 
     const validateForm = () => {
         if (userInfo.about === '' || userInfo.location_id === '') {
+            console.log('here');
             setError('Please fill in all fields');
+            return false;
         }
         if (
             userInfo.role_id === 1 &&
             (userInfo.genres.length === 0 || userInfo.instrument_id === '' || userInfo.experience_id === '')
         ) {
             setError('Please fill in all fields');
+            return false;
         } else if (userInfo.role_id === 2 && userInfo.venue_type_id === '') {
             setError('Please fill in all fields');
+            return false;
         } else {
             setError(null);
+            return true;
         }
     };
 
     const handleSignUp = async () => {
         setError(null);
 
-        validateForm();
+        const userInputValid = validateForm();
 
-        if (error) return;
-        
+        if (!userInputValid) return;
+
         const formData = new FormData();
 
         for (const key in userInfo) {
-            // if (key === 'picture' && userInfo.picture) {
-            //     formData.append('picture', {
-            //         uri: userInfo[key].uri,
-            //         name: userInfo[key].name,
-            //         type: userInfo[key].type,
-            //     });
-            // }
-            formData.append(key, userInfo[key]);
+            if (key === 'picture' && userInfo.picture) {
+                console.log('here!')
+                formData.append('picture', {
+                    uri: userInfo.picture.uri,
+                    name: userInfo.picture.name,
+                    type: userInfo.picture.type,
+                });
+            } else {
+                formData.append(key, userInfo[key]);
+            }
         }
         console.log('User Info:', userInfo);
         try {

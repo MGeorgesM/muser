@@ -15,14 +15,13 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
-    const [authError, setAuthError] = useState(null);
     const [userInfo, setUserInfo] = useState({
         name: 'May',
         email: 'may@mail.com',
         password: 'password',
         about: 'New to beirut looking for a bass player to play Jazz',
         picture: '',
-        location_id: 1,
+        location_id:1,
         availability_id: 1,
         experience_id: 3,
         instrument_id: 6,
@@ -71,8 +70,6 @@ export const UserProvider = ({ children }) => {
         checkUser();
     }, []);
 
-
-
     const handleSignOut = async () => {
         console.log(navigation.getState());
         try {
@@ -85,7 +82,7 @@ export const UserProvider = ({ children }) => {
                 CommonActions.reset({
                     index: 0,
                     routes: [
-                        { name: 'Authentication' }, // Ensure this is the correct name of your auth stack or screen
+                        { name: 'Authentication' },
                     ],
                 })
             );
@@ -99,7 +96,6 @@ export const UserProvider = ({ children }) => {
             value={{
                 loggedIn,
                 userInfo,
-                authError,
                 currentUser,
                 handleSignOut,
                 setUserInfo,
