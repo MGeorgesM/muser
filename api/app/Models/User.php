@@ -62,7 +62,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function instrument()
     {
-        return $this->belongsTo(Instrument::class);
+        return $this->belongsTo(Instrument::class, 'instrument_id');
     }
 
     public function location()

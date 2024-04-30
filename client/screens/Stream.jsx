@@ -5,6 +5,7 @@ import { Heart, Play, PlayIcon } from 'lucide-react-native';
 import { utilities } from '../styles/utilities';
 import BackBtn from '../components/Elements/BackBtn';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Live = () => {
     const show = {
@@ -57,7 +58,7 @@ const Live = () => {
     };
 
     const [bandMembers, setBandMembers] = useState(show.band.members);
-    
+    console.log(show.band.members);
     return (
         <View style={{ flex: 1 }}>
             <BackBtn />
@@ -78,10 +79,11 @@ const Live = () => {
             </View>
             <View style={[{ paddingHorizontal: 20 }]}>
                 <Text style={[utilities.textM, utilities.textBold, { fontFamily: 'Montserrat' }]}>Band</Text>
-
-                {bandMembers.map((member) => (
-                    <BandMemberCard key={member.id} member={member} />
-                ))}
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                    {bandMembers.map((member) => (
+                        <BandMemberCard key={member.id} entity={member} />
+                    ))}
+                </ScrollView>
             </View>
         </View>
     );

@@ -21,14 +21,16 @@ class VenueController extends Controller
             },
             'shows.band.members' => function ($query) {
 
-                $query->join('users as members', 'band_members.user_id', '=', 'members.id')
+                $query->join('users as members', 'band_members.user_id', '=', 'members.id', )
                     ->select(
                         'band_members.id',
                         'band_members.band_id',
                         'members.id as id',
                         'members.name as name',
                         'members.picture as picture',
-                    );
+                        'members.instrument_id',
+                    )
+                    ->with('instrument:id,name');
             }
         ])->find($venueId);
 

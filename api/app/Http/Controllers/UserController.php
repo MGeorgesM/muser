@@ -58,6 +58,33 @@ class UserController extends Controller
         return response()->json($users->map->full_details);
     }
 
+    // public function getUsersByRole($role)
+    // {
+    //     $current_user_id = auth()->id();
+
+    //     $connectedUserIds = [];
+    //     if ($role === 'musician') {
+    //         $connectedUserIds = Connection::where('user_one_id', $current_user_id)
+    //             ->orWhere('user_two_id', $current_user_id)
+    //             ->get()
+    //             ->map(function ($conn) use ($current_user_id) {
+    //                 // Return the connected user's ID
+    //                 return $conn->user_one_id === $current_user_id ? $conn->user_two_id : $conn->user_one_id;
+    //             })->all();
+    //     }
+
+
+    //     $users = User::whereHas('role', function ($query) use ($role) {
+    //         $query->where('name', $role);
+    //     })->where('is_active', 1)
+    //         ->where('id', '!=', $current_user_id)
+    //         ->whereNotIn('id', $connectedUserIds)  // Exclude connected user IDs
+    //         ->get();
+
+    //     return response()->json($users->map->full_details);
+    // }
+
+
     public function updateUser(UpdateUserRequest $request, $id)
     {
         $user = User::find($id);
@@ -66,17 +93,17 @@ class UserController extends Controller
         }
 
         $user->fill($request->validated());
-    
+
         if ($request->has('genres')) {
             $user->genres()->sync($request->genres);
         }
-    
+
         if ($request->hasFile('picture')) {
             $user->picture = $this->updateProfilePicture($request, $user);
-        }       
-    
+        }
+
         $user->save();
-    
+
         return response()->json(['message' => 'User updated successfully', 'user' => $user->full_details]);
     }
 

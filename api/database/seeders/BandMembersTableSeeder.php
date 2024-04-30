@@ -24,7 +24,7 @@ class BandMembersTableSeeder extends Seeder
             $numberOfMembers = rand(2, $maxMembers);
 
             for ($i = 0; $i < $numberOfMembers; $i++) {
-                $userId = User::whereNotIn('id', $usedUserIds)->inRandomOrder()->first()->id;
+                $userId = User::where('role_id', 1)->whereNotIn('id', $usedUserIds)->inRandomOrder()->first()->id;
 
                 BandMember::factory()->forBand($band->id)->forUser($userId)->create();
                 $usedUserIds[] = $userId;
