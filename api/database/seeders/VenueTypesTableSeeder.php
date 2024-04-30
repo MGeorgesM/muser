@@ -14,19 +14,19 @@ class VenueTypesTableSeeder extends Seeder
     public function run(): void
     {
         $venue_type = new VenueType();
-        $venue_type->name = 'pub';
+        $venue_type->name = 'Pub';
         $venue_type->save();
 
         $venue_type = new VenueType();
-        $venue_type->name = 'club';
+        $venue_type->name = 'Club';
         $venue_type->save();
 
         $venue_type = new VenueType();
-        $venue_type->name = 'hotel';
+        $venue_type->name = 'Hotel';
         $venue_type->save();
 
         $venue_type = new VenueType();
-        $venue_type->name = 'restaurant';
+        $venue_type->name = 'Restaurant';
         $venue_type->save();
     }
 }

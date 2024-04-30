@@ -44,6 +44,7 @@ const UserInfo = ({ navigation }) => {
         if (key === 'Music Genres') {
             setUserInfo((prev) => ({ ...prev, genres: [...prev.genres, value] }));
         } else if (key === 'Venue Type') {
+            console.log('here');
             setUserInfo((prev) => ({ ...prev, [`venue_type_id`]: value }));
         } else {
             setUserInfo((prev) => ({ ...prev, [`${key.toLowerCase()}_id`]: value }));
@@ -77,18 +78,23 @@ const UserInfo = ({ navigation }) => {
             setError('Please select a profile picture');
             return false;
         }
+
+        if (userInfo.about.length > 40 || userInfo.venue_name.length > 40) {
+            setError('Please keep your bio under 40 characters');
+            return false;
+        }
         if (userInfo.about === '' || userInfo.location_id === '') {
-            console.log('here');
             setError('Please fill in all fields');
             return false;
         }
         if (
-            userInfo.role_id === 1 &&
+            userInfo.role_id == 1 &&
             (userInfo.genres.length === 0 || userInfo.instrument_id === '' || userInfo.experience_id === '')
         ) {
+            console.log('here');
             setError('Please fill in all fields');
             return false;
-        } else if (userInfo.role_id === 2 && userInfo.venue_type_id === '') {
+        } else if (userInfo.role_id == 2 && (userInfo.venue_type_id === '' || userInfo.venue_name === '')) {
             setError('Please fill in all fields');
             return false;
         } else {
@@ -98,9 +104,11 @@ const UserInfo = ({ navigation }) => {
     };
 
     const handleSignUp = async () => {
+        setError(null);
         const userInputValid = validateForm();
 
         if (!userInputValid) return;
+        console.log('Signing up:', userInfo);
 
         const uri = selectedPicture.assets[0].uri;
         const filename = selectedPicture.assets[0].uri.split('/').pop();
@@ -138,7 +146,7 @@ const UserInfo = ({ navigation }) => {
                 await AsyncStorage.setItem('token', response.data.token);
                 setLoggedIn(true);
                 setCurrentUser(response.data.user);
-                navigation.navigate('FeedStack', { screen: 'FeedMain' });
+                navigation.navigate('Feed', { screen: 'FeedMain' });
             }
         } catch (error) {
             console.error('Error registering:', error);
@@ -170,13 +178,25 @@ const UserInfo = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
             <View>
-                <Text style={styles.inputTextProfile}>{userInfo.userType === 'venue' ? 'Description' : 'Bio'}</Text>
+                <Text style={styles.inputTextProfile}>{userInfo.role_id == 2 ? 'Description' : 'Bio'}</Text>
                 <TextInput
                     placeholder="Tell us about yourself!"
                     style={{ marginBottom: 20 }}
                     value={userInfo.about}
                     onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
                 />
+                {userInfo.role_id == 2 && (
+                    <>
+                        <Text style={styles.inputTextProfile}>Venue Name</Text>
+                        <TextInput
+                            placeholder="Venue Name"
+                            style={{ marginBottom: 20 }}
+                            value={userInfo.venue_name}
+                            onChangeText={(text) => setUserInfo((prev) => ({ ...prev, venue_name: text }))}
+                        />
+                    </>
+                )}
+
                 <View>
                     {Object.keys(profileProperties).length > 0 &&
                         Object.keys(profileProperties).map((key) => {
@@ -188,7 +208,11 @@ const UserInfo = ({ navigation }) => {
                                     key={key}
                                     label={key}
                                     items={profileProperties[key]}
-                                    selectedValue={userInfo[key.toLowerCase() + '_id']}
+                                    selectedValue={
+                                        key === 'Venue Type'
+                                            ? userInfo['venue_type_id']
+                                            : userInfo[key.toLowerCase() + '_id']
+                                    }
                                     onValueChange={(value) => handlePickerChange(key, value)}
                                 />
                             );

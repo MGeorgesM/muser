@@ -46,7 +46,7 @@ const Authentication = ({ navigation }) => {
                 setLoggedIn(true);
                 setCurrentUser(response.data.user);
                 console.log('User login successful:', response.data.user);
-                navigation.navigate('FeedStack', { screen: 'FeedMain' });
+                navigation.navigate('Feed', { screen: 'FeedMain' });
 
             }
 

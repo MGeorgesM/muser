@@ -16,17 +16,18 @@ export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({
-        name: 'Georges',
-        email: 'georges@mail.com',
+        name: 'Robbie',
+        email: 'robbie@mail.com',
         password: 'password',
-        about: 'New to beirut looking for a bass player to play Jazz',
+        about: 'This is me Robbie Williams!',
         picture: '',
         location_id: 1,
         availability_id: 1,
         experience_id: 3,
         instrument_id: 6,
-        venue_type_id: '',
-        role_id: 1,
+        venue_type_id: '1',
+        venue_name: '',
+        role_id: '1',
         genres: [1, 3],
     });
     const navigation = useNavigation();

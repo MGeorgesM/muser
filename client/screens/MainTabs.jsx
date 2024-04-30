@@ -13,6 +13,7 @@ import LiveStreamNavigator from '../navigators/LiveStreamNavigator';
 const Tab = createBottomTabNavigator();
 
 const MainTabs = () => {
+
     return (
         <Tab.Navigator
             initialRouteName="Venues"
