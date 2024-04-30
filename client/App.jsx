@@ -13,6 +13,8 @@ import MainTabs from './screens/MainTabs';
 import UserRole from './screens/UserRole';
 import UserInfo from './screens/UserInfo';
 
+import { useFonts } from 'expo-font';
+
 // import {utilities, colors} from '../styles/utilities';
 
 const Stack = createStackNavigator();
@@ -33,8 +35,10 @@ const AppNavigator = () => {
     return loggedIn ? <MainTabs /> : <AuthenticationStack />;
 };
 
-
 const App = () => {
+    const [fontsLoaded] = useFonts({
+        'Montserrat': require('./assets/fonts/Montserrat-VariableFont_wght.ttf'),
+    });
     return (
         <Provider store={store}>
             <NavigationContainer>

@@ -8,7 +8,7 @@ const LiveStreamStack = createStackNavigator();
 
 const LiveStreamNavigator = () => {
     return (
-        <LiveStreamStack.Navigator initialRouteName="StreamsOverview" screenOptions={{ headerShown: false }}>
+        <LiveStreamStack.Navigator initialRouteName="Stream" screenOptions={{ headerShown: false }}>
             <LiveStreamStack.Screen name="StreamsOverview" component={StreamsOverview} />
             <LiveStreamStack.Screen name="Stream" component={Stream} />
         </LiveStreamStack.Navigator>
