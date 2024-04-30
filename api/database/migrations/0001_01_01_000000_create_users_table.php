@@ -57,7 +57,7 @@ return new class extends Migration
             $table->foreignId('availability_id')->nullable()->constrained('availabilities')->onDelete('cascade');
             $table->foreignId('experience_id')->nullable()->constrained('experiences')->onDelete('cascade');
             $table->foreignId('instrument_id')->nullable()->constrained('instruments')->onDelete('cascade');
-            $table->sring('venue_name', 40);
+            $table->string('venue_name', 40)->nullable();
             $table->foreignId('venue_type_id')->nullable()->constrained('venue_types')->onDelete('cascade');
             $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade');
             $table->boolean('is_active')->default(1);

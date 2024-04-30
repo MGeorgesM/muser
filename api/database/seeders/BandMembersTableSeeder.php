@@ -17,14 +17,21 @@ class BandMembersTableSeeder extends Seeder
     public function run(): void
     {
         $bands = Band::all();
+        $maxMembers = 6;
 
         foreach ($bands as $band) {
             $usedUserIds = [];
+            $numberOfMembers = rand(2, $maxMembers);
 
-            for ($i = 0; $i < 2; $i++) {
+            for ($i = 0; $i < $numberOfMembers; $i++) {
                 $userId = User::whereNotIn('id', $usedUserIds)->inRandomOrder()->first()->id;
-                BandMemberFactory::new()->forBand($band->id)->forUser($userId)->create();
+
+                BandMember::factory()->forBand($band->id)->forUser($userId)->create();
                 $usedUserIds[] = $userId;
+
+                if ($i >= 1 && rand(0, 1)) {
+                    break;
+                }
             }
         }
     }
