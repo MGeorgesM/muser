@@ -16,12 +16,12 @@ export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({
-        name: 'May',
-        email: 'may@mail.com',
+        name: 'Georges',
+        email: 'georges@mail.com',
         password: 'password',
         about: 'New to beirut looking for a bass player to play Jazz',
         picture: '',
-        location_id:1,
+        location_id: 1,
         availability_id: 1,
         experience_id: 3,
         instrument_id: 6,
@@ -81,9 +81,7 @@ export const UserProvider = ({ children }) => {
             navigation.dispatch(
                 CommonActions.reset({
                     index: 0,
-                    routes: [
-                        { name: 'Authentication' },
-                    ],
+                    routes: [{ name: 'Authentication' }],
                 })
             );
         } catch (error) {
@@ -97,8 +95,9 @@ export const UserProvider = ({ children }) => {
                 loggedIn,
                 userInfo,
                 currentUser,
-                handleSignOut,
                 setUserInfo,
+                setLoggedIn,
+                handleSignOut,
                 setCurrentUser,
             }}
         >

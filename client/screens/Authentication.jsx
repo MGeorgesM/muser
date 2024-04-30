@@ -6,6 +6,7 @@ import { useUser } from '../contexts/UserContext';
 import SignInForm from '../components/AuthenticationForms/SignInForm';
 import SignUpForm from '../components/AuthenticationForms/SignUpForm';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const logoImg = require('../assets/logo.png');
 const { styles } = require('../components/AuthenticationForms/styles');
@@ -15,7 +16,7 @@ const Authentication = ({ navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
     const [error, setError] = useState(null);
 
-    const { userInfo, setUserInfo, authError } = useUser();
+    const { userInfo, setUserInfo, authError, setLoggedIn, setCurrentUser } = useUser();
 
     useEffect(() => {
         if ((!userInfo.email.includes('@') || !userInfo.email.includes('.')) && userInfo.email.length > 0) {
@@ -45,8 +46,10 @@ const Authentication = ({ navigation }) => {
                 setLoggedIn(true);
                 setCurrentUser(response.data.user);
                 console.log('User login successful:', response.data.user);
-                navigation.navigate('Feed');
+                navigation.navigate('FeedStack', { screen: 'FeedMain' });
+
             }
+
         } catch (error) {
             console.log('Error signing in:', error);
             setError('Invalid email or password');

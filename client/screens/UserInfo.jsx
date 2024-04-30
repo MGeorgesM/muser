@@ -20,7 +20,7 @@ const UserInfo = ({ navigation }) => {
     const [formTouched, setFormTouched] = useState(false);
     const [error, setError] = useState(null);
 
-    const { userInfo, setUserInfo } = useUser();
+    const { userInfo, setUserInfo, setLoggedIn, setCurrentUser } = useUser();
 
     useEffect(() => {
         const getProperties = async () => {
@@ -67,21 +67,16 @@ const UserInfo = ({ navigation }) => {
         if (result.canceled) return;
 
         setSelectedPicture(result);
-
-        // if (!result.cancelled && result.assets && result.assets.length > 0) {
-        //     const uri = result.assets[0].uri;
-        //     const fileType = uri.substring(uri.lastIndexOf('.') + 1);
-        //     const type = `image/${fileType}`;
-        //     const name = `picture.${fileType}`;
-
-        //     console.log('Image:', { uri, name, type });
-
-        //     setUserInfo((prev) => ({ ...prev, picture: { uri, name, type } }));
-        //     setSelectedPicture(result);
-        // }
+        setUserInfo((prev) => ({ ...prev, picture: result.uri }));
     };
 
     const validateForm = () => {
+        setError(null);
+
+        if (!selectedPicture) {
+            setError('Please select a profile picture');
+            return false;
+        }
         if (userInfo.about === '' || userInfo.location_id === '') {
             console.log('here');
             setError('Please fill in all fields');
@@ -103,13 +98,9 @@ const UserInfo = ({ navigation }) => {
     };
 
     const handleSignUp = async () => {
-        setError(null);
-
         const userInputValid = validateForm();
 
         if (!userInputValid) return;
-
-        console.log('Selected Picture:', selectedPicture);
 
         const uri = selectedPicture.assets[0].uri;
         const filename = selectedPicture.assets[0].uri.split('/').pop();
@@ -117,14 +108,17 @@ const UserInfo = ({ navigation }) => {
         const ext = match?.[1];
         const type = match ? `picture/${match[1]}` : `picture`;
 
+        console.log('Selected Picture:', selectedPicture);
+
         const formData = new FormData();
 
         for (const key in userInfo) {
-            if (key === 'picture' && userInfo.picture) {
+            if (userInfo[key] === '') continue;
+            if (key === 'picture') {
                 console.log('here!');
                 formData.append('picture', {
                     uri: selectedPicture.assets[0].uri,
-                    name: `photo.${ext}`, // Ensure the extension is correct
+                    name: `photo.${ext}`,
                     type: `image/${ext}`,
                 });
             } else if (Array.isArray(userInfo[key])) {
@@ -135,14 +129,16 @@ const UserInfo = ({ navigation }) => {
                 formData.append(key, userInfo[key]);
             }
         }
-        console.log('User Info:', userInfo);
+
+        console.log('UserInfo:', userInfo);
+
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/register', formData);
             if (response.status === 201) {
                 await AsyncStorage.setItem('token', response.data.token);
                 setLoggedIn(true);
                 setCurrentUser(response.data.user);
-                navigation.navigate('Feed');
+                navigation.navigate('FeedStack', { screen: 'FeedMain' });
             }
         } catch (error) {
             console.error('Error registering:', error);

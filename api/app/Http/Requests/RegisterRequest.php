@@ -21,20 +21,29 @@ class RegisterRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:6',
             'about' => 'required|string|max:120',
             'picture' => 'required|image|mimes:jpeg,png,jpg|max:4096',
             'location_id' => 'required|int|exists:locations,id',
-            'availability_id' => 'exists:availabilities,id',
-            'experience_id' => 'exists:experiences,id',
-            'instrument_id' => 'exists:instruments,id',
-            // 'venue_type_id' => 'exists:venue_types,id',
-            'role_id' => 'exists:roles,id',
+            // 'availability_id' => 'sometimes|exists:availabilities,id',
+            'experience_id' => 'sometimes|exists:experiences,id',
+            'instrument_id' => 'sometimes|exists:instruments,id',
+            'venue_type_id' => 'sometimes|exists:venue_types,id',
+            'role_id' => 'required|exists:roles,id',
             'genres' => 'required|array',
             'genres.*' => 'exists:genres,id',
         ];
+
+        if ($this->input('role_id') == 1) {
+            $rules['instrument_id'] = 'required|exists:instruments,id';
+            $rules['experience_id'] = 'required|exists:experiences,id';
+        } elseif ($this->input('role_id') == 2) {
+            $rules['venue_type_id'] = 'required|exists:venue_types,id';
+        }
+
+        return $rules;
     }
 }

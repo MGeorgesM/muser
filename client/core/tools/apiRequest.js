@@ -20,9 +20,9 @@ export const sendRequest = async (method, route, body) => {
         });
         return response;
     } catch (error) {
-        console.error('Error during HTTP request:', error);
+        console.log('AXIOS Error during HTTP request:', error);
         if (error.response) {
-            console.error('Response error:', error.response.data);
+            console.error('AXIOS Response error:', error.response.data);
         }
         throw error;
     }
