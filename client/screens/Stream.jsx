@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 
-import { Heart, Play, PlayIcon } from 'lucide-react-native';
+import { Heart, Play, PlayIcon, Send } from 'lucide-react-native';
 import { colors, utilities } from '../styles/utilities';
 import BackBtn from '../components/Elements/BackBtn';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
@@ -75,15 +75,7 @@ const Live = () => {
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
                 <View>
-                    <Text
-                        style={[
-                            utilities.textCenter,
-                            utilities.textL,
-                            utilities.textBold,
-                        ]}
-                    >
-                        {show.name}
-                    </Text>
+                    <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>{show.name}</Text>
                     <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
                 </View>
                 <View>
@@ -91,9 +83,7 @@ const Live = () => {
                 </View>
             </View>
             <View style={[{ paddingHorizontal: 20 }]}>
-                <Text style={[utilities.textM, utilities.textBold, { marginBottom: 8 }]}>
-                    Band
-                </Text>
+                <Text style={[utilities.textM, utilities.textBold, { marginBottom: 8 }]}>Band</Text>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     {bandMembers.map((member) => (
                         <BandMemberCard key={member.id} entity={member} />
@@ -109,6 +99,15 @@ const Live = () => {
                         <Text style={[utilities.textS]}>This is a user comment on the live stream</Text>
                     </View>
                 </ScrollView>
+                <View style={styles.userInputField}>
+                    <TextInput
+                        placeholder="Write a comment"
+                        style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: colors.white }}
+                    />
+                    <TouchableOpacity>
+                        <Send size={24} color={colors.darkGray} />
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -120,7 +119,7 @@ const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     commentsContainer: {
-        marginTop: 24,
+        marginTop: 8,
         paddingTop: 24,
         borderTopEndRadius: 36,
         borderTopStartRadius: 36,
@@ -133,5 +132,15 @@ const styles = StyleSheet.create({
         height: 32,
         borderRadius: 16,
         marginRight: 8,
+    },
+
+    userInputField: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingRight: 20,
+        height: 48,
+        borderTopColor: colors.lightGray,
+        borderTopWidth: 1,
     },
 });
