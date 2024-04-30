@@ -9,15 +9,16 @@ import { requestMethods, sendRequest } from '../core/tools/apiRequest';
 import { CirclePlus, Plus, ArrowLeft } from 'lucide-react-native';
 
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
-import { colors, utilities } from '../styles/utilities';
 
 const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserInfo = ({ navigation }) => {
     const [profileProperties, setProfileProperties] = useState({});
     const [selectedPicture, setSelectedPicture] = useState(null);
+    const [formTouched, setFormTouched] = useState(false);
+    const [error, setError] = useState(null);
 
-    const { userInfo, setUserInfo, handleSignUp } = useUser();
+    const { userInfo, setUserInfo } = useUser();
 
     useEffect(() => {
         const getProperties = async () => {
@@ -74,6 +75,60 @@ const UserInfo = ({ navigation }) => {
         }
     };
 
+    const validateForm = () => {
+        if (userInfo.about === '' || userInfo.location_id === '') {
+            setError('Please fill in all fields');
+        }
+        if (
+            userInfo.role_id === 1 &&
+            (userInfo.genres.length === 0 || userInfo.instrument_id === '' || userInfo.experience_id === '')
+        ) {
+            setError('Please fill in all fields');
+        } else if (userInfo.role_id === 2 && userInfo.venue_type_id === '') {
+            setError('Please fill in all fields');
+        } else {
+            setError(null);
+        }
+    };
+
+    const handleSignUp = async () => {
+        setError(null);
+
+        validateForm();
+
+        if (error) return;
+        
+        const formData = new FormData();
+
+        for (const key in userInfo) {
+            // if (key === 'picture' && userInfo.picture) {
+            //     formData.append('picture', {
+            //         uri: userInfo[key].uri,
+            //         name: userInfo[key].name,
+            //         type: userInfo[key].type,
+            //     });
+            // }
+            formData.append(key, userInfo[key]);
+        }
+        console.log('User Info:', userInfo);
+        try {
+            const response = await sendRequest(requestMethods.POST, 'auth/register', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (response.status === 201) {
+                await AsyncStorage.setItem('token', response.data.token);
+                setLoggedIn(true);
+                setCurrentUser(response.data.user);
+                navigation.navigate('Feed');
+            }
+        } catch (error) {
+            console.error('Error registering:', error);
+            setError('Failed to register user');
+        }
+    };
+
     return (
         <View style={styles.userInfoContainer}>
             <View style={styles.headerContainer}>
@@ -108,6 +163,9 @@ const UserInfo = ({ navigation }) => {
                 <View>
                     {Object.keys(profileProperties).length > 0 &&
                         Object.keys(profileProperties).map((key) => {
+                            if (key === 'Music Genres') {
+                                return;
+                            }
                             return (
                                 <ProfileDetailsPicker
                                     key={key}
@@ -118,10 +176,10 @@ const UserInfo = ({ navigation }) => {
                                 />
                             );
                         })}
-
                 </View>
             </View>
             <View style={styles.bottomInnerContainer}>
+                <Text style={styles.errorText}>{error}</Text>
                 <TouchableOpacity style={styles.primaryBtn}>
                     <Text style={styles.primaryBtnText} onPress={handleSignUp}>
                         Register

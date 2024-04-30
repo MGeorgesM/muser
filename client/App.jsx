@@ -19,7 +19,7 @@ const Stack = createStackNavigator();
 
 const AuthenticationStack = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName='UserInfo'>
             <Stack.Screen name="Authentication" component={Authentication} options={{ headerShown: false }} />
             <Stack.Screen name="UserRole" component={UserRole} options={{ headerShown: false }} />
             <Stack.Screen name="UserInfo" component={UserInfo} options={{ headerShown: false }} />

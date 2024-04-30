@@ -20,15 +20,15 @@ export const UserProvider = ({ children }) => {
         name: 'May',
         email: 'may@mail.com',
         password: 'password',
-        about: '',
+        about: 'New to beirut looking for a bass player to play Jazz',
         picture: '',
-        location_id: '',
+        location_id: 1,
         availability_id: 1,
-        experience_id: '',
-        instrument_id: '',
+        experience_id: 3,
+        instrument_id: 6,
         venue_type_id: '',
         role_id: 1,
-        genres: [],
+        genres: [1, 3],
     });
     const navigation = useNavigation();
     console.log(userInfo);
@@ -71,38 +71,7 @@ export const UserProvider = ({ children }) => {
         checkUser();
     }, []);
 
-    const handleSignUp = async () => {
-        setAuthError(null);
-        const formData = new FormData();
 
-        for (const key in userInfo) {
-            // if (key === 'picture' && userInfo.picture) {
-            //     formData.append('picture', {
-            //         uri: userInfo[key].uri,
-            //         name: userInfo[key].name,
-            //         type: userInfo[key].type,
-            //     });
-            // }
-            formData.append(key, userInfo[key]);
-        }
-        console.log('User Info:', userInfo);
-        try {
-            const response = await sendRequest(requestMethods.POST, 'auth/register', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            if (response.status === 201) {
-                await AsyncStorage.setItem('token', response.data.token);
-                setLoggedIn(true);
-                setCurrentUser(response.data.user);
-                navigation.navigate('Feed');
-            }
-        } catch (error) {
-            console.error('Error registering:', error);
-            setAuthError('Failed to register user');
-        }
-    };
 
     const handleSignOut = async () => {
         console.log(navigation.getState());
@@ -132,7 +101,6 @@ export const UserProvider = ({ children }) => {
                 userInfo,
                 authError,
                 currentUser,
-                handleSignUp,
                 handleSignOut,
                 setUserInfo,
                 setCurrentUser,

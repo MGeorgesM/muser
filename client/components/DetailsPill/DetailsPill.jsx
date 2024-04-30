@@ -1,16 +1,18 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-const DetailsPill = ({ label, item, handlePress }) => {
+const DetailsPill = ({ label, items, handlePress }) => {
     const [selected, setSelected] = useState(false);
 
+    const togglePill = () => {
+        setSelected(!selected);
+        handlePress(item);
+    };
+
     return (
-        <View style={{ alignItems: 'flex-start' }}>
-            <Text style={styles.inputTextProfile}>{label}</Text>
-            <TouchableOpacity style={[styles.detailPill]}>
-                <Text style={styles.detail}>Music Genres</Text>
-            </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={[styles.detailPill]} onPress={togglePill} >
+            <Text style={styles.detail}>{}</Text>
+        </TouchableOpacity>
     );
 };
 
@@ -23,10 +25,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.primary,
+        backgroundColor: !selected ? colors.primary : colors.lightGray,
     },
 
     detail: {
-        color: 'white',
+        color: !selected ? 'white' : 'black',
     },
 });
