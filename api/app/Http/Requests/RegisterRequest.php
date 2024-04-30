@@ -32,6 +32,7 @@ class RegisterRequest extends FormRequest
             'experience_id' => 'sometimes|exists:experiences,id',
             'instrument_id' => 'sometimes|exists:instruments,id',
             'venue_type_id' => 'sometimes|exists:venue_types,id',
+            'venue_name' => 'sometimes|string|max:40',
             'role_id' => 'required|exists:roles,id',
             'genres' => 'required|array',
             'genres.*' => 'exists:genres,id',
@@ -42,6 +43,7 @@ class RegisterRequest extends FormRequest
             $rules['experience_id'] = 'required|exists:experiences,id';
         } elseif ($this->input('role_id') == 2) {
             $rules['venue_type_id'] = 'required|exists:venue_types,id';
+            $rules['venue_name'] = 'required|string|max:40';
         }
 
         return $rules;

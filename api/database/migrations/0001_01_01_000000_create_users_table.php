@@ -51,12 +51,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('about', 120);
+            $table->string('about', 40);
             $table->string('picture');
             $table->foreignId('location_id')->constrained('locations')->onDelete('cascade');
             $table->foreignId('availability_id')->nullable()->constrained('availabilities')->onDelete('cascade');
             $table->foreignId('experience_id')->nullable()->constrained('experiences')->onDelete('cascade');
             $table->foreignId('instrument_id')->nullable()->constrained('instruments')->onDelete('cascade');
+            $table->sring('venue_name', 40);
             $table->foreignId('venue_type_id')->nullable()->constrained('venue_types')->onDelete('cascade');
             $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade');
             $table->boolean('is_active')->default(1);

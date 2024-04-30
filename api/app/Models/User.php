@@ -25,6 +25,7 @@ class User extends Authenticatable implements JWTSubject
         'availability_id',
         'experience_id',
         'instrument_id',
+        'venue_name',
         'venue_type_id',
         'role_id',
     ];
@@ -113,6 +114,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'id' => $this->id,
+            'role' => $this->role,
             'name' => $this->name,
             'email' => $this->email,
             'about' => $this->about,
@@ -122,8 +124,8 @@ class User extends Authenticatable implements JWTSubject
             'instrument' => $this->instrument,
             'availability' => $this->availability,
             'experience' => $this->experience,
-            'role' => $this->role,
             'venueType' => $this->venueType,
+            'venueName' => $this->venue_name,
         ];
     }
 }
