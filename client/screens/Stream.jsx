@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, ScrollView } from 'react-native';
 
 import { Heart, Play, PlayIcon } from 'lucide-react-native';
-import { utilities } from '../styles/utilities';
+import { colors, utilities } from '../styles/utilities';
 import BackBtn from '../components/Elements/BackBtn';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
-import { ScrollView } from 'react-native-gesture-handler';
+import { defaultAvatar } from '../core/tools/apiRequest';
 
 const Live = () => {
     const show = {
@@ -55,6 +55,10 @@ const Live = () => {
                 },
             ],
         },
+        venue: {
+            id: 2,
+            name: 'The Venue',
+        },
     };
 
     const [bandMembers, setBandMembers] = useState(show.band.members);
@@ -69,20 +73,41 @@ const Live = () => {
             >
                 <PlayIcon size={42} color={'white'} />
             </View>
-            <View style={{ alignItems: 'flex-start', padding: 20 }}>
-                <Text
-                    style={[utilities.textCenter, utilities.textXL, utilities.textBold, { fontFamily: 'Montserrat' }]}
-                >
-                    Live Now
-                </Text>
-                <Text style={[utilities.textCenter, { fontSize: 16, color: 'gray' }]}>Live from the Venue</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
+                <View>
+                    <Text
+                        style={[
+                            utilities.textCenter,
+                            utilities.textL,
+                            utilities.textBold,
+                        ]}
+                    >
+                        {show.name}
+                    </Text>
+                    <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
+                </View>
+                <View>
+                    <Heart size={24} color={colors.primary} />
+                </View>
             </View>
             <View style={[{ paddingHorizontal: 20 }]}>
-                <Text style={[utilities.textM, utilities.textBold, { fontFamily: 'Montserrat' }]}>Band</Text>
+                <Text style={[utilities.textM, utilities.textBold, { marginBottom: 8 }]}>
+                    Band
+                </Text>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     {bandMembers.map((member) => (
                         <BandMemberCard key={member.id} entity={member} />
                     ))}
+                </ScrollView>
+            </View>
+            <View style={styles.commentsContainer}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View
+                        style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginBottom: 8 }}
+                    >
+                        <Image source={defaultAvatar} style={styles.commentAvatar}></Image>
+                        <Text style={[utilities.textS]}>This is a user comment on the live stream</Text>
+                    </View>
                 </ScrollView>
             </View>
         </View>
@@ -93,4 +118,20 @@ export default Live;
 
 const height = Dimensions.get('window').height;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    commentsContainer: {
+        marginTop: 24,
+        paddingTop: 24,
+        borderTopEndRadius: 36,
+        borderTopStartRadius: 36,
+        flex: 1,
+        elevation: 1,
+    },
+
+    commentAvatar: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        marginRight: 8,
+    },
+});

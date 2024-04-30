@@ -49,21 +49,36 @@ class ShowController extends Controller
     public function getShow(Request $request, $showId = null)
     {
         if ($showId) {
-            $show = Show::with(['band.members:id,name,picture'])->find($showId);
+            $show = Show::with([
+                'band.members' => function ($query) {
+                    $query->select('id', 'name', 'picture', 'instrument_id')
+                        ->with('instrument:id,name');
+                },
+                'band',
+                'venue:id,name'
+            ])->find($showId);
+
             if (!$show) {
                 return response()->json(['message' => 'Show not found'], 404);
             }
+
+            $show->band->members = $show->band->members->map(function ($member) {
+                $member->instrument = $member->instrument->name;
+                return $member;
+            });
+
+            $show->venue_name = $show->venue->name;
+
             return response()->json($show);
         }
 
         $status = $request->query('status');
+        $shows = Show::with(['band.members:id,name,picture', 'band', 'venue:id,name'])
+            ->when($status, function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->get();
 
-        if ($status) {
-            $shows = Show::with(['band.members:id,name,picture'])->where('status', $status)->get();
-            return response()->json($shows);
-        }
-
-        $shows = Show::with(['band.members:id,name,picture'])->get();
         return response()->json($shows);
     }
 
