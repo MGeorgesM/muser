@@ -42,6 +42,7 @@ const App = () => {
                 await PermissionsAndroid.requestMultiple([
                     'android.permission.POST_NOTIFICATIONS',
                     'android.permission.BLUETOOTH_CONNECT',
+                    'android.permission.CAMERA',
                 ]);
             }
         };

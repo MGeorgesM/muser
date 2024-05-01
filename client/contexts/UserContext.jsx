@@ -55,6 +55,7 @@ export const UserProvider = ({ children }) => {
                 if (token && currentUser === null) {
                     const response = await sendRequest(requestMethods.GET, 'auth/me');
                     if (response.status === 200) {
+                        setLoggedIn(true);
                         setCurrentUser(response.data);
                     } else {
                         await AsyncStorage.clear();

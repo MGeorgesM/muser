@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button } from 'react-native';
+import { useCall, useCallStateHooks, useIncallManager, VideoRenderer } from '@stream-io/video-react-native-sdk';
+
+import InCallManager from 'react-native-incall-manager';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -13,24 +16,105 @@ import {
 
 import { useUser } from '../contexts/UserContext';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
+import inCallManager from 'react-native-incall-manager';
 
 const StreamS = () => {
-    const [call, setCall] = useState(null);
     const [streamToken, setStreamToken] = useState(null);
     const [startStream, setStartStream] = useState(false);
-    const [user, setUser] = useState({});
     const [client, setClient] = useState(null);
+    const [call, setCall] = useState(null);
+    const [user, setUser] = useState({});
     const [watchMode, setWatchMode] = useState(false);
+    // const [streamDisplay, setStreamDisplay] = useState(false);
 
-    const { currentUser } = useUser();
+    const { currentUser, loggedIn } = useUser();
 
-    const streamId = 116888991;
+    const streamId = 8883888;
     const apiKey = 'cpt9ax3gakj3';
 
-    useEffect(() => {
-        if (currentUser && Object.keys(currentUser).length === 0) return;
+    // const LivestreamUI = () => {
+    //     const call = useCall();
 
-        const user = { id: currentUser?.id.toString(), name: currentUser?.name, image: profilePicturesUrl+currentUser?.picture };
+    //     const { useParticipantCount, useLocalParticipant, useIsCallLive } = useCallStateHooks();
+
+    //     const totalParticipants = useParticipantCount();
+    //     const localParticipant = useLocalParticipant();
+    //     const isCallLive = useIsCallLive();
+
+    //     useEffect(() => {
+    //         InCallManager.start({ media: 'video', auto: 'true' });
+    //         return () => InCallManager.stop();
+    //     }, []);
+
+    //     return (
+    //         <View style={styles.flexed}>
+    //             <Text style={styles.text}>Live: {totalParticipants}</Text>
+    //             <View style={styles.flexed}>
+    //                 {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
+    //             </View>
+    //             <View style={styles.bottomBar}>
+    //                 {isCallLive ? (
+    //                     <Button onPress={stopLiveStream} title="Stop Livestream" />
+    //                 ) : (
+    //                     <Button
+    //                         onPress={() => {
+    //                             call?.goLive();
+    //                         }}
+    //                         title="Start Livestream"
+    //                     />
+    //                 )}
+    //             </View>
+    //         </View>
+    //     );
+    // };
+
+    const liveStreamWatch = () => {
+        const call = useCall();
+
+        const { useParticipantCount, useLocalParticipant, useIsCallLive } = useCallStateHooks();
+
+        const totalParticipants = useParticipantCount();
+        const localParticipant = useLocalParticipant();
+        const isCallLive = useIsCallLive();
+
+        useEffect(() => {
+            InCallManager.start({ media: 'video', auto: 'true' });
+            return () => InCallManager.stop();
+        }, []);
+
+        return (
+            <View style={styles.flexed}>
+                <Text style={styles.text}>Live: {totalParticipants}</Text>
+                <View style={styles.flexed}>
+                    {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
+                </View>
+                <View style={styles.bottomBar}>
+                    {isCallLive ? (
+                        <Button onPress={stopLiveStream} title="Stop Livestream" />
+                    ) : (
+                        <Button
+                            onPress={() => {
+                                call?.goLive();
+                            }}
+                            title="Start Livestream"
+                        />
+                    )}
+                </View>
+            </View>
+        );
+    };
+
+    useEffect(() => {
+        console.log('User:', currentUser);
+        console.log('Logged in:', loggedIn);
+
+        if (!loggedIn && Object.keys(currentUser).length === 0) return;
+
+        const user = {
+            id: currentUser?.id.toString(),
+            name: currentUser?.name,
+            image: profilePicturesUrl + currentUser?.picture,
+        };
 
         const getStreamToken = async () => {
             const token = await AsyncStorage.getItem('streamToken');
@@ -44,53 +128,77 @@ const StreamS = () => {
         console.log('Stream token:', streamToken);
         console.log('User!:', user.id);
 
-        streamClient = new StreamVideoClient({
+        const streamClient = new StreamVideoClient({
             apiKey,
             user,
             token: streamToken,
             options: {
-                logLevel: 'error',
+                logLevel: 'debug',
             },
         });
 
-        console.log('Clientsetup:', streamClient);
+        streamClient && console.log('Connected to stream client!');
 
         setClient(streamClient);
-    }, [streamId]);
+    }, []);
 
-    const joinCall = async () => {
-        
+    const createCall = async () => {
+        if (!client) {
+            console.log('No client found');
+            return;
+        }
         console.log('client:', client);
         try {
             const call = client.call('livestream', streamId);
-            await call.join({ create: true });
+            await call.getOrCreate();
             setCall(call);
         } catch (error) {
             console.error('Error joining call:', error);
         }
     };
 
-    // const handleStreamEnd = async () => {
-    //     try {
-    //         await call.end();
-    //     } catch (error) {
-    //         console.error('Error ending stream:', error);
-    //     }
-    // };
+    const joinCall = async () => {
+
+        if (!client) {
+            console.log('No client found');
+            return;
+        }
+
+        setWatchMode(true);
+        console.log('client:', client);
+        try {
+            const call = client.call('livestream', streamId);
+            await call.join();
+            setCall(call);
+        } catch (error) {
+            console.error('Error joining call:', error);
+        }
+    };
+
+    const leaveCall = async () => {
+        if (call) {
+            await call.leave().catch(console.error);
+            inCallManager.stop();
+            setCall(null);
+        }
+    };
+
+    const stopLiveStream = async () => {
+        if (call) {
+            // await call.stopLive().catch(console.error);
+            await call.endCall().catch(console.error);
+            inCallManager.stop();
+            setCall(null);
+        }
+    };
 
     if (call === null)
         return (
             <View style={styles.liveStreamStartContainer}>
-                <TouchableOpacity onPress={joinCall} style={styles.callStartBtn}>
+                <TouchableOpacity onPress={createCall} style={styles.callStartBtn}>
                     <Text style={{ color: 'white' }}>Start Stream</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => {
-                        setWatchMode(true);
-                        joinCall();
-                    }}
-                    style={styles.callJoinBtn}
-                >
+                <TouchableOpacity onPress={joinCall} style={styles.callJoinBtn}>
                     <Text style={{ color: 'white' }}>Watch Stream</Text>
                 </TouchableOpacity>
             </View>
@@ -99,11 +207,12 @@ const StreamS = () => {
     return (
         <StreamVideo client={client}>
             <StreamCall call={call}>
-                <SafeAreaView style={{ flex: 1 }}>
+                <SafeAreaView style={{ flex: 1, marginTop: 64 }}>
                     {!watchMode ? (
-                        <HostLivestream onStartStreamHandler={() => setStartStream(true)} />
+                        // <LivestreamUI />
+                        <HostLivestream onEndStreamHandler={stopLiveStream} />
                     ) : (
-                        <ViewerLivestream />
+                        <ViewerLivestream onLeaveStreamHandler={leaveCall} />
                     )}
                 </SafeAreaView>
             </StreamCall>
@@ -131,5 +240,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'green',
         padding: 10,
+    },
+    flexed: {
+        flex: 1,
+    },
+    text: {
+        alignSelf: 'center',
+        color: 'white',
+        backgroundColor: 'blue',
+        padding: 6,
+        margin: 4,
+    },
+    bottomBar: {
+        alignSelf: 'center',
+        margin: 4,
     },
 });
