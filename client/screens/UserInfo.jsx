@@ -143,9 +143,10 @@ const UserInfo = ({ navigation }) => {
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/register', formData);
             if (response.status === 201) {
-                await AsyncStorage.setItem('token', response.data.token);
                 setLoggedIn(true);
                 setCurrentUser(response.data.user);
+                await AsyncStorage.setItem('token', response.data.token);
+                await AsyncStorage.setItem('streamToken', response.data.stream_token);
                 navigation.navigate('Feed', { screen: 'FeedMain' });
             }
         } catch (error) {

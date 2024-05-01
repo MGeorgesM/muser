@@ -1,42 +1,75 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
 
-import { HostLivestream, StreamCall, StreamVideo, StreamVideoClient, User } from '@stream-io/video-react-native-sdk';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {
+    HostLivestream,
+    StreamCall,
+    StreamVideo,
+    StreamVideoClient,
+    User,
+    name,
+} from '@stream-io/video-react-native-sdk';
 
 import { useUser } from '../contexts/UserContext';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const StreamS = () => {
     const [call, setCall] = useState(null);
+    const [streamToken, setStreamToken] = useState(null);
     const [startStream, setStartStream] = useState(false);
+    const [user, setUser] = useState({});
+    const [client, setClient] = useState(null);
 
-    const { currentUser, userToken } = useUser();
+    const { currentUser } = useUser();
 
-    const streamId = 6;
+    const streamId = 10;
     const apiKey = 'cpt9ax3gakj3';
-    const user = { id: currentUser.id };
-    let client = null;
-    console.log('currentUser:', currentUser);
-    console.log('userToken:', userToken);
+
+    // const token = ''
 
     useEffect(() => {
-      client = new StreamVideoClient({ apiKey, user, token: userToken});
+        if (Object.keys(currentUser).length === 0) return;
 
-    }, [userToken]);
+        const user = { id: currentUser.id.toString(), name: currentUser.name, image: currentUser.picture };
 
-
-    useEffect(() => {
-        const joinCall = async () => {
-            try {
-                const call = client.call('livestream', streamId);
-                await call.join({ create: true });
-                setCall(call);
-            } catch (error) {
-                console.error('Error joining call:', error);
-            }
+        const getStreamToken = async () => {
+            const token = await AsyncStorage.getItem('streamToken');
+            setStreamToken(token);
         };
 
-        startStream && joinCall();
-    }, []);
+        getStreamToken();
+
+        if (!streamToken || Object.keys(user).length === 0) return;
+
+        console.log('Stream token:', streamToken);
+        console.log('User!:', user.id);
+
+        streamClient = new StreamVideoClient({
+            apiKey,
+            user,
+            token: streamToken,
+            options: {
+                logLevel: 'warn',
+            },
+        });
+
+        console.log('Clientsetup:', streamClient)
+
+        setClient(streamClient);
+    },[streamId]);
+
+    const joinCall = async () => {
+        console.log('client:', client)
+        try {
+            const call = client.call('livestream', streamId);
+            await call.join({ create: true });
+            setCall(call);
+        } catch (error) {
+            console.error('Error joining call:', error);
+        }
+    };
 
     // const handleStreamEnd = async () => {
     //     try {
@@ -46,14 +79,20 @@ const StreamS = () => {
     //     }
     // };
 
-
-    if (call === null) return <Text>Loading...</Text>;
+    if (call === null)
+        return (
+            <View style={styles.liveStreamStartContainer}>
+                <TouchableOpacity onPress={joinCall} style={styles.callStartBtn}>
+                    <Text style={{color:'white'}}>Start Stream</Text>
+                </TouchableOpacity>
+            </View>
+        );
 
     return (
         <StreamVideo client={client}>
             <StreamCall call={call}>
                 <SafeAreaView style={{ flex: 1 }}>
-                    <HostLivestream onStartStreamHandler={() => setStartStream(true)}/>
+                    <HostLivestream onStartStreamHandler={() => setStartStream(true)} />
                 </SafeAreaView>
             </StreamCall>
         </StreamVideo>
@@ -62,4 +101,17 @@ const StreamS = () => {
 
 export default StreamS;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+
+    liveStreamStartContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    callStartBtn: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'blue',
+        padding: 10,
+    },
+});

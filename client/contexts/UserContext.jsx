@@ -14,7 +14,6 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
-    const [userToken, setUserToken] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({
         name: 'Robbie',
@@ -52,16 +51,15 @@ export const UserProvider = ({ children }) => {
         const checkUser = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
-                setUserToken(token);
 
                 if (token && currentUser === null) {
                     const response = await sendRequest(requestMethods.GET, 'auth/me');
                     if (response.status === 200) {
                         setCurrentUser(response.data);
                     } else {
-                        await AsyncStorage.removeItem('token');
+                        await AsyncStorage.clear();
                         setLoggedIn(false);
-                        navigation.navigate('Authentication');
+                        !loggedIn && navigation.navigate('Authentication');
                     }
                 }
 
@@ -81,7 +79,7 @@ export const UserProvider = ({ children }) => {
             if (response.status !== 200) throw new Error('Failed to log out');
             setCurrentUser(null);
             setLoggedIn(false);
-            await AsyncStorage.removeItem('token');
+            await AsyncStorage.clear();
             navigation.dispatch(
                 CommonActions.reset({
                     index: 0,
@@ -99,7 +97,6 @@ export const UserProvider = ({ children }) => {
                 loggedIn,
                 userInfo,
                 currentUser,
-                userToken,
                 setUserInfo,
                 setLoggedIn,
                 handleSignOut,

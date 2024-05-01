@@ -42,12 +42,12 @@ const Authentication = ({ navigation }) => {
             const response = await sendRequest(requestMethods.POST, 'auth/login', userInfo);
 
             if (response.status === 200) {
-                await AsyncStorage.setItem('token', response.data.token);
                 setLoggedIn(true);
                 setCurrentUser(response.data.user);
+                await AsyncStorage.setItem('token', response.data.token);
+                await AsyncStorage.setItem('streamToken', response.data.stream_token);
                 console.log('User login successful:', response.data.user);
                 loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
-
             }
 
         } catch (error) {
