@@ -8,12 +8,11 @@ import {
     StreamCall,
     StreamVideo,
     StreamVideoClient,
-    User,
-    name,
+    ViewerLivestream,
 } from '@stream-io/video-react-native-sdk';
 
 import { useUser } from '../contexts/UserContext';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { profilePicturesUrl } from '../core/tools/apiRequest';
 
 const StreamS = () => {
     const [call, setCall] = useState(null);
@@ -21,18 +20,17 @@ const StreamS = () => {
     const [startStream, setStartStream] = useState(false);
     const [user, setUser] = useState({});
     const [client, setClient] = useState(null);
+    const [watchMode, setWatchMode] = useState(false);
 
     const { currentUser } = useUser();
 
-    const streamId = 10;
+    const streamId = 116888991;
     const apiKey = 'cpt9ax3gakj3';
 
-    // const token = ''
-
     useEffect(() => {
-        if (Object.keys(currentUser).length === 0) return;
+        if (currentUser && Object.keys(currentUser).length === 0) return;
 
-        const user = { id: currentUser.id.toString(), name: currentUser.name, image: currentUser.picture };
+        const user = { id: currentUser?.id.toString(), name: currentUser?.name, image: profilePicturesUrl+currentUser?.picture };
 
         const getStreamToken = async () => {
             const token = await AsyncStorage.getItem('streamToken');
@@ -51,17 +49,18 @@ const StreamS = () => {
             user,
             token: streamToken,
             options: {
-                logLevel: 'warn',
+                logLevel: 'error',
             },
         });
 
-        console.log('Clientsetup:', streamClient)
+        console.log('Clientsetup:', streamClient);
 
         setClient(streamClient);
-    },[streamId]);
+    }, [streamId]);
 
     const joinCall = async () => {
-        console.log('client:', client)
+        
+        console.log('client:', client);
         try {
             const call = client.call('livestream', streamId);
             await call.join({ create: true });
@@ -83,7 +82,16 @@ const StreamS = () => {
         return (
             <View style={styles.liveStreamStartContainer}>
                 <TouchableOpacity onPress={joinCall} style={styles.callStartBtn}>
-                    <Text style={{color:'white'}}>Start Stream</Text>
+                    <Text style={{ color: 'white' }}>Start Stream</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        setWatchMode(true);
+                        joinCall();
+                    }}
+                    style={styles.callJoinBtn}
+                >
+                    <Text style={{ color: 'white' }}>Watch Stream</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -92,7 +100,11 @@ const StreamS = () => {
         <StreamVideo client={client}>
             <StreamCall call={call}>
                 <SafeAreaView style={{ flex: 1 }}>
-                    <HostLivestream onStartStreamHandler={() => setStartStream(true)} />
+                    {!watchMode ? (
+                        <HostLivestream onStartStreamHandler={() => setStartStream(true)} />
+                    ) : (
+                        <ViewerLivestream />
+                    )}
                 </SafeAreaView>
             </StreamCall>
         </StreamVideo>
@@ -102,16 +114,22 @@ const StreamS = () => {
 export default StreamS;
 
 const styles = StyleSheet.create({
-
     liveStreamStartContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        gap: 8,
     },
     callStartBtn: {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'blue',
+        padding: 10,
+    },
+    callJoinBtn: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'green',
         padding: 10,
     },
 });

@@ -28,6 +28,7 @@ const ChatCard = ({ chat, navigation }) => {
                 const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
                 if (response.status !== 200) throw new Error('Failed to fetch users');
                 console.log('Users fetched:', response.data);
+                console.log(`${profilePicturesUrl + response.data[0].picture}`)
                 setTitle(response.data.map((user) => user.name).join(', '));
                 otherParticipantIds.length === 1
                     ? setAvatar(`${profilePicturesUrl + response.data[0].picture}`)

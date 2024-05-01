@@ -19,7 +19,7 @@ const Profile = ({ navigation }) => {
     }, []);
     return (
         <View>
-            <Text>Profile</Text>
+            <Text>StreamW</Text>
         </View>
     );
 };

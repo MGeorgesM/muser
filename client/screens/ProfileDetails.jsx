@@ -14,8 +14,6 @@ const ProfileDetails = ({ route }) => {
     const { currentUser } = useUser();
     const navigation = useNavigation();
 
-    console.log([currentUser.id, user.id].sort())
-
     return (
         <View style={styles.container}>
             <Image source={{ uri: imageUrl }} style={styles.avatar} />

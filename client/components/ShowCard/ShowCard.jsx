@@ -5,9 +5,9 @@ import { ChevronRight, Play } from 'lucide-react-native';
 
 import { colors, utilities } from '../../styles/utilities';
 
-const ShowCard = ({ entity, navigation }) => {
+const ShowCard = ({ entity, navigation, handlePress }) => {
     return (
-        <TouchableOpacity style={styles.showCard}>
+        <TouchableOpacity style={styles.showCard} onPress={handlePress}>
             <View style={styles.showCardInner}>
                 <View style={styles.showBtn}>
                     <Play size={16} color={colors.primary} />

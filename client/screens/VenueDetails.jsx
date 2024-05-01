@@ -193,9 +193,9 @@ const VenueDetails = ({ route, navigation }) => {
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) =>
                         switchHandler ? (
-                            <BandMemberCard entity={item} navigation={navigation} />
+                            <BandMemberCard entity={item} navigation={navigation}/>
                         ) : (
-                            <ShowCard entity={item} navigation={navigation} />
+                            <ShowCard entity={item} navigation={navigation} handlePress={() => setSwitchHandler(true)}/>
                         )
                     }
                     showsVerticalScrollIndicator={false}
@@ -218,8 +218,8 @@ const styles = StyleSheet.create({
     },
 
     borderRadiusBottom: {
-        // borderBottomLeftRadius: 20,
-        // borderBottomRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
     },
 
     venueOrShowImage: {

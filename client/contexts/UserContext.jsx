@@ -77,8 +77,8 @@ export const UserProvider = ({ children }) => {
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/logout');
             if (response.status !== 200) throw new Error('Failed to log out');
-            setCurrentUser(null);
             setLoggedIn(false);
+            setCurrentUser(null);
             await AsyncStorage.clear();
             navigation.dispatch(
                 CommonActions.reset({
