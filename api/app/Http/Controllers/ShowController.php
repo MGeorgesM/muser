@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Models\Show;
-use App\Models\User;
 
 class ShowController extends Controller
 {
@@ -35,8 +34,8 @@ class ShowController extends Controller
             $filename = time() . '.' . $extension;
             $file->move(public_path('/show-pictures/'), $filename);
 
-            if (File::exists(public_path('/show-pictures/') . $show->picture)) {
-                File::delete(public_path('/show-pictures/') . $show->picture);
+            if (File::exists(public_path('/show_pictures/') . $show->picture)) {
+                File::delete(public_path('/show_pictures/') . $show->picture);
             }
 
             $show->picture = $filename;
@@ -54,7 +53,7 @@ class ShowController extends Controller
                 'venue:id,name',
                 'band.members' => function ($query) {
                     $query->select('users.id', 'users.name', 'users.picture', 'users.instrument_id')
-                          ->with(['instrument:id,name']);
+                        ->with(['instrument:id,name']);
                 }
             ])->find($showId);
 
@@ -72,7 +71,7 @@ class ShowController extends Controller
             'venue:id,name',
             'band.members' => function ($query) {
                 $query->select('users.id', 'users.name', 'users.picture', 'users.instrument_id')
-                      ->with(['instrument:id,name']);
+                    ->with(['instrument:id,name']);
             }
         ]);
 
@@ -163,8 +162,8 @@ class ShowController extends Controller
             return response()->json(['message' => 'Show not found'], 404);
         }
 
-        if (File::exists(public_path('/show-pictures/') . $show->picture)) {
-            File::delete(public_path('/show-pictures/') . $show->picture);
+        if (File::exists(public_path('/show_pictures/') . $show->picture)) {
+            File::delete(public_path('/show_pictures/') . $show->picture);
         }
 
         $show->delete();
