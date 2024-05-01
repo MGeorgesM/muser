@@ -14,6 +14,7 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
+    const [userToken, setUserToken] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({
         name: 'Robbie',
@@ -51,6 +52,7 @@ export const UserProvider = ({ children }) => {
         const checkUser = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
+                setUserToken(token);
 
                 if (token && currentUser === null) {
                     const response = await sendRequest(requestMethods.GET, 'auth/me');
@@ -62,6 +64,7 @@ export const UserProvider = ({ children }) => {
                         navigation.navigate('Authentication');
                     }
                 }
+
                 token && setLoggedIn(true);
                 console.log('Token in UserContext:', token);
             } catch (error) {
@@ -96,6 +99,7 @@ export const UserProvider = ({ children }) => {
                 loggedIn,
                 userInfo,
                 currentUser,
+                userToken,
                 setUserInfo,
                 setLoggedIn,
                 handleSignOut,

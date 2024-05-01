@@ -16,7 +16,7 @@ const Authentication = ({ navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
     const [error, setError] = useState(null);
 
-    const { userInfo, setUserInfo, authError, setLoggedIn, setCurrentUser } = useUser();
+    const { userInfo, setUserInfo, authError, setLoggedIn, loggedIn, setCurrentUser } = useUser();
 
     useEffect(() => {
         if ((!userInfo.email.includes('@') || !userInfo.email.includes('.')) && userInfo.email.length > 0) {
@@ -46,7 +46,7 @@ const Authentication = ({ navigation }) => {
                 setLoggedIn(true);
                 setCurrentUser(response.data.user);
                 console.log('User login successful:', response.data.user);
-                navigation.navigate('Feed', { screen: 'FeedMain' });
+                loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
 
             }
 

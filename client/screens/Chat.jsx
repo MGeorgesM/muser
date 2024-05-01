@@ -82,7 +82,7 @@ const Chat = ({ navigation, route }) => {
             if (!chatRef) return;
 
             const messagesRef = collection(chatRef, 'messages');
-            const q = query(messagesRef, orderBy('createdAt', 'asc'));
+            const q = query(messagesRef, orderBy('createdAt', 'desc'));
 
             unsubscribe = onSnapshot(q, (snapshot) => {
                 const fetchedMessages = snapshot.docs.map((doc) => ({
@@ -230,7 +230,7 @@ const Chat = ({ navigation, route }) => {
                 // avatar: null,
             }}
             renderBubble={renderBubble}
-            inverted={false}
+            inverted={true}
             renderSend={renderSend}
             renderInputToolbar={renderInputToolbar}
             messagesContainerStyle={{ backgroundColor: '#1E1E1E', paddingTop: 8 }}

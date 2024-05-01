@@ -45,14 +45,14 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
     Route::get('connections', [UserController::class, 'getConnections']);
     Route::post('connections/{id}', [UserController::class, 'addConnection']);
 
-    Route::post('venues/{venueId}/rating', [VenueController::class, 'addUpdateRating']);
     Route::get('venues/{venueId}/rating', [VenueController::class, 'getVenueAverageRating']);
+    Route::post('venues/{venueId}/rating', [VenueController::class, 'addUpdateRating']);
 
-    Route::post('bands', [BandController::class, 'addBand']);
     Route::get('bands/{id?}', [BandController::class, 'getBand']);
+    Route::post('bands', [BandController::class, 'addBand']);
 
+    Route::get('shows/{showId?}', [ShowController::class, 'getShows']);
     Route::post('shows', [ShowController::class, 'addShow']);
-    Route::get('shows/{showId?}', [ShowController::class, 'getShow']);
     // Route::get('venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
     // Route::get('shows', [VenueController::class, 'getShowsByVenue']);
 });

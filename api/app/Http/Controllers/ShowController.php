@@ -47,12 +47,8 @@ class ShowController extends Controller
         return response()->json($show, 201);
     }
 
-    public function getShow(Request $request, $showId = null)
+    public function getShows(Request $request, $showId = null)
     {
-
-        $venueId = $request->query('venue_id');
-        $showStatus = $request->query('status');
-
         if ($showId) {
             $show = Show::with([
                 'venue:id,name',
@@ -69,55 +65,68 @@ class ShowController extends Controller
             return response()->json($show);
         }
 
-        $shows = Show::with([
+        $venueId = $request->query('venue_id');
+        $showStatus = $request->query('status');
+
+        $query = Show::with([
             'venue:id,name',
             'band.members' => function ($query) {
                 $query->select('users.id', 'users.name', 'users.picture', 'users.instrument_id')
                       ->with(['instrument:id,name']);
             }
-        ])->get();
+        ]);
+
+        if ($venueId) {
+            $query->where('venue_id', $venueId);
+        }
+
+        if ($showStatus) {
+            $query->where('status', $showStatus);
+        }
+
+        $shows = $query->get();
 
         return response()->json($shows);
     }
 
-    public function getShowsByVenue($venueId, $status = null)
-    {
-        $venue = User::with([
-            'shows' => function ($query) {
+    // public function getShowsByVenue($venueId, $status = null)
+    // {
+    //     $venue = User::with([
+    //         'shows' => function ($query) {
 
-                $query->select('shows.id', 'shows.name', 'shows.date', 'shows.status', 'shows.band_id', 'shows.venue_id', 'shows.picture');
-            },
-            'shows.band' => function ($query) {
+    //             $query->select('shows.id', 'shows.name', 'shows.date', 'shows.status', 'shows.band_id', 'shows.venue_id', 'shows.picture');
+    //         },
+    //         'shows.band' => function ($query) {
 
-                $query->select('bands.id', 'bands.name');
-            },
-            'shows.band.members' => function ($query) {
+    //             $query->select('bands.id', 'bands.name');
+    //         },
+    //         'shows.band.members' => function ($query) {
 
-                $query->join('users as members', 'band_members.user_id', '=', 'members.id',)
-                    ->select(
-                        'band_members.id',
-                        'band_members.band_id',
-                        'members.id as id',
-                        'members.name as name',
-                        'members.picture as picture',
-                        'members.instrument_id',
-                    )
-                    ->with('instrument:id,name');
-            }
-        ])->find($venueId);
+    //             $query->join('users as members', 'band_members.user_id', '=', 'members.id',)
+    //                 ->select(
+    //                     'band_members.id',
+    //                     'band_members.band_id',
+    //                     'members.id as id',
+    //                     'members.name as name',
+    //                     'members.picture as picture',
+    //                     'members.instrument_id',
+    //                 )
+    //                 ->with('instrument:id,name');
+    //         }
+    //     ])->find($venueId);
 
-        if (!$venue) {
-            return response()->json(['error' => 'Venue not found'], 404);
-        }
+    //     if (!$venue) {
+    //         return response()->json(['error' => 'Venue not found'], 404);
+    //     }
 
-        if ($status) {
-            $venue->shows = $venue->shows->filter(function ($show) use ($status) {
-                return $show->status === $status;
-            });
-        }
+    //     if ($status) {
+    //         $venue->shows = $venue->shows->filter(function ($show) use ($status) {
+    //             return $show->status === $status;
+    //         });
+    //     }
 
-        return response()->json($venue->shows, 200);
-    }
+    //     return response()->json($venue->shows, 200);
+    // }
 
 
     public function updateShow(Request $request)

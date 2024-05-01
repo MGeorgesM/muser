@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-
-import { StatusBar } from 'react-native';
+import { Platform, StatusBar, PermissionsAndroid } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 
 import { store } from './store/store';
 import { Provider } from 'react-redux';
@@ -36,9 +36,17 @@ const AppNavigator = () => {
 };
 
 const App = () => {
-    const [fontsLoaded] = useFonts({
-        'Montserrat': require('./assets/fonts/Montserrat-VariableFont_wght.ttf'),
-    });
+    useEffect(() => {
+        const run = async () => {
+            if (Platform.OS === 'android') {
+                await PermissionsAndroid.requestMultiple([
+                    'android.permission.POST_NOTIFICATIONS',
+                    'android.permission.BLUETOOTH_CONNECT',
+                ]);
+            }
+        };
+        run();
+    }, []);
     return (
         <Provider store={store}>
             <NavigationContainer>
