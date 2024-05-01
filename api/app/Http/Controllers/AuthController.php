@@ -14,6 +14,8 @@ use App\Models\Instrument;
 use App\Models\VenueType;
 use App\Models\Genre;
 
+use GetStream\StreamChat\Client as Client;
+
 
 class AuthController extends Controller
 {
@@ -45,8 +47,11 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized, Wrong email or Password'], 401);
         }
 
+        $stream_token = $this->generateStreamToken();
+
         return response()->json([
             'token' => $token,
+            'stream_token' => $stream_token,
             'user' => auth()->user()->full_details,
         ]);
     }
@@ -72,8 +77,11 @@ class AuthController extends Controller
 
         $token = auth()->login($user);
 
+        $stream_token = $this->generateStreamToken();
+
         return response()->json([
             'token' => $token,
+            'stream_token' => $stream_token,
             'user' => $user->full_details,
         ], 201);
     }
@@ -128,6 +136,16 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' => 'Email is available'], 200);
+    }
+
+    public function generateStreamToken()
+    {
+        $api_key = 'cpt9ax3gakj3';
+        $api_secret = 'zarnj2z22k3w5av4byqfe24c5h97htfb8arc8cghds777ytthxwqcrenbut8pgm5';
+
+        $serverClient = new Client($api_key, $api_secret);
+
+        return $serverClient->createToken(auth()->user()->id);
     }
 
     public function getProperties()

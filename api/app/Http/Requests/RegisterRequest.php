@@ -33,7 +33,7 @@ class RegisterRequest extends FormRequest
             'instrument_id' => 'sometimes|exists:instruments,id',
             'venue_type_id' => 'sometimes|exists:venue_types,id',
             'venue_name' => 'sometimes|string|max:40',
-            'role_id' => 'required|exists:roles,id',
+            'role_id' => 'exists:roles,id',
             'genres' => 'required|array',
             'genres.*' => 'exists:genres,id',
         ];
