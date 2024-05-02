@@ -18,12 +18,17 @@ const streamApiKey = process.env.EXPO_PUBLIC_STREAM_ACCESS_KEY;
 
 const LiveStreamNavigator = () => {
     const [client, setClient] = useState(null);
+    const [initialRoute, setInitialRoute] = useState('Streams')
 
     const { currentUser, loggedIn } = useUser();
 
     useEffect(() => {
         const initializeClient = async () => {
             if (loggedIn && currentUser && Object.keys(currentUser).length !== 0) {
+
+                const initialRoute = currentUser.role.id === 1 ? 'Streams' : 'StreamBroadcast'
+                setInitialRoute(initialRoute)
+
                 const token = await AsyncStorage.getItem('streamToken');
 
                 if (!token) return;
@@ -66,7 +71,7 @@ const LiveStreamNavigator = () => {
     return client ? (
         <StreamVideo client={client}>
             <LiveStreamStack.Navigator
-                initialRouteName={currentUser.role.id === 1 ? 'Streams' : 'StreamBroadcast'}
+                initialRouteName={initialRoute}
                 screenOptions={{ headerShown: false }}
             >
                 <LiveStreamStack.Screen name="Streams" component={Streams} />
