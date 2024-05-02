@@ -48,7 +48,7 @@ const LiveStreamNavigator = () => {
                         user,
                         token,
                         options: {
-                            logLevel: 'debug',
+                            logLevel: 'error',
                         },
                     });
                     setClient(client);

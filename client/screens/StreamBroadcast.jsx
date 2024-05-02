@@ -43,7 +43,7 @@ import { profilePicturesUrl } from '../core/tools/apiRequest';
 import inCallManager from 'react-native-incall-manager';
 
 const StreamBroadcast = () => {
-    const streamId = 'hgjbkdafdf';
+    const streamId = 'hgjbkddtagddafdf';
     const [call, setCall] = useState(null);
     const [viewer, setViewer] = useState(false);
 
@@ -77,6 +77,7 @@ const StreamBroadcast = () => {
             console.log('No client found');
             return;
         }
+        setViewer(true);
         console.log('Client Found!');
 
         try {
@@ -87,7 +88,6 @@ const StreamBroadcast = () => {
             console.error('Error joining call:', error);
         }
 
-        setViewer(true);
     };
 
     // const leaveCall = async () => {
@@ -126,12 +126,13 @@ const StreamBroadcast = () => {
         const isCallLive = useIsCallLive();
 
         console.log('localParticipant:', localParticipant);
+        console.log('remoteParticitPants', remoteParticipants)
 
         useEffect(() => {
             InCallManager.start({ media: 'video' });
             return () => {
                 InCallManager.stop();
-                if (call) {
+                if (call && !viewer) {
                     call.endCall();
                     console.log('Ending Call!');
                 }
@@ -159,11 +160,15 @@ const StreamBroadcast = () => {
         };
 
         const togglePauseStart = async () => {
+            console.log('Calling State:', callingState)
             if(callingState === CallingState.JOINED) {
                 console.log('Calling state is Joined, Leaving')
                 await call.leave();
-            } else {
+            } else if(isCallLive) {
+                const call = client.call('livestream', streamId);
                 await call.join();
+            } else {
+                console.log('Stream is in Backstage')            
             }
 
         }
@@ -172,6 +177,7 @@ const StreamBroadcast = () => {
             inCallManager.stop();
             if (viewer) {
                 togglePauseStart();
+                return;
             }
             await call?.stopLive();
             await call?.stopPublish(SfuEvents.HealthCheckRequest, true);
@@ -192,10 +198,11 @@ const StreamBroadcast = () => {
                         },
                     ]}
                 >
-                    {localParticipant && <VideoRenderer participant={remoteParticipants} trackType="videoTrack" />}
+                    {/* {remoteParticipants.length > 0 && <VideoRenderer participant={local} trackType="videoTrack" />} */}
+                    {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
 
                     <TouchableOpacity onPress={handleExit}>
-                        <Play size={42} color={'white'} />
+                        {callingState === CallingState.JOINED ? <Pause size={42} color={'white'} /> : <Play size={42} color={'white'} />}
                     </TouchableOpacity>
                 </View>
             );
