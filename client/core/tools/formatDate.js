@@ -31,3 +31,22 @@ export const formatDate = (firestoreTimestamp) => {
     }
 };
 
+
+export function formatDateString(dateString) {
+    const date = new Date(dateString);
+    
+    const options = { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', hour12: true };
+    const formattedDate = date.toLocaleString('en-GB', options); // 'en-GB' ensures day before month in date
+
+    const [dayName, time, fullDate] = formattedDate.split(', ');
+    const formattedTime = time.trim().replace(' am', 'AM').replace(' pm', 'PM');
+    return `${dayName} ${formattedTime}`;
+}
+
+export function truncateText(text, maxLength = 28) {
+    if (text.length > maxLength) {
+        return text.slice(0, maxLength) + '...';
+    }
+    return text;
+}
+

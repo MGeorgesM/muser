@@ -11,6 +11,10 @@ const showsSlice = createSlice({
         setShows(state, action) {
             state.shows = action.payload;
         },
+
+        addShows(state, action) {
+            state.shows.push(action.payload);
+        },
     },
 });
 

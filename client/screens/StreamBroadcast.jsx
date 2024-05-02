@@ -108,7 +108,7 @@ const StreamBroadcast = () => {
     //     }
     // };
 
-    const LiveStreamViewerLayout = ({ viewer = true }) => {
+    const LiveStreamViewerLayout = ({ viewer = false }) => {
         const call = useCall();
 
         const { useCameraState, useMicrophoneState, useCallCallingState, useHasOngoingScreenShare, useParticipants } =
@@ -193,32 +193,32 @@ const StreamBroadcast = () => {
             setCall(null);
         };
 
-        const ViewerMode = () => {
-            return (
-                <View
-                    style={[
-                        {
-                            height: height * 0.5,
-                            backgroundColor: 'black',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        },
-                    ]}
-                >
-                    {/* {remoteParticipants.length > 0 && <VideoRenderer participant={local} trackType="videoTrack" />} */}
-                    {/* {presenter && <VideoRenderer participant={presenter} trackType="videoTrack" />} */}
-                    {/* {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />} */}
+        // const ViewerMode = () => {
+        //     return (
+        //         <View
+        //             style={[
+        //                 {
+        //                     height: height * 0.5,
+        //                     backgroundColor: 'black',
+        //                     alignItems: 'center',
+        //                     justifyContent: 'center',
+        //                 },
+        //             ]}
+        //         >
+        //             {/* {remoteParticipants.length > 0 && <VideoRenderer participant={local} trackType="videoTrack" />} */}
+        //             {/* {presenter && <VideoRenderer participant={presenter} trackType="videoTrack" />} */}
+        //             {/* {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />} */}
 
-                    <TouchableOpacity onPress={handleExit}>
-                        {callingState === CallingState.JOINED ? (
-                            <Pause size={42} color={'white'} />
-                        ) : (
-                            <Play size={42} color={'white'} />
-                        )}
-                    </TouchableOpacity>
-                </View>
-            );
-        };
+        //             <TouchableOpacity onPress={handleExit}>
+        //                 {callingState === CallingState.JOINED ? (
+        //                     <Pause size={42} color={'white'} />
+        //                 ) : (
+        //                     <Play size={42} color={'white'} />
+        //                 )}
+        //             </TouchableOpacity>
+        //         </View>
+        //     );
+        // };
 
         const HostMode = () => {
             return (

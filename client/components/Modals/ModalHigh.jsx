@@ -18,7 +18,12 @@ const ModalHigh = ({ title, navigation, items, renderItem }) => {
                     <Text style={[utilities.textL, utilities.textBold]}>{title}</Text>
                 </View>
 
-                <FlatList data={items} keyExtractor={(item) => item.name} renderItem={renderItem}></FlatList>
+                <FlatList
+                    data={items}
+                    keyExtractor={(item) => item.name}
+                    renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
+                ></FlatList>
             </View>
         </View>
     );
