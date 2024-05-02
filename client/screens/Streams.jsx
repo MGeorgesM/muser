@@ -42,7 +42,10 @@ const Streams = ({ navigation }) => {
 
     const StreamCard = ({ show }) => {
         return (
-            <TouchableOpacity style={styles.cardContainer} onPress={() => navigation.navigate('StreamView')}>
+            <TouchableOpacity
+                style={styles.cardContainer}
+                onPress={() => navigation.navigate('StreamView', { id: show.id })}
+            >
                 <Image source={{ uri: showsPicturesUrl + show.picture }} style={styles.backgroundImage} />
                 <View style={styles.overlay}>
                     <View>
@@ -50,15 +53,16 @@ const Streams = ({ navigation }) => {
 
                         <Text style={styles.date}>{formatDateString(show.date)}</Text>
                     </View>
-                </View>
                     <View style={styles.avatarsDisplay}>
                         {show.band.members.map((member) => (
                             <Image
+                                key={member.id}
                                 source={{ uri: profilePicturesUrl + member.picture }}
                                 style={{ width: 32, height: 32, borderRadius: 16 }}
                             />
                         ))}
                     </View>
+                </View>
             </TouchableOpacity>
         );
     };
@@ -101,18 +105,18 @@ const styles = StyleSheet.create({
     avatarsDisplay: {
         position: 'absolute',
         right: 8,
-        top: 8,
+        bottom: 8,
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
     },
     streamName: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
         color: 'white',
     },
     date: {
-        fontSize: 16,
+        fontSize: 14,
         color: 'white',
     },
 });

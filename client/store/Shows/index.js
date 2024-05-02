@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const initialState = {
     shows: [],
