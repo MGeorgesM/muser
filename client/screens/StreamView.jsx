@@ -7,63 +7,17 @@ import BackBtn from '../components/Elements/BackBtn';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
 import { defaultAvatar } from '../core/tools/apiRequest';
 
-const StreamView = ({ navigation }) => {
-    const show = {
-        id: 5,
-        name: 'The Jazzy Brazzy',
-        description: 'Modi molestias dolore quia',
-        picture: 'show.jpg',
-        date: '2024-11-20 15:26:31',
-        duration: 112,
-        band_id: 3,
-        venue_id: 14,
-        status: 'set',
-        created_at: '2024-04-30T10:37:35.000000Z',
-        updated_at: '2024-04-30T10:37:35.000000Z',
-        band: {
-            id: 3,
-            name: 'Boyle-Quigley',
-            created_at: '2024-04-30T10:37:34.000000Z',
-            updated_at: '2024-04-30T10:37:34.000000Z',
-            members: [
-                {
-                    id: 10,
-                    name: "Prof. Ernesto O'Keefe",
-                    picture: 'musician.jpg',
-                    pivot: {
-                        band_id: 3,
-                        user_id: 10,
-                    },
-                },
-                {
-                    id: 9,
-                    name: 'Lori King',
-                    picture: 'musician.jpg',
-                    pivot: {
-                        band_id: 3,
-                        user_id: 9,
-                    },
-                },
-                {
-                    id: 6,
-                    name: 'Roselyn Willms',
-                    picture: 'musician.jpg',
-                    pivot: {
-                        band_id: 3,
-                        user_id: 6,
-                    },
-                },
-            ],
-        },
-        venue: {
-            id: 2,
-            name: 'The Venue',
-        },
-    };
+
+import { formatDateString, truncateText } from '../core/tools/formatDate';
+
+const StreamView = ({ navigation, route }) => {
+
+    const { show } = route.params;
+
 
     const [bandMembers, setBandMembers] = useState(show.band.members);
-    console.log(show.band.members);
-    return (
+    console.log(show);
+    if (show) return (
         <View style={{ flex: 1 }}>
             <BackBtn navigation={navigation} />
             <View
@@ -75,17 +29,17 @@ const StreamView = ({ navigation }) => {
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
                 <View>
-                    <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>{show.name}</Text>
+                    <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>{truncateText(show.name)}</Text>
                     <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
                 </View>
                 <View>
                     <Heart size={24} color={colors.primary} />
                 </View>
             </View>
-            <View style={[{ paddingHorizontal: 20 }]}>
+            <View style={[{ paddingLeft: 20 }]}>
                 <Text style={[utilities.textM, utilities.textBold, { marginBottom: 8 }]}>Band</Text>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    {bandMembers.map((member) => (
+                    {show.band.members.map((member) => (
                         <BandMemberCard key={member.id} entity={member} />
                     ))}
                 </ScrollView>
@@ -124,7 +78,10 @@ const styles = StyleSheet.create({
         borderTopEndRadius: 36,
         borderTopStartRadius: 36,
         flex: 1,
-        elevation: 1,
+        border: colors.lightGray,
+        borderWidth: 0.25,
+        // elevation: 1,
+        
     },
 
     commentAvatar: {

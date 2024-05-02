@@ -41,11 +41,9 @@ const Streams = ({ navigation }) => {
     }, []);
 
     const StreamCard = ({ show }) => {
+        console.log('each show', show);
         return (
-            <TouchableOpacity
-                style={styles.cardContainer}
-                onPress={() => navigation.navigate('StreamView', { id: show.id })}
-            >
+            <TouchableOpacity style={styles.cardContainer} onPress={() => navigation.navigate('StreamView', { show })}>
                 <Image source={{ uri: showsPicturesUrl + show.picture }} style={styles.backgroundImage} />
                 <View style={styles.overlay}>
                     <View>

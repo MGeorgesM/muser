@@ -12,7 +12,7 @@ const BandMemberCard = ({ entity, navigation }) => {
                 <Image source={{ uri: entityImage }} style={styles.bandMemberPhoto} />
                 <View style={{ marginStart: 8 }}>
                     <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>{entity.name}</Text>
-                    <Text style={[utilities.textXS, { color: colors.gray }]}>{entity.instrument}</Text>
+                    <Text style={[utilities.textXS, { color: colors.gray }]}>{entity.instrument.name}</Text>
                 </View>
             </View>
         </TouchableOpacity>
