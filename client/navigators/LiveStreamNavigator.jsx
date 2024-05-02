@@ -2,12 +2,18 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import StreamsOverview from '../screens/StreamsOverview';
-import Stream from '../screens/Stream';
-import StreamS from '../screens/StreamS';
+import Stream from '../screens/StreamView';
+import StreamS from '../screens/StreamBroadcast';
 
 const LiveStreamStack = createStackNavigator();
 
 const LiveStreamNavigator = () => {
+
+    const {currentUser} = useUser();
+
+
+
+
     return (
         <LiveStreamStack.Navigator initialRouteName="StreamS" screenOptions={{ headerShown: false }}>
             <LiveStreamStack.Screen name="StreamsOverview" component={StreamsOverview} />

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Dimensions } from 'react-native';
 import { useCall, useCallStateHooks, useIncallManager, VideoRenderer } from '@stream-io/video-react-native-sdk';
 
 import InCallManager from 'react-native-incall-manager';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {PlayIcon} from 'lucide-react-native'
 
 import {
     HostLivestream,
@@ -29,7 +31,7 @@ const StreamS = () => {
 
     const { currentUser, loggedIn } = useUser();
 
-    const streamId = 8883888;
+    const streamId = 98989871;
     const apiKey = 'cpt9ax3gakj3';
 
     // const LivestreamUI = () => {
@@ -68,41 +70,7 @@ const StreamS = () => {
     //     );
     // };
 
-    const liveStreamWatch = () => {
-        const call = useCall();
 
-        const { useParticipantCount, useLocalParticipant, useIsCallLive } = useCallStateHooks();
-
-        const totalParticipants = useParticipantCount();
-        const localParticipant = useLocalParticipant();
-        const isCallLive = useIsCallLive();
-
-        useEffect(() => {
-            InCallManager.start({ media: 'video', auto: 'true' });
-            return () => InCallManager.stop();
-        }, []);
-
-        return (
-            <View style={styles.flexed}>
-                <Text style={styles.text}>Live: {totalParticipants}</Text>
-                <View style={styles.flexed}>
-                    {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
-                </View>
-                <View style={styles.bottomBar}>
-                    {isCallLive ? (
-                        <Button onPress={stopLiveStream} title="Stop Livestream" />
-                    ) : (
-                        <Button
-                            onPress={() => {
-                                call?.goLive();
-                            }}
-                            title="Start Livestream"
-                        />
-                    )}
-                </View>
-            </View>
-        );
-    };
 
     useEffect(() => {
         console.log('User:', currentUser);
@@ -140,7 +108,12 @@ const StreamS = () => {
         streamClient && console.log('Connected to stream client!');
 
         setClient(streamClient);
-    }, []);
+
+
+        return () => {
+            streamClient && streamClient.disconnectUser();
+        }
+    }, [loggedIn, currentUser, streamToken, streamId]);
 
     const createCall = async () => {
         if (!client) {
@@ -158,6 +131,7 @@ const StreamS = () => {
     };
 
     const joinCall = async () => {
+        console.log('Joining call')
 
         if (!client) {
             console.log('No client found');
@@ -165,7 +139,7 @@ const StreamS = () => {
         }
 
         setWatchMode(true);
-        console.log('client:', client);
+
         try {
             const call = client.call('livestream', streamId);
             await call.join();
@@ -176,6 +150,10 @@ const StreamS = () => {
     };
 
     const leaveCall = async () => {
+
+        console.log('leaving call');
+
+
         if (call) {
             await call.leave().catch(console.error);
             inCallManager.stop();
@@ -190,6 +168,64 @@ const StreamS = () => {
             inCallManager.stop();
             setCall(null);
         }
+    };
+
+    const LiveStreamViewerLayout = () => {
+        const call = useCall();
+
+        const { useParticipantCount, useLocalParticipant, useIsCallLive } = useCallStateHooks();
+
+        const totalParticipants = useParticipantCount();
+        const localParticipant = useLocalParticipant();
+        const isCallLive = useIsCallLive();
+
+        const height = Dimensions.get('window').height;
+
+        useEffect(() => {
+            InCallManager.start({ media: 'video' });
+            return () => InCallManager.stop();
+        }, []);
+
+        const handleViewerAction = () => {
+            call ? leaveCall() : joinCall();
+        }
+
+        return (
+            <View style={styles.flexed}>
+                <Text style={styles.text}>Live: {totalParticipants}</Text>
+                {/* <View style={styles.flexed}>
+                    {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
+                </View> */}
+                {/* <View style={styles.bottomBar}>
+                    {isCallLive ? (
+                        <Button onPress={stopLiveStream} title="Stop Livestream" />
+                    ) : (
+                        <Button
+                            onPress={() => {
+                                call?.goLive();
+                            }}
+                            title="Start Livestream"
+                        />
+                    )}
+                </View> */}
+                <View
+                    style={[
+                        {
+                            height: height * 0.5,
+                            backgroundColor: 'black',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        },
+                    ]}
+                >
+                    {call && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
+                    {/* {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />} */}
+                    <TouchableOpacity onPress={handleViewerAction}>
+                        <PlayIcon size={42} color={'white'} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        );
     };
 
     if (call === null)
@@ -209,10 +245,10 @@ const StreamS = () => {
             <StreamCall call={call}>
                 <SafeAreaView style={{ flex: 1, marginTop: 64 }}>
                     {!watchMode ? (
-                        // <LivestreamUI />
                         <HostLivestream onEndStreamHandler={stopLiveStream} />
                     ) : (
-                        <ViewerLivestream onLeaveStreamHandler={leaveCall} />
+                        <LiveStreamViewerLayout />
+                        // <ViewerLivestream onLeaveStreamHandler={leaveCall} />
                     )}
                 </SafeAreaView>
             </StreamCall>
