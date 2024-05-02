@@ -7,7 +7,7 @@ import { colors, utilities } from '../styles/utilities';
 import ModalHigh from '../components/Modals/ModalHigh';
 import shows from '../core/tools/fakeShows';
 
-const StreamsOverview = ({ navigation }) => {
+const Streams = ({ navigation }) => {
     const StreamCard = ({ show }) => {
         return (
             <TouchableOpacity style={styles.cardContainer} onPress={navigation.navigate}>
@@ -37,7 +37,7 @@ const StreamsOverview = ({ navigation }) => {
     );
 };
 
-export default StreamsOverview;
+export default Streams;
 
 const styles = StyleSheet.create({
 

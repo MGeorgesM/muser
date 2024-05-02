@@ -7,7 +7,7 @@ import BackBtn from '../components/Elements/BackBtn';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
 import { defaultAvatar } from '../core/tools/apiRequest';
 
-const Live = () => {
+const StreamView = () => {
     const show = {
         id: 5,
         name: 'The Jazzy Brazzy',
@@ -113,7 +113,7 @@ const Live = () => {
     );
 };
 
-export default Live;
+export default StreamView;
 
 const height = Dimensions.get('window').height;
 

@@ -20,7 +20,7 @@ import { useUser } from '../contexts/UserContext';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 import inCallManager from 'react-native-incall-manager';
 
-const StreamS = () => {
+const StreamBroadcast = () => {
     const [streamToken, setStreamToken] = useState(null);
     const [startStream, setStartStream] = useState(false);
     const [client, setClient] = useState(null);
@@ -72,48 +72,48 @@ const StreamS = () => {
 
 
 
-    useEffect(() => {
-        console.log('User:', currentUser);
-        console.log('Logged in:', loggedIn);
+    // useEffect(() => {
+    //     console.log('User:', currentUser);
+    //     console.log('Logged in:', loggedIn);
 
-        if (!loggedIn && Object.keys(currentUser).length === 0) return;
+    //     if (!loggedIn && Object.keys(currentUser).length === 0) return;
 
-        const user = {
-            id: currentUser?.id.toString(),
-            name: currentUser?.name,
-            image: profilePicturesUrl + currentUser?.picture,
-        };
+    //     const user = {
+    //         id: currentUser?.id.toString(),
+    //         name: currentUser?.name,
+    //         image: profilePicturesUrl + currentUser?.picture,
+    //     };
 
-        const getStreamToken = async () => {
-            const token = await AsyncStorage.getItem('streamToken');
-            setStreamToken(token);
-        };
+    //     const getStreamToken = async () => {
+    //         const token = await AsyncStorage.getItem('streamToken');
+    //         setStreamToken(token);
+    //     };
 
-        getStreamToken();
+    //     getStreamToken();
 
-        if (!streamToken || Object.keys(user).length === 0) return;
+    //     if (!streamToken || Object.keys(user).length === 0) return;
 
-        console.log('Stream token:', streamToken);
-        console.log('User!:', user.id);
+    //     console.log('Stream token:', streamToken);
+    //     console.log('User!:', user.id);
 
-        const streamClient = new StreamVideoClient({
-            apiKey,
-            user,
-            token: streamToken,
-            options: {
-                logLevel: 'debug',
-            },
-        });
+    //     const streamClient = new StreamVideoClient({
+    //         apiKey,
+    //         user,
+    //         token: streamToken,
+    //         options: {
+    //             logLevel: 'debug',
+    //         },
+    //     });
 
-        streamClient && console.log('Connected to stream client!');
+    //     streamClient && console.log('Connected to stream client!');
 
-        setClient(streamClient);
+    //     setClient(streamClient);
 
 
-        return () => {
-            streamClient && streamClient.disconnectUser();
-        }
-    }, [loggedIn, currentUser, streamToken, streamId]);
+    //     return () => {
+    //         streamClient && streamClient.disconnectUser();
+    //     }
+    // }, [loggedIn, currentUser, streamToken, streamId]);
 
     const createCall = async () => {
         if (!client) {
@@ -230,7 +230,7 @@ const StreamS = () => {
 
     if (call === null)
         return (
-            <View style={styles.liveStreamStartContainer}>
+            <View style={styles.liveStreamBroadcasttartContainer}>
                 <TouchableOpacity onPress={createCall} style={styles.callStartBtn}>
                     <Text style={{ color: 'white' }}>Start Stream</Text>
                 </TouchableOpacity>
@@ -256,10 +256,10 @@ const StreamS = () => {
     );
 };
 
-export default StreamS;
+export default StreamBroadcast;
 
 const styles = StyleSheet.create({
-    liveStreamStartContainer: {
+    liveStreamBroadcasttartContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
