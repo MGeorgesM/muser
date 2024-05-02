@@ -10,7 +10,7 @@ import { defaultAvatar } from '../core/tools/apiRequest';
 import { useUser } from '../contexts/UserContext';
 
 import { fireStoreDb } from '../config/firebase';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, serverTimestamp } from 'firebase/firestore';
 
 import { formatDateString, truncateText } from '../core/tools/formatDate';
 
@@ -78,53 +78,50 @@ const StreamView = ({ navigation, route }) => {
     }, [show.id]);
 
     const createShowAndComments = async (initialComment) => {
-        const newShowRef = doc(collection(fireStoreDb, 'chats'));
+        const newShowRef = doc(collection(fireStoreDb, 'shows'));
         const commentsRef = collection(newShowRef, 'comments');
 
         await addDoc(commentsRef, {
-            text: initialComment.text,
+            text: initialComment,
             createdAt: serverTimestamp(),
             userId: currentUser.id,
         });
 
         await setDoc(newShowRef, {
-            showId: show.Id,
+            showId: show.id,
             createdAt: serverTimestamp(),
         });
 
         return newShowRef;
     };
 
-    const onSend = useCallback(async (messages = []) => {
-        let showCommentsRef = await getChat();
-        if (!showCommentsRef) {
-            const firstMessage = messages[0];
-            showCommentsRef = await createChat(firstMessage);
-            await addConnection();
+    const onSend = useCallback(async (comments = []) => {
+        let showRef = doc(fireStoreDb, 'shows', show.id);
+        if (!showRef) {
+            const initialComment = comments[0];
+            showRef = await createShowAndComments(initialComment);
         } else {
-            const commentsRef = collection(showCommentsRef, 'messages');
+            const commentsRef = collection(showRef, 'comments');
 
-            messages.forEach(async (message) => {
-                const { _id, text, createdAt, user } = message;
-                const messageDocRef = await addDoc(commentsRef, {
-                    _id,
+            for (const message of comments) {
+                const { text, user } = message;
+                await addDoc(commentsRef, {
                     text,
-                    createdAt,
-                    userId: user._id,
+                    createdAt: serverTimestamp(),
+                    userId: currentUser.id,
                 });
-
-                await updateDoc(showCommentsRef, {
-                    lastMessage: {
-                        messageId: messageDocRef.id,
-                        text,
-                        createdAt,
-                        userId: user._id,
-                    },
-                });
-            });
+            }
         }
 
-        setComments((previousComments) => );
+        setComments((prevComments) => [
+            ...prevComments,
+            ...comments.map((comment) => ({
+                _id: comment._id,
+                userId: currentUser.id,
+                text: comment.text,
+                createdAt: new Date(),
+            })),
+        ]);
     });
 
     // const handlePostComment = () => {
