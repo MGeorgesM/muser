@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Dimensions, Pressable } from 'react-native';
 import {
     CallingState,
     SfuEvents,
@@ -9,7 +9,7 @@ import {
     VideoRenderer,
 } from '@stream-io/video-react-native-sdk';
 
-import InCallManager from 'react-native-incall-manager';
+import inCallManager from 'react-native-incall-manager';
 
 import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop, Pause } from 'lucide-react-native';
 
@@ -17,8 +17,7 @@ import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk'
 import { colors } from '../styles/utilities';
 
 const StreamBroadcast = ({ navigation, route }) => {
-
-    const { showId } = route.params;
+    const { showId } = route?.params + 10000 ?? {};
 
     const [call, setCall] = useState(null);
     const [viewer, setViewer] = useState(false);
@@ -114,9 +113,9 @@ const StreamBroadcast = ({ navigation, route }) => {
         // console.log('Presenter', presenter);
 
         useEffect(() => {
-            InCallManager.start({ media: 'video' });
+            inCallManager.start({ media: 'video' });
             return () => {
-                InCallManager.stop();
+                inCallManager.stop();
                 if (call && !viewer) {
                     call.endCall();
                     console.log('Ending Call!');
@@ -209,8 +208,13 @@ const StreamBroadcast = ({ navigation, route }) => {
                             <Radio size={24} color={isCallLive ? '#FFB84F' : 'white'} />
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.flexed}>
+                    <View style={[styles.flexed, { alignItems: 'center', justifyContent: 'center' }]}>
                         {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
+                        {!isCallLive && (
+                            <Pressable onPress={handleStreamStatus}>
+                                <Play size={48} color={'white'} style={styles.streamStartBtn} />
+                            </Pressable>
+                        )}
                     </View>
                     <View style={styles.bottomLiveStreamBar}>
                         <TouchableOpacity onPress={toggleVideoMuted}>
@@ -230,9 +234,11 @@ const StreamBroadcast = ({ navigation, route }) => {
                                 <Mic size={24} color={'white'} />
                             )}
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={handleStreamStatus}>
-                            {isCallLive ? <CircleStop size={24} color={'white'} /> : <Play size={24} color={'white'} />}
-                        </TouchableOpacity>
+                        {isCallLive && (
+                            <TouchableOpacity onPress={handleStreamStatus}>
+                                {<CircleStop size={24} color={'white'} />}
+                            </TouchableOpacity>
+                        )}
                     </View>
                 </View>
             );
@@ -282,18 +288,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 8,
     },
-    callStartBtn: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'blue',
-        padding: 10,
-    },
-    callJoinBtn: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'green',
-        padding: 10,
-    },
+    // callStartBtn: {
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     backgroundColor: 'blue',
+    //     padding: 10,
+    // },
+    // callJoinBtn: {
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     backgroundColor: 'green',
+    //     padding: 10,
+    // },
     flexed: {
         flex: 1,
     },
@@ -326,4 +332,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         gap: 8,
     },
+
+    streamStartBtn: {},
 });

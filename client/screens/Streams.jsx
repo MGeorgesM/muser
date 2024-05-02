@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
@@ -14,6 +14,7 @@ import { formatDateString, truncateText } from '../core/tools/formatDate';
 
 const Streams = ({ navigation }) => {
     const dispatch = useDispatch();
+    const [userIsVenue, setUserIsVenue] = useState(false);
 
     const { currentUser } = useUser();
 
@@ -22,11 +23,13 @@ const Streams = ({ navigation }) => {
     console.log(currentUser.role.id);
 
     useEffect(() => {
+        currentUser.role.id === 2 ? setUserIsVenue(true) : setUserIsVenue(false);
+
         const getShows = async () => {
             try {
                 const response = await sendRequest(
                     requestMethods.GET,
-                    `shows?status=set${currentUser.role.id === 2 ? `&venue_id=${currentUser.id}` : ''}`,
+                    `shows?status=set${userIsVenue ? `&venue_id=${currentUser.id}` : ''}`,
                     null
                 );
                 if (response.status !== 200) throw new Error('Failed to fetch shows');
@@ -38,12 +41,19 @@ const Streams = ({ navigation }) => {
         };
 
         getShows();
-    }, []);
+    }, [userIsVenue]);
 
     const StreamCard = ({ show }) => {
         console.log('each show', show);
         return (
-            <TouchableOpacity style={styles.cardContainer} onPress={() => navigation.navigate('StreamView', { show })}>
+            <TouchableOpacity
+                style={styles.cardContainer}
+                onPress={() => {
+                    userIsVenue
+                        ? navigation.navigate('StreamBroadcast', { showId: show.id })
+                        : navigation.navigate('StreamView', { show });
+                }}
+            >
                 <Image source={{ uri: showsPicturesUrl + show.picture }} style={styles.backgroundImage} />
                 <View style={styles.overlay}>
                     <View>
