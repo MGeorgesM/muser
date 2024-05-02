@@ -37,11 +37,13 @@ const StreamBroadcast = () => {
     client && console.log('Client Found!');
 
     const createCall = async () => {
+        console.log('Creating call');
+
         if (!client) {
             console.log('No client found');
             return;
         }
-        console.log('client:', client);
+        console.log('Client Found!');
         try {
             const call = client.call('livestream', streamId);
             await call.join({ create: true });
@@ -58,9 +60,8 @@ const StreamBroadcast = () => {
             console.log('No client found');
             return;
         }
-
+        console.log('Client Found!');
         setWatchMode(true);
-
         try {
             const call = client.call('livestream', streamId);
             await call.join();
@@ -70,26 +71,28 @@ const StreamBroadcast = () => {
         }
     };
 
-    const leaveCall = async () => {
-        console.log('leaving call');
+    // const leaveCall = async () => {
+    //     console.log('leaving call');
 
-        if (call) {
-            await call.leave().catch(console.error);
-            inCallManager.stop();
-            // setCall(null);
-        }
-    };
+    //     if (call) {
+    //         await call.leave().catch(console.error);
+    //         inCallManager.stop();
+    //         // setCall(null);
+    //     }
+    // };
 
-    const stopLiveStream = async () => {
-        if (call) {
-            // await call.stopLive().catch(console.error);
-            await call.endCall().catch(console.error);
-            inCallManager.stop();
-            setCall(null);
-        }
-    };
+    // const stopLiveStream = async () => {
+    //     if (call) {
+    //         // await call.stopLive().catch(console.error);
+    //         await call.endCall().catch(console.error);
+    //         inCallManager.stop();
+    //         setCall(null);
+    //     }
+    // };
 
-    const LiveStreamViewerLayout = () => {
+    const LiveStreamViewerLayout = ({ mode }) => {
+        const [callOngoing, setCallOngoing] = useState(false);
+
         const call = useCall();
         const { useCameraState, useMicrophoneState } = useCallStateHooks();
         const { status: microphoneStatus } = useMicrophoneState();
@@ -120,9 +123,14 @@ const StreamBroadcast = () => {
             await call?.microphone.toggle();
         };
 
+        const handleStart = async () => {
+            await call?.goLive();
+        }
+
         const handleExit = async () => {
             await call?.stopLive();
             await call?.leave();
+            await call.off();
             inCallManager.stop();
             setCall(null);
         };
@@ -130,30 +138,17 @@ const StreamBroadcast = () => {
         return (
             <View style={styles.flexed}>
                 <View style={styles.topLiveStreamBar}>
-                    <TouchableOpacity style={{ flexDirection: 'row' }}>
-                        <Users size={24} color={'white'} />
-                        <Text>{totalParticipants}</Text>
-                    </TouchableOpacity>
                     <TouchableOpacity>
                         <Radio size={24} color={isCallLive ? 'red' : 'white'} />
                     </TouchableOpacity>
+                    <TouchableOpacity style={{ flexDirection: 'row' }}>
+                        <Users size={24} color={'white'} />
+                        <Text style={{color:'white'}}>{totalParticipants}</Text>
+                    </TouchableOpacity>
                 </View>
-                {/* <Text style={styles.text}>Live: {totalParticipants}</Text> */}
                 <View style={styles.flexed}>
                     {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
                 </View>
-                {/* <View style={styles.bottomBar}>
-                    {isCallLive ? (
-                        <Button onPress={() => call?.stopLive()} title="Stop Livestream" />
-                    ) : (
-                        <Button
-                            onPress={() => {
-                                call?.goLive();
-                            }}
-                            title="Start Livestream"
-                        />
-                    )}
-                </View> */}
                 <View style={styles.bottomLiveStreamBar}>
                     <TouchableOpacity onPress={toggleVideoMuted}>
                         {cameraStatus === 'disabled' ? (
