@@ -50,9 +50,9 @@ const StreamView = ({ navigation, route }) => {
 
             unsubscribe = onSnapshot(q, (snapshot) => {
                 const fetchedComments = snapshot.docs.map((doc) => ({
-                    // _id: doc.id,
+                    _id: doc.id,
                     text: doc.data().text,
-                    createdAt: doc.data().createdAt.toDate(),
+                    createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
                     userId: doc.data().userId,
                 }));
                 setComments(fetchedComments);
