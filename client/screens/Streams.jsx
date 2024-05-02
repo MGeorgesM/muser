@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
     },
     avatarsDisplay: {
         position: 'absolute',
-        right: 8,
-        bottom: 8,
+        right: 20,
+        bottom: 12,
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
