@@ -2,54 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Dimensions } from 'react-native';
 import {
     CallingState,
-    FloatingParticipantView,
     SfuEvents,
     useCall,
     useCallStateHooks,
-    useIncallManager,
     useStreamVideoClient,
     VideoRenderer,
 } from '@stream-io/video-react-native-sdk';
 
 import InCallManager from 'react-native-incall-manager';
 
-import {
-    Play,
-    SwitchCamera,
-    VideoOff,
-    Video,
-    Radio,
-    Mic,
-    MicOff,
-    CirclePlay,
-    Users,
-    Eye,
-    CircleStop,
-    Pause,
-} from 'lucide-react-native';
+import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop, Pause } from 'lucide-react-native';
 
-import {
-    HostLivestream,
-    CallContent,
-    StreamCall,
-    StreamVideo,
-    StreamVideoClient,
-    ViewerLivestream,
-} from '@stream-io/video-react-native-sdk';
+import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
+import { colors } from '../styles/utilities';
 
-import { useUser } from '../contexts/UserContext';
-import { profilePicturesUrl } from '../core/tools/apiRequest';
-import inCallManager from 'react-native-incall-manager';
-import { LivestreamLayout } from '@stream-io/video-react-native-sdk/src/components';
+const StreamBroadcast = ({ navigation, route }) => {
 
-const StreamBroadcast = () => {
-    const streamId = 'hgjbkddtfeeaggfggddafdf';
+    const { showId } = route.params;
+
     const [call, setCall] = useState(null);
     const [viewer, setViewer] = useState(false);
 
     const client = useStreamVideoClient();
 
     client && console.log('Client Found!');
+    console.log('Show ID:', showId);
 
     const createCall = async () => {
         console.log('Creating call');
@@ -60,7 +37,7 @@ const StreamBroadcast = () => {
         }
         console.log('Client Found!');
         try {
-            const call = client.call('livestream', streamId);
+            const call = client.call('livestream', showId);
             await call.join({ create: true });
             setCall(call);
         } catch (error) {
@@ -81,7 +58,7 @@ const StreamBroadcast = () => {
         console.log('Client Found!');
 
         try {
-            const call = client.call('livestream', streamId);
+            const call = client.call('livestream', showId);
             await call.join({ create: true });
             setCall(call);
         } catch (error) {
@@ -173,7 +150,7 @@ const StreamBroadcast = () => {
                 console.log('Calling state is Joined, Leaving');
                 await call.leave();
             } else if (isCallLive) {
-                const call = client.call('livestream', streamId);
+                const call = client.call('livestream', showId);
                 await call.join();
             } else {
                 console.log('Stream is in Backstage');
@@ -275,12 +252,13 @@ const StreamBroadcast = () => {
     if (call === null)
         return (
             <View style={styles.liveStreamBroadcasttartContainer}>
-                <TouchableOpacity onPress={createCall} style={styles.callStartBtn}>
-                    <Text style={{ color: 'white' }}>Start Stream</Text>
+                <TouchableOpacity onPress={createCall}>
+                    <Radio size={48} color={colors.darkGray} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={joinCall} style={styles.callJoinBtn}>
+                <Text style={{ fontSize: 20, color: colors.darkGray }}>Go Live</Text>
+                {/* <TouchableOpacity onPress={joinCall} style={styles.callJoinBtn}>
                     <Text style={{ color: 'white' }}>Watch Stream</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         );
 
