@@ -43,7 +43,7 @@ import inCallManager from 'react-native-incall-manager';
 const StreamBroadcast = () => {
     const streamId = 'hgjbkdafdf';
     const [call, setCall] = useState(null);
-    const [watchMode, setWatchMode] = useState(false);
+    const [viewer, setViewer] = useState(false);
 
     const client = useStreamVideoClient();
 
@@ -74,7 +74,7 @@ const StreamBroadcast = () => {
             return;
         }
         console.log('Client Found!');
-        setWatchMode(true);
+
         try {
             const call = client.call('livestream', streamId);
             await call.join();
@@ -103,7 +103,7 @@ const StreamBroadcast = () => {
     //     }
     // };
 
-    const LiveStreamViewerLayout = ({ viewer = false }) => {
+    const LiveStreamViewerLayout = ({ viewer = true }) => {
         const [callOngoing, setCallOngoing] = useState(false);
 
         const call = useCall();
@@ -111,17 +111,24 @@ const StreamBroadcast = () => {
         const { status: microphoneStatus } = useMicrophoneState();
         const { status: cameraStatus } = useCameraState();
 
-        const { useParticipantCount, useLocalParticipant, useIsCallLive } = useCallStateHooks();
+        const { useParticipantCount, useLocalParticipant, useRemoteParticipants, useIsCallLive } = useCallStateHooks();
 
         const totalParticipants = useParticipantCount();
         const localParticipant = useLocalParticipant();
+        const remoteParticipants = useRemoteParticipants();
         const isCallLive = useIsCallLive();
 
         console.log('localParticipant:', localParticipant);
 
         useEffect(() => {
             InCallManager.start({ media: 'video' });
-            return () => InCallManager.stop();
+            return () => {
+                InCallManager.stop();
+                if (call) {
+                    call.endCall();
+                    console.log('Ending Call!');
+                }
+            };
         }, []);
 
         const toggleVideoMuted = async () => {
@@ -145,6 +152,7 @@ const StreamBroadcast = () => {
         };
 
         const handleExit = async () => {
+            inCallManager.stop();
             if (viewer) {
                 await call.leave();
                 call.off();
@@ -154,48 +162,70 @@ const StreamBroadcast = () => {
             await call?.stopPublish(SfuEvents.HealthCheckRequest, true);
             await call?.leave();
             call.off();
-            inCallManager.stop();
             setCall(null);
         };
 
-        return (
-            <View style={styles.flexed}>
-                <View style={styles.topLiveStreamBar}>
-                    <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                        <Text style={{ color: 'white' }}>{totalParticipants}</Text>
-                        {/* <Eye size={24} color={'white'} /> */}
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Radio size={24} color={isCallLive ? '#FFB84F' : 'white'} />
-                    </TouchableOpacity>
+        const ViewerMode = () => {
+            return (
+                <View
+                    style={[
+                        {
+                            height: height * 0.5,
+                            backgroundColor: 'black',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        },
+                    ]}
+                >
+                    {localParticipant && <VideoRenderer participant={remoteParticipants} trackType="videoTrack" />}
+
+                    <Play size={42} color={'white'} />
                 </View>
+            );
+        };
+
+        const HostMode = () => {
+            return (
                 <View style={styles.flexed}>
-                    {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
+                    <View style={styles.topLiveStreamBar}>
+                        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                            <Text style={{ color: 'white' }}>{totalParticipants}</Text>
+                            {/* <Eye size={24} color={'white'} /> */}
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Radio size={24} color={isCallLive ? '#FFB84F' : 'white'} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.flexed}>
+                        {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
+                    </View>
+                    <View style={styles.bottomLiveStreamBar}>
+                        <TouchableOpacity onPress={toggleVideoMuted}>
+                            {cameraStatus === 'disabled' ? (
+                                <VideoOff size={24} color={'white'} />
+                            ) : (
+                                <Video size={24} color={'white'} />
+                            )}
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={toggleCameraFacingMode}>
+                            <SwitchCamera size={24} color={'white'} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={toggleAudioMuted}>
+                            {microphoneStatus === 'disabled' ? (
+                                <MicOff size={24} color={'white'} />
+                            ) : (
+                                <Mic size={24} color={'white'} />
+                            )}
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleStreamStatus}>
+                            {isCallLive ? <CircleStop size={24} color={'white'} /> : <Play size={24} color={'white'} />}
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={styles.bottomLiveStreamBar}>
-                    <TouchableOpacity onPress={toggleVideoMuted}>
-                        {cameraStatus === 'disabled' ? (
-                            <VideoOff size={24} color={'white'} />
-                        ) : (
-                            <Video size={24} color={'white'} />
-                        )}
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={toggleCameraFacingMode}>
-                        <SwitchCamera size={24} color={'white'} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={toggleAudioMuted}>
-                        {microphoneStatus === 'disabled' ? (
-                            <MicOff size={24} color={'white'} />
-                        ) : (
-                            <Mic size={24} color={'white'} />
-                        )}
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleStreamStatus}>
-                        {isCallLive ? <CircleStop size={24} color={'white'} /> : <Play size={24} color={'white'} />}
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
+            );
+        };
+
+        return viewer ? <ViewerMode /> : <HostMode />;
     };
 
     if (call === null)
@@ -213,13 +243,15 @@ const StreamBroadcast = () => {
     return (
         <StreamCall call={call}>
             <SafeAreaView style={{ flex: 1, marginTop: 64 }}>
-                <LiveStreamViewerLayout />
+                <LiveStreamViewerLayout viewer={viewer} />
             </SafeAreaView>
         </StreamCall>
     );
 };
 
 export default StreamBroadcast;
+
+const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     liveStreamBroadcasttartContainer: {
