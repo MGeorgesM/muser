@@ -103,7 +103,7 @@ const StreamBroadcast = () => {
     //     }
     // };
 
-    const LiveStreamViewerLayout = ({ mode }) => {
+    const LiveStreamViewerLayout = ({ viewer = false }) => {
         const [callOngoing, setCallOngoing] = useState(false);
 
         const call = useCall();
@@ -145,6 +145,11 @@ const StreamBroadcast = () => {
         };
 
         const handleExit = async () => {
+            if (viewer) {
+                await call.leave();
+                call.off();
+                inCallManager.stop();
+            }
             await call?.stopLive();
             await call?.stopPublish(SfuEvents.HealthCheckRequest, true);
             await call?.leave();
@@ -156,12 +161,12 @@ const StreamBroadcast = () => {
         return (
             <View style={styles.flexed}>
                 <View style={styles.topLiveStreamBar}>
-                    <TouchableOpacity>
-                        <Radio size={24} color={isCallLive ? 'red' : 'white'} />
-                    </TouchableOpacity>
                     <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                         <Text style={{ color: 'white' }}>{totalParticipants}</Text>
-                        <Eye size={24} color={'white'} />
+                        {/* <Eye size={24} color={'white'} /> */}
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Radio size={24} color={isCallLive ? '#FFB84F' : 'white'} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.flexed}>
@@ -260,10 +265,11 @@ const styles = StyleSheet.create({
 
     topLiveStreamBar: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         paddingVertical: 8,
         paddingHorizontal: 20,
+        gap: 8,
     },
 });
