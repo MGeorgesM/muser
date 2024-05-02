@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Dimensions } from 'react-native';
 import {
+    CallingState,
     SfuEvents,
     useCall,
     useCallStateHooks,
@@ -25,6 +26,7 @@ import {
     Users,
     Eye,
     CircleStop,
+    Pause,
 } from 'lucide-react-native';
 
 import {
@@ -64,6 +66,8 @@ const StreamBroadcast = () => {
         } catch (error) {
             console.error('Error joining call:', error);
         }
+
+        setViewer(false);
     };
 
     const joinCall = async () => {
@@ -82,6 +86,8 @@ const StreamBroadcast = () => {
         } catch (error) {
             console.error('Error joining call:', error);
         }
+
+        setViewer(true);
     };
 
     // const leaveCall = async () => {
@@ -104,18 +110,19 @@ const StreamBroadcast = () => {
     // };
 
     const LiveStreamViewerLayout = ({ viewer = true }) => {
-        const [callOngoing, setCallOngoing] = useState(false);
-
         const call = useCall();
-        const { useCameraState, useMicrophoneState } = useCallStateHooks();
+
+        const { useCameraState, useMicrophoneState, useCallCallingState } = useCallStateHooks();
+        const { useParticipantCount, useLocalParticipant, useRemoteParticipants, useIsCallLive } = useCallStateHooks();
+
         const { status: microphoneStatus } = useMicrophoneState();
         const { status: cameraStatus } = useCameraState();
-
-        const { useParticipantCount, useLocalParticipant, useRemoteParticipants, useIsCallLive } = useCallStateHooks();
 
         const totalParticipants = useParticipantCount();
         const localParticipant = useLocalParticipant();
         const remoteParticipants = useRemoteParticipants();
+
+        const callingState = useCallCallingState();
         const isCallLive = useIsCallLive();
 
         console.log('localParticipant:', localParticipant);
@@ -151,12 +158,20 @@ const StreamBroadcast = () => {
             await call?.goLive();
         };
 
+        const togglePauseStart = async () => {
+            if(callingState === CallingState.JOINED) {
+                console.log('Calling state is Joined, Leaving')
+                await call.leave();
+            } else {
+                await call.join();
+            }
+
+        }
+
         const handleExit = async () => {
             inCallManager.stop();
             if (viewer) {
-                await call.leave();
-                call.off();
-                inCallManager.stop();
+                togglePauseStart();
             }
             await call?.stopLive();
             await call?.stopPublish(SfuEvents.HealthCheckRequest, true);
@@ -179,7 +194,9 @@ const StreamBroadcast = () => {
                 >
                     {localParticipant && <VideoRenderer participant={remoteParticipants} trackType="videoTrack" />}
 
-                    <Play size={42} color={'white'} />
+                    <TouchableOpacity onPress={handleExit}>
+                        <Play size={42} color={'white'} />
+                    </TouchableOpacity>
                 </View>
             );
         };
