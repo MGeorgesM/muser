@@ -48,11 +48,11 @@ const LiveStreamNavigator = () => {
                         user,
                         token,
                         options: {
-                            logLevel: 'error',
+                            logLevel: 'debug',
                         },
                     });
                     setClient(client);
-                    console.log('Connect to GET stream client!')
+                    console.log('Connected to GET stream client!')
                 } catch (error) {
                     console.error('Error setting up Stream client:', error);
                 }

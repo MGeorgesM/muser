@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Dimensions } from 'react-native';
 import {
+    SfuEvents,
     useCall,
     useCallStateHooks,
     useIncallManager,
@@ -12,7 +13,19 @@ import InCallManager from 'react-native-incall-manager';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CirclePlay, Users } from 'lucide-react-native';
+import {
+    Play,
+    SwitchCamera,
+    VideoOff,
+    Video,
+    Radio,
+    Mic,
+    MicOff,
+    CirclePlay,
+    Users,
+    Eye,
+    CircleStop,
+} from 'lucide-react-native';
 
 import {
     HostLivestream,
@@ -123,14 +136,19 @@ const StreamBroadcast = () => {
             await call?.microphone.toggle();
         };
 
+        const handleStreamStatus = async () => {
+            isCallLive ? handleExit() : handleStart();
+        };
+
         const handleStart = async () => {
             await call?.goLive();
-        }
+        };
 
         const handleExit = async () => {
             await call?.stopLive();
+            await call?.stopPublish(SfuEvents.HealthCheckRequest, true);
             await call?.leave();
-            await call.off();
+            call.off();
             inCallManager.stop();
             setCall(null);
         };
@@ -141,9 +159,9 @@ const StreamBroadcast = () => {
                     <TouchableOpacity>
                         <Radio size={24} color={isCallLive ? 'red' : 'white'} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ flexDirection: 'row' }}>
-                        <Users size={24} color={'white'} />
-                        <Text style={{color:'white'}}>{totalParticipants}</Text>
+                    <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                        <Text style={{ color: 'white' }}>{totalParticipants}</Text>
+                        <Eye size={24} color={'white'} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.flexed}>
@@ -167,8 +185,8 @@ const StreamBroadcast = () => {
                             <Mic size={24} color={'white'} />
                         )}
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={handleExit}>
-                        <Play size={24} color={'white'} />
+                    <TouchableOpacity onPress={handleStreamStatus}>
+                        {isCallLive ? <CircleStop size={24} color={'white'} /> : <Play size={24} color={'white'} />}
                     </TouchableOpacity>
                 </View>
             </View>
@@ -245,6 +263,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        padding: 8,
+        paddingVertical: 8,
+        paddingHorizontal: 20,
     },
 });
