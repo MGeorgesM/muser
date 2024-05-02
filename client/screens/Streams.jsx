@@ -10,7 +10,7 @@ import shows from '../core/tools/fakeShows';
 const Streams = ({ navigation }) => {
     const StreamCard = ({ show }) => {
         return (
-            <TouchableOpacity style={styles.cardContainer} onPress={navigation.navigate}>
+            <TouchableOpacity style={styles.cardContainer} onPress={() => navigation.navigate('StreamView')}>
                 <Image source={show.imageUrl} style={styles.backgroundImage} />
                 <View style={styles.overlay}>
                     <View>
@@ -40,7 +40,6 @@ const Streams = ({ navigation }) => {
 export default Streams;
 
 const styles = StyleSheet.create({
-
     cardContainer: {
         width: '100%',
         height: 180,

@@ -7,7 +7,7 @@ import BackBtn from '../components/Elements/BackBtn';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
 import { defaultAvatar } from '../core/tools/apiRequest';
 
-const StreamView = () => {
+const StreamView = ({ navigation }) => {
     const show = {
         id: 5,
         name: 'The Jazzy Brazzy',
@@ -65,7 +65,7 @@ const StreamView = () => {
     console.log(show.band.members);
     return (
         <View style={{ flex: 1 }}>
-            <BackBtn />
+            <BackBtn navigation={navigation} />
             <View
                 style={[
                     { height: height * 0.5, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center' },

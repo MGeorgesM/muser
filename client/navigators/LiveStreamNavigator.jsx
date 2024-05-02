@@ -26,7 +26,7 @@ const LiveStreamNavigator = () => {
         const initializeClient = async () => {
             if (loggedIn && currentUser && Object.keys(currentUser).length !== 0) {
 
-                const initialRoute = currentUser.role.id === 1 ? 'Streams' : 'StreamBroadcast'
+                const initialRoute = currentUser.role.id === 2 ? 'Streams' : 'StreamBroadcast'
                 setInitialRoute(initialRoute)
 
                 const token = await AsyncStorage.getItem('streamToken');
