@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Dimensions } from 'react-native';
 import {
     CallingState,
+    FloatingParticipantView,
     SfuEvents,
     useCall,
     useCallStateHooks,
@@ -11,8 +12,6 @@ import {
 } from '@stream-io/video-react-native-sdk';
 
 import InCallManager from 'react-native-incall-manager';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
     Play,
@@ -41,9 +40,10 @@ import {
 import { useUser } from '../contexts/UserContext';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 import inCallManager from 'react-native-incall-manager';
+import { LivestreamLayout } from '@stream-io/video-react-native-sdk/src/components';
 
 const StreamBroadcast = () => {
-    const streamId = 'hgjbkddtagddafdf';
+    const streamId = 'hgjbkddtfeeaggfggddafdf';
     const [call, setCall] = useState(null);
     const [viewer, setViewer] = useState(false);
 
@@ -82,12 +82,11 @@ const StreamBroadcast = () => {
 
         try {
             const call = client.call('livestream', streamId);
-            await call.join();
+            await call.join({ create: true });
             setCall(call);
         } catch (error) {
             console.error('Error joining call:', error);
         }
-
     };
 
     // const leaveCall = async () => {
@@ -112,7 +111,8 @@ const StreamBroadcast = () => {
     const LiveStreamViewerLayout = ({ viewer = true }) => {
         const call = useCall();
 
-        const { useCameraState, useMicrophoneState, useCallCallingState } = useCallStateHooks();
+        const { useCameraState, useMicrophoneState, useCallCallingState, useHasOngoingScreenShare, useParticipants } =
+            useCallStateHooks();
         const { useParticipantCount, useLocalParticipant, useRemoteParticipants, useIsCallLive } = useCallStateHooks();
 
         const { status: microphoneStatus } = useMicrophoneState();
@@ -126,7 +126,15 @@ const StreamBroadcast = () => {
         const isCallLive = useIsCallLive();
 
         console.log('localParticipant:', localParticipant);
-        console.log('remoteParticitPants', remoteParticipants)
+        console.log('remoteParticitPants', remoteParticipants);
+
+        // const floatingParticipant = hasOngoingScreenShare && hasVideoTrack(currentSpeaker) && currentSpeaker;
+        // const hasScreenShare = (p) => p?.publishedTracks.includes(SfuModels.TrackType.SCREEN_SHARE);
+        // const hasOngoingScreenShare = useHasOngoingScreenShare();
+        // const [currentSpeaker, ...otherParticipants] = useParticipants();
+        // const presenter = hasOngoingScreenShare
+
+        // console.log('Presenter', presenter);
 
         useEffect(() => {
             InCallManager.start({ media: 'video' });
@@ -160,18 +168,17 @@ const StreamBroadcast = () => {
         };
 
         const togglePauseStart = async () => {
-            console.log('Calling State:', callingState)
-            if(callingState === CallingState.JOINED) {
-                console.log('Calling state is Joined, Leaving')
+            console.log('Calling State:', callingState);
+            if (callingState === CallingState.JOINED) {
+                console.log('Calling state is Joined, Leaving');
                 await call.leave();
-            } else if(isCallLive) {
+            } else if (isCallLive) {
                 const call = client.call('livestream', streamId);
                 await call.join();
             } else {
-                console.log('Stream is in Backstage')            
+                console.log('Stream is in Backstage');
             }
-
-        }
+        };
 
         const handleExit = async () => {
             inCallManager.stop();
@@ -199,10 +206,15 @@ const StreamBroadcast = () => {
                     ]}
                 >
                     {/* {remoteParticipants.length > 0 && <VideoRenderer participant={local} trackType="videoTrack" />} */}
-                    {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
+                    {/* {presenter && <VideoRenderer participant={presenter} trackType="videoTrack" />} */}
+                    {/* {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />} */}
 
                     <TouchableOpacity onPress={handleExit}>
-                        {callingState === CallingState.JOINED ? <Pause size={42} color={'white'} /> : <Play size={42} color={'white'} />}
+                        {callingState === CallingState.JOINED ? (
+                            <Pause size={42} color={'white'} />
+                        ) : (
+                            <Play size={42} color={'white'} />
+                        )}
                     </TouchableOpacity>
                 </View>
             );
@@ -249,7 +261,15 @@ const StreamBroadcast = () => {
             );
         };
 
-        return viewer ? <ViewerMode /> : <HostMode />;
+        return viewer ? (
+            <ViewerLivestream
+                ViewerLivestreamTopView={null}
+                ViewerLeaveStreamButton={null}
+                ViewerLivestreamControls={null}
+            />
+        ) : (
+            <HostMode />
+        );
     };
 
     if (call === null)
