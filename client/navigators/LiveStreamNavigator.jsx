@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 
-import Streams from '../screens/Streams';
+import Streams from '../screens/Streams'
 import StreamBroadcast from '../screens/StreamBroadcast';
 import StreamView from '../screens/StreamView';
 import { StreamVideo, StreamVideoClient } from '@stream-io/video-react-native-sdk';

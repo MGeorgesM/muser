@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { StyleSheet, Text, View, Dimensions, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 
-import { Heart, Play, PlayIcon, Send } from 'lucide-react-native';
-import { colors, utilities } from '../styles/utilities';
 import BackBtn from '../components/Elements/BackBtn';
+import CommentCard from '../components/CommentCard/CommentCard';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
-import { defaultAvatar } from '../core/tools/apiRequest';
 
 import { useUser } from '../contexts/UserContext';
 
 import { fireStoreDb } from '../config/firebase';
 import { collection, query, where, onSnapshot, serverTimestamp } from 'firebase/firestore';
 
-import { formatDateString, truncateText } from '../core/tools/formatDate';
+import { truncateText } from '../core/tools/formatDate';
+import { colors, utilities } from '../styles/utilities';
+import { Heart, Play, PlayIcon, Send } from 'lucide-react-native';
 
 const StreamView = ({ navigation, route }) => {
     const { show } = route.params;
@@ -23,59 +23,24 @@ const StreamView = ({ navigation, route }) => {
     const [comments, setComments] = useState([]);
     const [showCommentsRef, setShowCommentsRef] = useState(null);
 
+
     useEffect(() => {
-        const showCommentsRef = collection(fireStoreDb, 'shows', show.id, 'comments');
-        const q = query(showCommentsRef, orderBy('createdAt', 'desc'));
+        const commentsRef = collection(fireStoreDb, 'shows', show.id, 'comments');
+        const q = query(commentsRef, orderBy('createdAt', 'desc'));
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const comments = [];
-
-            console.log('Snapshot size:', querySnapshot.size);
-            querySnapshot.forEach((doc) => {
-                console.log('raw data:', doc.data());
-                comments.push({ id: doc.id, ...doc.data() });
-            });
-
-            comments.sort((a, b) => b.lastMessage.createdAt - a.lastMessage.createdAt);
-            setComments(comments);
-
-            if (!querySnapshot.empty) {
-                return querySnapshot.docs[0].ref;
-            }
-
-            return null;
+            const fetchedComments = querySnapshot.docs.map((doc) => ({
+                _id: doc.id,
+                text: doc.data().text,
+                createdAt: doc.data().createdAt.toDate(),
+                user: {
+                    _id: doc.data().userId,
+                },
+            }));
+            setComments(fetchedComments);
         });
 
-        return () => unsubscribe;
-    }, [show.id]);
-
-    useEffect(() => {
-        let unsubscribe;
-
-        const setUpCommentsListener = async () => {
-            const commentsRef = collection(fireStoreDb, 'shows', show.id, 'comments');
-            const queryRef = query(commentsRef, orderBy('createdAt', 'desc'));
-
-            unsubscribe = onSnapshot(q, (snapshot) => {
-                const fetchedComments = snapshot.docs.map((doc) => ({
-                    _id: doc.id,
-                    text: doc.data().text,
-                    createdAt: doc.data().createdAt.toDate(),
-                    user: {
-                        _id: doc.data().userId,
-                    },
-                }));
-                setComments(fetchedComments);
-            });
-        };
-
-        setUpCommentsListener();
-
-        return () => {
-            if (unsubscribe) {
-                unsubscribe();
-            }
-        };
+        return () => unsubscribe();
     }, [show.id]);
 
     const createShowAndComments = async (initialComment) => {
@@ -96,34 +61,37 @@ const StreamView = ({ navigation, route }) => {
         return newShowRef;
     };
 
-    const onSend = useCallback(async (comments = []) => {
-        let showRef = doc(fireStoreDb, 'shows', show.id);
-        if (!showRef) {
-            const initialComment = comments[0];
-            showRef = await createShowAndComments(initialComment);
-        } else {
-            const commentsRef = collection(showRef, 'comments');
+    const onSend = useCallback(
+        async (newComments = []) => {
+            let showRef = doc(fireStoreDb, 'shows', show.id);
+            const showSnapshot = await getDoc(showRef);
 
-            for (const message of comments) {
-                const { text, user } = message;
-                await addDoc(commentsRef, {
-                    text,
-                    createdAt: serverTimestamp(),
-                    userId: currentUser.id,
-                });
+            if (!showSnapshot.exists()) {
+                const initialComment = newComments[0];
+                showRef = await createShowAndComments(initialComment);
+            } else {
+                const commentsRef = collection(showRef, 'comments');
+                for (const message of newComments) {
+                    await addDoc(commentsRef, {
+                        text: message.text,
+                        createdAt: serverTimestamp(),
+                        userId: currentUser.id,
+                    });
+                }
             }
-        }
 
-        setComments((prevComments) => [
-            ...prevComments,
-            ...comments.map((comment) => ({
-                _id: comment._id,
-                userId: currentUser.id,
-                text: comment.text,
-                createdAt: new Date(),
-            })),
-        ]);
-    });
+            setComments((prevComments) => [
+                ...prevComments,
+                ...newComments.map((comment) => ({
+                    _id: comment._id,
+                    userId: currentUser.id,
+                    text: comment.text,
+                    createdAt: new Date(),
+                })),
+            ]);
+        },
+        [fireStoreDb, show.id, currentUser.id]
+    );
 
     const handlePostComment = () => {
         console.log('Posting comment');
@@ -171,7 +139,11 @@ const StreamView = ({ navigation, route }) => {
                     </ScrollView>
                 </View>
                 <View style={styles.commentsContainer}>
-                    <ScrollView showsVerticalScrollIndicator={false}></ScrollView>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        {comments.map((comment) => (
+                            <CommentCard key={comment._id} comment={comment}  />
+                        ))}
+                    </ScrollView>
                     <View style={styles.userInputField}>
                         <TextInput
                             placeholder="Write a comment"
