@@ -25,13 +25,17 @@ const LiveStreamNavigator = () => {
         const initializeClient = async () => {
             if (loggedIn && currentUser && Object.keys(currentUser).length !== 0) {
                 const token = await AsyncStorage.getItem('streamToken');
-                if (!token) return;
 
+                if (!token) return;
+                
                 const user = {
                     id: currentUser.id.toString(),
                     name: currentUser.name,
                     image: profilePicturesUrl + currentUser.picture,
                 };
+                
+                console.log('Initialized Client', user)
+                console.log('CurrentUser', currentUser)
 
                 try {
                     const client = new StreamVideoClient({
@@ -39,7 +43,7 @@ const LiveStreamNavigator = () => {
                         user,
                         token,
                         options: {
-                            logLevel: 'debug',
+                            logLevel: 'error',
                         },
                     });
                     setClient(client);
@@ -62,7 +66,7 @@ const LiveStreamNavigator = () => {
     return client ? (
         <StreamVideo client={client}>
             <LiveStreamStack.Navigator
-                initialRouteName={currentUser.role_id === 1 ? 'Streams' : 'StreamBroadcast'}
+                initialRouteName={currentUser.role.id === 1 ? 'Streams' : 'StreamBroadcast'}
                 screenOptions={{ headerShown: false }}
             >
                 <LiveStreamStack.Screen name="Streams" component={Streams} />

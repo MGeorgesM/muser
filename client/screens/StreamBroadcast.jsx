@@ -241,7 +241,6 @@ const StreamBroadcast = () => {
         );
 
     return (
-        <StreamVideo client={client}>
             <StreamCall call={call}>
                 <SafeAreaView style={{ flex: 1, marginTop: 64 }}>
                     {!watchMode ? (
@@ -252,7 +251,6 @@ const StreamBroadcast = () => {
                     )}
                 </SafeAreaView>
             </StreamCall>
-        </StreamVideo>
     );
 };
 

@@ -32,7 +32,7 @@ const Streams = ({ navigation }) => {
             title="Upcoming Shows"
             navigation={navigation}
             items={shows}
-            renderItem={({ item }) => <StreamCard show={item} />}
+            renderItem={({ item }) => <StreamCard key={item.id} show={item} />}
         />
     );
 };
