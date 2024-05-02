@@ -52,6 +52,7 @@ const LiveStreamNavigator = () => {
                         },
                     });
                     setClient(client);
+                    console.log('Connect to GET stream client!')
                 } catch (error) {
                     console.error('Error setting up Stream client:', error);
                 }
