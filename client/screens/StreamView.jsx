@@ -41,7 +41,6 @@ const StreamView = ({ navigation, route }) => {
         let unsubscribe;
 
         const setupCommentsListener = async () => {
-            
             const commentsRef = collection(fireStoreDb, 'shows', show.id.toString(), 'comments');
 
             if (!commentsRef) return;
@@ -53,10 +52,11 @@ const StreamView = ({ navigation, route }) => {
                     _id: doc.id,
                     text: doc.data().text,
                     createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
+                    userAvatar: doc.data().userAvatar,
                     userId: doc.data().userId,
                 }));
                 setComments(fetchedComments);
-                console.log('fetched Comments', fetchedComments)
+                console.log('fetched Comments', fetchedComments);
             });
         };
         setupCommentsListener();
@@ -74,6 +74,7 @@ const StreamView = ({ navigation, route }) => {
         await addDoc(commentsRef, {
             text: initialComment,
             createdAt: serverTimestamp(),
+            userAvatar: currentUser.picture,
             userId: currentUser.id,
         });
 
@@ -99,6 +100,7 @@ const StreamView = ({ navigation, route }) => {
                 await addDoc(commentsRef, {
                     text: comment,
                     createdAt: serverTimestamp(),
+                    userAvatar: currentUser.picture,
                     userId: currentUser.id,
                 });
             }
@@ -113,10 +115,10 @@ const StreamView = ({ navigation, route }) => {
             //     })),
             // ]);
 
-            setComments((prevComments) => [
-                ...prevComments,
-                { text: comment, createdAt: new Date(), userId: currentUser.id },
-            ]);
+            // setComments((prevComments) => [
+            //     ...prevComments,
+            //     { text: comment, createdAt: new Date(), userId: currentUser.id, userAvatar: currentUser.picture },
+            // ]);
         },
         [fireStoreDb, show.id, currentUser.id]
     );
@@ -169,7 +171,7 @@ const StreamView = ({ navigation, route }) => {
                 <View style={styles.commentsContainer}>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {comments.map((comment) => (
-                            <CommentCard key={comment._id} userId={comment.userId} text={comment.text} />
+                            <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
                         ))}
                     </ScrollView>
                     <View style={styles.userInputField}>
@@ -203,7 +205,6 @@ const styles = StyleSheet.create({
         borderWidth: 0.25,
         // elevation: 1,
     },
-
 
     userInputField: {
         flexDirection: 'row',
