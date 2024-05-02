@@ -19,6 +19,7 @@ const StreamView = ({ navigation, route }) => {
 
     const { currentUser } = useUser();
 
+    const [userComment, setUserComment] = useState('');
     const [comments, setComments] = useState([]);
     const [showCommentsRef, setShowCommentsRef] = useState(null);
 
@@ -124,9 +125,13 @@ const StreamView = ({ navigation, route }) => {
         ]);
     });
 
-    // const handlePostComment = () => {
-    //     console.log('Posting comment');
-    // };
+    const handlePostComment = () => {
+        console.log('Posting comment');
+        if (userComment.trim()) {
+            onSend(userComment);
+            setUserComment('');
+        }
+    };
 
     if (show)
         return (
@@ -170,6 +175,8 @@ const StreamView = ({ navigation, route }) => {
                     <View style={styles.userInputField}>
                         <TextInput
                             placeholder="Write a comment"
+                            value={userComment}
+                            onChangeText={(text) => setUserComment(text)}
                             style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: colors.white }}
                         />
                         <TouchableOpacity onPress={handlePostComment}>
