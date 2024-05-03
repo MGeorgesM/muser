@@ -31,7 +31,7 @@ const Venues = ({ navigation }) => {
             navigation={navigation}
             items={venues}
             renderItem={({ item }) => (
-                <ShowVenueCard entity={item} handleNavigation={() => navigation.navigate('VenueDetails', { item })} />
+                <ShowVenueCard entity={item} handlePress={() => navigation.navigate('VenueDetails', { venue: item })} />
             )}
         />
     );

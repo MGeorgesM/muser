@@ -16,7 +16,7 @@ const MainTabs = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName="Live"
+            initialRouteName="Venues"
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let IconComponent;
