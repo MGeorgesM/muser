@@ -48,6 +48,19 @@ export default {
                     },
                 },
             ],
+            [
+                'expo-font',
+                {
+                    fonts: [
+                        './assets/fonts/Montserrat-Black.ttf',
+                        './assets/fonts/Montserrat-Bold.ttf',
+                        './assets/fonts/Montserrat-Light.ttf',
+                        './assets/fonts/Montserrat-Medium.ttf',
+                        './assets/fonts/Montserrat-Regular.ttf',
+                        './assets/fonts/Montserrat-SemiBold.ttf',
+                    ],
+                },
+            ],
         ],
         extra: {
             apiKey: process.env.API_KEY,

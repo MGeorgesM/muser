@@ -14,6 +14,7 @@ import UserRole from './screens/UserRole';
 import UserInfo from './screens/UserInfo';
 
 import { useFonts } from 'expo-font';
+import Welcome from './screens/Welcome';
 
 // import {utilities, colors} from '../styles/utilities';
 
@@ -21,7 +22,8 @@ const Stack = createStackNavigator();
 
 const AuthenticationStack = () => {
     return (
-        <Stack.Navigator initialRouteName="Authentication" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Welcome" component={Welcome} />
             <Stack.Screen name="Authentication" component={Authentication} />
             <Stack.Screen name="UserRole" component={UserRole} />
             <Stack.Screen name="UserInfo" component={UserInfo} />

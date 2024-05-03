@@ -7,6 +7,9 @@ import SignInForm from '../components/AuthenticationForms/SignInForm';
 import SignUpForm from '../components/AuthenticationForms/SignUpForm';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { utilities } from '../styles/utilities';
+
+import {useFonts} from 'expo-font'
 
 const logoImg = require('../assets/logo.png');
 const { styles } = require('../components/AuthenticationForms/styles');
@@ -100,8 +103,8 @@ const Authentication = ({ navigation }) => {
             </View>
             <View style={styles.bottomInnerContainer}>
                 <Text style={styles.errorText}>{error}</Text>
-                <TouchableOpacity style={styles.primaryBtn} onPress={handleProceed}>
-                    <Text style={styles.primaryBtnText}>{!switchHandler ? 'Log In' : 'Continue'}</Text>
+                <TouchableOpacity style={[utilities.primaryBtn]} onPress={handleProceed}>
+                    <Text style={[utilities.primaryBtnText]}>{!switchHandler ? 'Log In' : 'Continue'}</Text>
                 </TouchableOpacity>
                 <Text style={styles.promptText}>
                     {switchHandler ? 'Have an account? ' : "Don't have an account? "}

@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export const colors = {
-    primary: '#212529',
+    primary: '#FFB13D',
     black: '#212529',
     darkGray: '#495057',
     lightGray: '#D9D9D9',
@@ -150,4 +150,30 @@ export const utilities = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+
+    myFontRegular: {
+        fontFamily: 'Montserrat-Regular',
+    },
+
+    myFontBold: {
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    myFontBlack: {
+        fontFamily: 'Montserrat-Black',
+    },
+
+    myFontSemiBold: {
+        fontFamily: 'Montserrat-SemiBold',
+    },
+
+    myFontMedium: {
+        fontFamily: 'Montserrat-Medium',
+    },
+
+    myFontLight: {
+        fontFamily: 'Montserrat-Light',
+    },
+
+
 });

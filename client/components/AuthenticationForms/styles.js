@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
+        
     },
     scrollContainer: {
         flexGrow: 1,
@@ -28,19 +29,6 @@ export const styles = StyleSheet.create({
         borderColor: '#212529',
         padding: 16,
         marginBottom: 14,
-    },
-    primaryBtn: {
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: '#212529',
-        borderRadius: 24,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    primaryBtnText: {
-        color: '#fff',
-        fontSize: 20,
-        fontWeight: 'bold',
     },
     promptText: {
         fontSize: 16,
