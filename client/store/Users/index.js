@@ -16,10 +16,13 @@ const usersSlice = createSlice({
             state.feedUsers = action.payload;
         },
         addConnectedUser(state, action) {
-            const newUser = action.payload;
-            state.connectedUsers.push(newUser);
-            state.feedUsers = state.feedUsers.filter((user) => user.id !== newUser.id);
-        }
+            const userId = action.payload;
+            const userIndex = state.feedUsers.findIndex((user) => user.id === userId);
+            if (userIndex !== -1) {
+                state.connectedUsers.push(state.feedUsers[userIndex]);
+                state.feedUsers.splice(userIndex, 1);
+            }
+        },
     },
 });
 

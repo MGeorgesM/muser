@@ -21,7 +21,6 @@ const Feed = ({ navigation }) => {
 
     useEffect(() => {
         const getUsers = async () => {
-            console.log('Fetching users');
             try {
                 const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
                 if (response.status !== 200) throw new Error('Failed to fetch users');
@@ -76,7 +75,7 @@ const Feed = ({ navigation }) => {
         //     )}
         // </View>
 
-        users.length > 0 && (
+        users?.length > 0 && (
             <MasonryList
                 data={users}
                 renderItem={({ item, index }) => {

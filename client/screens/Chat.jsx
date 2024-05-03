@@ -24,6 +24,7 @@ import { useUser } from '../contexts/UserContext';
 
 import { defaultAvatar } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { useDispatch } from 'react-redux';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
@@ -56,7 +57,6 @@ const Chat = ({ navigation, route }) => {
         };
 
         getUsersPicutresandNames();
-
     }, [participants]);
 
     useLayoutEffect(() => {
@@ -157,6 +157,7 @@ const Chat = ({ navigation, route }) => {
         try {
             const response = await sendRequest(requestMethods.POST, `connections/${receiverId}`, null);
             if (response.status !== 200) throw new Error('Failed to add connection');
+            useDispatch(addConnectedUser(receiverId));
             console.log('Connection added:', response.data);
         } catch (error) {
             console.error('Error adding connection:', error);

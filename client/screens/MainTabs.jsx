@@ -16,7 +16,7 @@ const MainTabs = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName="Venues"
+            initialRouteName="Feed"
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let IconComponent;

@@ -10,13 +10,13 @@ import { useSelector } from 'react-redux';
 
 const ProfileDetails = ({ route }) => {
     const { userId } = route.params;
+    const navigation = useNavigation();
+
+    const { currentUser } = useUser();
     const [user, setUser] = useState({});
+
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
     const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
-
-    console.log('userId', userId)
-    console.log('feedUsers', feedUsers);
-    console.log('connectedUsers', connectedUsers);
 
     useEffect(() => {
         if (userId) {
@@ -27,11 +27,7 @@ const ProfileDetails = ({ route }) => {
         }
     }, [userId, feedUsers, connectedUsers]);
 
-    console.log('user', user);
     const imageUrl = `${profilePicturesUrl + user.picture}`;
-
-    const { currentUser } = useUser();
-    const navigation = useNavigation();
 
     if (user.name)
         return (
