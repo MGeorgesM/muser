@@ -112,7 +112,7 @@ class UserController extends Controller
             ->map->full_details;
 
         return response()->json([
-            'connectionUsers' => $connectedUsers,
+            'connectedUsers' => $connectedUsers,
             'feedUsers' => $otherUsers
         ]);
     }

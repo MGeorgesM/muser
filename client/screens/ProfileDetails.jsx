@@ -11,18 +11,21 @@ import { useSelector } from 'react-redux';
 const ProfileDetails = ({ route }) => {
     const { userId } = route.params;
     const [user, setUser] = useState({});
-    const users = useSelector((global) => global.usersSlice.users);
+    const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
+    const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
 
-    console.log(userId);
+    console.log('userId', userId)
+    console.log('feedUsers', feedUsers);
+    console.log('connectedUsers', connectedUsers);
 
     useEffect(() => {
-        console.log('userId', userId);
-        console.log('users', users);
         if (userId) {
-            const foundUser = users.find((user) => user.id === userId);
-            setUser(foundUser);
+            const foundUser = feedUsers.find((user) => user.id === userId);
+            if (foundUser) return setUser(foundUser);
+            const foundConnectedUser = connectedUsers.find((user) => user.id === userId);
+            if (foundConnectedUser) return setUser(foundConnectedUser);
         }
-    }, [userId, users]);
+    }, [userId, feedUsers, connectedUsers]);
 
     console.log('user', user);
     const imageUrl = `${profilePicturesUrl + user.picture}`;

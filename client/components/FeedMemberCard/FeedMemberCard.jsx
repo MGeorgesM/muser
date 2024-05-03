@@ -11,7 +11,7 @@ const FeedMemberCard = ({ user, height, navigation }) => {
     return (
         <TouchableOpacity
             style={[styles.cardContainer, { height: height || 180 }]}
-            onPress={() => navigation.navigate('ProfileDetails', { user })}
+            onPress={() => navigation.navigate('ProfileDetails', { userId: user.id })}
         >
             <Image source={{ uri: imageUrl }} style={styles.photo} />
             <View style={styles.overlay}>
