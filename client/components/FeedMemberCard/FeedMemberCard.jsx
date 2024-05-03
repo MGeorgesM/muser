@@ -10,7 +10,7 @@ const FeedMemberCard = ({ user, height, navigation }) => {
     const imageUrl = `${profilePicturesUrl + user.picture}`;
     return (
         <TouchableOpacity
-            style={[styles.cardContainer, { height: height || 180 }]}
+            style={[styles.cardContainer, { height: height || 180}]}
             onPress={() => navigation.navigate('ProfileDetails', { userId: user.id })}
         >
             <Image source={{ uri: imageUrl }} style={styles.photo} />
@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
         width: 170,
         borderRadius: utilities.borderRadius.m,
         overflow: 'hidden',
-        margin: 8,
+        margin: 4,
+
     },
     photo: {
         width: '100%',

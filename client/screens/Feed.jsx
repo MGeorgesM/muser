@@ -56,6 +56,8 @@ const Feed = ({ navigation }) => {
             headerStyle: {
                 backgroundColor: colors.bgDark,
                 height: 128,
+                shadowColor: 'transparent',
+                elevation: 0,
             },
         });
     });
@@ -100,11 +102,11 @@ const Feed = ({ navigation }) => {
         //     )}
         // </View>
 
-        users?.length > 0 && (
+        <View style={styles.listContainer}>
             <MasonryList
                 data={users}
-                renderItem={({ item, index }) => {
-                    const itemHeight = index % 2 === 1 ? 270 : 180;
+                renderItem={({ item, i }) => {
+                    const itemHeight = Math.floor(Math.random() * (290 - 180 + 1) + 180);
                     return <FeedMemberCard user={item} height={itemHeight} navigation={navigation} />;
                 }}
                 keyExtractor={(item) => item.id}
@@ -112,7 +114,7 @@ const Feed = ({ navigation }) => {
                 style={{ flex: 1 }}
                 contentContainerStyle={styles.cardsContainer}
             />
-        )
+        </View>
     );
 };
 
@@ -132,6 +134,12 @@ const styles = StyleSheet.create({
         borderColor: 'white',
         borderWidth: 0.5,
     },
+
+    listContainer: {
+        backgroundColor: colors.bgDark,
+        flex: 1,
+        padding: 16,
+    },
     welcomeDisplay: {
         marginBottom: -2,
         color: 'white',
@@ -142,9 +150,8 @@ const styles = StyleSheet.create({
         // flexWrap: 'wrap',
         // justifyContent: 'center',
         // gap: 16,
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 16,
         paddingTop: 8,
     },
 });
