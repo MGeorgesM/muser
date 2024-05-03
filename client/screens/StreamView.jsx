@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 
 import BackBtn from '../components/Elements/BackBtn';
@@ -21,6 +21,9 @@ import {
     setDoc,
 } from 'firebase/firestore';
 
+import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
+import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
+
 import { truncateText } from '../core/tools/formatDate';
 import { colors, utilities } from '../styles/utilities';
 import { Heart, Play, Send } from 'lucide-react-native';
@@ -34,8 +37,32 @@ const StreamView = ({ navigation, route }) => {
     const [comments, setComments] = useState([]);
     const [showCommentsRef, setShowCommentsRef] = useState(null);
 
-    console.log('showId', show.id);
-    console.log('user comment', userComment);
+    const [call, setCall] = useState(null);
+
+    const client = useStreamVideoClient();
+    const showId = show.id.toString() + 'TEST0';
+
+    client && console.log('Client Found!');
+    console.log('Show ID:', show.id);
+    console.log('Call:', call);
+
+    useLayoutEffect(() => {
+        if (!client || call) return;
+
+        const setupCall = async () => {
+            console.log('Setting up call');
+            try {
+                const call = client.call('livestream', showId);
+                await call.get();
+                call && console.log('Call set up!');
+                setCall(call);
+            } catch (error) {
+                console.log('Error setting up Call', error);
+            }
+        };
+
+        setupCall();
+    }, [client, show.id]);
 
     useEffect(() => {
         let unsubscribe;
@@ -56,7 +83,6 @@ const StreamView = ({ navigation, route }) => {
                     userId: doc.data().userId,
                 }));
                 setComments(fetchedComments);
-                console.log('fetched Comments', fetchedComments);
             });
         };
         setupCommentsListener();
@@ -131,63 +157,78 @@ const StreamView = ({ navigation, route }) => {
         }
     };
 
-    if (show)
-        return (
-            <View style={{ flex: 1 }}>
-                <BackBtn navigation={navigation} />
-                <View
-                    style={[
-                        {
-                            height: height * 0.5,
-                            backgroundColor: 'black',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        },
-                    ]}
-                >
-                    <Play size={42} color={'white'} />
-                </View>
-                <View
-                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}
-                >
-                    <View>
-                        <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>
-                            {truncateText(show.name)}
-                        </Text>
-                        <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
-                    </View>
-                    <View>
-                        <Heart size={24} color={colors.primary} />
-                    </View>
-                </View>
-                <View style={[{ paddingLeft: 20 }]}>
-                    <Text style={[utilities.textM, utilities.textBold, { marginBottom: 8 }]}>Band</Text>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                        {show.band.members.map((member) => (
-                            <BandMemberCard key={member.id} entity={member} />
-                        ))}
-                    </ScrollView>
-                </View>
-                <View style={styles.commentsContainer}>
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        {comments.map((comment) => (
-                            <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
-                        ))}
-                    </ScrollView>
-                    <View style={styles.userInputField}>
-                        <TextInput
-                            placeholder="Write a comment"
-                            value={userComment}
-                            onChangeText={(text) => setUserComment(text)}
-                            style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: colors.white }}
+    return (
+        // <StreamCall call={call}>
+        <View style={{ flex: 1 }}>
+            <BackBtn navigation={navigation} />
+            <View
+                style={[
+                    {
+                        height: height * 0.5,
+                        backgroundColor: 'black',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    },
+                ]}
+            >
+                {call && (
+                    <StreamCall call={call}>
+                        <ViewerLivestream
+                            ViewerLivestreamTopView={null}
+                            ViewerLeaveStreamButton={null}
+                            ViewerLivestreamControls={null}
                         />
-                        <TouchableOpacity onPress={handlePostComment}>
-                            <Send size={24} color={colors.darkGray} />
-                        </TouchableOpacity>
-                    </View>
+                    </StreamCall>
+                )}
+                <Play size={42} color={'white'} />
+            </View>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: 20,
+                }}
+            >
+                <View>
+                    <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>
+                        {truncateText(show.name)}
+                    </Text>
+                    <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
+                </View>
+                <View>
+                    <Heart size={24} color={colors.primary} />
                 </View>
             </View>
-        );
+            <View style={[{ paddingLeft: 20 }]}>
+                <Text style={[utilities.textM, utilities.textBold, { marginBottom: 8 }]}>Band</Text>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                    {show.band.members.map((member) => (
+                        <BandMemberCard key={member.id} entity={member} />
+                    ))}
+                </ScrollView>
+            </View>
+            <View style={styles.commentsContainer}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    {comments.map((comment) => (
+                        <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
+                    ))}
+                </ScrollView>
+                <View style={styles.userInputField}>
+                    <TextInput
+                        placeholder="Write a comment"
+                        value={userComment}
+                        onChangeText={(text) => setUserComment(text)}
+                        style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: colors.white }}
+                    />
+                    <TouchableOpacity onPress={handlePostComment}>
+                        <Send size={24} color={colors.darkGray} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+        // </StreamCall>
+    );
 };
 
 export default StreamView;

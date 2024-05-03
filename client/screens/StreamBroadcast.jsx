@@ -17,7 +17,7 @@ import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk'
 import { colors } from '../styles/utilities';
 
 const StreamBroadcast = ({ navigation, route }) => {
-    const { showId } = route?.params + 10000 ?? {};
+    const { showId } = route?.params.toString() + 'TEST' ?? {};
 
     const [call, setCall] = useState(null);
     const [viewer, setViewer] = useState(false);

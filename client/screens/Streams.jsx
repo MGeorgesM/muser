@@ -20,7 +20,6 @@ const Streams = ({ navigation }) => {
 
     const shows = useSelector((global) => global.showsSlice.shows);
 
-    console.log(currentUser.role.id);
 
     useEffect(() => {
         currentUser.role.id === 2 ? setUserIsVenue(true) : setUserIsVenue(false);
@@ -33,7 +32,7 @@ const Streams = ({ navigation }) => {
                     null
                 );
                 if (response.status !== 200) throw new Error('Failed to fetch shows');
-                console.log('Shows:', response.data);
+   
                 dispatch(setShows(response.data));
             } catch (error) {
                 console.log('Error fetching shows:', error);
@@ -44,7 +43,6 @@ const Streams = ({ navigation }) => {
     }, [userIsVenue]);
 
     const StreamCard = ({ show }) => {
-        console.log('each show', show);
         return (
             <TouchableOpacity
                 style={styles.cardContainer}
