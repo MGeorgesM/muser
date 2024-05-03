@@ -8,8 +8,9 @@ export const colors = {
     gray: '#ADB5BD',
     offWhite: '#DEE2E6',
     white: '#FFFFFF',
-    
+
     bgDark: '#1E1E1E',
+    bglight: '#2E2E2E',
 
     blackTrsp: 'rgba(0,0,0,0.3)',
     whiteTrsp: 'rgba(255,255,255,0.5)',

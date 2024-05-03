@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Image, View, StyleSheet, Dimensions } from 'react-native';
 
 import { fireStoreDb } from '../config/firebase';
 import {
@@ -16,16 +16,20 @@ import {
     updateDoc,
 } from 'firebase/firestore';
 
-import { PlusIcon, View, ArrowLeft, Send as SendIcon } from 'lucide-react-native';
+import { PlusIcon, ArrowLeft, Send as SendIcon, ChevronLeft } from 'lucide-react-native';
 import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
 import { renderBubble, renderSend, renderInputToolbar } from '../core/tools/chatConfigurations';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addConnectedUser } from '../store/Users';
 import { useUser } from '../contexts/UserContext';
 
 import { defaultAvatar } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+
+import PictureHeader from '../components/PictureHeader/PictureHeader';
+import { colors } from '../styles/utilities';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
@@ -34,6 +38,9 @@ const Chat = ({ navigation, route }) => {
     const [messages, setMessages] = useState([]);
     const [participants, setParticipants] = useState(chatParticipants);
     const [newParticipant, setNewParticipant] = useState(16);
+    const [receiver, setReceiver] = useState(null);
+
+    const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
 
     useEffect(() => {
         setParticipants(chatParticipants);
@@ -51,29 +58,48 @@ const Chat = ({ navigation, route }) => {
             try {
                 const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
                 if (response.status !== 200) throw new Error('Failed to fetch users');
+                setReceiver(response.data);
                 console.log('Users fetched:', response.data);
             } catch (error) {
                 console.log('Error fetching users:', error);
             }
         };
 
+        const getUserConnections = async () => {
+            try {   
+                const response = await sendRequest(requestMethods.GET, 'connections', null);
+                if (response.status !== 200) throw new Error('Failed to fetch connections');
+                dispatch(setConnectedUsers(response.data));
+            } catch (error) {
+                console.log('Error fetching connections:', error);
+            }
+        }
+        
         getUsersPicutresandNames();
     }, [participants]);
 
     useLayoutEffect(() => {
+        console.log('receiver', receiver);
         navigation.setOptions({
+            headerTitle: () => <PictureHeader picture={receiver?.picture} name={receiver?.name} />,
             headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')}>
-                    <ArrowLeft size={24} color="black" />
+                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')} style={{ marginLeft: 20 }}>
+                    <ChevronLeft size={24} color="white" />
                 </TouchableOpacity>
             ),
             headerRight: () => (
-                <TouchableOpacity onPress={addParticipant}>
-                    <PlusIcon size={24} color="black" />
+                <TouchableOpacity onPress={addParticipant} style={{ marginRight: 20 }}>
+                    <PlusIcon size={24} color="white" />
                 </TouchableOpacity>
             ),
+            headerStyle: {
+                backgroundColor: colors.bgDark,
+                height: 128,
+                shadowColor: 'transparent',
+                elevation: 0,
+            },
         });
-    }, [navigation, addParticipant, chatParticipants]);
+    }, [navigation, addParticipant, receiver]);
 
     useLayoutEffect(() => {
         let unsubscribe;
@@ -224,19 +250,45 @@ const Chat = ({ navigation, route }) => {
     });
 
     return (
-        <GiftedChat
-            messages={messages}
-            onSend={(messages) => onSend(messages)}
-            user={{
-                _id: currentUser.id,
-                // avatar: null,
-            }}
-            renderBubble={renderBubble}
-            inverted={true}
-            renderSend={renderSend}
-            renderInputToolbar={renderInputToolbar}
-            messagesContainerStyle={{ backgroundColor: '#1E1E1E', paddingTop: 8 }}
-        />
+        <>
+            <View style={{ flex: 1, position: 'relative', backgroundColor: colors.bgDark }}>
+                <GiftedChat
+                    messages={messages}
+                    onSend={(messages) => onSend(messages)}
+                    user={{
+                        _id: currentUser.id,
+                        // avatar: null,
+                    }}
+                    renderBubble={renderBubble}
+                    inverted={true}
+                    renderSend={renderSend}
+                    renderInputToolbar={() => {
+                        return null;
+                    }}
+                    messagesContainerStyle={{ backgroundColor: '#1E1E1E', paddingTop: 8 }}
+                    alignTop={true}
+                    renderActions={() => null}
+                />
+                <View style={styles.chatModal}>
+                    <ScrollView>
+
+                    </ScrollView>
+                </View>
+            </View>
+        </>
     );
 };
 export default Chat;
+
+const height = Dimensions.get('window').height;
+
+const styles = StyleSheet.create({
+    chatModal: {
+        backgroundColor: colors.bglight,
+        height: height * 0.3,
+        shadowColor: 'transparent',
+        elevation: 0,
+        bottom: 0,
+        left: 0,
+    },
+});

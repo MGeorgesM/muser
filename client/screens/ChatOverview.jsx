@@ -21,6 +21,7 @@ const ChatOverview = ({ navigation }) => {
     });
 
     useEffect(() => {
+        if (!currentUser) return;
         const chatRef = collection(fireStoreDb, 'chats');
         const q = query(chatRef, where('participantsIds', 'array-contains', currentUser.id));
 
@@ -44,7 +45,7 @@ const ChatOverview = ({ navigation }) => {
         });
 
         return () => unsubscribe;
-    }, []);
+    }, [currentUser]);
 
     return (
         <FlatList
