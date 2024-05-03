@@ -58,7 +58,7 @@ class UserController extends Controller
     //     return response()->json($users->map->full_details);
     // }
 
-    public function getUsersByRole($role)
+    public function getUsersByRole(Request $request, $role)
     {
         // $current_user_id = auth()->id();
 
@@ -71,7 +71,7 @@ class UserController extends Controller
         //             return $conn->user_one_id === $current_user_id ? $conn->user_two_id : $conn->user_one_id;
         //         })->all();
         // }
-
+            
 
         // $users = User::whereHas('role', function ($query) use ($role) {
         //     $query->where('name', $role);
@@ -102,6 +102,10 @@ class UserController extends Controller
             ->get()
             ->map->full_details;
 
+        if ($request->query('connected')) {
+            return response()->json($connectedUsers);
+        }
+
         $otherUsers = User::whereHas('role', function ($query) use ($role) {
             $query->where('name', $role);
         })
@@ -110,6 +114,9 @@ class UserController extends Controller
             ->whereNotIn('id', $connectedUserIds)
             ->get()
             ->map->full_details;
+
+        $otherUsers = $otherUsers->shuffle();
+
 
         return response()->json([
             'connectedUsers' => $connectedUsers,
@@ -169,7 +176,9 @@ class UserController extends Controller
             'user_two_id' => $sortedIds[1]
         ]);
 
-        return $this->getConnections();
+        $userTwo = User::find($userTwoId);
+
+        return response()->json(['message' => 'Connection added successfully', 'user' => $userTwo->full_details]);
     }
 
     public function disableUser($id)
