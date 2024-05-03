@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
-
-import { useUser } from '../contexts/UserContext';
-import { sendRequest, requestMethods, showsPicturesUrl, profilePicturesUrl } from '../core/tools/apiRequest';
-
-import { colors, utilities } from '../styles/utilities';
-
-import ModalHigh from '../components/Modals/ModalHigh';
 
 import { setShows } from '../store/Shows';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatDateString, truncateText } from '../core/tools/formatDate';
+import { useUser } from '../contexts/UserContext';
+
+import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+
+import ModalHigh from '../components/Modals/ModalHigh';
 import ShowVenueCard from '../components/ShowVenueCards/ShowVenueCard';
 
 const Streams = ({ navigation }) => {
@@ -61,5 +57,3 @@ const Streams = ({ navigation }) => {
 };
 
 export default Streams;
-
-const styles = StyleSheet.create({});

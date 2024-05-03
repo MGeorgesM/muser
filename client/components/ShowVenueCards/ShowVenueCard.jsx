@@ -14,8 +14,8 @@ const ShowVenueCard = ({ entity, handlePress }) => {
             <Image source={{ uri: imageUrl }} style={styles.backgroundImage} />
             <View style={styles.overlay}>
                 <View>
-                    <Text style={[styles.streamName]}>{truncateText(name)}</Text>
-                    <Text style={styles.date}>{(date && formatDateString(date)) || about}</Text>
+                    <Text style={[styles.streamName, {fontSize: band ? 18 : 20}]}>{truncateText(name)}</Text>
+                    <Text style={[styles.date, {fontSize: band ? 14 : 16}]}>{(date && formatDateString(date)) || about}</Text>
                 </View>
                 {band && (
                     <View style={styles.avatarsDisplay}>
@@ -68,12 +68,10 @@ const styles = StyleSheet.create({
         gap: 6,
     },
     streamName: {
-        fontSize: 18,
         fontWeight: 'bold',
         color: 'white',
     },
     date: {
-        fontSize: 14,
         color: 'white',
     },
 });
