@@ -53,7 +53,7 @@ const App = () => {
         <Provider store={store}>
             <NavigationContainer>
                 <UserProvider>
-                    <StatusBar translucent={true} backgroundColor="transparent" barStyle={'dark-content'} />
+                    <StatusBar translucent={true} backgroundColor="transparent" barStyle={'light-content'} />
                     <AppNavigator />
                 </UserProvider>
             </NavigationContainer>

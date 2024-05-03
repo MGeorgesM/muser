@@ -1,21 +1,25 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, StatusBar, SafeAreaView } from 'react-native';
 import React from 'react';
-import { utilities } from '../styles/utilities';
+import { colors, utilities } from '../styles/utilities';
 
+const image = require('../assets/appImages/onboard0.jpg');
 
 const Welcome = ({ navigation }) => {
-    const handleProceed = () => {};
-
     return (
-        <View style={[styles.welcomeContainer, utilities.container]}>
-            <Text style={styles.welcomeText}>BE PART OF MUSER</Text>
-            <TouchableOpacity
-                style={[utilities.primaryBtn, { marginBottom: 96 }]}
-                onPress={() => navigation.navigate('Authentication')}
-            >
-                <Text style={[utilities.primaryBtnText]}>Get Started</Text>
-            </TouchableOpacity>
-        </View>
+        <SafeAreaView style={{ flex: 1 }}>
+            {/* <StatusBar translucent hidden={true} /> */}
+            <ImageBackground style={[styles.welcomeContainer]} source={image} resizeMode="cover">
+                <View style={styles.overlay}>
+                    <Text style={styles.welcomeText}>BE PART OF MUSER</Text>
+                    <TouchableOpacity
+                        style={[utilities.primaryBtn, { marginBottom: 96 }]}
+                        onPress={() => navigation.navigate('Authentication')}
+                    >
+                        <Text style={[utilities.primaryBtnText, { color: colors.black }]}>Get Started</Text>
+                    </TouchableOpacity>
+                </View>
+            </ImageBackground>
+        </SafeAreaView>
     );
 };
 
@@ -28,9 +32,17 @@ const styles = StyleSheet.create({
     },
 
     welcomeText: {
+        color: 'white',
         fontSize: 40,
         fontWeight: 'bold',
         marginBottom: 8,
         marginLeft: 8,
+    },
+
+    overlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        justifyContent: 'flex-end',
+        paddingHorizontal: 20,
     },
 });
