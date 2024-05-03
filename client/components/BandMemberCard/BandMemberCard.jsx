@@ -7,7 +7,13 @@ import { profilePicturesUrl } from '../../core/tools/apiRequest';
 const BandMemberCard = ({ entity, navigation }) => {
     const entityImage = `${profilePicturesUrl + entity.picture}`;
     return (
-        <TouchableOpacity style={[utilities.flexRow, { marginBottom: 14, marginRight: 10 }]}>
+        <TouchableOpacity
+            style={[utilities.flexRow, { marginBottom: 14, marginRight: 10 }]}
+            onPress={() => {
+                if(!entity) return
+                navigation.navigate('Feed', { screen: 'ProfileDetails', params: { userId: entity.id } });
+            }}
+        >
             <View style={[utilities.flexRow, utilities.center]}>
                 <Image source={{ uri: entityImage }} style={styles.bandMemberPhoto} />
                 <View style={{ marginStart: 8 }}>

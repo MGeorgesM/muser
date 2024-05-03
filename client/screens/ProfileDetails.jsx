@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
@@ -6,45 +6,62 @@ import { useNavigation } from '@react-navigation/native';
 
 import { colors, utilities } from '../styles/utilities';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
+import { useSelector } from 'react-redux';
 
 const ProfileDetails = ({ route }) => {
-    const { user } = route.params;
+    const { userId } = route.params;
+    const [user, setUser] = useState({});
+    const users = useSelector((global) => global.usersSlice.users);
+
+    console.log(userId);
+
+    useEffect(() => {
+        console.log('userId', userId);
+        console.log('users', users);
+        if (userId) {
+            const foundUser = users.find((user) => user.id === userId);
+            setUser(foundUser);
+        }
+    }, [userId, users]);
+
+    console.log('user', user);
     const imageUrl = `${profilePicturesUrl + user.picture}`;
 
     const { currentUser } = useUser();
     const navigation = useNavigation();
 
-    return (
-        <View style={styles.container}>
-            <Image source={{ uri: imageUrl }} style={styles.avatar} />
-            <View style={[styles.detailContainer]}>
-                <View>
-                    <Text style={[utilities.textXL, utilities.textBold, { marginTop: 12 }]}>{user.name}</Text>
-                    <Text style={[utilities.textS, { color: colors.darkGray }]}>{user.instrument.name}</Text>
-                    <Text style={[utilities.textXS, { color: colors.gray }]}>{user.location.name}</Text>
+    if (user.name)
+        return (
+            <View style={styles.container}>
+                <Image source={{ uri: imageUrl }} style={styles.avatar} />
+                <View style={[styles.detailContainer]}>
+                    <View>
+                        <Text style={[utilities.textXL, utilities.textBold, { marginTop: 12 }]}>{user.name}</Text>
+                        <Text style={[utilities.textS, { color: colors.darkGray }]}>{user.instrument.name}</Text>
+                        <Text style={[utilities.textXS, { color: colors.gray }]}>{user.location.name}</Text>
+                    </View>
+                    <View>
+                        <Text style={[utilities.textS, utilities.textBold, styles.profileDetailsHeader]}>Bio</Text>
+                        <Text style={[utilities.textM, { color: colors.darkGray }]}>{user.about}</Text>
+                        <Text style={[utilities.textS, utilities.textBold, styles.profileDetailsHeader]}>Details</Text>
+                        <Text style={[utilities.textM, { color: colors.darkGray }]}>Skils and Details</Text>
+                    </View>
+                    <TouchableOpacity style={[utilities.secondaryBtn, { marginTop: 32 }]}>
+                        <Text
+                            style={utilities.secondaryBtnText}
+                            onPress={() =>
+                                navigation.navigate('Chat', {
+                                    screen: 'ChatDetails',
+                                    params: { chatParticipants: [currentUser.id, user.id].sort() },
+                                })
+                            }
+                        >
+                            Say Hello!
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-                <View>
-                    <Text style={[utilities.textS, utilities.textBold, styles.profileDetailsHeader]}>Bio</Text>
-                    <Text style={[utilities.textM, { color: colors.darkGray }]}>{user.about}</Text>
-                    <Text style={[utilities.textS, utilities.textBold, styles.profileDetailsHeader]}>Details</Text>
-                    <Text style={[utilities.textM, { color: colors.darkGray }]}>Skils and Details</Text>
-                </View>
-                <TouchableOpacity style={[utilities.secondaryBtn, { marginTop: 32 }]}>
-                    <Text
-                        style={utilities.secondaryBtnText}
-                        onPress={() =>
-                            navigation.navigate('Chat', {
-                                screen: 'ChatDetails',
-                                params: { chatParticipants: [currentUser.id, user.id].sort() },
-                            })
-                        }
-                    >
-                        Say Hello!
-                    </Text>
-                </TouchableOpacity>
             </View>
-        </View>
-    );
+        );
 };
 
 export default ProfileDetails;

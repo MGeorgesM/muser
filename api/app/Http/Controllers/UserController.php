@@ -60,6 +60,28 @@ class UserController extends Controller
 
     public function getUsersByRole($role)
     {
+        // $current_user_id = auth()->id();
+
+        // $connectedUserIds = [];
+        // if ($role === 'musician') {
+        //     $connectedUserIds = Connection::where('user_one_id', $current_user_id)
+        //         ->orWhere('user_two_id', $current_user_id)
+        //         ->get()
+        //         ->map(function ($conn) use ($current_user_id) {
+        //             return $conn->user_one_id === $current_user_id ? $conn->user_two_id : $conn->user_one_id;
+        //         })->all();
+        // }
+
+
+        // $users = User::whereHas('role', function ($query) use ($role) {
+        //     $query->where('name', $role);
+        // })->where('is_active', 1)
+        //     ->where('id', '!=', $current_user_id)
+        //     ->whereNotIn('id', $connectedUserIds)
+        //     ->get();
+
+        // return response()->json($users->map->full_details);
+
         $current_user_id = auth()->id();
 
         $connectedUserIds = [];
@@ -72,15 +94,27 @@ class UserController extends Controller
                 })->all();
         }
 
+        $connectedUsers = User::whereIn('id', $connectedUserIds)
+            ->whereHas('role', function ($query) use ($role) {
+                $query->where('name', $role);
+            })
+            ->where('is_active', 1)
+            ->get()
+            ->map->full_details;
 
-        $users = User::whereHas('role', function ($query) use ($role) {
+        $otherUsers = User::whereHas('role', function ($query) use ($role) {
             $query->where('name', $role);
-        })->where('is_active', 1)
+        })
+            ->where('is_active', 1)
             ->where('id', '!=', $current_user_id)
             ->whereNotIn('id', $connectedUserIds)
-            ->get();
+            ->get()
+            ->map->full_details;
 
-        return response()->json($users->map->full_details);
+        return response()->json([
+            'connectionUsers' => $connectedUsers,
+            'feedUsers' => $otherUsers
+        ]);
     }
 
 
