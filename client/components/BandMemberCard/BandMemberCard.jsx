@@ -18,8 +18,8 @@ const BandMemberCard = ({ entity, handlePress }) => {
             <View style={[utilities.flexRow, utilities.center]}>
                 <Image source={{ uri: entityImage }} style={styles.bandMemberPhoto} />
                 <View style={{ marginStart: 8 }}>
-                    <Text style={[utilities.textM, utilities.textBold, { color: colors.white }]}>{entity.name}</Text>
-                    <Text style={[utilities.textXS, { color: colors.gray }]}>{entity.instrument.name}</Text>
+                    <Text style={[utilities.textM, utilities.textBold, { color: colors.white }]}>{entity?.name}</Text>
+                    <Text style={[utilities.textXS, { color: colors.gray }]}>{entity?.instrument?.name}</Text>
                 </View>
             </View>
         </TouchableOpacity>

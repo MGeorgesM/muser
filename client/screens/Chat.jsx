@@ -20,7 +20,7 @@ import { PlusIcon, ArrowLeft, Send as SendIcon, ChevronLeft } from 'lucide-react
 import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
 import { renderBubble, renderSend, renderInputToolbar } from '../core/tools/chatConfigurations';
 
-import { addConnectedUser, setConnectUsers } from '../store/Users';
+import { addConnectedUser, setConnectedUsers } from '../store/Users';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUser } from '../contexts/UserContext';
 
@@ -29,8 +29,10 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import { colors, utilities } from '../styles/utilities';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
+
+import { CircleCheckBig, CircleX } from 'lucide-react-native';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
@@ -43,6 +45,9 @@ const Chat = ({ navigation, route }) => {
 
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
+    const [bandModalVisible, setBandModalVisible] = useState(true);
+
+    const [bandName, setBandName] = useState('');
 
     const dispatch = useDispatch();
 
@@ -71,7 +76,7 @@ const Chat = ({ navigation, route }) => {
 
         const getUserConnections = async () => {
             try {
-                const response = await sendRequest(requestMethods.GET, 'connections', null);
+                const response = await sendRequest(requestMethods.GET, 'users/type/musician?connected=true', null);
                 if (response.status !== 200) throw new Error('Failed to fetch connections');
                 console.log('Connections fetched:', response.data);
                 dispatch(setConnectedUsers(response.data));
@@ -90,21 +95,20 @@ const Chat = ({ navigation, route }) => {
             headerTitle: () => {
                 return <PictureHeader picture={receiver?.picture} name={receiver?.name} />;
             },
-            // headerLeft: () => (
-            //     <TouchableOpacity onPress={() => navigation.navigate('ChatMain')} style={{ marginLeft: 20 }}>
-            //         <ChevronLeft size={24} color="white" />
-            //     </TouchableOpacity>
-            // ),
+            headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')} style={{ marginLeft: 20 }}>
+                    <ChevronLeft size={24} color="white" />
+                </TouchableOpacity>
+            ),
             headerRight: () => (
-                <TouchableOpacity
-                    onPress={() => setConnectionModalVisible(true)}
-                    style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', gap: 8 }}
-                >
+                <View style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', gap: 8 }}>
                     <Pressable style={styles.bandBtn}>
                         <Text style={styles.bandBtnText}>Band</Text>
                     </Pressable>
-                    <PlusIcon size={24} color="white" />
-                </TouchableOpacity>
+                    <Pressable onPress={() => setConnectionModalVisible(true)}>
+                        <PlusIcon size={24} color="white" />
+                    </Pressable>
+                </View>
             ),
             headerStyle: {
                 backgroundColor: colors.bgDark,
@@ -263,6 +267,22 @@ const Chat = ({ navigation, route }) => {
         setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
     });
 
+    const handleFormBand = async () => {
+        if (bandName.length > 0) {
+            const chatRef = await getChat();
+            if (chatRef) {
+                try {
+                    await updateDoc(chatRef, {
+                        bandName,
+                    });
+                    setBandModalVisible(false);
+                } catch (error) {
+                    console.error('Error adding band name:', error);
+                }
+            }
+        }
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: colors.bgDark }}>
             <GiftedChat
@@ -276,7 +296,7 @@ const Chat = ({ navigation, route }) => {
                 inverted={true}
                 renderSend={renderSend}
                 renderInputToolbar={() => {
-                    if (connectionModalVisible) return null;
+                    if (connectionModalVisible || bandModalVisible) return null;
                     return renderInputToolbar();
                 }}
                 messagesContainerStyle={{ backgroundColor: colors.bgDark, paddingTop: 8 }}
@@ -295,6 +315,26 @@ const Chat = ({ navigation, route }) => {
                         keyExtractor={(item) => item.id}
                         showsVerticalScrollIndicator={false}
                     />
+                </View>
+            )}
+            {bandModalVisible && (
+                <View style={styles.chatModal}>
+                    <Text style={[utilities.textL, utilities.textCenter, { marginBottom: 16 }]}>Form Your Band</Text>
+                    <View style={styles.bandInputContainer}>
+                        <TextInput
+                            style={[styles.formBandInput]}
+                            placeholder="Band name"
+                            placeholderTextColor="#ADADAD"
+                            value={bandName}
+                            onChangeText={(text) => setBandName(text)}
+                        />
+                        {
+                            <Pressable onPress={handleFormBand}>
+                                (bandName.length > 0 && <CircleCheckBig size={24} color={colors.white} />) || (
+                                <CircleX size={24} color={colors.white} />)
+                            </Pressable>
+                        }
+                    </View>
                 </View>
             )}
         </View>
@@ -328,5 +368,22 @@ const styles = StyleSheet.create({
         color: colors.black,
         fontSize: 16,
         fontWeight: 'bold',
+    },
+
+    bandInputContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 24,
+        marginTop: 24,
+    },
+
+    formBandInput: {
+        fontSize: 16,
+        color: colors.white,
+        height: 48,
+        textAlign: 'center',
+        // borderBottomColor: colors.white,
+        // borderBottomWidth: 0.5,
     },
 });

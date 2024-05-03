@@ -9,7 +9,7 @@ const usersSlice = createSlice({
     name: 'usersSlice',
     initialState,
     reducers: {
-        setConnectUsers(state, action) {
+        setConnectedUsers(state, action) {
             state.connectedUsers = action.payload;
         },
         setFeedUsers(state, action) {
@@ -26,6 +26,6 @@ const usersSlice = createSlice({
     },
 });
 
-export const { setConnectUsers, setFeedUsers, addConnectedUser } = usersSlice.actions;
+export const { setConnectedUsers, setFeedUsers, addConnectedUser } = usersSlice.actions;
 export const usersSliceName = usersSlice.name;
 export default usersSlice.reducer;
