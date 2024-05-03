@@ -4,10 +4,9 @@ import { colors } from '../../styles/utilities';
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-
     },
     scrollContainer: {
-        flex:1,
+        flex: 1,
         flexGrow: 1,
         justifyContent: 'space-between',
         paddingHorizontal: 20,
@@ -65,9 +64,11 @@ export const styles = StyleSheet.create({
     },
 
     userTypePrompt: {
+        marginTop: -24,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        gap: 16,
     },
 
     userTypePicker: {
@@ -115,9 +116,7 @@ export const styles = StyleSheet.create({
     },
     errorText: {
         fontSize: 16,
-        textAlign:'center',
+        textAlign: 'center',
         marginBottom: 10,
     },
-
-
 });

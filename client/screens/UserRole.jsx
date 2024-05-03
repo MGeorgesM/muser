@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Image, View, Text, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 
 import { useUser } from '../contexts/UserContext';
 
@@ -23,14 +24,26 @@ const UserRole = ({ navigation }) => {
                     <Text style={styles.header}>What Brings You to Muser?</Text>
                     <View style={styles.userTypePrompt}>
                         <Text style={styles.userTypeText}>I'm a</Text>
-                        <Picker
-                            style={styles.userTypePicker}
-                            selectedValue={userInfo.role_id}
-                            onValueChange={(itemValue) => setUserInfo((prev) => ({ ...prev, role_id: itemValue }))}
-                        >
-                            <Picker.Item label="Musician" value="1" style={styles.pickerItem} />
-                            <Picker.Item label="Venue" value="2" style={styles.pickerItem} />
-                        </Picker>
+                        <RNPickerSelect
+                            value="1"
+                            onValueChange={(value) => setUserInfo((prev) => ({ ...prev, role_id: value }))}
+                            items={[
+                                { label: 'Musician', value: '1', color: 'black' },
+                                { label: 'Venue', value: '2', color: 'black' },
+                            ]}
+                            placeholder={{}}
+                            style={{
+                                inputAndroid: {
+                                    fontSize: 24,
+                                    color: 'white',
+                                },
+                                viewContainer: {
+                                    flex: 1,
+                                    paddingLeft: 10,
+                                },
+                            }}
+                            useNativeAndroidPickerStyle={false}
+                        />
                     </View>
                 </View>
                 <View style={styles.bottomInnerContainer}>
