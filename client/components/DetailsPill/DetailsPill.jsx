@@ -1,22 +1,18 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-const DetailsPill = ({ label, items, handlePress }) => {
-    const [selected, setSelected] = useState(false);
+import { colors } from '../../styles/utilities';
 
-    const togglePill = () => {
-        setSelected(!selected);
-        handlePress(item);
-    };
-
+const DetailsPill = ({ label, item, handlePress, isSelected }) => {
     return (
-        <TouchableOpacity style={[styles.detailPill]} onPress={togglePill} >
-            <Text style={styles.detail}>{}</Text>
+        <TouchableOpacity
+            style={[styles.detailPill, { backgroundColor: isSelected ? colors.lightGray : 'transparent' }]}
+            onPress={() => handlePress(item.id)}
+        >
+            <Text style={[styles.detail, { color: isSelected ? colors.black : 'white' }]}>{item.name}</Text>
         </TouchableOpacity>
     );
 };
-
-export default DetailsPill;
 
 const styles = StyleSheet.create({
     detailPill: {
@@ -25,10 +21,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: !selected ? colors.primary : colors.lightGray,
+        borderColor: colors.lightGray,
+        borderWidth: 0.25,
     },
-
     detail: {
-        color: !selected ? 'white' : 'black',
+        fontSize: 16,
     },
 });
+
+export default DetailsPill;

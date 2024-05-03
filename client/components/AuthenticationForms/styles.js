@@ -83,8 +83,9 @@ export const styles = StyleSheet.create({
 
     userInfoContainer: {
         flex: 1,
+        justifyContent: 'space-between',
         paddingHorizontal: 20,
-        justifyContent: 'center',
+        paddingTop: 80,
         backgroundColor: colors.bgDark,
     },
     headerContainer: {
@@ -93,6 +94,13 @@ export const styles = StyleSheet.create({
         marginVertical: 16,
         gap: 16,
     },
+
+    userInfoHeaderContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 16,
+    },
+
     headerProfile: {
         color: 'white',
         fontSize: 24,
@@ -103,7 +111,7 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: 32,
+        marginVertical: 40,
     },
     addPhotoText: {
         color: 'white',
@@ -115,6 +123,13 @@ export const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'left',
+    },
+    genresContainer: {
+        marginTop: 16,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        gap: 10,
     },
     errorText: {
         color: colors.primary,

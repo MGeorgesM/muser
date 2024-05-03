@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
+import { Text, TextInput, Image, TouchableOpacity, View, StyleSheet } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
 
 import { useUser } from '../contexts/UserContext';
 import { requestMethods, sendRequest } from '../core/tools/apiRequest';
 
-import { CirclePlus, Plus, ArrowLeft } from 'lucide-react-native';
+import { CirclePlus, Plus, ArrowLeft, ChevronLeft } from 'lucide-react-native';
 
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, utilities } from '../styles/utilities';
 import BackBtn from '../components/Elements/BackBtn';
+import DetailsPill from '../components/DetailsPill/DetailsPill';
 
 const { styles } = require('../components/AuthenticationForms/styles');
 
@@ -156,68 +157,92 @@ const UserInfo = ({ navigation }) => {
             setError('Failed to register user');
         }
     };
-
+    const handlePress = (genreId) => {
+        let newGenres = [];
+        if (userInfo.genres.includes(genreId)) {
+            newGenres = userInfo.genres.filter((id) => id !== genreId);
+        } else {
+            newGenres = [...userInfo.genres, genreId];
+        }
+        setUserInfo((prev) => ({ ...prev, genres: newGenres }));
+    };
     return (
         <View style={styles.userInfoContainer}>
-            <BackBtn color="white" backgroundColor="transparent" />
-            <View style={styles.headerContainer}>
-                <Text style={styles.headerProfile}>Complete Your Profile</Text>
-            </View>
-            <View style={styles.addPhotoPrompt}>
-                {selectedPicture ? (
-                    <>
-                        <Image
-                            source={{ uri: selectedPicture.assets[0].uri }}
-                            style={{ width: 100, height: 100, borderRadius: 50 }}
-                        />
-                    </>
-                ) : (
-                    <Text style={styles.addPhotoText}>Add a Photo</Text>
-                )}
-                <TouchableOpacity onPress={handleImagePicker}>
-                    <CirclePlus size={50} color={'white'} />
-                </TouchableOpacity>
-            </View>
             <View>
-                <Text style={styles.inputTextProfile}>{userInfo.role_id == 2 ? 'Description' : 'Bio'}</Text>
-                <TextInput
-                    placeholder="Tell us about yourself!"
-                    style={{ marginBottom: 20, color: colors.lightGray }}
-                    value={userInfo.about}
-                    onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
-                />
-                {userInfo.role_id == 2 && (
-                    <>
-                        <Text style={styles.inputTextProfile}>Venue Name</Text>
-                        <TextInput
-                            placeholder="Venue Name"
-                            style={{ marginBottom: 20 }}
-                            value={userInfo.venue_name}
-                            onChangeText={(text) => setUserInfo((prev) => ({ ...prev, venue_name: text }))}
-                        />
-                    </>
-                )}
-
+                <View style={styles.userInfoHeaderContainer}>
+                    <ChevronLeft size={24} color={'white'} />
+                    <Text style={styles.headerProfile}>Complete Your Profile</Text>
+                </View>
+                <View style={styles.addPhotoPrompt}>
+                    {selectedPicture ? (
+                        <>
+                            <Image
+                                source={{ uri: selectedPicture.assets[0].uri }}
+                                style={{ width: 100, height: 100, borderRadius: 50 }}
+                            />
+                        </>
+                    ) : (
+                        <Text style={styles.addPhotoText}>Add a Photo</Text>
+                    )}
+                    <TouchableOpacity onPress={handleImagePicker}>
+                        <CirclePlus size={50} color={'white'} />
+                    </TouchableOpacity>
+                </View>
                 <View>
-                    {Object.keys(profileProperties).length > 0 &&
-                        Object.keys(profileProperties).map((key) => {
-                            if (key === 'Music Genres') {
-                                return;
-                            }
-                            return (
-                                <ProfileDetailsPicker
-                                    key={key}
-                                    label={key}
-                                    items={profileProperties[key]}
-                                    selectedValue={
-                                        key === 'Venue Type'
-                                            ? userInfo['venue_type_id']
-                                            : userInfo[key.toLowerCase() + '_id']
-                                    }
-                                    onValueChange={(value) => handlePickerChange(key, value)}
-                                />
-                            );
-                        })}
+                    <Text style={styles.inputTextProfile}>{userInfo.role_id == 2 ? 'Description' : 'Bio'}</Text>
+                    <TextInput
+                        placeholder="Tell us about yourself!"
+                        style={{ marginBottom: 20, color: colors.lightGray }}
+                        value={userInfo.about}
+                        onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
+                    />
+                    {userInfo.role_id == 2 && (
+                        <>
+                            <Text style={styles.inputTextProfile}>Venue Name</Text>
+                            <TextInput
+                                placeholder="Venue Name"
+                                style={{ marginBottom: 20 }}
+                                value={userInfo.venue_name}
+                                onChangeText={(text) => setUserInfo((prev) => ({ ...prev, venue_name: text }))}
+                            />
+                        </>
+                    )}
+
+                    <View>
+                        {Object.keys(profileProperties).length > 0 &&
+                            Object.keys(profileProperties).map((key) => {
+                                if (key === 'Music Genres') {
+                                    return (
+                                        <>
+                                            <Text style={styles.inputTextProfile}>Music Genres</Text>
+                                            <View style={styles.genresContainer}>
+                                                {profileProperties[key].map((genre) => (
+                                                    <DetailsPill
+                                                        key={genre.id}
+                                                        item={genre}
+                                                        handlePress={handlePress}
+                                                        isSelected={userInfo.genres.includes(genre.id)}
+                                                    />
+                                                ))}
+                                            </View>
+                                        </>
+                                    );
+                                }
+                                return (
+                                    <ProfileDetailsPicker
+                                        key={key}
+                                        label={key}
+                                        items={profileProperties[key]}
+                                        selectedValue={
+                                            key === 'Venue Type'
+                                                ? userInfo['venue_type_id']
+                                                : userInfo[key.toLowerCase() + '_id']
+                                        }
+                                        onValueChange={(value) => handlePickerChange(key, value)}
+                                    />
+                                );
+                            })}
+                    </View>
                 </View>
             </View>
             <View style={styles.bottomInnerContainer}>
