@@ -11,6 +11,8 @@ import { CirclePlus, Plus, ArrowLeft } from 'lucide-react-native';
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { colors, utilities } from '../styles/utilities';
+import BackBtn from '../components/Elements/BackBtn';
 
 const { styles } = require('../components/AuthenticationForms/styles');
 
@@ -157,10 +159,8 @@ const UserInfo = ({ navigation }) => {
 
     return (
         <View style={styles.userInfoContainer}>
+            <BackBtn color="white" backgroundColor="transparent" />
             <View style={styles.headerContainer}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <ArrowLeft size={24} color="black" />
-                </TouchableOpacity>
                 <Text style={styles.headerProfile}>Complete Your Profile</Text>
             </View>
             <View style={styles.addPhotoPrompt}>
@@ -175,14 +175,14 @@ const UserInfo = ({ navigation }) => {
                     <Text style={styles.addPhotoText}>Add a Photo</Text>
                 )}
                 <TouchableOpacity onPress={handleImagePicker}>
-                    <CirclePlus size={50} color={'black'} />
+                    <CirclePlus size={50} color={'white'} />
                 </TouchableOpacity>
             </View>
             <View>
                 <Text style={styles.inputTextProfile}>{userInfo.role_id == 2 ? 'Description' : 'Bio'}</Text>
                 <TextInput
                     placeholder="Tell us about yourself!"
-                    style={{ marginBottom: 20 }}
+                    style={{ marginBottom: 20, color: colors.lightGray }}
                     value={userInfo.about}
                     onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
                 />
@@ -222,8 +222,8 @@ const UserInfo = ({ navigation }) => {
             </View>
             <View style={styles.bottomInnerContainer}>
                 <Text style={styles.errorText}>{error}</Text>
-                <TouchableOpacity style={styles.primaryBtn}>
-                    <Text style={styles.primaryBtnText} onPress={handleSignUp}>
+                <TouchableOpacity style={[utilities.primaryBtn]}>
+                    <Text style={[utilities.primaryBtnText]} onPress={handleSignUp}>
                         Register
                     </Text>
                 </TouchableOpacity>

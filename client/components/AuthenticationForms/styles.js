@@ -58,6 +58,7 @@ export const styles = StyleSheet.create({
     },
     userTypeText: {
         fontSize: 24,
+        paddingRight: 12,
         color: colors.primary,
         fontWeight: 'bold',
         alignSelf: 'center',
@@ -68,7 +69,6 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 16,
     },
 
     userTypePicker: {
@@ -82,10 +82,10 @@ export const styles = StyleSheet.create({
     },
 
     userInfoContainer: {
-        height: '100%',
+        flex: 1,
         paddingHorizontal: 20,
-        marginTop: 32,
         justifyContent: 'center',
+        backgroundColor: colors.bgDark,
     },
     headerContainer: {
         flexDirection: 'row',
@@ -94,6 +94,7 @@ export const styles = StyleSheet.create({
         gap: 16,
     },
     headerProfile: {
+        color: 'white',
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'left',
@@ -105,16 +106,18 @@ export const styles = StyleSheet.create({
         marginBottom: 32,
     },
     addPhotoText: {
+        color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
     },
     inputTextProfile: {
-        color: 'black',
+        color: 'white',
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'left',
     },
     errorText: {
+        color: colors.primary,
         fontSize: 16,
         textAlign: 'center',
         marginBottom: 10,

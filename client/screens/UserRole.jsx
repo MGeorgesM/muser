@@ -6,6 +6,8 @@ import { useUser } from '../contexts/UserContext';
 
 import { utilities } from '../styles/utilities';
 
+import { ChevronDown } from 'lucide-react-native';
+
 import BackBtn from '../components/Elements/BackBtn';
 
 const logoImg = require('../assets/logowhite.png');
@@ -14,7 +16,6 @@ const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserRole = ({ navigation }) => {
     const { userInfo, setUserInfo } = useUser();
-
     return (
         <ImageBackground source={imageSource} style={{ flex: 1 }} resizeMode="cover">
             <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -44,6 +45,7 @@ const UserRole = ({ navigation }) => {
                             }}
                             useNativeAndroidPickerStyle={false}
                         />
+                        <ChevronDown size={24} color="white" style={{marginTop:4, marginLeft:6}} />
                     </View>
                 </View>
                 <View style={styles.bottomInnerContainer}>
