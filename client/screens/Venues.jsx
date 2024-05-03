@@ -4,6 +4,8 @@ import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react
 import { setVenues } from '../store/Venues';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { formatDateString, truncateText } from '../core/tools/formatDate';
+
 import { ChevronLeft } from 'lucide-react-native';
 import { colors, utilities } from '../styles/utilities';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
@@ -16,7 +18,6 @@ const Venues = ({ navigation }) => {
 
     useEffect(() => {
         const getVenues = async () => {
-            console.log('Fetching venues');
             try {
                 const response = await sendRequest(requestMethods.GET, 'users/type/venue', null);
                 if (response.status !== 200) throw new Error('Failed to fetch venues');
@@ -28,25 +29,27 @@ const Venues = ({ navigation }) => {
         getVenues();
     }, []);
 
-    const StreamCard = ({ entity, navigation }) => {
-        const { picture, about, name, location, venueType, date } = entity;
+    const StreamCard = ({ entity, handleNavigation }) => {
+        
+        const { picture, about, name, location, venueType, band, date } = entity;
         const imageUrl = `${profilePicturesUrl + picture}`;
+
         return (
-            <TouchableOpacity
-                style={styles.cardContainer}
-                onPress={() => navigation.navigate('VenueDetails', { entity })}
-            >
+            <TouchableOpacity style={styles.cardContainer} onPress={handleNavigation}>
                 <Image source={{ uri: imageUrl }} style={styles.backgroundImage} />
                 <View style={styles.overlay}>
                     <View>
-                        <Text style={[styles.streamName]}>{name}</Text>
-
-                        <Text style={styles.date}>{date || about}</Text>
+                        <Text style={[styles.streamName]}>{truncateText(name)}</Text>
+                        <Text style={styles.date}>{date && formatDateString(date) || about}</Text>
                     </View>
-                    {date && (
+                    {band && (
                         <View style={styles.avatarsDisplay}>
-                            {show.band.members.map((member) => (
-                                <Image source={member.avatar} style={{ width: 32, height: 32, borderRadius: 16 }} />
+                            {band.members.map((member) => (
+                                <Image
+                                    key={member.id}
+                                    source={{ uri: profilePicturesUrl + member.picture }}
+                                    style={{ width: 32, height: 32, borderRadius: 16 }}
+                                />
                             ))}
                         </View>
                     )}
@@ -59,7 +62,9 @@ const Venues = ({ navigation }) => {
             title="Venues"
             navigation={navigation}
             items={venues}
-            renderItem={({ item }) => <StreamCard entity={item} navigation={navigation} />}
+            renderItem={({ item }) => (
+                <StreamCard entity={item} handleNavigation={() => navigation.navigate('VenueDetails', { item })} />
+            )}
         />
     );
 };

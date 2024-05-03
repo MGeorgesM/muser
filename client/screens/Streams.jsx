@@ -11,6 +11,7 @@ import ModalHigh from '../components/Modals/ModalHigh';
 import { setShows } from '../store/Shows';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDateString, truncateText } from '../core/tools/formatDate';
+import ShowVenueCard from '../components/ShowVenueCards/ShowVenueCard';
 
 const Streams = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -19,7 +20,6 @@ const Streams = ({ navigation }) => {
     const { currentUser } = useUser();
 
     const shows = useSelector((global) => global.showsSlice.shows);
-
 
     useEffect(() => {
         currentUser.role.id === 2 ? setUserIsVenue(true) : setUserIsVenue(false);
@@ -32,7 +32,7 @@ const Streams = ({ navigation }) => {
                     null
                 );
                 if (response.status !== 200) throw new Error('Failed to fetch shows');
-   
+
                 dispatch(setShows(response.data));
             } catch (error) {
                 console.log('Error fetching shows:', error);
@@ -42,87 +42,24 @@ const Streams = ({ navigation }) => {
         getShows();
     }, [userIsVenue]);
 
-    const StreamCard = ({ show }) => {
-        return (
-            <TouchableOpacity
-                style={styles.cardContainer}
-                onPress={() => {
-                    userIsVenue
-                        ? navigation.navigate('StreamBroadcast', { showId: show.id })
-                        : navigation.navigate('StreamView', { show });
-                }}
-            >
-                <Image source={{ uri: showsPicturesUrl + show.picture }} style={styles.backgroundImage} />
-                <View style={styles.overlay}>
-                    <View>
-                        <Text style={[styles.streamName]}>{truncateText(show.name)}</Text>
-
-                        <Text style={styles.date}>{formatDateString(show.date)}</Text>
-                    </View>
-                    <View style={styles.avatarsDisplay}>
-                        {show.band.members.map((member) => (
-                            <Image
-                                key={member.id}
-                                source={{ uri: profilePicturesUrl + member.picture }}
-                                style={{ width: 32, height: 32, borderRadius: 16 }}
-                            />
-                        ))}
-                    </View>
-                </View>
-            </TouchableOpacity>
-        );
+    const handleCardPress = (show) => {
+        userIsVenue
+            ? navigation.navigate('StreamBroadcast', { showId: show.id })
+            : navigation.navigate('StreamView', { show });
     };
+
     return (
         <ModalHigh
             title="Upcoming Shows"
             navigation={navigation}
             items={shows}
-            renderItem={({ item }) => <StreamCard key={item.id} show={item} />}
+            renderItem={({ item }) => (
+                <ShowVenueCard key={item.id} entity={item} handlePress={() => handleCardPress(item)} />
+            )}
         />
     );
 };
 
 export default Streams;
 
-const styles = StyleSheet.create({
-    cardContainer: {
-        width: '100%',
-        height: 180,
-        overflow: 'hidden',
-        position: 'relative',
-        borderRadius: utilities.borderRadius.m,
-        marginBottom: 16,
-    },
-    backgroundImage: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-    },
-    overlay: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '50%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        padding: 16,
-        justifyContent: 'space-between',
-    },
-    avatarsDisplay: {
-        position: 'absolute',
-        right: 20,
-        bottom: 12,
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 6,
-    },
-    streamName: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-    date: {
-        fontSize: 14,
-        color: 'white',
-    },
-});
+const styles = StyleSheet.create({});
