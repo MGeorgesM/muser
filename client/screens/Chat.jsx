@@ -24,7 +24,7 @@ import { addConnectedUser, setConnectedUsers } from '../store/Users';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUser } from '../contexts/UserContext';
 
-import { defaultAvatar } from '../core/tools/apiRequest';
+import { defaultAvatar, profilePicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import PictureHeader from '../components/PictureHeader/PictureHeader';
@@ -120,6 +120,20 @@ const Chat = ({ navigation, route }) => {
         });
     }, [navigation, addParticipant, receiver]);
 
+    getReceiverPicture = (userId) => {
+        console.log('getting receivers pictures', userId);
+
+        if (receiver.length > 1) {
+            let picture = null;
+            const imageFromDb = receiver?.find((user) => user.id === userId);
+            if (imageFromDb) {
+                picture = `${profilePicturesUrl + imageFromDb.picture}`;
+                console.log('Image from db:', picture);
+                return picture;
+            }
+        }
+    };
+
     useLayoutEffect(() => {
         let unsubscribe;
 
@@ -137,7 +151,7 @@ const Chat = ({ navigation, route }) => {
                     createdAt: doc.data().createdAt.toDate(),
                     user: {
                         _id: doc.data().userId,
-                        avatar: participants.length === 2 ? null : defaultAvatar,
+                        avatar: participants.length === 2 ? null : getReceiverPicture(doc.data().userId),
                     },
                 }));
                 setMessages(fetchedMessages);
@@ -178,6 +192,7 @@ const Chat = ({ navigation, route }) => {
     };
 
     const addParticipant = async (newParticipantId) => {
+        console.log('adding participant');
         if (newParticipantId && !participants.includes(newParticipantId)) {
             const chatRef = await getChat();
             if (chatRef) {
@@ -195,6 +210,7 @@ const Chat = ({ navigation, route }) => {
                 }
             }
         }
+        setConnectionModalVisible(false);
     };
 
     const addConnection = async () => {
