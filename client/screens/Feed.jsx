@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
-import { setConnectUsers, setFeedUsers, setUsers } from '../store/Users';
+import { setConnectedUsers, setFeedUsers, setUsers } from '../store/Users';
 import { useUser } from '../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -24,7 +24,7 @@ const Feed = ({ navigation }) => {
         try {
             const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
             if (response.status !== 200) throw new Error('Failed to fetch users');
-            dispatch(setConnectUsers(response.data.connectedUsers));
+            dispatch(setConnectedUsers(response.data.connectedUsers));
             dispatch(setFeedUsers(response.data.feedUsers));
         } catch (error) {
             console.log('Error fetching users:', error);

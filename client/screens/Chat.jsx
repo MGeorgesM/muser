@@ -45,7 +45,7 @@ const Chat = ({ navigation, route }) => {
 
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
-    const [bandModalVisible, setBandModalVisible] = useState(true);
+    const [bandModalVisible, setBandModalVisible] = useState(false);
 
     const [bandName, setBandName] = useState('');
 
@@ -273,14 +273,78 @@ const Chat = ({ navigation, route }) => {
             if (chatRef) {
                 try {
                     await updateDoc(chatRef, {
-                        bandName,
+                        chatTitle: bandName,
                     });
-                    setBandModalVisible(false);
                 } catch (error) {
-                    console.error('Error adding band name:', error);
+                    console.log('Error adding band name:', error);
+                }
+
+                // const messageRef = collection(chatRef, 'messages');
+
+                // const messageDocRef = await addDoc(messageRef, {
+                //     _id: `${currentUser.id}-${Date.now()}-${bandName}`,
+                //     text: `${currentUser.name} has formed the band ${bandName}`,
+                //     createdAt: serverTimestamp(),
+                //     userId: currentUser.id,
+                // });
+
+                // await updateDoc(chatRef, {
+                //     lastMessage: {
+                //         messageId: messageDocRef.id,
+                //         text,
+                //         createdAt,
+                //         userId,
+                //     },
+                // });
+                try {
+                    const response = await sendRequest(requestMethods.POST, `bands`, {
+                        name: bandName,
+                        members: participants,
+                    });
+                    if (response.status !== 200) throw new Error('Failed to create band');
+                    console.log('Band created:', response.data);
+                } catch (error) {
+                    console.error('Error creating band:', error);
                 }
             }
         }
+
+        setBandModalVisible(false);
+    };
+
+    function renderComposer(props) {
+        return (
+            <Composer
+                {...props}
+                textInputStyle={{
+                    color: '#fff',
+                    marginEnd: 8,
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                    backgroundColor: 'transparent',
+                }}
+            />
+        );
+    }
+
+    function renderInputToolbar(props) {
+        if (connectionModalVisible || bandModalVisible) return null;
+
+        return (
+            <InputToolbar
+                {...props}
+                containerStyle={{
+                    backgroundColor: '#1E1E1E',
+                    padding: 6,
+                    borderTopColor: '#fff',
+                    borderTopWidth: 0.5,
+                    borderBottomColor: '#fff',
+                    borderBottomWidth: 0.5,
+                }}
+                renderComposer={renderComposer}
+                primaryStyle={{ alignItems: 'center', justifyContent: 'center' }}
+            />
+        );
     }
 
     return (
@@ -295,10 +359,8 @@ const Chat = ({ navigation, route }) => {
                 renderBubble={renderBubble}
                 inverted={true}
                 renderSend={renderSend}
-                renderInputToolbar={() => {
-                    if (connectionModalVisible || bandModalVisible) return null;
-                    return renderInputToolbar();
-                }}
+                renderInputToolbar={renderInputToolbar}
+                // renderInputToolbar={renderInputToolbar}
                 messagesContainerStyle={{ backgroundColor: colors.bgDark, paddingTop: 8 }}
                 alignTop={true}
                 renderActions={() => null}
@@ -328,12 +390,13 @@ const Chat = ({ navigation, route }) => {
                             value={bandName}
                             onChangeText={(text) => setBandName(text)}
                         />
-                        {
-                            <Pressable onPress={handleFormBand}>
-                                (bandName.length > 0 && <CircleCheckBig size={24} color={colors.white} />) || (
-                                <CircleX size={24} color={colors.white} />)
-                            </Pressable>
-                        }
+                        <Pressable onPress={handleFormBand}>
+                            {bandName.length > 0 ? (
+                                <CircleCheckBig size={32} color={colors.white} />
+                            ) : (
+                                <CircleX size={32} color={colors.white} />
+                            )}
+                        </Pressable>
                     </View>
                 </View>
             )}
