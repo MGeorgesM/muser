@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, ScrollView, TextInput, TouchableOpacity, Pressable } from 'react-native';
 
 import BackBtn from '../components/Elements/BackBtn';
 import CommentCard from '../components/CommentCard/CommentCard';
@@ -26,7 +26,8 @@ import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 
 import { truncateText } from '../core/tools/formatDate';
 import { colors, utilities } from '../styles/utilities';
-import { Heart, Play, Send } from 'lucide-react-native';
+import { Heart, Play, Send, Pause } from 'lucide-react-native';
+import inCallManager from 'react-native-incall-manager';
 
 const StreamView = ({ navigation, route }) => {
     const { show } = route.params;
@@ -36,6 +37,7 @@ const StreamView = ({ navigation, route }) => {
     const [userComment, setUserComment] = useState('');
     const [comments, setComments] = useState([]);
     const [showCommentsRef, setShowCommentsRef] = useState(null);
+    const [videoPlaying, setVideoPlaying] = useState(false);
 
     const [call, setCall] = useState(null);
 
@@ -46,7 +48,7 @@ const StreamView = ({ navigation, route }) => {
     console.log('Show ID:', show.id);
     console.log('Call:', call);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (!client || call) return;
 
         const setupCall = async () => {
@@ -57,11 +59,20 @@ const StreamView = ({ navigation, route }) => {
                 call && console.log('Call set up!');
                 setCall(call);
             } catch (error) {
+                setVideoPlaying(false);
                 console.log('Error setting up Call', error);
             }
         };
 
         setupCall();
+
+        return () => {
+            if (call) {
+                call.leave();
+                setCall(null);
+                inCallManager.stop();
+            }
+        };
     }, [client, show.id]);
 
     useEffect(() => {
@@ -92,6 +103,27 @@ const StreamView = ({ navigation, route }) => {
             }
         };
     }, [show.id]);
+
+    const joinCall = async () => {
+        console.log('Joining call');
+
+        if (!client) {
+            console.log('No client found');
+            return;
+        }
+        // setViewer(true);
+        console.log('Client Found!');
+
+        try {
+            const call = client.call('livestream', showId);
+            await call.join();
+            setCall(call);
+            console.log('Call joined!', call);
+            call && setVideoPlaying(true);
+        } catch (error) {
+            console.log('Error joining call:', error);
+        }
+    };
 
     const createShowAndComments = async (initialComment) => {
         const newShowRef = doc(collection(fireStoreDb, 'shows'));
@@ -157,14 +189,27 @@ const StreamView = ({ navigation, route }) => {
         }
     };
 
+    const handleUserStreamInteraction = () => {
+        if (!call) {
+            joinCall();
+            return;
+        } else if (videoPlaying) {
+            call.leave();
+            setVideoPlaying(false);
+        } else {
+            joinCall();
+            setVideoPlaying(true);
+        }
+    };
+
     return (
         // <StreamCall call={call}>
         <View style={{ flex: 1 }}>
-            <BackBtn navigation={navigation} />
+            {/* <BackBtn navigation={navigation} /> */}
             <View
                 style={[
                     {
-                        height: height * 0.5,
+                        height: height * 0.48,
                         backgroundColor: 'black',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -180,7 +225,9 @@ const StreamView = ({ navigation, route }) => {
                         />
                     </StreamCall>
                 )}
-                <Play size={42} color={'white'} />
+                <Pressable onPress={handleUserStreamInteraction}>
+                    {!videoPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
+                </Pressable>
             </View>
             <View
                 style={{
