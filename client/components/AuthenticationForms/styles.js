@@ -1,16 +1,19 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../styles/utilities';
 
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        
+
     },
     scrollContainer: {
+        flex:1,
         flexGrow: 1,
         justifyContent: 'space-between',
         paddingHorizontal: 20,
     },
     header: {
+        color: 'white',
         textAlign: 'center',
         fontSize: 32,
         fontWeight: 'bold',
@@ -21,22 +24,26 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 6,
         marginLeft: 8,
+        color: 'white',
     },
     input: {
+        color: '#ADADAD',
         height: 48,
         borderRadius: 24,
         borderWidth: 0.5,
-        borderColor: '#212529',
+        borderColor: '#ADADAD',
+        backgroundColor: '#2E2C2F20',
         padding: 16,
         marginBottom: 14,
     },
     promptText: {
+        color: 'white',
         fontSize: 16,
         marginTop: 10,
         textAlign: 'center',
     },
     promptLink: {
-        color: 'blue',
+        color: colors.primary,
         textDecorationLine: 'underline',
     },
     welcomeLogo: {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { Image, View, Text, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 
@@ -9,17 +9,20 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { utilities } from '../styles/utilities';
 
-import {useFonts} from 'expo-font'
+import { useFonts } from 'expo-font';
 
-const logoImg = require('../assets/logo.png');
+const logoImg = require('../assets/logowhite.png');
 const { styles } = require('../components/AuthenticationForms/styles');
-
 
 const Authentication = ({ navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
     const [error, setError] = useState(null);
 
     const { userInfo, setUserInfo, authError, setLoggedIn, loggedIn, setCurrentUser } = useUser();
+
+    const imageSource = switchHandler
+        ? require('../assets/appImages/onboard2.jpg')
+        : require('../assets/appImages/onboard1.jpg');
 
     useEffect(() => {
         if ((!userInfo.email.includes('@') || !userInfo.email.includes('.')) && userInfo.email.length > 0) {
@@ -52,7 +55,6 @@ const Authentication = ({ navigation }) => {
                 console.log('User login successful:', response.data.user);
                 loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
             }
-
         } catch (error) {
             console.log('Error signing in:', error);
             setError('Invalid email or password');
@@ -91,35 +93,39 @@ const Authentication = ({ navigation }) => {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <View style={styles.topInnerContainer}>
-                <Image style={styles.welcomeLogo} source={logoImg} />
-                <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
-                {switchHandler ? (
-                    <SignUpForm userInfo={userInfo} setUserInfo={setUserInfo} />
-                ) : (
-                    <SignInForm userInfo={userInfo} setUserInfo={setUserInfo} />
-                )}
-            </View>
-            <View style={styles.bottomInnerContainer}>
-                <Text style={styles.errorText}>{error}</Text>
-                <TouchableOpacity style={[utilities.primaryBtn]} onPress={handleProceed}>
-                    <Text style={[utilities.primaryBtnText]}>{!switchHandler ? 'Log In' : 'Continue'}</Text>
-                </TouchableOpacity>
-                <Text style={styles.promptText}>
-                    {switchHandler ? 'Have an account? ' : "Don't have an account? "}
-                    <Text
-                        style={styles.promptLink}
-                        onPress={() => {
-                            setSwitchHandler(!switchHandler);
-                            setError(null);
-                        }}
-                    >
-                        {switchHandler ? 'Log In' : 'Register'}
+        <ImageBackground source={imageSource} style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={[styles.scrollContainer, utilities.photoOverlayS]}>
+                {/* <View style={[utilities.photo]}> */}
+                <View style={styles.topInnerContainer}>
+                    <Image style={styles.welcomeLogo} source={logoImg} />
+                    <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
+                    {switchHandler ? (
+                        <SignUpForm userInfo={userInfo} setUserInfo={setUserInfo} />
+                    ) : (
+                        <SignInForm userInfo={userInfo} setUserInfo={setUserInfo} />
+                    )}
+                </View>
+                <View style={styles.bottomInnerContainer}>
+                    <Text style={styles.errorText}>{error}</Text>
+                    <TouchableOpacity style={[utilities.primaryBtn]} onPress={handleProceed}>
+                        <Text style={[utilities.primaryBtnText]}>{!switchHandler ? 'Log In' : 'Continue'}</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.promptText}>
+                        {switchHandler ? 'Have an account? ' : "Don't have an account? "}
+                        <Text
+                            style={styles.promptLink}
+                            onPress={() => {
+                                setSwitchHandler(!switchHandler);
+                                setError(null);
+                            }}
+                        >
+                            {switchHandler ? 'Log In' : 'Register'}
+                        </Text>
                     </Text>
-                </Text>
-            </View>
-        </ScrollView>
+                </View>
+                {/* </View> */}
+            </ScrollView>
+        </ImageBackground>
     );
 };
 

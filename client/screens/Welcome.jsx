@@ -9,7 +9,7 @@ const Welcome = ({ navigation }) => {
         <SafeAreaView style={{ flex: 1 }}>
             {/* <StatusBar translucent hidden={true} /> */}
             <ImageBackground style={[styles.welcomeContainer]} source={image} resizeMode="cover">
-                <View style={styles.overlay}>
+                <View style={[utilities.photoOverlayS, {paddingHorizontal:20}]}>
                     <Text style={styles.welcomeText}>BE PART OF MUSER</Text>
                     <TouchableOpacity
                         style={[utilities.primaryBtn, { marginBottom: 96 }]}
@@ -39,10 +39,4 @@ const styles = StyleSheet.create({
         marginLeft: 8,
     },
 
-    overlay: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.1)',
-        justifyContent: 'flex-end',
-        paddingHorizontal: 20,
-    },
 });

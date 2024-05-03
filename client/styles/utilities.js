@@ -140,7 +140,7 @@ export const utilities = StyleSheet.create({
     },
 
     primaryBtnText: {
-        color: 'white',
+        color: colors.black,
         fontSize: 20,
         fontWeight: 'bold',
     },
@@ -175,5 +175,9 @@ export const utilities = StyleSheet.create({
         fontFamily: 'Montserrat-Light',
     },
 
+    photoOverlayS: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    },
 
 });
