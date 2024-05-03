@@ -20,17 +20,17 @@ const Feed = ({ navigation }) => {
     const { currentUser } = useUser();
     const users = useSelector((global) => global.usersSlice.feedUsers);
 
+    const getUsers = async () => {
+        try {
+            const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
+            if (response.status !== 200) throw new Error('Failed to fetch users');
+            dispatch(setConnectUsers(response.data.connectedUsers));
+            dispatch(setFeedUsers(response.data.feedUsers));
+        } catch (error) {
+            console.log('Error fetching users:', error);
+        }
+    };
     useEffect(() => {
-        const getUsers = async () => {
-            try {
-                const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
-                if (response.status !== 200) throw new Error('Failed to fetch users');
-                dispatch(setConnectUsers(response.data.connectedUsers));
-                dispatch(setFeedUsers(response.data.feedUsers));
-            } catch (error) {
-                console.log('Error fetching users:', error);
-            }
-        };
         getUsers();
     }, [currentUser]);
 
@@ -113,6 +113,7 @@ const Feed = ({ navigation }) => {
                 numColumns={2}
                 style={{ flex: 1 }}
                 contentContainerStyle={styles.cardsContainer}
+                onRefresh={getUsers}
             />
         </View>
     );
@@ -152,6 +153,5 @@ const styles = StyleSheet.create({
         // gap: 16,
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: 8,
     },
 });
