@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { MessagesSquare, Store, Radio, AudioWaveform, UserRound } from 'lucide-react-native';
@@ -9,11 +9,14 @@ import ChatNavigator from '../navigators/ChatNavigator';
 import Profile from './Profile';
 import VenueNavigator from '../navigators/VenueNavigator';
 import LiveStreamNavigator from '../navigators/LiveStreamNavigator';
+import { colors } from '../styles/utilities';
+
+
+
 
 const Tab = createBottomTabNavigator();
 
 const MainTabs = () => {
-
     return (
         <Tab.Navigator
             initialRouteName="Feed"
@@ -35,8 +38,8 @@ const MainTabs = () => {
 
                     return <IconComponent color={color} size={24} />;
                 },
-                tabBarActiveTintColor: 'black',
-                tabBarInactiveTintColor: 'gray',
+                tabBarActiveTintColor: colors.primary,
+                tabBarInactiveTintColor: colors.white,
                 tabBarLabelStyle: {
                     fontSize: 12,
                     marginBottom: 12,
@@ -46,6 +49,8 @@ const MainTabs = () => {
                 },
                 tabBarStyle: {
                     height: 64,
+                    backgroundColor: colors.bgDark,
+   
                 },
             })}
         >

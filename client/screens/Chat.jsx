@@ -20,11 +20,12 @@ import { PlusIcon, View, ArrowLeft, Send as SendIcon } from 'lucide-react-native
 import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
 import { renderBubble, renderSend, renderInputToolbar } from '../core/tools/chatConfigurations';
 
+import { useDispatch } from 'react-redux';
+import { addConnectedUser } from '../store/Users';
 import { useUser } from '../contexts/UserContext';
 
 import { defaultAvatar } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
-import { useDispatch } from 'react-redux';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();

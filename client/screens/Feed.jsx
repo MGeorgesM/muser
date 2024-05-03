@@ -11,7 +11,7 @@ import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
 import MasonryList from '@react-native-seoul/masonry-list';
 
 import { colors, utilities } from '../styles/utilities';
-import { LucideSearch } from 'lucide-react-native';
+import { SearchIcon } from 'lucide-react-native';
 
 const avatar = require('../assets/avatar.png');
 
@@ -50,7 +50,7 @@ const Feed = ({ navigation }) => {
                         justifyContent: 'center',
                     }}
                 >
-                    <LucideSearch size={20} color="white" />
+                    <SearchIcon size={20} color="white" />
                 </View>
             ),
             headerStyle: {
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     listContainer: {
         backgroundColor: colors.bgDark,
         flex: 1,
-        padding: 16,
+        paddingHorizontal: 16,
     },
     welcomeDisplay: {
         marginBottom: -2,
@@ -153,5 +153,6 @@ const styles = StyleSheet.create({
         // gap: 16,
         justifyContent: 'space-between',
         alignItems: 'center',
+        paddding:0
     },
 });

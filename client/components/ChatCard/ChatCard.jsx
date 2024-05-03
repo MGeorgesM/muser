@@ -28,7 +28,7 @@ const ChatCard = ({ chat, navigation }) => {
                 const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
                 if (response.status !== 200) throw new Error('Failed to fetch users');
                 console.log('Users fetched:', response.data);
-                console.log(`${profilePicturesUrl + response.data[0].picture}`)
+                console.log(`${profilePicturesUrl + response.data[0].picture}`);
                 setTitle(response.data.map((user) => user.name).join(', '));
                 otherParticipantIds.length === 1
                     ? setAvatar(`${profilePicturesUrl + response.data[0].picture}`)
@@ -54,7 +54,7 @@ const ChatCard = ({ chat, navigation }) => {
             onPress={() => navigation.navigate('ChatDetails', { chatId: chat.id, chatParticipants: participants })}
         >
             <View style={[utilities.flexRow, utilities.center]}>
-                <Image source={{ uri: avatar }} style={styles.chatCardPhoto} />
+                {avatar && <Image source={{ uri: avatar }} style={styles.chatCardPhoto} />}
                 <View>
                     <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>
                         {title || 'Chat'}

@@ -26,6 +26,6 @@ const usersSlice = createSlice({
     },
 });
 
-export const { setConnectUsers, setFeedUsers } = usersSlice.actions;
+export const { setConnectUsers, setFeedUsers, addConnectedUser } = usersSlice.actions;
 export const usersSliceName = usersSlice.name;
 export default usersSlice.reducer;
