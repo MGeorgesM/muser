@@ -93,7 +93,7 @@ const Authentication = ({ navigation }) => {
     };
 
     return (
-        <ImageBackground source={imageSource} style={{ flex: 1 }}>
+        <ImageBackground source={imageSource} style={{ flex: 1 }} resizeMode='cover'>
             <ScrollView contentContainerStyle={[styles.scrollContainer, utilities.photoOverlayS]}>
                 {/* <View style={[utilities.photo]}> */}
                 <View style={styles.topInnerContainer}>

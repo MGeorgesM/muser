@@ -59,20 +59,27 @@ export const styles = StyleSheet.create({
     },
     userTypeText: {
         fontSize: 24,
+        color: colors.primary,
         fontWeight: 'bold',
         alignSelf: 'center',
     },
+
     userTypePrompt: {
         flexDirection: 'row',
-        justifyContent: 'center',
         alignItems: 'center',
-        flex: 1,
+        justifyContent: 'center',
     },
+
     userTypePicker: {
-        fontSize: 24,
         width: 200,
         alignSelf: 'center',
     },
+
+    pickerItem: {
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+
     userInfoContainer: {
         height: '100%',
         paddingHorizontal: 20,
@@ -111,4 +118,6 @@ export const styles = StyleSheet.create({
         textAlign:'center',
         marginBottom: 10,
     },
+
+
 });

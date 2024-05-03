@@ -6,10 +6,10 @@ const image = require('../assets/appImages/onboard0.jpg');
 
 const Welcome = ({ navigation }) => {
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
             {/* <StatusBar translucent hidden={true} /> */}
             <ImageBackground style={[styles.welcomeContainer]} source={image} resizeMode="cover">
-                <View style={[utilities.photoOverlayS, {paddingHorizontal:20}]}>
+                <View style={[utilities.photoOverlayS, { paddingHorizontal: 20, justifyContent: 'flex-end' }]}>
                     <Text style={styles.welcomeText}>BE PART OF MUSER</Text>
                     <TouchableOpacity
                         style={[utilities.primaryBtn, { marginBottom: 96 }]}
@@ -19,7 +19,7 @@ const Welcome = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </ImageBackground>
-        </SafeAreaView>
+        </View>
     );
 };
 
@@ -38,5 +38,4 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         marginLeft: 8,
     },
-
 });

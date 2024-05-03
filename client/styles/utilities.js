@@ -7,7 +7,7 @@ export const colors = {
     lightGray: '#D9D9D9',
     gray: '#ADB5BD',
     offWhite: '#DEE2E6',
-    
+
     blackTrsp: 'rgba(0,0,0,0.3)',
     whiteTrsp: 'rgba(255,255,255,0.5)',
     lightGrayTrsp: '#d9d9d990',
@@ -17,7 +17,7 @@ export const colors = {
 export const utilities = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal:20,
+        paddingHorizontal: 20,
     },
 
     flexRow: {
@@ -29,9 +29,9 @@ export const utilities = StyleSheet.create({
         justifyContent: 'center',
     },
 
-    spaceBetween:{
-      alignItems: 'center',
-        justifyContent: 'space-between',  
+    spaceBetween: {
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
 
     textCenter: {
@@ -94,7 +94,7 @@ export const utilities = StyleSheet.create({
         width: '100%',
         resizeMode: 'cover',
     },
-    
+
     overlay: {
         position: 'absolute',
         bottom: 0,
@@ -103,7 +103,7 @@ export const utilities = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         padding: 20,
     },
-    
+
     borderRadius: {
         s: 12,
         m: 18,
@@ -179,5 +179,4 @@ export const utilities = StyleSheet.create({
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
     },
-
 });
