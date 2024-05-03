@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
-import { TouchableOpacity, Image, View, StyleSheet, Dimensions } from 'react-native';
+import { TouchableOpacity, Image, View, StyleSheet, Dimensions, Text, Pressable } from 'react-native';
 
 import { fireStoreDb } from '../config/firebase';
 import {
@@ -20,16 +20,17 @@ import { PlusIcon, ArrowLeft, Send as SendIcon, ChevronLeft } from 'lucide-react
 import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
 import { renderBubble, renderSend, renderInputToolbar } from '../core/tools/chatConfigurations';
 
+import { addConnectedUser, setConnectUsers } from '../store/Users';
 import { useDispatch, useSelector } from 'react-redux';
-import { addConnectedUser } from '../store/Users';
 import { useUser } from '../contexts/UserContext';
 
 import { defaultAvatar } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import PictureHeader from '../components/PictureHeader/PictureHeader';
-import { colors } from '../styles/utilities';
-import { ScrollView } from 'react-native-gesture-handler';
+import { colors, utilities } from '../styles/utilities';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
@@ -37,10 +38,13 @@ const Chat = ({ navigation, route }) => {
 
     const [messages, setMessages] = useState([]);
     const [participants, setParticipants] = useState(chatParticipants);
-    const [newParticipant, setNewParticipant] = useState(16);
+    // const [newParticipant, setNewParticipant] = useState(null);
     const [receiver, setReceiver] = useState(null);
 
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
+    const [connectionModalVisible, setConnectionModalVisible] = useState(false);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setParticipants(chatParticipants);
@@ -66,29 +70,39 @@ const Chat = ({ navigation, route }) => {
         };
 
         const getUserConnections = async () => {
-            try {   
+            try {
                 const response = await sendRequest(requestMethods.GET, 'connections', null);
                 if (response.status !== 200) throw new Error('Failed to fetch connections');
+                console.log('Connections fetched:', response.data);
                 dispatch(setConnectedUsers(response.data));
             } catch (error) {
                 console.log('Error fetching connections:', error);
             }
-        }
-        
+        };
+        userConnections.length === 0 && getUserConnections();
+        console.log('userConnections:', userConnections);
         getUsersPicutresandNames();
     }, [participants]);
 
     useLayoutEffect(() => {
         console.log('receiver', receiver);
         navigation.setOptions({
-            headerTitle: () => <PictureHeader picture={receiver?.picture} name={receiver?.name} />,
-            headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')} style={{ marginLeft: 20 }}>
-                    <ChevronLeft size={24} color="white" />
-                </TouchableOpacity>
-            ),
+            headerTitle: () => {
+                return <PictureHeader picture={receiver?.picture} name={receiver?.name} />;
+            },
+            // headerLeft: () => (
+            //     <TouchableOpacity onPress={() => navigation.navigate('ChatMain')} style={{ marginLeft: 20 }}>
+            //         <ChevronLeft size={24} color="white" />
+            //     </TouchableOpacity>
+            // ),
             headerRight: () => (
-                <TouchableOpacity onPress={addParticipant} style={{ marginRight: 20 }}>
+                <TouchableOpacity
+                    onPress={() => setConnectionModalVisible(true)}
+                    style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', gap: 8 }}
+                >
+                    <Pressable style={styles.bandBtn}>
+                        <Text style={styles.bandBtnText}>Band</Text>
+                    </Pressable>
                     <PlusIcon size={24} color="white" />
                 </TouchableOpacity>
             ),
@@ -97,6 +111,7 @@ const Chat = ({ navigation, route }) => {
                 height: 128,
                 shadowColor: 'transparent',
                 elevation: 0,
+                borderBottomWidth: 0.5,
             },
         });
     }, [navigation, addParticipant, receiver]);
@@ -158,20 +173,19 @@ const Chat = ({ navigation, route }) => {
         }
     };
 
-    const addParticipant = async () => {
-        if (newParticipant && !participants.includes(newParticipant)) {
+    const addParticipant = async (newParticipantId) => {
+        if (newParticipantId && !participants.includes(newParticipantId)) {
             const chatRef = await getChat();
             if (chatRef) {
                 try {
-                    const newParticipantsList = [...participants, newParticipant].sort();
+                    const newParticipantsList = [...participants, newParticipantId].sort();
                     console.log('New participants:', newParticipantsList);
                     await updateDoc(chatRef, {
                         participantsIds: newParticipantsList,
                     });
 
-                    setParticipants([...participants, newParticipant]);
-                    // setIsPopupVisible(false);
-                    // setNewParticipant('');
+                    setParticipants([...participants, newParticipantId]);
+                    setConnectionModalVisible(false);
                 } catch (error) {
                     console.error('Error adding participant', error);
                 }
@@ -250,32 +264,40 @@ const Chat = ({ navigation, route }) => {
     });
 
     return (
-        <>
-            <View style={{ flex: 1, position: 'relative', backgroundColor: colors.bgDark }}>
-                <GiftedChat
-                    messages={messages}
-                    onSend={(messages) => onSend(messages)}
-                    user={{
-                        _id: currentUser.id,
-                        // avatar: null,
-                    }}
-                    renderBubble={renderBubble}
-                    inverted={true}
-                    renderSend={renderSend}
-                    renderInputToolbar={() => {
-                        return null;
-                    }}
-                    messagesContainerStyle={{ backgroundColor: '#1E1E1E', paddingTop: 8 }}
-                    alignTop={true}
-                    renderActions={() => null}
-                />
-                <View style={styles.chatModal}>
-                    <ScrollView>
+        <View style={{ flex: 1, backgroundColor: colors.bgDark }}>
+            <GiftedChat
+                messages={messages}
+                onSend={(messages) => onSend(messages)}
+                user={{
+                    _id: currentUser.id,
+                    // avatar: null,
+                }}
+                renderBubble={renderBubble}
+                inverted={true}
+                renderSend={renderSend}
+                renderInputToolbar={() => {
+                    if (connectionModalVisible) return null;
+                    return renderInputToolbar();
+                }}
+                messagesContainerStyle={{ backgroundColor: colors.bgDark, paddingTop: 8 }}
+                alignTop={true}
+                renderActions={() => null}
+            />
 
-                    </ScrollView>
+            {connectionModalVisible && (
+                <View style={styles.chatModal}>
+                    <Text style={[utilities.textL, utilities.textCenter, { marginBottom: 16 }]}>Your Connections</Text>
+                    <FlatList
+                        data={userConnections}
+                        renderItem={({ item }) => (
+                            <BandMemberCard entity={item} handlePress={() => addParticipant(item.id)} />
+                        )}
+                        keyExtractor={(item) => item.id}
+                        showsVerticalScrollIndicator={false}
+                    />
                 </View>
-            </View>
-        </>
+            )}
+        </View>
     );
 };
 export default Chat;
@@ -284,11 +306,27 @@ const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     chatModal: {
-        backgroundColor: colors.bglight,
         height: height * 0.3,
+        padding: 20,
+        borderTopLeftRadius: utilities.borderRadius.xl,
+        borderTopEndRadius: utilities.borderRadius.xl,
+        backgroundColor: colors.bglight,
         shadowColor: 'transparent',
-        elevation: 0,
-        bottom: 0,
-        left: 0,
+    },
+
+    bandBtn: {
+        backgroundColor: colors.primary,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: utilities.borderRadius.m,
+        marginRight: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    bandBtnText: {
+        color: colors.black,
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
