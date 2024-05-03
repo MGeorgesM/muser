@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, View, Text, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
+import { Image, View, Text, ScrollView, TouchableOpacity, ImageBackground, KeyboardAvoidingView } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 
@@ -93,38 +93,40 @@ const Authentication = ({ navigation }) => {
     };
 
     return (
-        <ImageBackground source={imageSource} style={{ flex: 1 }} resizeMode='cover'>
-            <ScrollView contentContainerStyle={[styles.scrollContainer, utilities.photoOverlayS]}>
-                {/* <View style={[utilities.photo]}> */}
-                <View style={styles.topInnerContainer}>
-                    <Image style={styles.welcomeLogo} source={logoImg} />
-                    <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
-                    {switchHandler ? (
-                        <SignUpForm userInfo={userInfo} setUserInfo={setUserInfo} />
-                    ) : (
-                        <SignInForm userInfo={userInfo} setUserInfo={setUserInfo} />
-                    )}
-                </View>
-                <View style={styles.bottomInnerContainer}>
-                    <Text style={styles.errorText}>{error}</Text>
-                    <TouchableOpacity style={[utilities.primaryBtn]} onPress={handleProceed}>
-                        <Text style={[utilities.primaryBtnText]}>{!switchHandler ? 'Log In' : 'Continue'}</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.promptText}>
-                        {switchHandler ? 'Have an account? ' : "Don't have an account? "}
-                        <Text
-                            style={styles.promptLink}
-                            onPress={() => {
-                                setSwitchHandler(!switchHandler);
-                                setError(null);
-                            }}
-                        >
-                            {switchHandler ? 'Log In' : 'Register'}
+        <ImageBackground source={imageSource} style={{ flex: 1 }} resizeMode="cover">
+
+                <ScrollView contentContainerStyle={[styles.scrollContainer, utilities.photoOverlayS]}>
+                    {/* <View style={[utilities.photo]}> */}
+                    <View style={styles.topInnerContainer}>
+                        <Image style={styles.welcomeLogo} source={logoImg} />
+                        <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
+                        {switchHandler ? (
+                            <SignUpForm userInfo={userInfo} setUserInfo={setUserInfo} />
+                        ) : (
+                            <SignInForm userInfo={userInfo} setUserInfo={setUserInfo} />
+                        )}
+                    </View>
+                    <View style={styles.bottomInnerContainer}>
+                        <Text style={styles.errorText}>{error}</Text>
+                        <TouchableOpacity style={[utilities.primaryBtn]} onPress={handleProceed}>
+                            <Text style={[utilities.primaryBtnText]}>{!switchHandler ? 'Log In' : 'Continue'}</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.promptText}>
+                            {switchHandler ? 'Have an account? ' : "Don't have an account? "}
+                            <Text
+                                style={styles.promptLink}
+                                onPress={() => {
+                                    setSwitchHandler(!switchHandler);
+                                    setError(null);
+                                }}
+                            >
+                                {switchHandler ? 'Log In' : 'Register'}
+                            </Text>
                         </Text>
-                    </Text>
-                </View>
-                {/* </View> */}
-            </ScrollView>
+                    </View>
+                    {/* </View> */}
+                </ScrollView>
+
         </ImageBackground>
     );
 };

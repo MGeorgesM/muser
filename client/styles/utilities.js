@@ -7,7 +7,8 @@ export const colors = {
     lightGray: '#D9D9D9',
     gray: '#ADB5BD',
     offWhite: '#DEE2E6',
-
+    white: '#FFFFFF',
+    
     bgDark: '#1E1E1E',
 
     blackTrsp: 'rgba(0,0,0,0.3)',

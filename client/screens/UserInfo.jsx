@@ -23,7 +23,7 @@ const UserInfo = ({ navigation }) => {
     const [formTouched, setFormTouched] = useState(false);
     const [error, setError] = useState(null);
 
-    const { userInfo, setUserInfo, setLoggedIn, setCurrentUser } = useUser();
+    const { userInfo, setUserInfo, setLoggedIn, setCurrentUser, loggedIn } = useUser();
 
     useEffect(() => {
         const getProperties = async () => {
@@ -150,7 +150,7 @@ const UserInfo = ({ navigation }) => {
                 setCurrentUser(response.data.user);
                 await AsyncStorage.setItem('token', response.data.token);
                 await AsyncStorage.setItem('streamToken', response.data.stream_token);
-                navigation.navigate('Feed', { screen: 'FeedMain' });
+                loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
             }
         } catch (error) {
             console.error('Error registering:', error);

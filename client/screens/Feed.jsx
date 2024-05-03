@@ -5,12 +5,13 @@ import { setConnectUsers, setFeedUsers, setUsers } from '../store/Users';
 import { useUser } from '../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { sendRequest, requestMethods, profilePicturesUrl } from '../core/tools/apiRequest';
 
 import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
 import MasonryList from '@react-native-seoul/masonry-list';
 
-import { utilities } from '../styles/utilities';
+import { colors, utilities } from '../styles/utilities';
+import { LucideSearch } from 'lucide-react-native';
 
 const avatar = require('../assets/avatar.png');
 
@@ -31,22 +32,46 @@ const Feed = ({ navigation }) => {
             }
         };
         getUsers();
-    }, []);
+    }, [currentUser]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: () => <CustomHeader username={currentUser?.name} avatar={avatar} />,
+            headerRight: () => (
+                <View
+                    style={{
+                        marginRight: 16,
+                        height: 42,
+                        width: 42,
+                        borderRadius: 21,
+                        borderColor: 'white',
+                        borderWidth: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <LucideSearch size={20} color="white" />
+                </View>
+            ),
+            headerStyle: {
+                backgroundColor: colors.bgDark,
+                height: 128,
+            },
         });
     });
 
     const CustomHeader = () => {
         const { currentUser } = useUser();
         return (
-            <View style={styles.headerContainer}>
-                <Image source={avatar} style={styles.avatar} />
-                <View style={styles.textContainer}>
-                    <Text style={[styles.welcomeDisplay, utilities.textM, utilities.noMb]}>Welcome</Text>
-                    <Text style={[utilities.textL, utilities.textBold]}>{currentUser?.name}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image source={{ uri: profilePicturesUrl + currentUser?.picture }} style={styles.avatar} />
+                    <View style={styles.textContainer}>
+                        <Text style={[styles.welcomeDisplay, utilities.textM, utilities.noMb]}>Welcome</Text>
+                        <Text style={[utilities.textL, utilities.textBold, { marginTop: -4, color: 'white' }]}>
+                            {currentUser?.name}
+                        </Text>
+                    </View>
                 </View>
             </View>
         );
@@ -103,9 +128,13 @@ const styles = StyleSheet.create({
         height: 48,
         borderRadius: 24,
         marginRight: 8,
+
+        borderColor: 'white',
+        borderWidth: 0.5,
     },
     welcomeDisplay: {
         marginBottom: -2,
+        color: 'white',
     },
 
     cardsContainer: {
