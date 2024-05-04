@@ -56,7 +56,17 @@ const MainTabs = () => {
         >
             <Tab.Screen name="Venues" component={VenueNavigator} options={{ headerShown: false }} />
             <Tab.Screen name="Chat" component={ChatNavigator} options={{ headerShown: false }} />
-            <Tab.Screen name="Feed" component={FeedNavigator} options={{ headerShown: false }} />
+            <Tab.Screen
+                name="Feed"
+                component={FeedNavigator}
+                options={{ headerShown: false }}
+                listeners={({ navigation }) => ({
+                    tabPress: (e) => {
+                        e.preventDefault();
+                        navigation.navigate('Feed', { screen: 'FeedMain' });
+                    },
+                })}
+            />
             <Tab.Screen name="Live" component={LiveStreamNavigator} options={{ headerShown: false }} />
             <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>

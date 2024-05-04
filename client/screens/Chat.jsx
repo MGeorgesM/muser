@@ -100,7 +100,7 @@ const Chat = ({ navigation, route }) => {
                 }
             },
             headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')} style={{ marginLeft: 20 }}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 20 }}>
                     <ChevronLeft size={24} color="white" />
                 </TouchableOpacity>
             ),

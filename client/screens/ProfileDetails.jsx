@@ -8,6 +8,7 @@ import { colors, utilities } from '../styles/utilities';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { useSelector } from 'react-redux';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
+import BackBtn from '../components/Elements/BackBtn';
 
 const ProfileDetails = ({ route }) => {
     const { userId } = route.params;
@@ -39,6 +40,7 @@ const ProfileDetails = ({ route }) => {
     if (user.name)
         return (
             <View style={utilities.flexed}>
+                <BackBtn navigation={navigation}/>
                 <Image source={{ uri: imageUrl }} style={[styles.profileDetailsPicture]} />
                 <View style={[styles.detailContainer]}>
                     <View>
