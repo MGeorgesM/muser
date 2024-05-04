@@ -3,12 +3,12 @@ import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 import { colors } from '../../styles/utilities';
 
-const DetailsPill = ({ item, handlePress, isSelected }) => {
-    console.log('item', item)
+const DetailsPill = ({ item, handlePress = null, isSelected }) => {
+    console.log('item', item);
     return (
         <TouchableOpacity
             style={[styles.detailPill, { backgroundColor: isSelected ? colors.lightGray : 'transparent' }]}
-            onPress={() => handlePress(item.id)}
+            onPress={() => handlePress && handlePress(item.id)}
         >
             <Text style={[styles.detail, { color: isSelected ? colors.black : 'white' }]}>{item.name ?? item.id}</Text>
         </TouchableOpacity>
@@ -26,7 +26,9 @@ const styles = StyleSheet.create({
         borderWidth: 0.25,
     },
     detail: {
+        fontFamily: 'Montserrat-Regular',
         fontSize: 16,
+        marginBottom:2,
     },
 });
 

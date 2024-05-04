@@ -53,53 +53,38 @@ const ProfileDetails = ({ route }) => {
                                 {user.instrument.name}
                             </Text>
                             <Text
-                                style={[utilities.textXS, utilities.myFontRegular, { color: colors.gray }]}
+                                style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}
                             >{`${user.location.name}, Lebanon`}</Text>
                         </View>
                         <InstrumentIcon instrument={user.instrument} />
                     </View>
                     <View>
-                        <Text
-                            style={[
-                                utilities.textS,
-                                utilities.myFontRegular,
-                                utilities.textBold,
-                                styles.profileDetailsHeader,
-                            ]}
-                        >
-                            Bio
+                        <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
+                            About Me
                         </Text>
-                        <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
+                        <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}>
                             {user.about}
                         </Text>
-                        <Text
-                            style={[
-                                utilities.textS,
-                                utilities.myFontRegular,
-                                utilities.textBold,
-                                styles.profileDetailsHeader,
-                            ]}
-                        >
-                            Details
+                        <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
+                            My Details
                         </Text>
-                        <View>
+                        <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 8, gap: 4 }]}>
                             <DetailsPill item={user?.instrument} />
                             <DetailsPill item={user?.experience} />
                             {user?.genres && user.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
                         </View>
                     </View>
-                    {!isConnected && (
-                        <PrimaryBtn
-                            text={'Say Hello!'}
-                            marginTop={'auto'}
-                            handlePress={() =>
-                                navigation.navigate('Chat', {
-                                    screen: 'ChatDetails',
-                                    params: { chatParticipants: [currentUser.id, user.id].sort() },
-                                })
-                            }
-                        />
-                    )}
+
+                    <PrimaryBtn
+                        text={isConnected ?  'Chat' : 'Say Hello!'}
+                        marginTop={'auto'}
+                        handlePress={() =>
+                            navigation.navigate('Chat', {
+                                screen: 'ChatDetails',
+                                params: { chatParticipants: [currentUser.id, user.id].sort() },
+                            })
+                        }
+                    />
                 </View>
             </View>
         );
