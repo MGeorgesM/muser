@@ -42,7 +42,7 @@ const StreamView = ({ navigation, route }) => {
     const [call, setCall] = useState(null);
 
     const client = useStreamVideoClient();
-    const showId = show.id.toString() + 'TEST0';
+    const showId = show.id.toString() + 'TEST78';
 
     client && console.log('Client Found!');
     console.log('Show ID:', show.id);
@@ -204,9 +204,47 @@ const StreamView = ({ navigation, route }) => {
 
     return (
         // <StreamCall call={call}>
-        <View style={{ flex: 1 }}>
-            {/* <BackBtn navigation={navigation} /> */}
-            <View
+        <>
+            <View style={{ flex: 1, position: 'relative' }}>
+                {call ? (
+                    <StreamCall call={call}>
+                        <View style={{ height: height * 0.48 }}>
+                            <ViewerLivestream
+                                ViewerLeaveStreamButton={null}
+                                ViewerLivestreamTopView={null}
+                                ViewerLivestreamControls={null}
+                            />
+                        </View>
+
+                        <Pressable
+                            onPress={handleUserStreamInteraction}
+                            style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: [{ translateX: -21 }, { translateY: -21 }],
+                            }}
+                        >
+                            {!videoPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
+                        </Pressable>
+                    </StreamCall>
+                ) : (
+                    <View
+                        style={[
+                            {
+                                height: height * 0.48,
+                                backgroundColor: 'black',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            },
+                        ]}
+                    ></View>
+                )}
+
+            </View>
+            <View style={{ flex: 1 }}>
+                {/* <BackBtn navigation={navigation} />
+                {/* <View
                 style={[
                     {
                         height: height * 0.48,
@@ -215,65 +253,57 @@ const StreamView = ({ navigation, route }) => {
                         justifyContent: 'center',
                     },
                 ]}
-            >
-                {call && (
-                    <StreamCall call={call}>
-                        <ViewerLivestream
-                            ViewerLivestreamTopView={null}
-                            ViewerLeaveStreamButton={null}
-                            ViewerLivestreamControls={null}
+            > */}
+                {/* </View>
+            <Pressable onPress={handleUserStreamInteraction} style={{ position: 'absolute', top: 20, right: 20 }}>
+                {!videoPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
+            </Pressable> */}
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: 20,
+                    }}
+                >
+                    <View>
+                        <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>
+                            {truncateText(show.name)}
+                        </Text>
+                        <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
+                    </View>
+                    <View>
+                        <Heart size={24} color={colors.primary} />
+                    </View>
+                </View>
+                <View style={[{ paddingLeft: 20 }]}>
+                    <Text style={[utilities.textM, utilities.textBold, { marginBottom: 8 }]}>Band</Text>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                        {show.band.members.map((member) => (
+                            <BandMemberCard key={member.id} entity={member} />
+                        ))}
+                    </ScrollView>
+                </View>
+                <View style={styles.commentsContainer}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        {comments.map((comment) => (
+                            <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
+                        ))}
+                    </ScrollView>
+                    <View style={styles.userInputField}>
+                        <TextInput
+                            placeholder="Write a comment"
+                            value={userComment}
+                            onChangeText={(text) => setUserComment(text)}
+                            style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: colors.white }}
                         />
-                    </StreamCall>
-                )}
-                <Pressable onPress={handleUserStreamInteraction}>
-                    {!videoPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
-                </Pressable>
-            </View>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: 20,
-                }}
-            >
-                <View>
-                    <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>
-                        {truncateText(show.name)}
-                    </Text>
-                    <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
-                </View>
-                <View>
-                    <Heart size={24} color={colors.primary} />
+                        <TouchableOpacity onPress={handlePostComment}>
+                            <Send size={24} color={colors.darkGray} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
-            <View style={[{ paddingLeft: 20 }]}>
-                <Text style={[utilities.textM, utilities.textBold, { marginBottom: 8 }]}>Band</Text>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    {show.band.members.map((member) => (
-                        <BandMemberCard key={member.id} entity={member} />
-                    ))}
-                </ScrollView>
-            </View>
-            <View style={styles.commentsContainer}>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    {comments.map((comment) => (
-                        <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
-                    ))}
-                </ScrollView>
-                <View style={styles.userInputField}>
-                    <TextInput
-                        placeholder="Write a comment"
-                        value={userComment}
-                        onChangeText={(text) => setUserComment(text)}
-                        style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: colors.white }}
-                    />
-                    <TouchableOpacity onPress={handlePostComment}>
-                        <Send size={24} color={colors.darkGray} />
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </View>
+        </>
         // </StreamCall>
     );
 };

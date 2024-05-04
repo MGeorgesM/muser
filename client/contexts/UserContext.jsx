@@ -17,7 +17,7 @@ export const UserProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({
         name: 'Ariana',
-        // email: 'neha.sporer@example.net',
+        // email: 'anissa.auer@example.org',
         email: 'grande@mail.com',
         password: 'password',
         about: 'This is me Ariana Williams!',

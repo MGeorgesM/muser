@@ -17,7 +17,9 @@ import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk'
 import { colors } from '../styles/utilities';
 
 const StreamBroadcast = ({ navigation, route }) => {
-    const { showId } = route?.params.toString() + 'TEST' ?? {};
+    const { showId } = route.params;
+
+    const showIdString = showId.toString() + 'TEST78' ?? {};
 
     const [call, setCall] = useState(null);
     const [viewer, setViewer] = useState(false);
@@ -25,7 +27,7 @@ const StreamBroadcast = ({ navigation, route }) => {
     const client = useStreamVideoClient();
 
     client && console.log('Client Found!');
-    console.log('Show ID:', showId);
+    console.log('Show ID:', showIdString);
 
     const createCall = async () => {
         console.log('Creating call');
@@ -36,7 +38,7 @@ const StreamBroadcast = ({ navigation, route }) => {
         }
         console.log('Client Found!');
         try {
-            const call = client.call('livestream', showId);
+            const call = client.call('livestream', showIdString);
             await call.join({ create: true });
             setCall(call);
         } catch (error) {
@@ -57,7 +59,7 @@ const StreamBroadcast = ({ navigation, route }) => {
         console.log('Client Found!');
 
         try {
-            const call = client.call('livestream', showId);
+            const call = client.call('livestream', showIdString);
             await call.join({ create: true });
             setCall(call);
         } catch (error) {
