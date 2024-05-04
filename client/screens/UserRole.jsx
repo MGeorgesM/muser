@@ -11,7 +11,7 @@ import { ChevronDown } from 'lucide-react-native';
 import BackBtn from '../components/Elements/BackBtn';
 
 const logoImg = require('../assets/logowhite.png');
-const imageSource = require('../assets/appImages/onboard3.jpg');
+const imageSource = require('../assets/appImages/onboard00.jpg');
 const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserRole = ({ navigation }) => {

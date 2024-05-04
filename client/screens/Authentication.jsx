@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
     Image,
-    View,
-    Text,
     ScrollView,
+    Text,
+    View,
     TouchableOpacity,
     ImageBackground,
     KeyboardAvoidingView,
@@ -94,7 +94,7 @@ const Authentication = ({ navigation }) => {
 
     return (
         <ImageBackground source={imageSource} style={styles.imageBackground}>
-            <ScrollView contentContainerStyle={[styles.scrollContainer, utilities.photoOverlayS]}>
+            <View style={[utilities.container, utilities.photoOverlayS]}>
                 <View style={styles.topInnerContainer}>
                     <Image style={styles.welcomeLogo} source={logoImg} />
                     <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
@@ -125,7 +125,7 @@ const Authentication = ({ navigation }) => {
                     </Text>
                 </View>
                 {/* </View> */}
-            </ScrollView>
+            </View>
         </ImageBackground>
     );
 };

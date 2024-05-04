@@ -4,7 +4,6 @@ import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { colors } from '../../styles/utilities';
 
 const DetailsPill = ({ item, handlePress = null, isSelected }) => {
-    console.log('item', item);
     return (
         <TouchableOpacity
             style={[styles.detailPill, { backgroundColor: isSelected ? colors.lightGray : 'transparent' }]}
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
     },
     detail: {
         fontFamily: 'Montserrat-Regular',
-        fontSize: 16,
+        fontSize: 14,
         marginBottom:2,
     },
 });

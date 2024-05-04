@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TextInput } from 'react-native';
+import { Text, View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { colors } from '../../styles/utilities';
 const { styles } = require('./styles');

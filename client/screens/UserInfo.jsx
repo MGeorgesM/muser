@@ -4,6 +4,7 @@ import { Text, TextInput, Image, TouchableOpacity, View, StyleSheet } from 'reac
 import * as ImagePicker from 'expo-image-picker';
 
 import { useUser } from '../contexts/UserContext';
+import { colors, utilities } from '../styles/utilities';
 import { requestMethods, sendRequest } from '../core/tools/apiRequest';
 
 import { CirclePlus, Plus, ArrowLeft, ChevronLeft } from 'lucide-react-native';
@@ -11,8 +12,7 @@ import { CirclePlus, Plus, ArrowLeft, ChevronLeft } from 'lucide-react-native';
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { colors, utilities } from '../styles/utilities';
-import BackBtn from '../components/Elements/BackBtn';
+
 import DetailsPill from '../components/DetailsPill/DetailsPill';
 
 const { styles } = require('../components/AuthenticationForms/styles');
@@ -192,6 +192,8 @@ const UserInfo = ({ navigation }) => {
                     <Text style={styles.inputTextProfile}>{userInfo.role_id == 2 ? 'Description' : 'Bio'}</Text>
                     <TextInput
                         placeholder="Tell us about yourself!"
+                        placeholderTextColor={colors.gray}
+                        cursorColor={colors.primary}
                         style={{ marginBottom: 20, color: colors.lightGray }}
                         value={userInfo.about}
                         onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
@@ -201,6 +203,8 @@ const UserInfo = ({ navigation }) => {
                             <Text style={styles.inputTextProfile}>Venue Name</Text>
                             <TextInput
                                 placeholder="Venue Name"
+                                placeholderTextColor={colors.gray}
+                                cursorColor={colors.primary}
                                 style={{ marginBottom: 20 }}
                                 value={userInfo.venue_name}
                                 onChangeText={(text) => setUserInfo((prev) => ({ ...prev, venue_name: text }))}

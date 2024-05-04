@@ -54,6 +54,7 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     topInnerContainer: {
+        flex: 1,
         marginTop: 128,
     },
     bottomInnerContainer: {
@@ -107,7 +108,7 @@ export const styles = StyleSheet.create({
     headerProfile: {
         color: 'white',
         fontSize: 24,
-        fontWeight: 'bold',
+        fontFamily: 'Montserrat-Bold',
         textAlign: 'left',
     },
     addPhotoPrompt: {
@@ -119,12 +120,12 @@ export const styles = StyleSheet.create({
     addPhotoText: {
         color: 'white',
         fontSize: 20,
-        fontWeight: 'bold',
+        fontFamily: 'Montserrat-Bold',
     },
     inputTextProfile: {
         color: 'white',
         fontSize: 14,
-        fontWeight: 'bold',
+        fontFamily: 'Montserrat-Bold',
         textAlign: 'left',
     },
     genresContainer: {
