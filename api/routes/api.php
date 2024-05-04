@@ -7,6 +7,7 @@ use App\Http\Controllers\BandController;
 use App\Http\Controllers\ShowController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GenreController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthenticatedMiddleware;
 use App\Http\Middleware\VenueMiddleware;
@@ -54,6 +55,8 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
     Route::get('shows/{showId?}', [ShowController::class, 'getShows']);
     Route::post('shows', [ShowController::class, 'addShow']);
+
+    Route::get('genres/', [GenreController::class, 'getGenres']);
     // Route::get('venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
     // Route::get('shows', [VenueController::class, 'getShowsByVenue']);
 });

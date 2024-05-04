@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import { ChevronLeft, CircleCheckBig } from 'lucide-react-native';
@@ -6,59 +6,46 @@ import { ChevronLeft, CircleCheckBig } from 'lucide-react-native';
 import { colors, utilities } from '../styles/utilities';
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
+import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+
 import hours from '../core/data/generateHours';
 
 const ShowDetails = ({ route, navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
+    const [userBands, setUserBands] = useState([]);
     // const { venue } = route.params;
     console.log(hours);
 
-    const bands = [
-        {
-            id: 1,
-            name: 'The Beatles',
-        },
-        {
-            id: 2,
-            name: 'The Rolling Stones',
-        },
-        {
-            id: 3,
-            name: 'The Who',
-        },
-        {
-            id: 4,
-            name: 'The Doors',
-        },
-    ];
+
+    useEffect(() => {
+        const getUserBands = async () => {
+            try {
+                const response = await sendRequest(requestMethods.GET, 'bands/me', null);
+                if (response.status !== 200) throw new Error('Failed to fetch user bands');
+                console.log(response.data);
+                setUserBands(response.data);
+            } catch (error) {
+                console.log('Error fetching user bands:', error);                
+            }
+        }
+    })
 
     const durations = [
+
         {
             id: 1,
-            name: '30 minutes',
-        },
-        {
-            id: 2,
             name: '1 hour',
         },
         {
-            id: 3,
-            name: '1 hour 30 minutes',
-        },
-        {
-            id: 4,
+            id: 2,
             name: '2 hours',
         },
         {
-            id: 5,
-            name: '2 hours 30 minutes',
-        },
-        {
-            id: 6,
+            id: 3,
             name: '3 hours',
         },
         {
-            id: 7,
+            id: 4,
             name: '> 3 hours',
         },
     ];
@@ -81,7 +68,7 @@ const ShowDetails = ({ route, navigation }) => {
         setSwitchHandler(true);
     };
 
-    return (
+    if(userBands) return (
         <View style={styles.main}>
             <View style={[utilities.container, styles.overviewContainer]}>
                 <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
@@ -94,10 +81,10 @@ const ShowDetails = ({ route, navigation }) => {
                     <Text style={[utilities.textL, utilities.myFontBold]}>{title}</Text>
                 </View>
                 <View>
-                    <ProfileDetailsPicker items={bands} label={'Band'} />
+                    <ProfileDetailsPicker items={userBands} label={'Band'} />
                     <ProfileDetailsPicker items={hours} label={'Show Starts'} />
                     <ProfileDetailsPicker items={durations} label={'Duration'} />
-                    <Text style={(utilities.textCenter, utilities.textBold, { fontSize: 18 })}>Availability</Text>
+                    <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18 }]}>Availability</Text>
                 </View>
                 <TouchableOpacity style={[utilities.primaryBtn, { marginBottom: 20 }]} onPress={handleProceed}>
                     <Text style={[utilities.primaryBtnText]}>Confirm</Text>
