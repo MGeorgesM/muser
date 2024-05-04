@@ -110,13 +110,13 @@ const Chat = ({ navigation, route }) => {
                     </Pressable>
                 </View>
             ),
-            headerStyle: {
-                backgroundColor: colors.bgDark,
-                height: 128,
-                shadowColor: 'transparent',
-                elevation: 0,
-                borderBottomWidth: 0.5,
-            },
+            // headerStyle: {
+            //     backgroundColor: colors.bgDark,
+            //     height: 128,
+            //     shadowColor: 'transparent',
+            //     elevation: 0,
+            //     borderBottomWidth: 0.5,
+            // },
         });
     }, [navigation, addParticipant, receiver]);
 
@@ -218,7 +218,7 @@ const Chat = ({ navigation, route }) => {
         try {
             const response = await sendRequest(requestMethods.POST, `connections/${receiverId}`, null);
             if (response.status !== 200) throw new Error('Failed to add connection');
-            useDispatch(addConnectedUser(receiverId));
+            dispatch(addConnectedUser(receiverId));
             console.log('Connection added:', response.data);
         } catch (error) {
             console.error('Error adding connection:', error);

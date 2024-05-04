@@ -43,7 +43,7 @@ const ChatCard = ({ chat, navigation }) => {
             getUsersPicutresandNames();
         } else {
             setTitle(chat.chatTitle);
-            setAvatar(null);
+            setAvatar(defaultAvatar);
         }
 
         console.log('Chat card participants', participants);

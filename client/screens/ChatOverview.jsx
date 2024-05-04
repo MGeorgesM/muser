@@ -16,7 +16,7 @@ const ChatOverview = ({ navigation }) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'Chats',
+            headerTitle: 'Your Connections'
         });
     });
 
