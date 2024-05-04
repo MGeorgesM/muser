@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView, TextInput, TouchableOpacity, Pressable } from 'react-native';
 
-import BackBtn from '../components/Elements/BackBtn';
 import CommentCard from '../components/CommentCard/CommentCard';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
 
@@ -28,6 +27,7 @@ import { truncateText } from '../core/tools/formatDate';
 import { colors, utilities } from '../styles/utilities';
 import { Heart, Play, Send, Pause } from 'lucide-react-native';
 import inCallManager from 'react-native-incall-manager';
+import ChatTextInput from '../components/ChatTextInput/ChatTextInput';
 
 const StreamView = ({ navigation, route }) => {
     const { show } = route.params;
@@ -162,21 +162,6 @@ const StreamView = ({ navigation, route }) => {
                     userId: currentUser.id,
                 });
             }
-
-            // setComments((prevComments) => [
-            //     ...prevComments,
-            //     ...newComments.map((comment) => ({
-            //         _id: comment._id,
-            //         userId: currentUser.id,
-            //         text: comment.text,
-            //         createdAt: new Date(),
-            //     })),
-            // ]);
-
-            // setComments((prevComments) => [
-            //     ...prevComments,
-            //     { text: comment, createdAt: new Date(), userId: currentUser.id, userAvatar: currentUser.picture },
-            // ]);
         },
         [fireStoreDb, show.id, currentUser.id]
     );
@@ -203,19 +188,17 @@ const StreamView = ({ navigation, route }) => {
     };
 
     return (
-        // <StreamCall call={call}>
         <>
             <View style={{ flex: 1, position: 'relative' }}>
                 {call ? (
                     <StreamCall call={call}>
-                        <View style={{ height: height * 0.48 }}>
+                        <View style={{ height: height * 0.5 }}>
                             <ViewerLivestream
                                 ViewerLeaveStreamButton={null}
                                 ViewerLivestreamTopView={null}
                                 ViewerLivestreamControls={null}
                             />
                         </View>
-
                         <Pressable
                             onPress={handleUserStreamInteraction}
                             style={{
@@ -232,7 +215,7 @@ const StreamView = ({ navigation, route }) => {
                     <View
                         style={[
                             {
-                                height: height * 0.48,
+                                height: height * 0.5,
                                 backgroundColor: 'black',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -240,24 +223,8 @@ const StreamView = ({ navigation, route }) => {
                         ]}
                     ></View>
                 )}
-
             </View>
-            <View style={{ flex: 1 }}>
-                {/* <BackBtn navigation={navigation} />
-                {/* <View
-                style={[
-                    {
-                        height: height * 0.48,
-                        backgroundColor: 'black',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    },
-                ]}
-            > */}
-                {/* </View>
-            <Pressable onPress={handleUserStreamInteraction} style={{ position: 'absolute', top: 20, right: 20 }}>
-                {!videoPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
-            </Pressable> */}
+            <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
                 <View
                     style={{
                         flexDirection: 'row',
@@ -290,7 +257,7 @@ const StreamView = ({ navigation, route }) => {
                             <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
                         ))}
                     </ScrollView>
-                    <View style={styles.userInputField}>
+                    {/* <View style={styles.userInputField}>
                         <TextInput
                             placeholder="Write a comment"
                             value={userComment}
@@ -300,11 +267,16 @@ const StreamView = ({ navigation, route }) => {
                         <TouchableOpacity onPress={handlePostComment}>
                             <Send size={24} color={colors.darkGray} />
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
+                    <ChatTextInput
+                        placeholder="Write a comment"
+                        value={userComment}
+                        onChangeText={setUserComment}
+                        onSendPress={handlePostComment}
+                    />
                 </View>
             </View>
         </>
-        // </StreamCall>
     );
 };
 
@@ -321,9 +293,7 @@ const styles = StyleSheet.create({
         flex: 1,
         border: colors.lightGray,
         borderWidth: 0.25,
-        // elevation: 1,
     },
-
     userInputField: {
         flexDirection: 'row',
         alignItems: 'center',
