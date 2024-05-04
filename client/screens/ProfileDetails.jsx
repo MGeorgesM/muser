@@ -24,8 +24,10 @@ const ProfileDetails = ({ route }) => {
         if (userId) {
             const foundUser = feedUsers.find((user) => user.id === userId);
             if (foundUser) return setUser(foundUser);
+            console.log('profile of', foundUser)
             const foundConnectedUser = connectedUsers.find((user) => user.id === userId);
             if (foundConnectedUser) {
+                console.log('profile of', foundConnectedUser)
                 setIsConnected(true);
                 return setUser(foundConnectedUser);
             }
@@ -41,14 +43,40 @@ const ProfileDetails = ({ route }) => {
                 <View style={[styles.detailContainer]}>
                     <View>
                         <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12 }]}>{user.name}</Text>
-                        <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.lightGray }]}>{user.instrument.name}</Text>
-                        <Text style={[utilities.textXS, utilities.myFontRegular, { color: colors.gray }]}>{user.location.name}</Text>
+                        <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.white }]}>
+                            {user.instrument.name}
+                        </Text>
+                        <Text
+                            style={[utilities.textXS, utilities.myFontRegular, { color: colors.lightGray }]}
+                        >{`${user.location.name}, Lebanon`}</Text>
                     </View>
                     <View>
-                        <Text style={[utilities.textS, utilities.myFontRegular, utilities.textBold, styles.profileDetailsHeader]}>Bio</Text>
-                        <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.lightGray }]}>{user.about}</Text>
-                        <Text style={[utilities.textS, utilities.myFontRegular, utilities.textBold, styles.profileDetailsHeader]}>Details</Text>
-                        <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.lightGray }]}>Skils and Details</Text>
+                        <Text
+                            style={[
+                                utilities.textS,
+                                utilities.myFontRegular,
+                                utilities.textBold,
+                                styles.profileDetailsHeader,
+                            ]}
+                        >
+                            Bio
+                        </Text>
+                        <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
+                            {user.about}
+                        </Text>
+                        <Text
+                            style={[
+                                utilities.textS,
+                                utilities.myFontRegular,
+                                utilities.textBold,
+                                styles.profileDetailsHeader,
+                            ]}
+                        >
+                            Details
+                        </Text>
+                        <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
+                            Skils and Details
+                        </Text>
                     </View>
                     {/* <TouchableOpacity style={[utilities.secondaryBtn, { marginTop: 32 }]}>
                         <Text
@@ -63,7 +91,18 @@ const ProfileDetails = ({ route }) => {
                             Say Hello!
                         </Text>
                     </TouchableOpacity> */}
-                    <PrimaryBtn text={'Say Hello!'} marginTop={'auto'} />
+                    {!isConnected && (
+                        <PrimaryBtn
+                            text={'Say Hello!'}
+                            marginTop={'auto'}
+                            handlePress={() =>
+                                navigation.navigate('Chat', {
+                                    screen: 'ChatDetails',
+                                    params: { chatParticipants: [currentUser.id, user.id].sort() },
+                                })
+                            }
+                        />
+                    )}
                 </View>
             </View>
         );
