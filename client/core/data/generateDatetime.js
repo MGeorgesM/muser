@@ -21,7 +21,7 @@ export const generateRandomDates = (numDates) => {
         const date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
         dates.push({
             id: i + 1,
-            date: date,
+            name: date,
         });
     }
 

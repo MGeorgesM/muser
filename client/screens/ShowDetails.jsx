@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 
 import { ChevronLeft, CircleCheckBig } from 'lucide-react-native';
 
@@ -26,7 +26,8 @@ const ShowDetails = ({ route, navigation }) => {
         picture: '',
     });
     // const { venue } = route.params;
-    console.log(hours);
+
+    console.log('showbooking', showBooking);
 
     useEffect(() => {
         const getUserBands = async () => {
@@ -103,9 +104,39 @@ const ShowDetails = ({ route, navigation }) => {
                         <Text style={[utilities.textL, utilities.myFontBold]}>{title}</Text>
                     </View>
                     <View>
-                        <ProfileDetailsPicker items={userBands} label={'Band'} />
-                        <ProfileDetailsPicker items={hours} label={'Show Starts'} />
-                        <ProfileDetailsPicker items={dates} label={'Date'} />
+                        <Text style={styles.inputTextProfile}>Show Name</Text>
+                        <TextInput
+                            placeholder="Show Name"
+                            placeholderTextColor={colors.gray}
+                            cursorColor={colors.primary}
+                            style={{ marginBottom: 20 }}
+                            value={showBooking.name}
+                            onChangeText={(text) => setUserInfo((prev) => ({ ...prev, name: text }))}
+                        />
+                        <ProfileDetailsPicker
+                            items={userBands}
+                            label={'Band'}
+                            selectedValue={showBooking.band_id}
+                            onValueChange={(value) =>
+                                setShowBooking((prev) => ({
+                                    ...prev,
+                                    band_id: value,
+                                }))
+                            }
+                        />
+
+                        <ProfileDetailsPicker
+                            items={dates}
+                            label={'Date'}
+                            selectedValue={showBooking.date}
+                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, date: value }))}
+                        />
+                        <ProfileDetailsPicker
+                            items={hours}
+                            label={'Show Starts'}
+                            selectedValue={showBooking.time}
+                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, time: value }))}
+                        />
                         <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18 }]}>Availability</Text>
                     </View>
                     <TouchableOpacity style={[utilities.primaryBtn, { marginBottom: 20 }]} onPress={handleProceed}>

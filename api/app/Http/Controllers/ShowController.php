@@ -12,7 +12,6 @@ class ShowController extends Controller
     {
         $request->validate([
             'name' => 'required|max:60',
-            'description' => 'required|max:120',
             'band_id' => 'required|exists:bands,id',
             'venue_id' => 'required|exists:users,id',
             'date' => 'required|date_format:Y-m-d',
