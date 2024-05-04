@@ -49,7 +49,7 @@ const VenueDetails = ({ route, navigation }) => {
     }, [venue]);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor:colors.bgDark}]}>
             {/* <BackBtn navigation={navigation} /> */}
             <View>
                 <Image
@@ -58,7 +58,7 @@ const VenueDetails = ({ route, navigation }) => {
                             ? `${showsPicturesUrl + selectedShow.picture}`
                             : `${profilePicturesUrl + venue.picture}`,
                     }}
-                    style={[styles.venueOrShowImage, styles.borderRadiusBottom]}
+                    style={[styles.entityImage, styles.borderRadiusBottom]}
                 />
 
                 <View style={[utilities.overlay, styles.borderRadiusBottom, { height: 96, gap: 2 }]}>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         // borderBottomRightRadius: 20,
     },
 
-    venueOrShowImage: {
+    entityImage: {
         width: '100%',
         height: height * 0.5,
         resizeMode: 'cover',

@@ -11,6 +11,7 @@ export const colors = {
 
     bgDark: '#1E1E1E',
     bglight: '#2E2E2E',
+    bglighter: '#',
 
     blackTrsp: 'rgba(0,0,0,0.3)',
     whiteTrsp: 'rgba(255,255,255,0.5)',

@@ -14,11 +14,11 @@ const ShowCard = ({ entity, navigation, handlePress }) => {
                     <Play size={16} color={colors.primary} />
                 </View>
                 <View style={styles.showDetails}>
-                    <Text style={utilities.textM}>{truncateText(entity.name)}</Text>
-                    <Text style={utilities.textS}>{formatDateString(entity.date)}</Text>
+                    <Text style={[utilities.textM, utilities.myFontMedium]}>{truncateText(entity.name, 25)}</Text>
+                    <Text style={[utilities.textS, utilities.myFontRegular]}>{formatDateString(entity.date)}</Text>
                 </View>
             </View>
-            <ChevronRight size={24} color={colors.darkGray} />
+            <ChevronRight size={24} color={colors.white} />
         </TouchableOpacity>
     );
 };
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         padding: 14,
         marginBottom: 6,
         height: 80,
-        backgroundColor: colors.lightGray,
+        backgroundColor: colors.bglight,
         borderRadius: utilities.borderRadius.m,
     },
 
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         width: 48,
         height: 48,
         borderRadius: utilities.borderRadius.s,
-        backgroundColor: colors.gray,
+        backgroundColor: colors.bgDark,
         alignItems: 'center',
         justifyContent: 'center',
     },
