@@ -12,8 +12,6 @@ import Authentication from './screens/Authentication';
 import MainTabs from './screens/MainTabs';
 import UserRole from './screens/UserRole';
 import UserInfo from './screens/UserInfo';
-
-import { useFonts } from 'expo-font';
 import Welcome from './screens/Welcome';
 
 // import {utilities, colors} from '../styles/utilities';

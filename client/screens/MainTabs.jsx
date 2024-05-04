@@ -6,9 +6,10 @@ import { MessagesSquare, Store, Radio, AudioWaveform, UserRound } from 'lucide-r
 
 import FeedNavigator from '../navigators/FeedNavigator';
 import ChatNavigator from '../navigators/ChatNavigator';
-import Profile from './Profile';
 import VenueNavigator from '../navigators/VenueNavigator';
+import ProfileNavigator from '../navigators/ProfileNavigator';
 import LiveStreamNavigator from '../navigators/LiveStreamNavigator';
+
 import { colors } from '../styles/utilities';
 
 const Tab = createBottomTabNavigator();
@@ -16,7 +17,7 @@ const Tab = createBottomTabNavigator();
 const MainTabs = () => {
     return (
         <Tab.Navigator
-            initialRouteName="Feed"
+            initialRouteName="Profile"
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let IconComponent;
@@ -35,6 +36,7 @@ const MainTabs = () => {
 
                     return <IconComponent color={color} size={24} />;
                 },
+                headerShown: false,
                 tabBarActiveTintColor: colors.primary,
                 tabBarInactiveTintColor: colors.white,
                 tabBarHideOnKeyboard: true,
@@ -58,7 +60,6 @@ const MainTabs = () => {
             <Tab.Screen
                 name="Chat"
                 component={ChatNavigator}
-                options={{ headerShown: false }}
                 listeners={({ navigation }) => ({
                     tabPress: (e) => {
                         e.preventDefault();
@@ -69,7 +70,6 @@ const MainTabs = () => {
             <Tab.Screen
                 name="Feed"
                 component={FeedNavigator}
-                options={{ headerShown: false }}
                 listeners={({ navigation }) => ({
                     tabPress: (e) => {
                         e.preventDefault();
@@ -77,8 +77,8 @@ const MainTabs = () => {
                     },
                 })}
             />
-            <Tab.Screen name="Live" component={LiveStreamNavigator} options={{ headerShown: false }} />
-            <Tab.Screen name="Profile" component={Profile} />
+            <Tab.Screen name="Live" component={LiveStreamNavigator} />
+            <Tab.Screen name="Profile" component={ProfileNavigator} />
         </Tab.Navigator>
     );
 };
