@@ -6,6 +6,8 @@ import { useUser } from '../contexts/UserContext';
 import { colors, utilities } from '../styles/utilities';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 
+import { UserRoundCog, LockKeyhole, ChevronRight } from 'lucide-react-native';
+
 import DetailsPill from '../components/DetailsPill/DetailsPill';
 
 const Profile = ({ navigation }) => {
@@ -43,6 +45,17 @@ const Profile = ({ navigation }) => {
                     {currentUser?.genres &&
                         currentUser.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
                 </View>
+            </View>
+            <View style={styles.editProfileModal}>
+                <TouchableOpacity style={styles.settingsCard}>
+                    <View style={styles.settingCardInner}>
+                        <View style={styles.settingsBtn}>
+                            <UserRoundCog size={16} color={colors.white} />
+                        </View>
+                        <Text style={styles.settingsDetails}>Edit Profile</Text>
+                    </View>
+                    <ChevronRight size={24} color={colors.white} />
+                </TouchableOpacity>
             </View>
         </View>
     ) : (
@@ -91,5 +104,44 @@ const styles = StyleSheet.create({
     profileDetailsSection: {
         paddingTop: 24,
         paddingHorizontal: 20,
+    },
+
+    editProfileModal: {
+        marginTop: 24,
+        padding: 20,
+        height: height * 0.3,
+        backgroundColor: colors.bgDark,
+        borderTopEndRadius: utilities.borderRadius.xl,
+        borderTopLeftRadius: utilities.borderRadius.xl,
+    },
+
+    settingsCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 14,
+        marginBottom: 6,
+        height: 80,
+        borderRadius: utilities.borderRadius.m,
+    },
+
+    settingCardInner: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    settingsDetails: {
+        marginLeft: 12,
+        fontFamily: 'Montserrat-Medium',
+        fontSize: 16,
+    },
+
+    settingsBtn: {
+        width: 48,
+        height: 48,
+        borderRadius: utilities.borderRadius.s,
+        backgroundColor: colors.bglight,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

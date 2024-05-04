@@ -15,7 +15,9 @@ const ShowCard = ({ entity, navigation, handlePress }) => {
                 </View>
                 <View style={styles.showDetails}>
                     <Text style={[utilities.textM, utilities.myFontMedium]}>{truncateText(entity.name, 25)}</Text>
-                    <Text style={[utilities.textS, utilities.myFontRegular]}>{formatDateString(entity.date)}</Text>
+                    {entity.data && (
+                        <Text style={[utilities.textS, utilities.myFontRegular]}>{formatDateString(entity.date)}</Text>
+                    )}
                 </View>
             </View>
             <ChevronRight size={24} color={colors.white} />
