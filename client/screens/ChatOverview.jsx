@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { FlatList } from 'react-native';
-
-import { utilities } from '../styles/utilities';
+import { View, FlatList } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 
 import { fireStoreDb } from '../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
+
+import { utilities } from '../styles/utilities';
 
 import ChatCard from '../components/ChatCard/ChatCard';
 
@@ -16,7 +16,7 @@ const ChatOverview = ({ navigation }) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'Your Connections'
+            headerTitle: 'Your Connections',
         });
     });
 
@@ -48,12 +48,14 @@ const ChatOverview = ({ navigation }) => {
     }, [currentUser]);
 
     return (
-        <FlatList
-            style={utilities.container}
-            data={chats}
-            renderItem={({ item }) => <ChatCard chat={item} navigation={navigation} />}
-            keyExtractor={(item) => item.id}
-        />
+        <View style={[utilities.darkContainer]}>
+            <FlatList
+                style={[utilities.flexed]}
+                data={chats}
+                renderItem={({ item }) => <ChatCard chat={item} navigation={navigation} />}
+                keyExtractor={(item) => item.id}
+            />
+        </View>
     );
 };
 

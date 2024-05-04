@@ -24,6 +24,16 @@ export const utilities = StyleSheet.create({
         paddingHorizontal: 20,
     },
 
+    flexed: {
+        flex: 1,
+    },
+
+    darkContainer: {
+        flex: 1,
+        backgroundColor: colors.bgDark,
+        paddingHorizontal: 20,
+    },
+
     flexRow: {
         flexDirection: 'row',
     },

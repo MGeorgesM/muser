@@ -57,7 +57,7 @@ const ChatCard = ({ chat, navigation }) => {
             <View style={[utilities.flexRow, utilities.center]}>
                 {avatar && <Image source={{ uri: avatar }} style={styles.chatCardPhoto} />}
                 <View>
-                    <Text style={[utilities.textM, utilities.textBold, { color: colors.black }]}>
+                    <Text style={[utilities.textM, utilities.textBold, { color: colors.white }]}>
                         {title || 'Chat'}
                     </Text>
                     <Text style={[utilities.textXS, { color: colors.gray }]}>{chat.lastMessage.text}</Text>

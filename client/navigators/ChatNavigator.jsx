@@ -20,10 +20,12 @@ const ChatNavigator = () => {
                     backgroundColor: colors.bgDark,
                     shadowColor: 'transparent',
                     borderBottomWidth: 0.5,
+                    borderBottomColor: colors.lightGray,
                     elevation: 0,
                     height: 128,
                 },
                 headerTitleStyle: {
+                    fontFamily: 'Montserrat-Regular',
                     color: colors.white,
                     fontSize: 20,
                 },
@@ -35,7 +37,7 @@ const ChatNavigator = () => {
                 ),
             }}
         >
-            <ChatStack.Screen name="ChatMain" component={ChatOverview} />
+            <ChatStack.Screen name="ChatMain" component={ChatOverview}/>
             <ChatStack.Screen name="ChatDetails" component={Chat} />
         </ChatStack.Navigator>
     );
