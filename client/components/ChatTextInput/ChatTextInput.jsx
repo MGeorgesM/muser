@@ -26,11 +26,11 @@ export default ChatTextInput;
 
 const styles = StyleSheet.create({
     userInputField: {
+        flex:1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingRight: 20,
-        height: 48,
         borderTopColor: colors.lightGray,
         borderTopWidth: 0.5,
     },

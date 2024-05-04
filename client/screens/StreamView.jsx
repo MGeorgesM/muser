@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView, TextInput, TouchableOpacity, Pressable } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Dimensions,
+    ScrollView,
+    TextInput,
+    TouchableOpacity,
+    Pressable,
+    KeyboardAvoidingView,
+    Platform,
+} from 'react-native';
 
 import CommentCard from '../components/CommentCard/CommentCard';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
@@ -57,7 +68,8 @@ const StreamView = ({ navigation, route }) => {
                 const call = client.call('livestream', showId);
                 await call.get();
                 call && console.log('Call set up!');
-                setCall(call);
+
+                call.setCall(call);
             } catch (error) {
                 setVideoPlaying(false);
                 console.log('Error setting up Call', error);
@@ -252,29 +264,27 @@ const StreamView = ({ navigation, route }) => {
                     </ScrollView>
                 </View>
                 <View style={styles.commentsContainer}>
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollView  showsVerticalScrollIndicator={false}>
                         {comments.map((comment) => (
                             <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
                         ))}
                     </ScrollView>
-                    {/* <View style={styles.userInputField}>
-                        <TextInput
+                </View>
+
+                <KeyboardAvoidingView
+                    style={{ height: 48 }}
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+                >
+                    <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.bgDark }}>
+                        <ChatTextInput
                             placeholder="Write a comment"
                             value={userComment}
-                            onChangeText={(text) => setUserComment(text)}
-                            style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: colors.white }}
+                            onChangeText={setUserComment}
+                            onSendPress={handlePostComment}
                         />
-                        <TouchableOpacity onPress={handlePostComment}>
-                            <Send size={24} color={colors.darkGray} />
-                        </TouchableOpacity>
-                    </View> */}
-                    <ChatTextInput
-                        placeholder="Write a comment"
-                        value={userComment}
-                        onChangeText={setUserComment}
-                        onSendPress={handlePostComment}
-                    />
-                </View>
+                    </View>
+                </KeyboardAvoidingView>
             </View>
         </>
     );
@@ -286,14 +296,15 @@ const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     commentsContainer: {
-        marginTop: 8,
+        flex: 1,
         paddingTop: 24,
         borderTopEndRadius: 36,
         borderTopStartRadius: 36,
-        flex: 1,
-        border: colors.lightGray,
-        borderWidth: 0.25,
+        // borderColor: colors.lightGray,
+        // borderWidth: 0.5,
+        borderBottomWidth: 0,
     },
+
     userInputField: {
         flexDirection: 'row',
         alignItems: 'center',

@@ -12,7 +12,7 @@ import { ChevronLeft, LogOut } from 'lucide-react-native';
 
 const ProfileStack = createStackNavigator();
 
-const ProfileNavigator = () => {
+const ProfileNavigator = ({navigation}) => {
 const {handleSignOut} = useUser();
 
     return (
