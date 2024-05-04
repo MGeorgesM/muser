@@ -11,6 +11,7 @@ import {
     addDoc,
     serverTimestamp,
     doc,
+    getDoc,
     setDoc,
     getDocs,
     updateDoc,
@@ -270,12 +271,22 @@ const Chat = ({ navigation, route }) => {
 
     const handleFormBand = async () => {
         if (bandName.length > 0) {
+            console.log('forming band includes', participants);
             const chatRef = await getChat();
             if (chatRef) {
+                const chatSnapshot = await getDoc(chatRef);
+                if (!chatSnapshot.exists()) {
+                    console.log('Chat document does not exist!');
+                    return;
+                }
+                const chatData = chatSnapshot.data();
+                const chatParticipantsIds = chatData.participantsIds;
+
+                console.log('Using these participants IDs for forming the band:', chatParticipantsIds);
                 try {
                     const response = await sendRequest(requestMethods.POST, `bands`, {
                         name: bandName,
-                        members: participants,
+                        members: chatParticipantsIds,
                     });
                     if (response.status !== 201) throw new Error('Failed to create band');
 

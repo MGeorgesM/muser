@@ -15,7 +15,7 @@ const ShowCard = ({ entity, navigation, handlePress }) => {
                 </View>
                 <View style={styles.showDetails}>
                     <Text style={[utilities.textM, utilities.myFontMedium]}>{truncateText(entity.name, 25)}</Text>
-                    {entity.data && (
+                    {entity.date && (
                         <Text style={[utilities.textS, utilities.myFontRegular]}>{formatDateString(entity.date)}</Text>
                     )}
                 </View>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         padding: 14,
         marginBottom: 6,
         height: 80,
-        backgroundColor: colors.bglight,
+        backgroundColor: colors.bgDark,
         borderRadius: utilities.borderRadius.m,
     },
 
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         width: 48,
         height: 48,
         borderRadius: utilities.borderRadius.s,
-        backgroundColor: colors.bgDark,
+        backgroundColor: colors.bgOffDark,
         alignItems: 'center',
         justifyContent: 'center',
     },

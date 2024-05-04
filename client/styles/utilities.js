@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 
 export const colors = {
     primary: '#9E002D',
-    // primary: '#FFB13D',
     black: '#212529',
     darkGray: '#495057',
     lightGray: '#D9D9D9',
@@ -10,11 +9,18 @@ export const colors = {
     offWhite: '#DEE2E6',
     white: '#FFFFFF',
 
+    platinum: '#E0E1DC',
+
+    bgDarkest: '#000000',
     bgDark: '#121212',
-    bglight: '#000000',
+    bgOffDark: '#2a2a2a',
+    bglight: '#3e3e3e',
+    bglighter: '#989898',
+    bglightest: '#cccccc',
+
+    // primary: '#FFB13D',
     // bgDark: '#1E1E1E',
     // bglight: '#2E2E2E',
-    bglighter: '#',
 
     blackTrsp: 'rgba(0,0,0,0.3)',
     whiteTrsp: 'rgba(255,255,255,0.5)',
@@ -163,7 +169,7 @@ export const utilities = StyleSheet.create({
         fontFamily: 'Montserrat-Light',
     },
     borderRadius: {
-        s: 12,
+        s: 8,
         m: 18,
         l: 24,
         xl: 36,

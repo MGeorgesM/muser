@@ -3,14 +3,13 @@ import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity }
 
 import { setSelectedVenue } from '../store/Venues';
 
-import BackBtn from '../components/Elements/BackBtn';
 import ShowCard from '../components/ShowCard/ShowCard';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
 
 import { utilities, colors } from '../styles/utilities';
 import { profilePicturesUrl, showsPicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
-import { formatDateString } from '../core/tools/formatDate';
+import { formatDateString, truncateText } from '../core/tools/formatDate';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const VenueDetails = ({ route, navigation }) => {
@@ -39,7 +38,7 @@ const VenueDetails = ({ route, navigation }) => {
             try {
                 const response = await sendRequest(requestMethods.GET, `shows?venue_id=${venue.id}&status=set`, null);
                 if (response.status !== 200) throw new Error('Failed to fetch venue shows');
-                console.log(response.data);
+                console.log('venue shows', response.data);
                 setShows(response.data);
             } catch (error) {
                 console.log('Error fetching venue shows:', error);
@@ -50,8 +49,7 @@ const VenueDetails = ({ route, navigation }) => {
     }, [venue]);
 
     return (
-        <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
-            {/* <BackBtn navigation={navigation} /> */}
+        <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
             <View>
                 <Image
                     source={{
@@ -61,10 +59,9 @@ const VenueDetails = ({ route, navigation }) => {
                     }}
                     style={[styles.entityImage, styles.borderRadiusBottom]}
                 />
-
                 <View style={[utilities.overlay, styles.borderRadiusBottom, { height: 96, gap: 2 }]}>
                     <Text style={[utilities.textL, utilities.myFontBold, { color: 'white' }]}>
-                        {!switchHandler ? venue.name : selectedShow.name}
+                        {truncateText(!switchHandler ? venue.name : selectedShow.name)}
                     </Text>
                     <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.offWhite }]}>
                         {switchHandler ? formatDateString(selectedShow.date) : `${venue.location.name}, Lebanon`}
@@ -125,8 +122,8 @@ const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     borderRadiusBottom: {
-        // borderBottomLeftRadius: 20,
-        // borderBottomRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
     },
     entityImage: {
         width: '100%',

@@ -87,11 +87,11 @@ const ShowDetails = ({ route, navigation }) => {
                 <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
                     <ChevronLeft
                         size={24}
-                        color="black"
+                        color="white"
                         style={{ position: 'absolute', left: 0 }}
                         onPress={() => navigation.goBack()}
                     />
-                    <Text style={[utilities.textL, utilities.textBold]}>{title}</Text>
+                    <Text style={[utilities.textL, utilities.myFontBold]}>{title}</Text>
                 </View>
                 <View>
                     <ProfileDetailsPicker items={bands} label={'Band'} />
@@ -112,11 +112,11 @@ export default ShowDetails;
 const styles = StyleSheet.create({
     main: {
         flex: 1,
-        backgroundColor: colors.darkGray,
+        backgroundColor: colors.bgDarkest,
     },
     overviewContainer: {
         marginTop: 64,
-        backgroundColor: 'white',
+        backgroundColor: colors.bgDark,
         borderTopEndRadius: utilities.borderRadius.xl,
         borderTopLeftRadius: utilities.borderRadius.xl,
         paddingTop: 24,
