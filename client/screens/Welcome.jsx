@@ -10,7 +10,7 @@ const Welcome = ({ navigation }) => {
     return (
         <View style={{ flex: 1 }}>
             <StatusBar translucent hidden={true} />
-            <ImageBackground style={[styles.welcomeContainer]} source={imageUrl} resizeMode="cover">
+            <ImageBackground style={[styles.welcomeContainer, styles.imageBackground]} source={imageUrl} resizeMode="cover">
                 <View style={[utilities.photoOverlayS, { paddingHorizontal: 20, justifyContent: 'flex-end' }]}>
                     <Text style={styles.welcomeText}>BE PART OF MUSER</Text>
                     <PrimaryBtn

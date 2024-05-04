@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native';
 
 export const colors = {
-    primary: '#FFB13D',
+    primary: '#9E002D',
+    // primary: '#FFB13D',
     black: '#212529',
     darkGray: '#495057',
     lightGray: '#D9D9D9',
@@ -9,8 +10,10 @@ export const colors = {
     offWhite: '#DEE2E6',
     white: '#FFFFFF',
 
-    bgDark: '#1E1E1E',
-    bglight: '#2E2E2E',
+    bgDark: '#121212',
+    bglight: '#000000',
+    // bgDark: '#1E1E1E',
+    // bglight: '#2E2E2E',
     bglighter: '#',
 
     blackTrsp: 'rgba(0,0,0,0.3)',
@@ -123,7 +126,7 @@ export const utilities = StyleSheet.create({
         justifyContent: 'center',
     },
     primaryBtnText: {
-        color: colors.black,
+        color: colors.white,
         fontSize: 20,
         fontFamily: 'Montserrat-Bold',
     },

@@ -15,7 +15,13 @@ const PictureHeader = ({ name, picture, welcome = false }) => {
                         {welcome && (
                             <Text style={[styles.welcomeDisplay, utilities.textM, utilities.noMb]}>Welcome</Text>
                         )}
-                        <Text style={[utilities.textL, utilities.myFontMedium, { marginTop: -4, color: 'white' }]}>
+                        <Text
+                            style={[
+                                welcome ? utilities.textL : utilities.textM,
+                                utilities.myFontMedium,
+                                { marginTop: -4, color: 'white', marginLeft: 0 },
+                            ]}
+                        >
                             {name}
                         </Text>
                     </View>

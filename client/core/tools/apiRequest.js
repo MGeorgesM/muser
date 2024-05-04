@@ -22,7 +22,7 @@ export const sendRequest = async (method, route, body) => {
     } catch (error) {
         console.log('AXIOS Error during HTTP request:', error);
         if (error.response) {
-            console.error('AXIOS Response error:', error.response.data);
+            console.log('AXIOS Response error:', error.response.data);
         }
         throw error;
     }

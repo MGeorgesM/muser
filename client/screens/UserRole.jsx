@@ -4,11 +4,12 @@ import RNPickerSelect from 'react-native-picker-select';
 
 import { useUser } from '../contexts/UserContext';
 
-import { utilities } from '../styles/utilities';
+import { colors, utilities } from '../styles/utilities';
 
 import { ChevronDown } from 'lucide-react-native';
 
 import BackBtn from '../components/Elements/BackBtn';
+import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const logoImg = require('../assets/logowhite.png');
 const imageSource = require('../assets/appImages/onboard00.jpg');
@@ -36,7 +37,8 @@ const UserRole = ({ navigation }) => {
                             style={{
                                 inputAndroid: {
                                     fontSize: 24,
-                                    color: 'white',
+                                    fontFamily: 'Montserrat-Bold',
+                                    color: colors.primary,
                                 },
                                 viewContainer: {
                                     flex: 1,
@@ -49,11 +51,7 @@ const UserRole = ({ navigation }) => {
                     </View>
                 </View>
                 <View style={styles.bottomInnerContainer}>
-                    <TouchableOpacity style={[utilities.primaryBtn]}>
-                        <Text style={[utilities.primaryBtnText]} onPress={() => navigation.navigate('UserInfo')}>
-                            Continue
-                        </Text>
-                    </TouchableOpacity>
+                    <PrimaryBtn text={'Continue'} handlePress={() => navigation.navigate('UserInfo')}/>
                 </View>
             </ScrollView>
         </ImageBackground>

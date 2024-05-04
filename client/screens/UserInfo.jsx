@@ -14,6 +14,7 @@ import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDeta
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import DetailsPill from '../components/DetailsPill/DetailsPill';
+import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const { styles } = require('../components/AuthenticationForms/styles');
 
@@ -173,7 +174,7 @@ const UserInfo = ({ navigation }) => {
                     <ChevronLeft size={24} color={'white'} />
                     <Text style={styles.headerProfile}>Complete Your Profile</Text>
                 </View>
-                <View style={styles.addPhotoPrompt}>
+                <View style={[styles.addPhotoPrompt, { marginVertical: selectedPicture ? 16 : 40 }]}>
                     {selectedPicture ? (
                         <>
                             <Image
@@ -251,11 +252,7 @@ const UserInfo = ({ navigation }) => {
             </View>
             <View style={styles.bottomInnerContainer}>
                 <Text style={styles.errorText}>{error}</Text>
-                <TouchableOpacity style={[utilities.primaryBtn]}>
-                    <Text style={[utilities.primaryBtnText]} onPress={handleSignUp}>
-                        Register
-                    </Text>
-                </TouchableOpacity>
+                <PrimaryBtn text="Register" handlePress={handleSignUp} />
             </View>
         </View>
     );

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
 import { setConnectedUsers, setFeedUsers, setUsers } from '../store/Users';
@@ -14,25 +14,17 @@ import { colors, utilities } from '../styles/utilities';
 import { SearchIcon } from 'lucide-react-native';
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
+import { FlatList } from 'react-native-gesture-handler';
 
 const Feed = ({ navigation }) => {
     const dispatch = useDispatch();
     const { currentUser } = useUser();
     const users = useSelector((global) => global.usersSlice.feedUsers);
+    const [refreshing, setRefreshing] = useState(false);
 
-    const getUsers = async () => {
-        try {
-            const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
-            if (response.status !== 200) throw new Error('Failed to fetch users');
-            dispatch(setConnectedUsers(response.data.connectedUsers));
-            dispatch(setFeedUsers(response.data.feedUsers));
-        } catch (error) {
-            console.log('Error fetching users:', error);
-        }
-    };
     useEffect(() => {
         getUsers();
-    }, [currentUser]);
+    }, [currentUser?.id, refreshing]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -62,21 +54,33 @@ const Feed = ({ navigation }) => {
         });
     });
 
-    return users.length !== 0 ? (
+    const getUsers = async () => {
+        try {
+            const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
+            if (response.status !== 200) throw new Error('Failed to fetch users');
+            dispatch(setConnectedUsers(response.data.connectedUsers));
+            dispatch(setFeedUsers(response.data.feedUsers));
+            setRefreshing(false);
+        } catch (error) {
+            console.log('Error fetching users:', error);
+        }
+    };
+
+    return users && users.length === 0 ? (
         <LoadingScreen />
     ) : (
         <View style={styles.listContainer}>
-            <MasonryList
+            <FlatList
                 data={users}
                 renderItem={({ item, i }) => {
-                    const itemHeight = Math.floor(Math.random() * (290 - 180 + 1) + 180);
-                    return <FeedMemberCard user={item} height={itemHeight} navigation={navigation} />;
+                    return <FeedMemberCard user={item} navigation={navigation} />;
                 }}
                 keyExtractor={(item) => item.id}
                 numColumns={2}
                 style={{ flex: 1 }}
                 contentContainerStyle={styles.cardsContainer}
-                onRefresh={getUsers}
+                refreshing={refreshing}
+                onRefresh={() => setRefreshing(true)}
             />
         </View>
     );

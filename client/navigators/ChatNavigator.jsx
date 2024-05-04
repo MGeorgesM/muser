@@ -11,7 +11,7 @@ import ChatOverview from '../screens/ChatOverview';
 
 const ChatStack = createStackNavigator();
 
-const ChatNavigator = () => {
+const ChatNavigator = ({navigation}) => {
     return (
         <ChatStack.Navigator
             initialRouteName="ChatMain"

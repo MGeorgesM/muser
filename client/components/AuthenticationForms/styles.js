@@ -63,8 +63,8 @@ export const styles = StyleSheet.create({
     userTypeText: {
         fontSize: 24,
         paddingRight: 12,
-        color: colors.primary,
-        fontWeight: 'bold',
+        color: colors.white,
+        fontFamily: 'Montserrat-Regular',
         alignSelf: 'center',
     },
 
@@ -115,7 +115,6 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginVertical: 40,
     },
     addPhotoText: {
         color: 'white',
