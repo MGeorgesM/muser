@@ -25,7 +25,7 @@ const ChatOverview = ({ navigation }) => {
         const chatRef = collection(fireStoreDb, 'chats');
         const q = query(chatRef, where('participantsIds', 'array-contains', currentUser.id));
 
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chatsArray = [];
 
             // console.log('Snapshot size:', querySnapshot.size);
@@ -35,6 +35,7 @@ const ChatOverview = ({ navigation }) => {
             });
 
             chatsArray.sort((a, b) => b.lastMessage.createdAt - a.lastMessage.createdAt);
+            console.log('Chats:', chatsArray)
             setChats(chatsArray);
 
             if (!querySnapshot.empty) {

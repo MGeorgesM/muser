@@ -15,7 +15,7 @@ const PictureHeader = ({ name, picture, welcome = false }) => {
                         {welcome && (
                             <Text style={[styles.welcomeDisplay, utilities.textM, utilities.noMb]}>Welcome</Text>
                         )}
-                        <Text style={[utilities.textL, utilities.textBold, { marginTop: -4, color: 'white' }]}>
+                        <Text style={[utilities.textL, utilities.myFontMedium, { marginTop: -4, color: 'white' }]}>
                             {name}
                         </Text>
                     </View>
@@ -36,9 +36,14 @@ const styles = StyleSheet.create({
         width: 48,
         height: 48,
         borderRadius: 24,
-        marginRight: 8,
+        marginRight: 10,
+        marginLeft: 0,
 
         borderColor: 'white',
         borderWidth: 0.5,
+    },
+    welcomeDisplay: {
+        marginBottom: -2,
+        color: 'white',
     },
 });

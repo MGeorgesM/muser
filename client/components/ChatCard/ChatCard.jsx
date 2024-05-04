@@ -52,12 +52,18 @@ const ChatCard = ({ chat, navigation }) => {
     return (
         <TouchableOpacity
             style={styles.chatCardContainer}
-            onPress={() => navigation.navigate('ChatDetails', { chatId: chat.id, chatParticipants: participants })}
+            onPress={() =>
+                navigation.navigate('ChatDetails', {
+                    chatId: chat.id,
+                    chatParticipants: participants,
+                    chatTitle: chat.chatTitle,
+                })
+            }
         >
             <View style={[utilities.flexRow, utilities.center]}>
                 {avatar && <Image source={{ uri: avatar }} style={styles.chatCardPhoto} />}
                 <View>
-                    <Text style={[utilities.textM, utilities.myFontMedium, { color: colors.white, marginBottom:6}]}>
+                    <Text style={[utilities.textM, utilities.myFontMedium, { color: colors.white, marginBottom: 6 }]}>
                         {title || 'Chat'}
                     </Text>
                     <Text style={[utilities.textXS, utilities.myFontRegular, { color: colors.gray }]}>

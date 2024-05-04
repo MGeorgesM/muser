@@ -36,7 +36,7 @@ import { CircleCheckBig, CircleX } from 'lucide-react-native';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
-    const { chatId, chatParticipants } = route.params;
+    const { chatId, chatParticipants, chatTitle } = route.params;
 
     const [messages, setMessages] = useState([]);
     const [participants, setParticipants] = useState(chatParticipants);
@@ -47,7 +47,7 @@ const Chat = ({ navigation, route }) => {
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
     const [bandModalVisible, setBandModalVisible] = useState(false);
 
-    const [bandName, setBandName] = useState('');
+    const [bandName, setBandName] = useState(chatTitle || '');
 
     const dispatch = useDispatch();
 
@@ -61,7 +61,6 @@ const Chat = ({ navigation, route }) => {
             const otherParticipantIds = participants.filter((id) => id !== currentUser.id);
 
             if (otherParticipantIds.length === 0) return;
-
             const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
 
             try {
@@ -93,7 +92,12 @@ const Chat = ({ navigation, route }) => {
         console.log('receiver', receiver);
         navigation.setOptions({
             headerTitle: () => {
-                return <PictureHeader picture={receiver?.picture} name={receiver?.name} />;
+                if(chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
+                else {
+                    const receiverName = receiver?.map((user) => user.name).join(', ');
+                    const reciverPicture = receiver?.map((user) => user.picture).join(', ');
+                    return <PictureHeader picture={reciverPicture} name={receiverName} />;
+                }
             },
             headerLeft: () => (
                 <TouchableOpacity onPress={() => navigation.navigate('ChatMain')} style={{ marginLeft: 20 }}>
@@ -148,7 +152,7 @@ const Chat = ({ navigation, route }) => {
                 const fetchedMessages = snapshot.docs.map((doc) => ({
                     _id: doc.id,
                     text: doc.data().text,
-                    createdAt: doc.data().createdAt.toDate(),
+                    createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
                     user: {
                         _id: doc.data().userId,
                         avatar: participants.length === 2 ? null : getReceiverPicture(doc.data().userId),
@@ -288,41 +292,44 @@ const Chat = ({ navigation, route }) => {
             const chatRef = await getChat();
             if (chatRef) {
                 try {
-                    await updateDoc(chatRef, {
-                        chatTitle: bandName,
-                    });
-                } catch (error) {
-                    console.log('Error adding band name:', error);
-                }
-
-                // const messageRef = collection(chatRef, 'messages');
-
-                // const messageDocRef = await addDoc(messageRef, {
-                //     _id: `${currentUser.id}-${Date.now()}-${bandName}`,
-                //     text: `${currentUser.name} has formed the band ${bandName}`,
-                //     createdAt: serverTimestamp(),
-                //     userId: currentUser.id,
-                // });
-
-                // await updateDoc(chatRef, {
-                //     lastMessage: {
-                //         messageId: messageDocRef.id,
-                //         text,
-                //         createdAt,
-                //         userId,
-                //     },
-                // });
-                try {
                     const response = await sendRequest(requestMethods.POST, `bands`, {
                         name: bandName,
                         members: participants,
                     });
-                    if (response.status !== 200) throw new Error();
+                    if (response.status !== 201) throw new Error('Failed to create band');
+
                     console.log('Band created:', response.data);
+
+                    await updateDoc(chatRef, {
+                        chatTitle: bandName,
+                    });
+
+                    const messageRef = collection(chatRef, 'messages');
+                    const messageData = {
+                        _id: `${currentUser.id}-${Date.now()}-${bandName}`,
+                        text: `${currentUser.name} has formed the band ${bandName}!`,
+                        createdAt: serverTimestamp(),
+                        userId: currentUser.id,
+                    };
+
+                    const messageDocRef = await addDoc(messageRef, messageData);
+
+                    await updateDoc(chatRef, {
+                        lastMessage: {
+                            messageId: messageDocRef.id,
+                            text: messageData.text,
+                            createdAt: serverTimestamp(),
+                            userId: currentUser.id,
+                        },
+                    });
                 } catch (error) {
-                    console.error('Error creating band:', error);
+                    console.error('Error processing band formation:', error);
                 }
+            } else {
+                console.log('No chat reference available');
             }
+        } else {
+            console.log('Band name is required');
         }
 
         setBandModalVisible(false);
@@ -377,7 +384,7 @@ const Chat = ({ navigation, route }) => {
                 renderSend={renderSend}
                 renderInputToolbar={renderInputToolbar}
                 // renderInputToolbar={renderInputToolbar}
-                messagesContainerStyle={{ backgroundColor: colors.bgDark, paddingTop: 8 }}
+                messagesContainerStyle={{ backgroundColor: colors.bgDark, paddingVertical: 8 }}
                 alignTop={true}
                 renderActions={() => null}
             />
@@ -401,7 +408,7 @@ const Chat = ({ navigation, route }) => {
                     <View style={styles.bandInputContainer}>
                         <TextInput
                             style={[styles.formBandInput]}
-                            placeholder="Band name"
+                            placeholder="Your band name"
                             placeholderTextColor={colors.lightGray}
                             value={bandName}
                             onChangeText={(text) => setBandName(text)}
@@ -470,5 +477,19 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         width: '80%',
         marginBottom: -8,
+    },
+
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    avatar: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        marginRight: 8,
+
+        borderColor: 'white',
+        borderWidth: 0.5,
     },
 });
