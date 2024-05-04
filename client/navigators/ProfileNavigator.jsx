@@ -44,7 +44,7 @@ const {handleSignOut} = useUser();
                 ),
             }}
         >
-            <ProfileStack.Screen name="Profile" component={Profile} />
+            <ProfileStack.Screen name="ProfileMain" component={Profile} />
             <ProfileStack.Screen name="ProfileEdit" component={ProfileEdit} />
         </ProfileStack.Navigator>
     );

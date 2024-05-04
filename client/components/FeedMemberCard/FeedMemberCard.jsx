@@ -5,6 +5,7 @@ import { colors, utilities } from '../../styles/utilities';
 import { profilePicturesUrl } from '../../core/tools/apiRequest';
 
 import { Guitar } from 'lucide-react-native';
+import InstrumentIcon from '../InstrumentIcon/InstrumentIcon';
 
 const FeedMemberCard = ({ user, height, navigation }) => {
     const imageUrl = `${profilePicturesUrl + user.picture}`;
@@ -16,7 +17,7 @@ const FeedMemberCard = ({ user, height, navigation }) => {
             <Image source={{ uri: imageUrl }} style={styles.photo} />
             <View style={styles.overlay}>
                 <Text style={styles.username}>{user.name}</Text>
-                <Guitar size={20} color="white" />
+                <InstrumentIcon instrument={user.instrument} />
             </View>
         </TouchableOpacity>
     );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Guitar, Drum, MicVocal, Piano, KeyboardMusic, Wind, Speaker } from 'lucide-react-native';
+import { Guitar, Drum, MicVocal, Piano, KeyboardMusic, TestTubeDiagonal, Speaker } from 'lucide-react-native';
 
 const InstrumentIcon = ({ instrument, color = 'white' }) => {
     console.log('rendering', instrument);
@@ -15,7 +15,7 @@ const InstrumentIcon = ({ instrument, color = 'white' }) => {
         case 'keyboard':
             return <KeyboardMusic color={color} />;
         case 'brass':
-            return <Wind color={color} />;
+            return <TestTubeDiagonal color={color} />;
         case 'bass':
             return <Speaker color={color} />;
         default:
