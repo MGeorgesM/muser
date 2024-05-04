@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 import BackBtn from '../components/Elements/BackBtn';
 import InstrumentIcon from '../components/InstrumentIcon/InstrumentIcon';
+import DetailsPill from '../components/DetailsPill/DetailsPill';
 
 const ProfileDetails = ({ route }) => {
     const { userId } = route.params;
@@ -22,7 +23,7 @@ const ProfileDetails = ({ route }) => {
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
     const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
 
-    console.log(feedUsers);
+    console.log('user profile', user);
 
     useEffect(() => {
         if (userId) {
@@ -81,23 +82,12 @@ const ProfileDetails = ({ route }) => {
                         >
                             Details
                         </Text>
-                        <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
-                            Skils and Details
-                        </Text>
+                        <View>
+                            <DetailsPill item={user?.instrument} />
+                            <DetailsPill item={user?.experience} />
+                            {user?.genres && user.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
+                        </View>
                     </View>
-                    {/* <TouchableOpacity style={[utilities.secondaryBtn, { marginTop: 32 }]}>
-                        <Text
-                            style={utilities.secondaryBtnText}
-                            onPress={() =>
-                                navigation.navigate('Chat', {
-                                    screen: 'ChatDetails',
-                                    params: { chatParticipants: [currentUser.id, user.id].sort() },
-                                })
-                            }
-                        >
-                            Say Hello!
-                        </Text>
-                    </TouchableOpacity> */}
                     {!isConnected && (
                         <PrimaryBtn
                             text={'Say Hello!'}

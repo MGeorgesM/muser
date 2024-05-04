@@ -122,7 +122,12 @@ class User extends Authenticatable implements JWTSubject
             'about' => $this->about,
             'picture' => $this->picture,
             'location' => $this->location,
-            'genres' => $this->genres->pluck('name', 'id'),
+            'genres' => $this->genres->map(function ($genre) {
+                return [
+                    'id' => $genre->id,
+                    'name' => $genre->name
+                ];
+            }),
             'instrument' => $this->instrument,
             'availability' => $this->availability,
             'experience' => $this->experience,
