@@ -81,7 +81,16 @@ const VenueDetails = ({ route, navigation }) => {
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) =>
                             switchHandler ? (
-                                <BandMemberCard entity={item} navigation={navigation} />
+                                <BandMemberCard
+                                    entity={item}
+                                    navigation={navigation}
+                                    handlePress={() => {
+                                        navigation.navigate('Feed', {
+                                            screen: 'ProfileDetails',
+                                            params: { userId: item.id },
+                                        });
+                                    }}
+                                />
                             ) : (
                                 <ShowCard
                                     entity={item}
