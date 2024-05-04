@@ -33,7 +33,7 @@ const ChatCard = ({ chat, navigation }) => {
                 // otherParticipantIds.length === 1
                 //     ? setAvatar(`${profilePicturesUrl + response.data[0].picture}`)
                 //     : setAvatar(`${defaultAvatar}`);
-                setAvatar(`${profilePicturesUrl + response.data[0].picture}`)
+                setAvatar(`${profilePicturesUrl + response.data[0].picture}`);
             } catch (error) {
                 console.log('Error fetching users:', error);
             }
@@ -57,14 +57,18 @@ const ChatCard = ({ chat, navigation }) => {
             <View style={[utilities.flexRow, utilities.center]}>
                 {avatar && <Image source={{ uri: avatar }} style={styles.chatCardPhoto} />}
                 <View>
-                    <Text style={[utilities.textM, utilities.textBold, { color: colors.white }]}>
+                    <Text style={[utilities.textM, utilities.myFontMedium, { color: colors.white, marginBottom:6}]}>
                         {title || 'Chat'}
                     </Text>
-                    <Text style={[utilities.textXS, { color: colors.gray }]}>{chat.lastMessage.text}</Text>
+                    <Text style={[utilities.textXS, utilities.myFontRegular, { color: colors.gray }]}>
+                        {chat.lastMessage.text}
+                    </Text>
                 </View>
             </View>
             <View>
-                <Text style={[utilities.textXS, { color: colors.gray }]}>{formatDate(chat.lastMessage.createdAt)}</Text>
+                <Text style={[utilities.textXS, utilities.myFontRegular, { color: colors.gray }]}>
+                    {formatDate(chat.lastMessage.createdAt)}
+                </Text>
             </View>
         </TouchableOpacity>
     );
@@ -76,12 +80,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingTop: 20,
+        paddingVertical: 16,
+
+        borderBottomColor: colors.darkGray,
+        borderBottomWidth: 0.25,
     },
     chatCardPhoto: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        marginRight: 10,
+        width: 64,
+        height: 64,
+        borderRadius: 32,
+        marginRight: 16,
     },
 });
