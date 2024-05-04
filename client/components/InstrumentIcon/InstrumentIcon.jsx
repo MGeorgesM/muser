@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Guitar, Drum, MicVocal, Piano, KeyboardMusic, TestTubeDiagonal, Speaker } from 'lucide-react-native';
 
 const InstrumentIcon = ({ instrument, color = 'white' }) => {
-    console.log('rendering', instrument);
+
     switch (instrument.name.toLowerCase()) {
         case 'strings':
             return <Guitar color={color} />;

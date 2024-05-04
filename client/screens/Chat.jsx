@@ -24,23 +24,21 @@ import { addConnectedUser, setConnectedUsers } from '../store/Users';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUser } from '../contexts/UserContext';
 
-import { defaultAvatar, profilePicturesUrl } from '../core/tools/apiRequest';
+import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import { colors, utilities } from '../styles/utilities';
-import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler';
+import { FlatList, TextInput } from 'react-native-gesture-handler';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
-
-import { CircleCheckBig, CircleX } from 'lucide-react-native';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
     const { chatId, chatParticipants, chatTitle } = route.params;
 
+    const [localChatId, setLocalChatId] = useState(chatId);
     const [messages, setMessages] = useState([]);
     const [participants, setParticipants] = useState(chatParticipants);
-    // const [newParticipant, setNewParticipant] = useState(null);
     const [receiver, setReceiver] = useState(null);
 
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
@@ -83,6 +81,7 @@ const Chat = ({ navigation, route }) => {
                 console.log('Error fetching connections:', error);
             }
         };
+
         userConnections.length === 0 && getUserConnections();
         console.log('userConnections:', userConnections);
         getUsersPicutresandNames();
@@ -92,7 +91,7 @@ const Chat = ({ navigation, route }) => {
         console.log('receiver', receiver);
         navigation.setOptions({
             headerTitle: () => {
-                if(chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
+                if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
                 else {
                     const receiverName = receiver?.map((user) => user.name).join(', ');
                     const reciverPicture = receiver?.map((user) => user.picture).join(', ');
@@ -114,32 +113,26 @@ const Chat = ({ navigation, route }) => {
                     </Pressable>
                 </View>
             ),
-            // headerStyle: {
-            //     backgroundColor: colors.bgDark,
-            //     height: 128,
-            //     shadowColor: 'transparent',
-            //     elevation: 0,
-            //     borderBottomWidth: 0.5,
-            // },
         });
     }, [navigation, addParticipant, receiver]);
 
-    getReceiverPicture = (userId) => {
-        console.log('getting receivers pictures', userId);
-
-        if (receiver.length > 1) {
-            let picture = null;
-            const imageFromDb = receiver?.find((user) => user.id === userId);
-            if (imageFromDb) {
-                picture = `${profilePicturesUrl + imageFromDb.picture}`;
-                console.log('Image from db:', picture);
-                return picture;
-            }
-        }
-    };
-
     useLayoutEffect(() => {
         let unsubscribe;
+
+        getReceiverPicture = (userId) => {
+            console.log('getting receivers pictures', userId);
+
+            if (userId === currentUser.id) return null;
+
+            if (receiver && receiver.length > 1) {
+                let picture = null;
+                const receiverUser = receiver?.find((user) => user.id === userId);
+                if (receiverUser) {
+                    picture = `${profilePicturesUrl + receiverUser.picture}`;
+                    return picture;
+                }
+            }
+        };
 
         const setupMessagesListener = async () => {
             const chatRef = await getChat();
@@ -169,40 +162,27 @@ const Chat = ({ navigation, route }) => {
                 unsubscribe();
             }
         };
-    }, [participants, chatId]);
+    }, [participants, chatId, localChatId]);
 
     const getChat = async () => {
         if (chatId) {
             const chatRef = doc(fireStoreDb, 'chats', chatId);
-            // try {
-            //     const docSnap = await getDoc(chatRef);
-            //     if(docSnap.exists()) {
-            //         const chatData = docSnap.data();
-            //         setParticipants(chatData.participantsIds);
-            //         console.log('participants:', chatData.participantsIds)
-            //     }
-            // } catch (error) {
-            //     console.log('Error getting chat:', error)
-            // }
             return chatRef;
         } else {
             const chatRef = collection(fireStoreDb, 'chats');
             const q = query(chatRef, where('participantsIds', '==', participants));
             // const q = query(chatRef, where(`participantsIds.${participants[0]}`, '==', true));
-
             const querySnapshot = await getDocs(q);
             if (!querySnapshot.empty) return querySnapshot.docs[0].ref;
         }
     };
 
     const addParticipant = async (newParticipantId) => {
-        console.log('adding participant');
         if (newParticipantId && !participants.includes(newParticipantId)) {
             const chatRef = await getChat();
             if (chatRef) {
                 try {
                     const newParticipantsList = [...participants, newParticipantId].sort();
-                    console.log('New participants:', newParticipantsList);
                     await updateDoc(chatRef, {
                         participantsIds: newParticipantsList,
                     });
@@ -260,6 +240,7 @@ const Chat = ({ navigation, route }) => {
         if (!chatRef) {
             const firstMessage = messages[0];
             chatRef = await createChat(firstMessage);
+            setLocalChatId(chatRef.id);
             await addConnection();
         } else {
             const messagesRef = collection(chatRef, 'messages');
@@ -383,7 +364,6 @@ const Chat = ({ navigation, route }) => {
                 inverted={true}
                 renderSend={renderSend}
                 renderInputToolbar={renderInputToolbar}
-                // renderInputToolbar={renderInputToolbar}
                 messagesContainerStyle={{ backgroundColor: colors.bgDark, paddingVertical: 8 }}
                 alignTop={true}
                 renderActions={() => null}
