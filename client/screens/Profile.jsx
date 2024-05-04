@@ -9,6 +9,7 @@ import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { UserRoundCog, LockKeyhole, ChevronRight } from 'lucide-react-native';
 
 import DetailsPill from '../components/DetailsPill/DetailsPill';
+import SettingsCard from '../components/SettingsCard/SettingsCard';
 
 const Profile = ({ navigation }) => {
     const { currentUser } = useUser();
@@ -25,7 +26,7 @@ const Profile = ({ navigation }) => {
             </View>
             <View style={styles.profileNameSecton}>
                 <Text style={[utilities.textL, utilities.myFontBold]}>{currentUser.name}</Text>
-                <Text style={[utilities.textM, utilities.myFontRegular]}>{currentUser.email}</Text>
+                <Text style={[utilities.textM, utilities.myFontRegular, {color:colors.gray}]}>{currentUser.email}</Text>
             </View>
             <View style={styles.profileDetailsSection}>
                 <Text style={[utilities.textM, utilities.myFontMedium]}>Bio</Text>
@@ -47,7 +48,7 @@ const Profile = ({ navigation }) => {
                 </View>
             </View>
             <View style={styles.editProfileModal}>
-                <TouchableOpacity style={styles.settingsCard}>
+                {/* <TouchableOpacity style={styles.settingsCard}>
                     <View style={styles.settingCardInner}>
                         <View style={styles.settingsBtn}>
                             <UserRoundCog size={16} color={colors.white} />
@@ -55,7 +56,9 @@ const Profile = ({ navigation }) => {
                         <Text style={styles.settingsDetails}>Edit Profile</Text>
                     </View>
                     <ChevronRight size={24} color={colors.white} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                <SettingsCard iconComponent={<UserRoundCog color={'white'} />} text={'Edit Profile'} />
+                <SettingsCard iconComponent={<LockKeyhole color={'white'} />} text={'Edit Login Details'} />
             </View>
         </View>
     ) : (
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
     topProfileView: {
         alignItems: 'center',
         position: 'relative',
-        height: height * 0.15,
+        height: height * 0.11,
         backgroundColor: colors.bgDark,
     },
 
@@ -83,7 +86,6 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         alignItems: 'center',
-        zIndex: 1,
     },
 
     profileDetailsPicture: {
@@ -93,10 +95,6 @@ const styles = StyleSheet.create({
     },
 
     profileNameSecton: {
-        // backgroundColor: colors.bglight,
-        // height: height * 0.85,
-        // padding: 20,
-        // elevation: 0,
         alignItems: 'center',
         paddingTop: 96,
     },
@@ -107,41 +105,15 @@ const styles = StyleSheet.create({
     },
 
     editProfileModal: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
         marginTop: 24,
         padding: 20,
-        height: height * 0.3,
+        height: height * 0.25,
+        justifyContent: 'center',
         backgroundColor: colors.bgDark,
         borderTopEndRadius: utilities.borderRadius.xl,
         borderTopLeftRadius: utilities.borderRadius.xl,
-    },
-
-    settingsCard: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 14,
-        marginBottom: 6,
-        height: 80,
-        borderRadius: utilities.borderRadius.m,
-    },
-
-    settingCardInner: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    settingsDetails: {
-        marginLeft: 12,
-        fontFamily: 'Montserrat-Medium',
-        fontSize: 16,
-    },
-
-    settingsBtn: {
-        width: 48,
-        height: 48,
-        borderRadius: utilities.borderRadius.s,
-        backgroundColor: colors.bglight,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
 });
