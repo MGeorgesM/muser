@@ -11,11 +11,11 @@ const ModalHigh = ({ title, navigation, items, renderItem }) => {
                 <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
                     <ChevronLeft
                         size={24}
-                        color="black"
+                        color="white"
                         style={{ position: 'absolute', left: 0 }}
                         onPress={() => navigation.goBack()}
                     />
-                    <Text style={[utilities.textL, utilities.textBold]}>{title}</Text>
+                    <Text style={[utilities.textL, utilities.myFontMedium]}>{title}</Text>
                 </View>
 
                 <FlatList
@@ -34,11 +34,11 @@ export default ModalHigh;
 const styles = StyleSheet.create({
     main: {
         flex: 1,
-        backgroundColor: colors.darkGray,
+        backgroundColor: colors.bglight,
     },
     overviewContainer: {
         marginTop: 64,
-        backgroundColor: 'white',
+        backgroundColor: colors.bgDark,
         borderTopEndRadius: utilities.borderRadius.xl,
         borderTopLeftRadius: utilities.borderRadius.xl,
         paddingTop: 24,

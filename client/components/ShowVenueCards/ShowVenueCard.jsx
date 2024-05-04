@@ -14,8 +14,10 @@ const ShowVenueCard = ({ entity, handlePress }) => {
             <Image source={{ uri: imageUrl }} style={styles.backgroundImage} />
             <View style={styles.overlay}>
                 <View>
-                    <Text style={[styles.streamName, {fontSize: band ? 18 : 20}]}>{truncateText(name)}</Text>
-                    <Text style={[styles.date, {fontSize: band ? 14 : 16}]}>{(date && formatDateString(date)) || about}</Text>
+                    <Text style={[styles.entityName, { fontSize: band ? 18 : 20 }]}>{truncateText(name)}</Text>
+                    <Text style={[styles.entityInfo, { fontSize: band ? 14 : 16 }]}>
+                        {(date && formatDateString(date)) || `${venueType.name} - ${location.name}`}
+                    </Text>
                 </View>
                 {band && (
                     <View style={styles.avatarsDisplay}>
@@ -41,7 +43,7 @@ const styles = StyleSheet.create({
         height: 180,
         overflow: 'hidden',
         position: 'relative',
-        borderRadius: utilities.borderRadius.m,
+        borderRadius: utilities.borderRadius.s,
         marginBottom: 16,
     },
     backgroundImage: {
@@ -54,24 +56,25 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        height: '50%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        padding: 16,
+        height: 'auto',
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        padding: 12,
         justifyContent: 'space-between',
     },
     avatarsDisplay: {
         position: 'absolute',
         right: 20,
-        bottom: 12,
+        top: 12,
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
     },
-    streamName: {
-        fontWeight: 'bold',
+    entityName: {
         color: 'white',
+        fontFamily: 'Montserrat-Medium',
     },
-    date: {
+    entityInfo: {
         color: 'white',
+        fontFamily: 'Montserrat-Regular',
     },
 });
