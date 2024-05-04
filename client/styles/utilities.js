@@ -125,7 +125,7 @@ export const utilities = StyleSheet.create({
     primaryBtnText: {
         color: colors.black,
         fontSize: 20,
-        fontWeight: 'bold',
+        fontFamily: 'Montserrat-Bold',
     },
     secondaryBtn: {
         height: 48,

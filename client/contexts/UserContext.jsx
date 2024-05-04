@@ -16,20 +16,20 @@ export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({
-        name: 'Ariana',
+        name: '',
         // email: 'anissa.auer@example.org',
-        email: 'grande@mail.com',
-        password: 'password',
-        about: 'This is me Ariana Williams!',
+        email: '',
+        password: '',
+        about: '',
         picture: '',
-        location_id: 1,
-        availability_id: 1,
-        experience_id: 3,
-        instrument_id: 6,
-        venue_type_id: '1',
+        location_id: '',
+        availability_id: '',
+        experience_id: '',
+        instrument_id: '',
+        venue_type_id: '',
         venue_name: '',
         role_id: '1',
-        genres: [1, 3],
+        genres: [],
     });
     const navigation = useNavigation();
     console.log(userInfo);
@@ -85,7 +85,7 @@ export const UserProvider = ({ children }) => {
             navigation.dispatch(
                 CommonActions.reset({
                     index: 0,
-                    routes: [{ name: 'Authentication' }],
+                    routes: [{ name: 'Welcome' }],
                 })
             );
         } catch (error) {

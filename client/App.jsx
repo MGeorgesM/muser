@@ -31,22 +31,21 @@ const AuthenticationStack = () => {
 
 const AppNavigator = () => {
     const { loggedIn } = useUser();
-
     return loggedIn ? <MainTabs /> : <AuthenticationStack />;
 };
 
 const App = () => {
-    useEffect(() => {
-        const run = async () => {
-            if (Platform.OS === 'android') {
-                await PermissionsAndroid.requestMultiple([
-                    'android.permission.POST_NOTIFICATIONS',
-                    'android.permission.BLUETOOTH_CONNECT',
-                ]);
-            }
-        };
-        run();
-    }, []);
+    // useEffect(() => {
+    //     const run = async () => {
+    //         if (Platform.OS === 'android') {
+    //             await PermissionsAndroid.requestMultiple([
+    //                 'android.permission.POST_NOTIFICATIONS',
+    //                 'android.permission.BLUETOOTH_CONNECT',
+    //             ]);
+    //         }
+    //     };
+    //     run();
+    // }, []);
     return (
         <Provider store={store}>
             <NavigationContainer>

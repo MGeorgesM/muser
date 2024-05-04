@@ -1,6 +1,8 @@
 import React from 'react';
 import { Text, View, TextInput } from 'react-native';
 
+import { colors } from '../../styles/utilities';
+
 const { styles } = require('./styles');
 
 const SignInForm = ({ userInfo, setUserInfo }) => {
@@ -8,8 +10,9 @@ const SignInForm = ({ userInfo, setUserInfo }) => {
         <View>
             <Text style={styles.label}>Email</Text>
             <TextInput
-                style={styles.input}
+                style={styles.authInput}
                 placeholder="user@mail.com"
+                placeholderTextColor={colors.gray}
                 value={userInfo?.email}
                 keyboardType="email-address"
                 textContentType="emailAddress"
@@ -18,8 +21,9 @@ const SignInForm = ({ userInfo, setUserInfo }) => {
             />
             <Text style={styles.label}>Password</Text>
             <TextInput
-                style={styles.input}
-                placeholder="password"
+                style={styles.authInput}
+                placeholder="Password"
+                placeholderTextColor={colors.gray}
                 value={userInfo?.password}
                 onChangeText={(text) => setUserInfo({ ...userInfo, password: text })}
                 autoCapitalize="none"

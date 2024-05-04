@@ -15,22 +15,24 @@ export const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         fontSize: 32,
-        fontWeight: 'bold',
+        fontFamily: 'Montserrat-Bold',
         marginTop: 24,
         marginBottom: 44,
     },
     label: {
         fontSize: 16,
+        fontFamily: 'Montserrat-Regular',
         marginBottom: 6,
         marginLeft: 8,
         color: 'white',
     },
-    input: {
-        color: '#ADADAD',
+    authInput: {
+        color: colors.offWhite,
+        fontFamily: 'Montserrat-Regular',
         height: 48,
         borderRadius: 24,
         borderWidth: 0.5,
-        borderColor: '#ADADAD',
+        borderColor: colors.offWhite,
         backgroundColor: '#2E2C2F20',
         padding: 16,
         marginBottom: 14,
@@ -38,16 +40,17 @@ export const styles = StyleSheet.create({
     promptText: {
         color: 'white',
         fontSize: 16,
+        fontFamily: 'Montserrat-Regular',
         marginTop: 10,
         textAlign: 'center',
     },
     promptLink: {
-        color: colors.primary,
+        color: colors.black,
         textDecorationLine: 'underline',
     },
     welcomeLogo: {
-        width: 130,
-        height: 130,
+        width: 140,
+        height: 140,
         alignSelf: 'center',
     },
     topInnerContainer: {
@@ -136,5 +139,12 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center',
         marginBottom: 10,
+    },
+    imageBackground: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
     },
 });

@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Image, View, Text, ScrollView, TouchableOpacity, ImageBackground, KeyboardAvoidingView } from 'react-native';
+import {
+    Image,
+    View,
+    Text,
+    ScrollView,
+    TouchableOpacity,
+    ImageBackground,
+    KeyboardAvoidingView,
+    Platform,
+} from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 
@@ -8,8 +17,7 @@ import SignUpForm from '../components/AuthenticationForms/SignUpForm';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { utilities } from '../styles/utilities';
-
-import { useFonts } from 'expo-font';
+import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const logoImg = require('../assets/logowhite.png');
 const { styles } = require('../components/AuthenticationForms/styles');
@@ -21,8 +29,8 @@ const Authentication = ({ navigation }) => {
     const { userInfo, setUserInfo, authError, setLoggedIn, loggedIn, setCurrentUser } = useUser();
 
     const imageSource = switchHandler
-        ? require('../assets/appImages/onboard2.jpg')
-        : require('../assets/appImages/onboard1.jpg');
+        ? require('../assets/appImages/onboard00.jpg')
+        : require('../assets/appImages/onboard00.jpg');
 
     useEffect(() => {
         if ((!userInfo.email.includes('@') || !userInfo.email.includes('.')) && userInfo.email.length > 0) {
@@ -36,14 +44,6 @@ const Authentication = ({ navigation }) => {
 
     const handleSignIn = async () => {
         setError(null);
-        // try {
-        //     const response = await signInWithEmailAndPassword(auth, email, password);
-        //     if (response.status === 200) {
-        //         navigation.navigate('Feed');
-        //     }
-        // } catch (error) {
-        //     console.error('Error signing in:', error);
-        // }
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/login', userInfo);
 
@@ -93,39 +93,39 @@ const Authentication = ({ navigation }) => {
     };
 
     return (
-        
-        <ImageBackground source={imageSource} style={{ flex: 1 }} resizeMode="cover">
-                <ScrollView contentContainerStyle={[styles.scrollContainer, utilities.photoOverlayS]}>
-                    {/* <View style={[utilities.photo]}> */}
-                    <View style={styles.topInnerContainer}>
-                        <Image style={styles.welcomeLogo} source={logoImg} />
-                        <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
-                        {switchHandler ? (
-                            <SignUpForm userInfo={userInfo} setUserInfo={setUserInfo} />
-                        ) : (
-                            <SignInForm userInfo={userInfo} setUserInfo={setUserInfo} />
-                        )}
-                    </View>
-                    <View style={styles.bottomInnerContainer}>
-                        <Text style={styles.errorText}>{error}</Text>
-                        <TouchableOpacity style={[utilities.primaryBtn]} onPress={handleProceed}>
-                            <Text style={[utilities.primaryBtnText]}>{!switchHandler ? 'Log In' : 'Continue'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.promptText}>
-                            {switchHandler ? 'Have an account? ' : "Don't have an account? "}
-                            <Text
-                                style={styles.promptLink}
-                                onPress={() => {
-                                    setSwitchHandler(!switchHandler);
-                                    setError(null);
-                                }}
-                            >
-                                {switchHandler ? 'Log In' : 'Register'}
-                            </Text>
+        <ImageBackground source={imageSource} style={styles.imageBackground}>
+            <ScrollView contentContainerStyle={[styles.scrollContainer, utilities.photoOverlayS]}>
+                <View style={styles.topInnerContainer}>
+                    <Image style={styles.welcomeLogo} source={logoImg} />
+                    <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
+                    {switchHandler ? (
+                        <SignUpForm userInfo={userInfo} setUserInfo={setUserInfo} />
+                    ) : (
+                        <SignInForm userInfo={userInfo} setUserInfo={setUserInfo} />
+                    )}
+                </View>
+                <View style={styles.bottomInnerContainer}>
+                    <Text style={styles.errorText}>{error}</Text>
+                    <PrimaryBtn
+                        text={!switchHandler ? 'Log In' : 'Continue'}
+                        handlePress={handleProceed}
+                        marginBottom={0}
+                    />
+                    <Text style={styles.promptText}>
+                        {switchHandler ? 'Have an account? ' : "Don't have an account? "}
+                        <Text
+                            style={styles.promptLink}
+                            onPress={() => {
+                                setSwitchHandler(!switchHandler);
+                                setError(null);
+                            }}
+                        >
+                            {switchHandler ? 'Log In' : 'Register'}
                         </Text>
-                    </View>
-                    {/* </View> */}
-                </ScrollView>
+                    </Text>
+                </View>
+                {/* </View> */}
+            </ScrollView>
         </ImageBackground>
     );
 };
