@@ -19,7 +19,6 @@ const ShowDetails = ({ route, navigation }) => {
     const dates = generateRandomDates(5);
     const [showBooking, setShowBooking] = useState({
         name: '',
-        description: '',
         date: '',
         time: '',
         band_id: '',
@@ -121,9 +120,9 @@ const ShowDetails = ({ route, navigation }) => {
                             placeholder="Show Name"
                             placeholderTextColor={colors.gray}
                             cursorColor={colors.primary}
-                            style={{ marginBottom: 20 }}
+                            style={{ marginBottom: 20, color:colors.gray }}
                             value={showBooking.name}
-                            onChangeText={(text) => setUserInfo((prev) => ({ ...prev, name: text }))}
+                            onChangeText={(text) => setShowBooking((prev) => ({ ...prev, name: text }))}
                         />
                         <ProfileDetailsPicker
                             items={userBands}

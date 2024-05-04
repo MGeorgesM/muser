@@ -3,7 +3,7 @@ export function generateHours() {
     for (let i = 10; i < 24; i++) {
         const hourString = `${i < 10 ? '0' + i : i}:00`;
         hours.push({
-            id: `${i}`,
+            id: hourString,
             name: hourString,
         });
     }
@@ -20,7 +20,7 @@ export const generateRandomDates = (numDates) => {
 
         const date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
         dates.push({
-            id: i + 1,
+            id: date,
             name: date,
         });
     }
