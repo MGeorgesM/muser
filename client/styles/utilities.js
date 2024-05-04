@@ -45,7 +45,6 @@ export const utilities = StyleSheet.create({
     },
 
     spaceBetween: {
-        alignItems: 'center',
         justifyContent: 'space-between',
     },
 

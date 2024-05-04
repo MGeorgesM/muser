@@ -100,7 +100,11 @@ const VenueDetails = ({ route, navigation }) => {
                         No shows available, check back later!
                     </Text>
                 )}
-                <PrimaryBtn text={'Book your Show'} />
+                <PrimaryBtn
+                    text={'Book your Show'}
+                    marginTop={'auto'}
+                    handlePress={() => navigation.navigate('ShowDetails')}
+                />
             </View>
         </View>
     );
