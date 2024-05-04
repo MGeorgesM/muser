@@ -48,6 +48,7 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
     Route::get('venues/{venueId}/rating', [VenueController::class, 'getVenueAverageRating']);
     Route::post('venues/{venueId}/rating', [VenueController::class, 'addUpdateRating']);
 
+    Route::get('bands/me', [BandController::class, 'getUserBands']);
     Route::get('bands/{id?}', [BandController::class, 'getBand']);
     Route::post('bands', [BandController::class, 'addBand']);
 

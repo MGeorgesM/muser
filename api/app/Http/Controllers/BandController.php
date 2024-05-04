@@ -21,11 +21,11 @@ class BandController extends Controller
 
         $non_musicians = User::whereIn('id', $members)->where('role_id', '!=', 1)->get();
 
-        if ($non_musicians->count() > 0){
+        if ($non_musicians->count() > 0) {
             return response()->json(['message' => 'All band members must be musicians'], 400);
         }
 
-        if (count($members) < 2 || count($members) > 10 ) {
+        if (count($members) < 2 || count($members) > 10) {
             return response()->json(['message' => 'A band must have at least 2 members and 10 members at most'], 400);
         }
 
@@ -62,6 +62,25 @@ class BandController extends Controller
             return response()->json($bands);
         }
     }
+
+    public function getUserBands()
+    {
+        $user_id = auth()->user()->id;
+    
+        if (!$user_id) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    
+        $bands = Band::with('members')
+            ->whereHas('members', function ($query) use ($user_id) {
+                $query->where('users.id', $user_id);
+            })
+            ->get();
+    
+        return response()->json($bands);
+    }
+    
+
 
     public function deleteBand($bandId)
     {
