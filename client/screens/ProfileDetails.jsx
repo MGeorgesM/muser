@@ -9,6 +9,7 @@ import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { useSelector } from 'react-redux';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 import BackBtn from '../components/Elements/BackBtn';
+import InstrumentIcon from '../components/InstrumentIcon/InstrumentIcon';
 
 const ProfileDetails = ({ route }) => {
     const { userId } = route.params;
@@ -21,14 +22,14 @@ const ProfileDetails = ({ route }) => {
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
     const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
 
+    console.log(feedUsers);
+
     useEffect(() => {
         if (userId) {
             const foundUser = feedUsers.find((user) => user.id === userId);
             if (foundUser) return setUser(foundUser);
-            console.log('profile of', foundUser)
             const foundConnectedUser = connectedUsers.find((user) => user.id === userId);
             if (foundConnectedUser) {
-                console.log('profile of', foundConnectedUser)
                 setIsConnected(true);
                 return setUser(foundConnectedUser);
             }
@@ -40,17 +41,21 @@ const ProfileDetails = ({ route }) => {
     if (user.name)
         return (
             <View style={utilities.flexed}>
-                <BackBtn navigation={navigation}/>
                 <Image source={{ uri: imageUrl }} style={[styles.profileDetailsPicture]} />
                 <View style={[styles.detailContainer]}>
-                    <View>
-                        <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12 }]}>{user.name}</Text>
-                        <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.white }]}>
-                            {user.instrument.name}
-                        </Text>
-                        <Text
-                            style={[utilities.textXS, utilities.myFontRegular, { color: colors.lightGray }]}
-                        >{`${user.location.name}, Lebanon`}</Text>
+                    <View
+                        style={[utilities.flexRow, utilities.alignCenter, utilities.spaceBetween, { marginRight: 20 }]}
+                    >
+                        <View>
+                            <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12 }]}>{user.name}</Text>
+                            <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.white }]}>
+                                {user.instrument.name}
+                            </Text>
+                            <Text
+                                style={[utilities.textXS, utilities.myFontRegular, { color: colors.gray }]}
+                            >{`${user.location.name}, Lebanon`}</Text>
+                        </View>
+                        <InstrumentIcon instrument={user.instrument} />
                     </View>
                     <View>
                         <Text

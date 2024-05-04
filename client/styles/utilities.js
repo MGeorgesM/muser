@@ -35,6 +35,9 @@ export const utilities = StyleSheet.create({
     flexRow: {
         flexDirection: 'row',
     },
+    alignCenter: {
+        alignItems: 'center',
+    },
     center: {
         alignItems: 'center',
         justifyContent: 'center',

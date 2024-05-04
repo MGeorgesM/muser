@@ -7,13 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { sendRequest, requestMethods, profilePicturesUrl } from '../core/tools/apiRequest';
 
-import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
 import MasonryList from '@react-native-seoul/masonry-list';
+import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
 
 import { colors, utilities } from '../styles/utilities';
 import { SearchIcon } from 'lucide-react-native';
-
-const avatar = require('../assets/avatar.png');
+import PictureHeader from '../components/PictureHeader/PictureHeader';
 
 const Feed = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -36,7 +35,7 @@ const Feed = ({ navigation }) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: () => <CustomHeader username={currentUser?.name} avatar={avatar} />,
+            headerTitle: () => <PictureHeader name={currentUser?.name} picture={currentUser?.picture} welcome={true} />,
             headerRight: () => (
                 <View
                     style={{
@@ -62,46 +61,7 @@ const Feed = ({ navigation }) => {
         });
     });
 
-    const CustomHeader = () => {
-        const { currentUser } = useUser();
-        return (
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image source={{ uri: profilePicturesUrl + currentUser?.picture }} style={styles.avatar} />
-                    <View style={styles.textContainer}>
-                        <Text style={[styles.welcomeDisplay, utilities.textM, utilities.noMb]}>Welcome</Text>
-                        <Text style={[utilities.textL, utilities.textBold, { marginTop: -4, color: 'white' }]}>
-                            {currentUser?.name}
-                        </Text>
-                    </View>
-                </View>
-            </View>
-        );
-    };
-
-    // const MemberCard = ({ user, height, navigation }) => {
-    //     const imageUrl = `${profilePicturesUrl + user.picture}`;
-    //     return (
-    //         <TouchableOpacity
-    //             style={[styles.cardContainer, { height: height || 180 }]}
-    //             onPress={() => navigation.navigate('ProfileDetails', { user })}
-    //         >
-    //             <Image source={{ uri: imageUrl }} style={styles.photo} />
-    //             <View style={styles.overlay}>
-    //                 <Text style={styles.username}>{user.name}</Text>
-    //                 <Guitar size={20} color="white" />
-    //             </View>
-    //         </TouchableOpacity>
-    //     );
-    // };
-
     return (
-        // <View style={styles.cardsContainer}>
-        //     {users && users.length > 0 && users.map((user) =>
-        //         (<MemberCard key={user.firebaseUserId} username={user.name} photo={user.profilePicture} />)
-        //     )}
-        // </View>
-
         <View style={styles.listContainer}>
             <MasonryList
                 data={users}
@@ -153,6 +113,6 @@ const styles = StyleSheet.create({
         // gap: 16,
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddding:0
+        paddding: 0,
     },
 });
