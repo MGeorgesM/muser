@@ -19,7 +19,7 @@ const ChatNavigator = () => {
                 headerStyle: {
                     backgroundColor: colors.bgDark,
                     shadowColor: 'transparent',
-                    borderBottomWidth: 0.5,
+                    borderBottomWidth: 0.25,
                     borderBottomColor: colors.lightGray,
                     elevation: 0,
                     height: 128,

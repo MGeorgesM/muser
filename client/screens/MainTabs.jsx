@@ -11,9 +11,6 @@ import VenueNavigator from '../navigators/VenueNavigator';
 import LiveStreamNavigator from '../navigators/LiveStreamNavigator';
 import { colors } from '../styles/utilities';
 
-
-
-
 const Tab = createBottomTabNavigator();
 
 const MainTabs = () => {
@@ -40,9 +37,11 @@ const MainTabs = () => {
                 },
                 tabBarActiveTintColor: colors.primary,
                 tabBarInactiveTintColor: colors.white,
+                tabBarHideOnKeyboard: true,
                 tabBarLabelStyle: {
                     fontSize: 12,
-                    marginBottom: 12,
+                    fontFamily: 'Montserrat-Regular',
+                    marginBottom: 10,
                 },
                 tabBarIconStyle: {
                     marginTop: 12,
@@ -50,7 +49,8 @@ const MainTabs = () => {
                 tabBarStyle: {
                     height: 64,
                     backgroundColor: colors.bgDark,
-   
+                    borderColor: colors.lightGray,
+                    borderTopWidth: 0.5,
                 },
             })}
         >

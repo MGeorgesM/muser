@@ -16,7 +16,7 @@ import {
     updateDoc,
 } from 'firebase/firestore';
 
-import { PlusIcon, ArrowLeft, Send as SendIcon, ChevronLeft } from 'lucide-react-native';
+import { PlusIcon, ArrowLeft, Send as SendIcon, ChevronLeft, X, Check } from 'lucide-react-native';
 import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
 import { renderBubble, renderSend, renderInputToolbar } from '../core/tools/chatConfigurations';
 
@@ -89,7 +89,7 @@ const Chat = ({ navigation, route }) => {
         getUsersPicutresandNames();
     }, [participants]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         console.log('receiver', receiver);
         navigation.setOptions({
             headerTitle: () => {
@@ -102,7 +102,7 @@ const Chat = ({ navigation, route }) => {
             ),
             headerRight: () => (
                 <View style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', gap: 8 }}>
-                    <Pressable style={styles.bandBtn}>
+                    <Pressable style={styles.bandBtn} onPress={() => setBandModalVisible(true)}>
                         <Text style={styles.bandBtnText}>Band</Text>
                     </Pressable>
                     <Pressable onPress={() => setConnectionModalVisible(true)}>
@@ -317,7 +317,7 @@ const Chat = ({ navigation, route }) => {
                         name: bandName,
                         members: participants,
                     });
-                    if (response.status !== 200) throw new Error('Failed to create band');
+                    if (response.status !== 200) throw new Error();
                     console.log('Band created:', response.data);
                 } catch (error) {
                     console.error('Error creating band:', error);
@@ -397,20 +397,20 @@ const Chat = ({ navigation, route }) => {
             )}
             {bandModalVisible && (
                 <View style={styles.chatModal}>
-                    <Text style={[utilities.textL, utilities.textCenter, { marginBottom: 16 }]}>Form Your Band</Text>
+                    <Text style={[utilities.textL, utilities.myFontMedium, utilities.textCenter]}>Form Your Band</Text>
                     <View style={styles.bandInputContainer}>
                         <TextInput
                             style={[styles.formBandInput]}
                             placeholder="Band name"
-                            placeholderTextColor="#ADADAD"
+                            placeholderTextColor={colors.lightGray}
                             value={bandName}
                             onChangeText={(text) => setBandName(text)}
                         />
-                        <Pressable onPress={handleFormBand}>
-                            {bandName.length > 0 ? (
-                                <CircleCheckBig size={32} color={colors.white} />
+                        <Pressable onPress={handleFormBand} style={{ marginBottom: -8 }}>
+                            {bandName?.length > 0 ? (
+                                <Check size={32} color={colors.white} />
                             ) : (
-                                <CircleX size={32} color={colors.white} />
+                                <X size={24} color={colors.white} />
                             )}
                         </Pressable>
                     </View>
@@ -425,18 +425,20 @@ const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     chatModal: {
-        height: height * 0.3,
-        padding: 20,
+        height: height * 0.2,
+        paddingHorizontal: 20,
+        paddingVertical: 24,
+        justifyContent: 'space-between',
         borderTopLeftRadius: utilities.borderRadius.xl,
         borderTopEndRadius: utilities.borderRadius.xl,
         backgroundColor: colors.bglight,
-        shadowColor: 'transparent',
     },
 
     bandBtn: {
         backgroundColor: colors.primary,
-        paddingHorizontal: 12,
-        paddingVertical: 6,
+        paddingHorizontal: 16,
+        paddingVertical: 4,
+
         borderRadius: utilities.borderRadius.m,
         marginRight: 8,
         alignItems: 'center',
@@ -444,25 +446,29 @@ const styles = StyleSheet.create({
     },
 
     bandBtnText: {
-        color: colors.black,
         fontSize: 16,
-        fontWeight: 'bold',
+        fontFamily: 'Montserrat-Bold',
+        marginBottom: 1,
+        color: colors.black,
     },
 
     bandInputContainer: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        gap: 24,
-        marginTop: 24,
+        justifyContent: 'space-between',
+
+        borderBottomColor: colors.lightGray,
+        borderBottomWidth: 0.5,
+
+        marginBottom: 10,
     },
 
     formBandInput: {
-        fontSize: 16,
+        fontSize: 18,
         color: colors.white,
         height: 48,
-        textAlign: 'center',
-        // borderBottomColor: colors.white,
-        // borderBottomWidth: 0.5,
+        textAlign: 'left',
+        width: '80%',
+        marginBottom: -8,
     },
 });
