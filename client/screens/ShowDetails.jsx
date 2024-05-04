@@ -4,11 +4,12 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-nativ
 import { ChevronLeft, CircleCheckBig } from 'lucide-react-native';
 
 import { colors, utilities } from '../styles/utilities';
-import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
-
 import { generateHours, generateRandomDates } from '../core/data/generateDatetime';
+
+import DetailsPill from '../components/DetailsPill/DetailsPill';
+import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
 const ShowDetails = ({ route, navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
@@ -24,6 +25,7 @@ const ShowDetails = ({ route, navigation }) => {
         band_id: '',
         venue_id: '',
         picture: '',
+        genres: [],
     });
     // const { venue } = route.params;
 
@@ -90,6 +92,16 @@ const ShowDetails = ({ route, navigation }) => {
         setSwitchHandler(true);
     };
 
+    const handlePress = (genreId) => {
+        let newGenres = [];
+        if (showBooking.genres.includes(genreId)) {
+            newGenres = showBooking.genres.filter((id) => id !== genreId);
+        } else {
+            newGenres = [...showBooking.genres, genreId];
+        }
+        setShowBooking((prev) => ({ ...prev, genres: newGenres }));
+    };
+
     if (userBands)
         return (
             <View style={styles.main}>
@@ -124,7 +136,6 @@ const ShowDetails = ({ route, navigation }) => {
                                 }))
                             }
                         />
-
                         <ProfileDetailsPicker
                             items={dates}
                             label={'Date'}
@@ -137,7 +148,21 @@ const ShowDetails = ({ route, navigation }) => {
                             selectedValue={showBooking.time}
                             onValueChange={(value) => setShowBooking((prev) => ({ ...prev, time: value }))}
                         />
-                        <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18 }]}>Availability</Text>
+                        {genres && genres.length > 0 && (
+                            <View style={styles.showGenresContainer}>
+                                <Text style={styles.inputTextProfile}>Music Genres</Text>
+                                {genres.map((genre) => (
+                                    <DetailsPill
+                                        key={genre.id}
+                                        item={genre}
+                                        handlePress={handlePress}
+                                        isSelected={showBooking.genres.includes(genre.id)}
+                                    />
+                                ))}
+                            </View>
+                        )}
+
+                        {/* <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18 }]}>Availability</Text> */}
                     </View>
                     <TouchableOpacity style={[utilities.primaryBtn, { marginBottom: 20 }]} onPress={handleProceed}>
                         <Text style={[utilities.primaryBtnText]}>Confirm</Text>
@@ -161,5 +186,8 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: utilities.borderRadius.xl,
         paddingTop: 24,
         justifyContent: 'space-between',
+    },
+    showGenresContainer: {
+        marginBottom: 20,
     },
 });
