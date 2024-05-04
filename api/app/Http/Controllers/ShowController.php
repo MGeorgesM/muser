@@ -15,9 +15,9 @@ class ShowController extends Controller
             'description' => 'required|max:120',
             'band_id' => 'required|exists:bands,id',
             'venue_id' => 'required|exists:users,id',
-            'date' => 'required|date_format:Y-m-d\TH:i:s',
-            'duration' => 'required|integer',
-            'picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'date' => 'required|date_format:Y-m-d',
+            'time' => 'required|date_format:H:i',
+            'picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $show = new Show();

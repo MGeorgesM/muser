@@ -26,10 +26,10 @@ return new class extends Migration
         Schema::create('shows', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description', 120);
-            $table->string('picture');
-            $table->dateTime('date');
-            $table->integer('duration');
+            $table->string('description', 40);
+            $table->string('picture')->nullable();
+            $table->date('date');
+            $table->time('time');
 
             $table->foreignId('band_id')->constrained('bands')->onDelete('cascade');
             $table->foreignId('venue_id')->constrained('users')->onDelete('cascade');

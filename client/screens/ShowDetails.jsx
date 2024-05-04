@@ -8,14 +8,25 @@ import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDeta
 
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
-import hours from '../core/data/generateHours';
+import { generateHours, generateRandomDates } from '../core/data/generateDatetime';
 
 const ShowDetails = ({ route, navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
     const [userBands, setUserBands] = useState([]);
+    const [genres, setGenres] = useState([]);
+    const hours = generateHours();
+    const dates = generateRandomDates(5);
+    const [showBooking, setShowBooking] = useState({
+        name: '',
+        description: '',
+        date: '',
+        time: '',
+        band_id: '',
+        venue_id: '',
+        picture: '',
+    });
     // const { venue } = route.params;
     console.log(hours);
-
 
     useEffect(() => {
         const getUserBands = async () => {
@@ -25,13 +36,26 @@ const ShowDetails = ({ route, navigation }) => {
                 console.log(response.data);
                 setUserBands(response.data);
             } catch (error) {
-                console.log('Error fetching user bands:', error);                
+                console.log('Error fetching user bands:', error);
             }
-        }
-    })
+        };
+
+        const getGenres = async () => {
+            try {
+                const response = await sendRequest(requestMethods.GET, 'genres', null);
+                if (response.status !== 200) throw new Error('Failed to fetch genres');
+                console.log(response.data);
+                setGenres(response.data);
+            } catch (error) {
+                console.log('Error fetching genres:', error);
+            }
+        };
+
+        getUserBands();
+        getGenres();
+    }, []);
 
     const durations = [
-
         {
             id: 1,
             name: '1 hour',
@@ -61,37 +85,35 @@ const ShowDetails = ({ route, navigation }) => {
     const handleProceed = () => {
         // navigation.navigate('ShowConfirmation')
         try {
-            
-        } catch (error) {
-            
-        }
+        } catch (error) {}
         setSwitchHandler(true);
     };
 
-    if(userBands) return (
-        <View style={styles.main}>
-            <View style={[utilities.container, styles.overviewContainer]}>
-                <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
-                    <ChevronLeft
-                        size={24}
-                        color="white"
-                        style={{ position: 'absolute', left: 0 }}
-                        onPress={() => navigation.goBack()}
-                    />
-                    <Text style={[utilities.textL, utilities.myFontBold]}>{title}</Text>
+    if (userBands)
+        return (
+            <View style={styles.main}>
+                <View style={[utilities.container, styles.overviewContainer]}>
+                    <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
+                        <ChevronLeft
+                            size={24}
+                            color="white"
+                            style={{ position: 'absolute', left: 0 }}
+                            onPress={() => navigation.goBack()}
+                        />
+                        <Text style={[utilities.textL, utilities.myFontBold]}>{title}</Text>
+                    </View>
+                    <View>
+                        <ProfileDetailsPicker items={userBands} label={'Band'} />
+                        <ProfileDetailsPicker items={hours} label={'Show Starts'} />
+                        <ProfileDetailsPicker items={dates} label={'Date'} />
+                        <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18 }]}>Availability</Text>
+                    </View>
+                    <TouchableOpacity style={[utilities.primaryBtn, { marginBottom: 20 }]} onPress={handleProceed}>
+                        <Text style={[utilities.primaryBtnText]}>Confirm</Text>
+                    </TouchableOpacity>
                 </View>
-                <View>
-                    <ProfileDetailsPicker items={userBands} label={'Band'} />
-                    <ProfileDetailsPicker items={hours} label={'Show Starts'} />
-                    <ProfileDetailsPicker items={durations} label={'Duration'} />
-                    <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18 }]}>Availability</Text>
-                </View>
-                <TouchableOpacity style={[utilities.primaryBtn, { marginBottom: 20 }]} onPress={handleProceed}>
-                    <Text style={[utilities.primaryBtnText]}>Confirm</Text>
-                </TouchableOpacity>
             </View>
-        </View>
-    );
+        );
 };
 
 export default ShowDetails;
