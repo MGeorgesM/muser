@@ -30,9 +30,6 @@ const ChatCard = ({ chat, navigation }) => {
                 console.log('Users fetched:', response.data);
                 console.log(`${profilePicturesUrl + response.data[0].picture}`);
                 setTitle(response.data.map((user) => user.name).join(', '));
-                // otherParticipantIds.length === 1
-                //     ? setAvatar(`${profilePicturesUrl + response.data[0].picture}`)
-                //     : setAvatar(`${defaultAvatar}`);
                 setAvatar(`${profilePicturesUrl + response.data[0].picture}`);
             } catch (error) {
                 console.log('Error fetching users:', error);

@@ -13,6 +13,7 @@ import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
 import { colors, utilities } from '../styles/utilities';
 import { SearchIcon } from 'lucide-react-native';
 import PictureHeader from '../components/PictureHeader/PictureHeader';
+import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const Feed = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -61,7 +62,9 @@ const Feed = ({ navigation }) => {
         });
     });
 
-    return (
+    return users.length !== 0 ? (
+        <LoadingScreen />
+    ) : (
         <View style={styles.listContainer}>
             <MasonryList
                 data={users}

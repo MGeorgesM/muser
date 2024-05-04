@@ -9,6 +9,7 @@ import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { utilities } from '../styles/utilities';
 
 import ChatCard from '../components/ChatCard/ChatCard';
+import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const ChatOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);
@@ -25,7 +26,7 @@ const ChatOverview = ({ navigation }) => {
         const chatRef = collection(fireStoreDb, 'chats');
         const q = query(chatRef, where('participantsIds', 'array-contains', currentUser.id));
 
-         const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chatsArray = [];
 
             // console.log('Snapshot size:', querySnapshot.size);
@@ -35,7 +36,7 @@ const ChatOverview = ({ navigation }) => {
             });
 
             chatsArray.sort((a, b) => b.lastMessage.createdAt - a.lastMessage.createdAt);
-            console.log('Chats:', chatsArray)
+            console.log('Chats:', chatsArray);
             setChats(chatsArray);
 
             if (!querySnapshot.empty) {
@@ -48,7 +49,9 @@ const ChatOverview = ({ navigation }) => {
         return () => unsubscribe;
     }, [currentUser]);
 
-    return (
+    return chats.length === 0 ? (
+        <LoadingScreen />
+    ) : (
         <View style={[utilities.darkContainer]}>
             <FlatList
                 style={[utilities.flexed]}
