@@ -16,11 +16,8 @@ const VenueDetails = ({ route, navigation }) => {
     const { venue } = route.params;
 
     const [switchHandler, setSwitchHandler] = useState(false);
-
     const [shows, setShows] = useState([]);
     const [selectedShow, setSelectedShow] = useState();
-
-    console.log('selected venue', venue.id);
 
     useEffect(() => {
         const getVenueDetails = async () => {

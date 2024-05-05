@@ -24,13 +24,11 @@ const ShowDetails = ({ route, navigation }) => {
         date: '',
         time: '',
         duration: '',
-        band_id: '',
+        band_id: 1,
         venue_id: venueId,
         picture: '',
         genre: '',
     });
-    // const { venue } = route.params;
-
  
     console.log('showbooking', showBooking);
 
