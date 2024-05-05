@@ -74,12 +74,12 @@ const ProfileDetails = ({ route }) => {
                     </View>
 
                     <PrimaryBtn
-                        text={isConnected ? 'Chat' : 'Say Hello!'}
+                        text={isConnected ?  'Chat' : 'Say Hello!'}
                         marginTop={'auto'}
                         handlePress={() =>
                             navigation.navigate('Chat', {
                                 screen: 'ChatDetails',
-                                params: { receiver: user },
+                                params: { chatParticipants: [currentUser.id, user.id].sort() },
                             })
                         }
                     />

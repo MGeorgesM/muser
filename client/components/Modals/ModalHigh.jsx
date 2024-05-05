@@ -20,7 +20,7 @@ const ModalHigh = ({ title, navigation, items, renderItem }) => {
 
                 <FlatList
                     data={items}
-                    keyExtractor={(item) => item.name}
+                    keyExtractor={(item) => item.id.toString()}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
                 ></FlatList>

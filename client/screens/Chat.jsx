@@ -35,28 +35,68 @@ import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
-    const { id, receiver, chatTitle } = route.params;
+    const { chatId, chatParticipants, chatTitle } = route.params;
 
+    const [localChatId, setLocalChatId] = useState(chatId);
+    const [messages, setMessages] = useState([]);
+    const [participants, setParticipants] = useState(chatParticipants);
+    const [receiver, setReceiver] = useState(null);
+
+    const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
     const [bandModalVisible, setBandModalVisible] = useState(false);
 
-    const [chatParticipants, setChatParticipants] = useState([]);
-    const [messages, setMessages] = useState([]);
-    // const [chatRef, setChatRef] = useState(null);
-    const [chatReferences, setChatReferences] = useState({ chatRef: null, messagesRef: null });
-    const [messagesRef, setMessagesRef] = useState(null);
-
-    const [bandName, setBandName] = useState('');
+    const [bandName, setBandName] = useState(chatTitle || '');
 
     const dispatch = useDispatch();
-    const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
+        setParticipants(chatParticipants);
+        console.log('Chat participants:', chatParticipants);
+    }, [chatParticipants]);
+
+    useEffect(() => {
+        const getUsersPicutresandNames = async () => {
+            const otherParticipantIds = participants.filter((id) => id !== currentUser.id);
+
+            if (otherParticipantIds.length === 0) return;
+            const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
+
+            try {
+                const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
+                if (response.status !== 200) throw new Error('Failed to fetch users');
+                setReceiver(response.data);
+                console.log('Users fetched:', response.data);
+            } catch (error) {
+                console.log('Error fetching users:', error);
+            }
+        };
+
+        const getUserConnections = async () => {
+            try {
+                const response = await sendRequest(requestMethods.GET, 'users/type/musician?connected=true', null);
+                if (response.status !== 200) throw new Error('Failed to fetch connections');
+                console.log('Connections fetched:', response.data);
+                dispatch(setConnectedUsers(response.data));
+            } catch (error) {
+                console.log('Error fetching connections:', error);
+            }
+        };
+
+        userConnections.length === 0 && getUserConnections();
+        console.log('userConnections:', userConnections);
+        getUsersPicutresandNames();
+    }, [participants]);
+
+    useEffect(() => {
+        console.log('receiver', receiver);
         navigation.setOptions({
             headerTitle: () => {
                 if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
                 else {
-                    return <PictureHeader picture={receiver?.picture} name={receiver?.name} />;
+                    const receiverName = receiver?.map((user) => user.name).join(', ');
+                    const reciverPicture = receiver?.map((user) => user.picture).join(', ');
+                    return <PictureHeader picture={reciverPicture} name={receiverName} />;
                 }
             },
             headerLeft: () => (
@@ -77,371 +117,214 @@ const Chat = ({ navigation, route }) => {
         });
     }, [navigation, addParticipant, receiver]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         let unsubscribe;
 
-        const fetchParticipants = async () => {
-            await getChatAndMessagesRef();
-            await getChatParticipants();
+        getReceiverPicture = (userId) => {
+            console.log('getting receivers pictures', userId);
+
+            if (userId === currentUser.id) return null;
+
+            if (receiver && receiver.length > 1) {
+                let picture = null;
+                const receiverUser = receiver?.find((user) => user.id === userId);
+                if (receiverUser) {
+                    picture = `${profilePicturesUrl + receiverUser.picture}`;
+                    return picture;
+                }
+            }
         };
 
-        setupMessagesListener().then((unsub) => {
-            unsubscribe = unsub;
-        });
+        const setupMessagesListener = async () => {
+            const chatRef = await getChat();
+            if (!chatRef) return;
 
-        fetchParticipants();
+            const messagesRef = collection(chatRef, 'messages');
+            const q = query(messagesRef, orderBy('createdAt', 'desc'));
 
-        console.log('Receiver:', receiver);
-        console.log('Chat Title:', chatTitle);
+            unsubscribe = onSnapshot(q, (snapshot) => {
+                const fetchedMessages = snapshot.docs.map((doc) => ({
+                    _id: doc.id,
+                    text: doc.data().text,
+                    createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
+                    user: {
+                        _id: doc.data().userId,
+                        avatar: participants.length === 2 ? null : getReceiverPicture(doc.data().userId),
+                    },
+                }));
+                setMessages(fetchedMessages);
+            });
+        };
+
+        setupMessagesListener();
 
         return () => {
             if (unsubscribe) {
                 unsubscribe();
             }
         };
-    }, [id, receiver]);
+    }, [participants, chatId, localChatId]);
 
-    const createChatId = () => [currentUser.id, receiver.id].sort().join('-');
-
-    const getChatAndMessagesRef = async () => {
-        setMessages([]);
-
-        const currentChatId = id || createChatId();
-        console.log('Current Chat ID:', currentChatId);
-
-        const chatRef = doc(fireStoreDb, 'chats', currentChatId);
-        const messagesRef = collection(chatRef, 'messages');
-
-        setChatReferences({ chatRef, messagesRef });
-        return [chatRef, messagesRef];
-    };
-
-    const checkIfChatExists = async () => {
-        const currentChatId = id || createChatId();
-
-        const chatRef = doc(fireStoreDb, 'chats', currentChatId);
-        const messagesRef = collection(chatRef, 'messages');
-
-        try {
-            const docSnap = await getDoc(chatRef);
-
-            if (docSnap.exists()) {
-                console.log('Chat document exists with ID:', currentChatId);
-                return true;
-            } else {
-                console.log('No chat document found with ID:', currentChatId);
-                return false;
-            }
-        } catch (error) {
-            console.error('Error accessing Firestore:', error);
-            return false;
-        }
-    };
-
-    const getChatParticipantsFromFirestore = async () => {
-        const chatExists = await checkIfChatExists();
-
-        if (!chatExists) return console.log('Chat does not Exist!');
-
-        try {
-            const chatSnapshot = await getDoc(chatReferences.chatRef);
-            if (!chatSnapshot.exists()) {
-                throw new Error('Chat document does not exist');
-            }
-
-            const chatData = chatSnapshot.data();
-            return chatData.participantsIds.map((id) => ({
-                id,
-                name: '',
-                picture: '',
-            }));
-        } catch (error) {
-            console.error('Error fetching participants:', error);
-            return [];
-        }
-    };
-
-    const getChatParticipants = async () => {
-        const chatExists = await checkIfChatExists();
-
-        if (!chatExists && !id) {
-            console.log('Chat reference is not available, getting Ids locally');
-            const participants = [currentUser, receiver].map((user) => ({
-                id: user.id,
-                name: user.name,
-                picture: user.picture,
-            }));
-            console.log('Participants:', participants);
-            setChatParticipants(participants);
+    const getChat = async () => {
+        if (chatId) {
+            const chatRef = doc(fireStoreDb, 'chats', chatId);
+            return chatRef;
         } else {
-            console.log('Chat reference is available, fetching participants from Firestore');
-            const participants = await getChatParticipantsFromFirestore();
-            setChatParticipants(participants);
+            const chatRef = collection(fireStoreDb, 'chats');
+            const q = query(chatRef, where('participantsIds', '==', participants));
+            // const q = query(chatRef, where(`participantsIds.${participants[0]}`, '==', true));
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) return querySnapshot.docs[0].ref;
         }
     };
 
-    const getChatParticipantsPictures = async () => {
-        if (chatParticipants.length < 3) return console.log('No or less than 3 participants to fetch pictures for');
-        const query = chatParticipants.map((participant) => `ids[]=${participant.id}`).join('&');
-        try {
-            const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
-            if (response.status !== 200) throw new Error('Failed to fetch users');
-            setChatParticipants(response.data);
-            console.log('Users fetched:', response.data);
-        } catch (error) {
-            console.error('Error fetching users:', error);
+    const addParticipant = async (newParticipantId) => {
+        if (newParticipantId && !participants.includes(newParticipantId)) {
+            const chatRef = await getChat();
+            if (chatRef) {
+                try {
+                    const newParticipantsList = [...participants, newParticipantId].sort();
+                    await updateDoc(chatRef, {
+                        participantsIds: newParticipantsList,
+                    });
+
+                    setParticipants([...participants, newParticipantId]);
+                    setConnectionModalVisible(false);
+                } catch (error) {
+                    console.error('Error adding participant', error);
+                }
+            }
         }
+        setConnectionModalVisible(false);
     };
 
-    const getCurrentUserConnections = async () => {
+    const addConnection = async () => {
+        const receiverId = participants.find((id) => id !== currentUser.id);
         try {
-            const response = await sendRequest(requestMethods.GET, 'users/type/musician?connected=true', null);
-            if (response.status !== 200) throw new Error('Failed to fetch connections');
-            console.log('Connections fetched:', response.data);
-            dispatch(setConnectedUsers(response.data));
-        } catch (error) {
-            console.log('Error fetching connections:', error);
-        }
-    };
-
-    const addToCurrentUserConnections = async (userId) => {
-        try {
-            const response = await sendRequest(requestMethods.POST, `connections/${userId}`, null);
+            const response = await sendRequest(requestMethods.POST, `connections/${receiverId}`, null);
             if (response.status !== 200) throw new Error('Failed to add connection');
-            dispatch(addConnectedUser(userId));
-            addChatParticipantToState(response.data);
+            dispatch(addConnectedUser(receiverId));
             console.log('Connection added:', response.data);
         } catch (error) {
             console.error('Error adding connection:', error);
         }
     };
 
-    const checkIfParticipantExistsinState = (userId) => {
-        if (!userId) return false;
-        return chatParticipants.some((user) => user.id === userId);
-    };
+    const createChat = async (initialMessage) => {
+        const newChatRef = doc(collection(fireStoreDb, 'chats'));
+        const messageRef = collection(newChatRef, 'messages');
 
-    const getChatParticipantPictureFromState = (userId) => {
-        if (!userId || userId === currentUser.id) {
-            console.log('No picture needed for current user.');
-            return null;
-        }
-
-        const participant = chatParticipants.find((user) => user.id === userId);
-        if (!participant || !participant.picture) {
-            console.log('Participant not found or no picture available.');
-            return null;
-        }
-
-        return `${profilePicturesUrl}${participant.picture}`;
-    };
-
-    const addChatParticipantToState = (user) => {
-        if (!user) {
-            console.log('No user provided');
-            return;
-        }
-
-        if (checkIfParticipantExistsinState(user.id)) {
-            console.log('Participant already in chat');
-            return;
-        }
-
-        setChatParticipants((currentParticipants) => [
-            ...currentParticipants,
-            { id: user.id, name: user.name, picture: user.picture },
-        ]);
-    };
-
-    const setupMessagesListener = async () => {
-        const [chatRef, messagesRef] = await getChatAndMessagesRef();
-
-        if (!messagesRef) {
-            return;
-        }
-
-        const q = query(messagesRef, orderBy('createdAt', 'desc'));
-
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const fetchedMessages = snapshot.docs.map((doc) => ({
-                _id: doc.id,
-                text: doc.data().text,
-                createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
-                user: {
-                    _id: doc.data().userId,
-                    avatar:
-                        chatParticipants.length === 2 ? null : getChatParticipantPictureFromState(doc.data().userId),
-                },
-            }));
-            setMessages(fetchedMessages);
+        const messageDocRef = await addDoc(messageRef, {
+            _id: initialMessage._id,
+            text: initialMessage.text,
+            createdAt: initialMessage.createdAt,
+            userId: initialMessage.user._id,
         });
 
-        return unsubscribe;
-    };
+        await setDoc(newChatRef, {
+            participantsIds: participants,
+            chatTitle: null,
+            lastMessage: {
+                messageId: messageDocRef.id,
+                text: initialMessage.text,
+                createdAt: initialMessage.createdAt,
+                userId: initialMessage.user._id,
+            },
+            createdAt: serverTimestamp(),
+        });
 
-    const updateChatParticipantsInFirestore = async (newParticipantIdsList) => {
-        if (!chatReferences.chatRef) {
-            console.error('No chat reference available.');
-            return;
-        }
-
-        try {
-            await updateDoc(chatReferences.chatRef, {
-                participantsIds: newParticipantIdsList,
-            });
-            setConnectionModalVisible(false);
-        } catch (error) {
-            console.error('Error updating participants:', error);
-        }
-    };
-
-    const addParticipant = async (newParticipantId) => {
-        if (checkIfParticipantExistsinState(newParticipantId)) {
-            console.log('Participant already in chat');
-            return;
-        }
-        const newParticipantIdsList = [...chatParticipants.map((participant) => participant.id), newParticipantId];
-
-        await updateChatParticipantsInFirestore(newParticipantIdsList);
-        await addToCurrentUserConnections(newParticipantId); //and add it to the state
-    };
-
-    const updateLastMessageInFirestore = async (messageData, chatRef) => {
-        const { messageId, text, createdAt, userId, chatTitle } = messageData;
-        if (!chatRef) {
-            console.error('Update Last Message - No chat reference available.');
-            return;
-        }
-        try {
-            await updateDoc(chatRef, {
-                chatTitle,
-                lastMessage: {
-                    messageId,
-                    text,
-                    createdAt,
-                    userId,
-                },
-            });
-        } catch (error) {
-            console.error('Error updating last message:', error);
-        }
-    };
-
-    const sendAndLogMessage = async (message, chatRef, messagesRef, chatTitle = null) => {
-        if (!messagesRef) return console.log('Send/Log no messagesRef');
-
-        const { _id, text, createdAt, user } = message;
-        try {
-            const messageDocRef = await addDoc(messagesRef, {
-                _id,
-                text,
-                createdAt,
-                userId: user._id,
-            });
-            await updateLastMessageInFirestore(
-                {
-                    messageId: messageDocRef.id,
-                    text,
-                    createdAt,
-                    userId: user._id,
-                    chatTitle,
-                },
-                chatRef
-            );
-        } catch (error) {
-            console.error('Error sending message:', error);
-        }
-    };
-
-    const createNewChat = async (initialMessage) => {
-        console.log('Initial Message', initialMessage._id);
-        const currentChatId = createChatId();
-        const chatRef = doc(fireStoreDb, 'chats', currentChatId);
-        const messagesRef = collection(chatRef, 'messages');
-
-        const chatParticipantsIds = chatParticipants.map((participant) => participant.id);
-
-        console.log('Creating Chat with Participants:', chatParticipantsIds);
-
-        try {
-            await setDoc(chatRef, {
-                participantsIds: chatParticipantsIds,
-                chatTitle: null,
-                lastMessage: {
-                    messageId: initialMessage._id,
-                    text: initialMessage.text,
-                    createdAt: initialMessage.createdAt,
-                    userId: initialMessage.user._id,
-                },
-                createdAt: serverTimestamp(),
-            });
-
-            await sendAndLogMessage(initialMessage, chatRef, messagesRef);
-            await addToCurrentUserConnections(receiver.id);
-        } catch (error) {
-            console.error('Error creating new chat:', error);
-            return null;
-        }
+        return newChatRef;
     };
 
     const onSend = useCallback(async (messages = []) => {
-        console.log('messages', messages);
-
-        console.log('first message', messages[0]);
-
-        const chatExists = await checkIfChatExists();
-
-        if (!chatExists) {
-            await createNewChat(messages[0]);
-            await getChatParticipants();
-            const participantIds = chatParticipants.map((participant) => participant.id);
-            await updateChatParticipantsInFirestore(participantIds);
+        let chatRef = await getChat();
+        if (!chatRef) {
+            const firstMessage = messages[0];
+            chatRef = await createChat(firstMessage);
+            setLocalChatId(chatRef.id);
+            await addConnection();
         } else {
-            await sendAndLogMessage(messages[0], chatTitle);
+            const messagesRef = collection(chatRef, 'messages');
+
+            messages.forEach(async (message) => {
+                const { _id, text, createdAt, user } = message;
+                const messageDocRef = await addDoc(messagesRef, {
+                    _id,
+                    text,
+                    createdAt,
+                    userId: user._id,
+                });
+
+                await updateDoc(chatRef, {
+                    lastMessage: {
+                        messageId: messageDocRef.id,
+                        text,
+                        createdAt,
+                        userId: user._id,
+                    },
+                });
+            });
         }
+
         setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
-    }, []);
+    });
 
     const handleFormBand = async () => {
-        if (!bandName) {
-            console.log('No band name provided');
-            return;
+        if (bandName.length > 0) {
+            console.log('forming band includes', participants);
+            const chatRef = await getChat();
+            if (chatRef) {
+                const chatSnapshot = await getDoc(chatRef);
+                if (!chatSnapshot.exists()) {
+                    console.log('Chat document does not exist!');
+                    return;
+                }
+                const chatData = chatSnapshot.data();
+                const chatParticipantsIds = chatData.participantsIds;
+
+                console.log('Using these participants IDs for forming the band:', chatParticipantsIds);
+                try {
+                    const response = await sendRequest(requestMethods.POST, `bands`, {
+                        name: bandName,
+                        members: chatParticipantsIds,
+                    });
+                    if (response.status !== 201) throw new Error('Failed to create band');
+
+                    console.log('Band created:', response.data);
+
+                    await updateDoc(chatRef, {
+                        chatTitle: bandName,
+                    });
+
+                    const messageRef = collection(chatRef, 'messages');
+                    const messageData = {
+                        _id: `${currentUser.id}-${Date.now()}-${bandName}`,
+                        text: `${currentUser.name} has formed the band ${bandName}!`,
+                        createdAt: serverTimestamp(),
+                        userId: currentUser.id,
+                    };
+
+                    const messageDocRef = await addDoc(messageRef, messageData);
+
+                    await updateDoc(chatRef, {
+                        lastMessage: {
+                            messageId: messageDocRef.id,
+                            text: messageData.text,
+                            createdAt: serverTimestamp(),
+                            userId: currentUser.id,
+                        },
+                    });
+                } catch (error) {
+                    console.error('Error processing band formation:', error);
+                }
+            } else {
+                console.log('No chat reference available');
+            }
+        } else {
+            console.log('Band name is required');
         }
 
-        if (!chatReferences.chatRef) {
-            console.log('No chat reference available');
-            setBandModalVisible(false);
-            return;
-        }
-
-        try {
-            const chatParticipants = await getChatParticipantsFromFirestore();
-            const chatParticipantsIds = chatParticipants.map((participant) => participant.id);
-
-            console.log('Creating band with these participants:', chatParticipantsIds);
-
-            const response = await sendRequest(requestMethods.POST, 'bands', {
-                name: bandName,
-                members: chatParticipantsIds,
-            });
-
-            if (response.status !== 201) throw new Error('Failed to create band');
-
-            console.log('Band created:', response.data);
-
-            const messageData = {
-                _id: `${currentUser.id}-${Date.now()}-${bandName}`,
-                text: `${currentUser.name} has formed the band ${bandName}!`,
-                createdAt: serverTimestamp(),
-                userId: currentUser.id,
-            };
-            const messageRef = collection(chatReferences.chatRef, 'messages');
-            await sendAndLogMessage(messageData, messageRef, bandName);
-        } catch (error) {
-            console.error('Error processing band formation:', error);
-        } finally {
-            setBandModalVisible(false);
-        }
+        setBandModalVisible(false);
     };
 
     function renderComposer(props) {
