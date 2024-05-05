@@ -18,11 +18,11 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
+            'name' => $this->faker->unique()->firstName,
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password',
             'about' => $this->faker->text(20),
-            'picture' => $this->faker->randomElement(array_map(function ($i) {
+            'picture' => $this->faker->unique()->randomElement(array_map(function ($i) {
                 return "musician ({$i}).jpg";
             }, range(1, 15))),
             'location_id' => Location::all()->random()->id,

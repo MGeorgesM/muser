@@ -16,8 +16,22 @@ class BandFactory extends Factory
      */
     public function definition()
     {
+        $bandNames = [
+            "Midnight Echoes",
+            "Velvet Thunder",
+            "Neon Dreamers",
+            "Silent Harmony",
+            "Eclipse Rhythm",
+            "Golden Rebels",
+            "Electric Serenade",
+            "Twilight Frequency",
+            "Celestial Tunes",
+            "Rustic Melodies"
+        ];
+        
         return [
             'name' => $this->faker->company,
+            'name' => $this->faker->unique()->randomElement($bandNames),
         ];
     }
 }

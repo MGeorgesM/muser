@@ -28,7 +28,7 @@ return new class extends Migration
             $table->date('date');
             $table->time('time');
             $table->integer('duration');
-            $table->string('picture')->nullable();
+            $table->string('picture')->nullable()->default('show (1).jpg');
 
             $table->foreignId('band_id')->constrained('bands')->onDelete('cascade');
             $table->foreignId('venue_id')->constrained('users')->onDelete('cascade');
