@@ -45,7 +45,7 @@ const Streams = ({ navigation }) => {
                   showId: show.id,
                   showName: `${show.band.name} @ ${show.venue.name}`,
               })
-            : navigation.navigate('StreamView', { showId: show.id });
+            : navigation.navigate('StreamView', { show });
     };
 
     return shows && shows.length > 0 ? (
