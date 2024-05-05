@@ -213,17 +213,6 @@ const StreamView = ({ navigation, route }) => {
                                 ViewerLivestreamControls={null}
                             />
                         </View>
-                        <Pressable
-                            onPress={handleUserStreamInteraction}
-                            style={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: [{ translateX: -21 }, { translateY: -21 }],
-                            }}
-                        >
-                            {!videoPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
-                        </Pressable>
                     </StreamCall>
                 ) : (
                     <View
@@ -237,6 +226,17 @@ const StreamView = ({ navigation, route }) => {
                         ]}
                     ></View>
                 )}
+                <Pressable
+                    onPress={handleUserStreamInteraction}
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: [{ translateX: -21 }, { translateY: -21 }],
+                    }}
+                >
+                    {!videoPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
+                </Pressable>
             </View>
             <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
                 <View
@@ -266,7 +266,7 @@ const StreamView = ({ navigation, route }) => {
                     </ScrollView>
                 </View>
                 <View style={styles.commentsContainer}>
-                    <ScrollView  showsVerticalScrollIndicator={false}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
                         {comments.map((comment) => (
                             <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
                         ))}

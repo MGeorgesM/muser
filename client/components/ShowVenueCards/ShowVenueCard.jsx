@@ -15,7 +15,7 @@ const ShowVenueCard = ({ entity, handlePress }) => {
             <View style={styles.overlay}>
                 <View>
                     <Text style={[styles.entityName, { fontSize: band ? 18 : 20 }]}>
-                        {name ? truncateText(name) : band.name}
+                        {name || band.name}
                     </Text>
                     <Text style={[styles.entityInfo, { fontSize: band ? 14 : 16 }]}>
                         {(date && formatDateString(date)) || `${venueType.name} - ${location.name}`}

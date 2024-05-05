@@ -58,7 +58,7 @@ const VenueDetails = ({ route, navigation }) => {
                 />
                 <View style={[utilities.overlay, styles.borderRadiusBottom, { height: 96, gap: 2 }]}>
                     <Text style={[utilities.textL, utilities.myFontBold, { color: 'white' }]}>
-                        {truncateText(!switchHandler ? venue.name : selectedShow.name)}
+                        {!switchHandler ? venue.name : selectedShow.band.name}
                     </Text>
                     <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.offWhite }]}>
                         {switchHandler ? formatDateString(selectedShow.date) : `${venue.location.name}, Lebanon`}
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     },
     entityImage: {
         width: '100%',
-        height: height * 0.5,
+        height: height * 0.49,
         resizeMode: 'cover',
         position: 'relative',
     },

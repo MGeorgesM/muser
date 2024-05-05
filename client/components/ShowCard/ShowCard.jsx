@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { ChevronRight, Play } from 'lucide-react-native';
 
 import { colors, utilities } from '../../styles/utilities';
-import { formatDateString, truncateText } from '../../core/tools/formatDate';
+import { formatDate, formatDateString, truncateText } from '../../core/tools/formatDate';
 
 const ShowCard = ({ entity, navigation, handlePress }) => {
     return (
@@ -14,7 +14,7 @@ const ShowCard = ({ entity, navigation, handlePress }) => {
                     <Play size={16} color={colors.primary} />
                 </View>
                 <View style={styles.showDetails}>
-                    <Text style={[utilities.textM, utilities.myFontMedium]}>{truncateText(entity.name, 25)}</Text>
+                    <Text style={[utilities.textM, utilities.myFontMedium]}>{entity.band.name}</Text>
                     {entity.date && (
                         <Text style={[utilities.textS, utilities.myFontRegular]}>{formatDateString(entity.date)}</Text>
                     )}
