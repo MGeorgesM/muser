@@ -50,6 +50,9 @@ export const utilities = StyleSheet.create({
     alignCenter: {
         alignItems: 'center',
     },
+    justifyCenter: {
+        justifyContent: 'center',
+    },
     center: {
         alignItems: 'center',
         justifyContent: 'center',

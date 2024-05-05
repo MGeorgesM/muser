@@ -6,9 +6,10 @@ import { ChevronLeft, CircleCheckBig } from 'lucide-react-native';
 import { colors, utilities } from '../styles/utilities';
 
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
-import { generateHours, generateRandomDates } from '../core/data/generateDatetime';
+import { generateHours, durations } from '../core/data/generateDatetime';
 
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
+import VenueAvailabilityCard from '../components/VenueAvailabilityCard/VenueAvailabilityCard';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const ShowDetails = ({ route, navigation }) => {
@@ -28,7 +29,7 @@ const ShowDetails = ({ route, navigation }) => {
     });
     // const { venue } = route.params;
 
-    const title = 'VenueName'
+    const title = 'VenueName';
 
     console.log('showbooking', showBooking);
 
@@ -66,16 +67,6 @@ const ShowDetails = ({ route, navigation }) => {
         setSwitchHandler(true);
     };
 
-    const handlePress = (genreId) => {
-        let newGenres = [];
-        if (showBooking.genres.includes(genreId)) {
-            newGenres = showBooking.genres.filter((id) => id !== genreId);
-        } else {
-            newGenres = [...showBooking.genres, genreId];
-        }
-        setShowBooking((prev) => ({ ...prev, genres: newGenres }));
-    };
-
     if (userBands)
         return (
             <View style={styles.main}>
@@ -90,15 +81,6 @@ const ShowDetails = ({ route, navigation }) => {
                         <Text style={[utilities.textL, utilities.myFontBold]}>{title}</Text>
                     </View>
                     <View>
-                        <Text style={[utilities.inputLabel]}>Show</Text>
-                        <TextInput
-                            placeholder="What are you calling this show?"
-                            placeholderTextColor={colors.gray}
-                            cursorColor={colors.primary}
-                            style={[utilities.textM, { marginBottom: 20, color: colors.gray }]}
-                            value={showBooking.name}
-                            onChangeText={(text) => setShowBooking((prev) => ({ ...prev, name: text }))}
-                        />
                         <ProfileDetailsPicker
                             items={userBands}
                             label={'Band'}
@@ -111,13 +93,6 @@ const ShowDetails = ({ route, navigation }) => {
                             }
                         />
                         <ProfileDetailsPicker
-                            items={hours}
-                            label={'Show Time'}
-                            selectedValue={showBooking.time}
-                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, time: value }))}
-                        />
-
-                        <ProfileDetailsPicker
                             items={genres}
                             label={'Main Genre'}
                             selectedValue={showBooking.genre}
@@ -128,32 +103,28 @@ const ShowDetails = ({ route, navigation }) => {
                                 }))
                             }
                         />
-                        <View style={styles.availabilityCard}>
-                            <Text style={[utilities.myFontMedium]}>RandomDate</Text>
-                            <Text style={[utilities.myFontLight]}>RandomTime - RandTime+showBooking.duration</Text>
-                        </View>
-                        {/* <ProfileDetailsPicker
-                            items={dates}
-                            label={'Date'}
-                            selectedValue={showBooking.date}
-                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, date: value }))}
+                        <ProfileDetailsPicker
+                            items={hours}
+                            label={'Show Time'}
+                            selectedValue={showBooking.time}
+                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, time: value }))}
                         />
- */}
-                        {/* {genres && genres.length > 0 && (
-                            <View style={styles.showGenresContainer}>
-                                <Text style={styles.inputTextProfile}>Music Genres</Text>
-                                {genres.map((genre) => (
-                                    <DetailsPill
-                                        key={genre.id}
-                                        item={genre}
-                                        handlePress={handlePress}
-                                        isSelected={showBooking.genres.includes(genre.id)}
-                                    />
-                                ))}
-                            </View>
-                        )} */}
+                        <ProfileDetailsPicker
+                            items={durations}
+                            label={'Duration'}
+                            selectedValue={showBooking.duration}
+                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, duration: value }))}
+                        />
+                        <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18 }]}>Availability</Text>
 
-                        {/* <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18 }]}>Availability</Text> */}
+                        {showBooking.duration &&
+                            [...Array(3)].map((_, index) => (
+                                <VenueAvailabilityCard
+                                    key={index}
+                                    duration={showBooking.duration}
+                                    setShowBooking={setShowBooking}
+                                />
+                            ))}
                     </View>
                     <View style={styles.bottomInnerContainer}>
                         <Text style={[utilities.errorText]}>Hello</Text>
@@ -182,5 +153,4 @@ const styles = StyleSheet.create({
     showGenresContainer: {
         marginBottom: 20,
     },
-
 });

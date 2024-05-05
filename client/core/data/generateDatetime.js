@@ -38,22 +38,22 @@ export const generateRandomDates = (numDates) => {
 export const durations = [
     {
         id: 1,
-        name: '1 hour',
+        name: '1 Hour',
         value: 1,
     },
     {
         id: 2,
-        name: '2 hours',
+        name: '2 Hours',
         value: 2,
     },
     {
         id: 3,
-        name: '3 hours',
+        name: '3 Hours',
         value: 3,
     },
     {
         id: 4,
-        name: '> 3 hours',
+        name: 'More than 3 Hours',
         value: 4,
     },
 ];
