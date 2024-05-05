@@ -15,6 +15,7 @@ class ShowController extends Controller
             'venue_id' => 'required|exists:users,id',
             'date' => 'required|date_format:Y-m-d',
             'time' => 'required|date_format:H:i',
+            'duration' => 'required|integer',
             'genre_id' => 'required|exists:genres,id',
             'picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -23,6 +24,7 @@ class ShowController extends Controller
         $show->band_id = $request->band_id;
         $show->date = $request->date;
         $show->time = $request->time;
+        $show->duration = $request->duration;
         $show->venue_id = $request->venue_id;
         $show->genre_id = $request->genre_id;
 
