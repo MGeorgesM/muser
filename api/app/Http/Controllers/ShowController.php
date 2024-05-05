@@ -20,12 +20,11 @@ class ShowController extends Controller
         ]);
 
         $show = new Show();
-        $show->name = $request->name;
-        $show->description = $request->description;
         $show->band_id = $request->band_id;
-        $show->venue_id = $request->venue_id;
         $show->date = $request->date;
-        $show->duration = $request->duration;
+        $show->time = $request->time;
+        $show->venue_id = $request->venue_id;
+        $show->genre_id = $request->genre_id;
 
         if ($request->hasFile('picture')) {
             $file = $request->file('picture');

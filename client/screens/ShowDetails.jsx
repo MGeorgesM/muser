@@ -169,7 +169,7 @@ const ShowDetails = ({ route, navigation }) => {
                                 onValueChange={(value) => setShowBooking((prev) => ({ ...prev, duration: value }))}
                             />
                         </View>
-                        <View style={validationError ? {} : { marginBottom: 36 }}>
+                        <View style={validationError ? {} : { marginBottom: 32 }}>
                             {showBooking.duration && (
                                 <>
                                     <Text
