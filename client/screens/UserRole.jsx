@@ -20,7 +20,7 @@ const UserRole = ({ navigation }) => {
     return (
         <ImageBackground source={imageSource} style={{ flex: 1 }} resizeMode="cover">
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <BackBtn color="white" backgroundColor="transparent" />
+                <BackBtn color="white" backgroundColor="transparent" navigation={navigation}/>
                 <View style={styles.topInnerContainer}>
                     <Image style={styles.welcomeLogo} source={logoImg} />
                     <Text style={styles.header}>What Brings You to Muser?</Text>

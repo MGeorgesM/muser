@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Text } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 
 import { fireStoreDb } from '../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
-import { utilities } from '../styles/utilities';
+import { colors, utilities } from '../styles/utilities';
 
 import ChatCard from '../components/ChatCard/ChatCard';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
@@ -50,7 +50,9 @@ const ChatOverview = ({ navigation }) => {
     }, [currentUser]);
 
     return chats.length === 0 ? (
-        <LoadingScreen />
+        <View style={[utilities.container, {backgroundColor:colors.bgDark}]}>
+            <LoadingScreen message={'Start Connecting!'} />
+        </View>
     ) : (
         <View style={[utilities.darkContainer]}>
             <FlatList

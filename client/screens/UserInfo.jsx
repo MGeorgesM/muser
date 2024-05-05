@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TextInput, Image, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Text, TextInput, Image, TouchableOpacity, View, StyleSheet, Pressable } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
 
@@ -70,7 +70,7 @@ const UserInfo = ({ navigation }) => {
         });
 
         if (result.canceled) return;
-
+        setError(null);
         setSelectedPicture(result);
         setUserInfo((prev) => ({ ...prev, picture: result.uri }));
     };
@@ -107,7 +107,7 @@ const UserInfo = ({ navigation }) => {
         }
     };
 
-    const handleSignUp = async () => {
+    const handleUserInfoInput = () => {
         setError(null);
         const userInputValid = validateForm();
 
@@ -144,6 +144,11 @@ const UserInfo = ({ navigation }) => {
 
         console.log('UserInfo:', userInfo);
 
+        return formData;
+    };
+
+    const handleSignUp = async () => {
+        const formData = handleUserInfoInput();
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/register', formData);
             if (response.status === 201) {
@@ -171,7 +176,8 @@ const UserInfo = ({ navigation }) => {
         <View style={styles.userInfoContainer}>
             <View>
                 <View style={styles.userInfoHeaderContainer}>
-                    <ChevronLeft size={24} color={'white'} />
+                    <ChevronLeft size={24} color={'white'} onPress={() => navigation.goBack()} />
+
                     <Text style={styles.headerProfile}>Complete Your Profile</Text>
                 </View>
                 <View style={[styles.addPhotoPrompt, { marginVertical: selectedPicture ? 16 : 40 }]}>
@@ -214,14 +220,14 @@ const UserInfo = ({ navigation }) => {
                     )}
 
                     <View>
-                        {Object.keys(profileProperties).length > 0 &&
-                            Object.keys(profileProperties).map((key) => {
-                                if (key === 'Music Genres') {
-                                    return (
-                                        <>
-                                            <Text style={styles.inputTextProfile}>Music Genres</Text>
-                                            <View style={styles.genresContainer}>
-                                                {profileProperties[key].map((genre) => (
+                        {Object.keys(profileProperties).map((key) => {
+                            if (key === 'Music Genres') {
+                                return (
+                                    <>
+                                        <Text style={styles.inputTextProfile}>Music Genres</Text>
+                                        <View style={styles.genresContainer}>
+                                            {profileProperties[key].length > 0 &&
+                                                profileProperties[key].map((genre) => (
                                                     <DetailsPill
                                                         key={genre.id}
                                                         item={genre}
@@ -229,24 +235,24 @@ const UserInfo = ({ navigation }) => {
                                                         isSelected={userInfo.genres.includes(genre.id)}
                                                     />
                                                 ))}
-                                            </View>
-                                        </>
-                                    );
-                                }
-                                return (
-                                    <ProfileDetailsPicker
-                                        key={key}
-                                        label={key}
-                                        items={profileProperties[key]}
-                                        selectedValue={
-                                            key === 'Venue Type'
-                                                ? userInfo['venue_type_id']
-                                                : userInfo[key.toLowerCase() + '_id']
-                                        }
-                                        onValueChange={(value) => handlePickerChange(key, value)}
-                                    />
+                                        </View>
+                                    </>
                                 );
-                            })}
+                            }
+                            return (
+                                <ProfileDetailsPicker
+                                    key={key}
+                                    label={key}
+                                    items={profileProperties[key]}
+                                    selectedValue={
+                                        key === 'Venue Type'
+                                            ? userInfo['venue_type_id']
+                                            : userInfo[key.toLowerCase() + '_id']
+                                    }
+                                    onValueChange={(value) => handlePickerChange(key, value)}
+                                />
+                            );
+                        })}
                     </View>
                 </View>
             </View>

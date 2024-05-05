@@ -89,7 +89,7 @@ export const UserProvider = ({ children }) => {
                 })
             );
         } catch (error) {
-            console.error('Error logging out:', error);
+            console.log('Error logging out:', error);
         }
     };
 
