@@ -41,8 +41,11 @@ const Streams = ({ navigation }) => {
 
     const handleCardPress = (show) => {
         userIsVenue
-            ? navigation.navigate('StreamBroadcast', { showId: show.id })
-            : navigation.navigate('StreamView', { show });
+            ? navigation.navigate('StreamBroadcast', {
+                  showId: show.id,
+                  showName: `${show.band.name} @ ${show.venue.name}`,
+              })
+            : navigation.navigate('StreamView', { showId: show.id });
     };
 
     return shows && shows.length > 0 ? (

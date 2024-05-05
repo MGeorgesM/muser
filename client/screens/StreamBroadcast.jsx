@@ -14,10 +14,10 @@ import inCallManager from 'react-native-incall-manager';
 import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop, Pause } from 'lucide-react-native';
 
 import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
-import { colors } from '../styles/utilities';
+import { colors, utilities } from '../styles/utilities';
 
 const StreamBroadcast = ({ navigation, route }) => {
-    const { showId } = route.params;
+    const { showId, showName } = route.params;
 
     const showIdString = showId.toString() + 'TEST78' ?? {};
 
@@ -67,26 +67,7 @@ const StreamBroadcast = ({ navigation, route }) => {
         }
     };
 
-    // const leaveCall = async () => {
-    //     console.log('leaving call');
-
-    //     if (call) {
-    //         await call.leave().catch(console.error);
-    //         inCallManager.stop();
-    //         // setCall(null);
-    //     }
-    // };
-
-    // const stopLiveStream = async () => {
-    //     if (call) {
-    //         // await call.stopLive().catch(console.error);
-    //         await call.endCall().catch(console.error);
-    //         inCallManager.stop();
-    //         setCall(null);
-    //     }
-    // };
-
-    const LiveStreamViewerLayout = ({ viewer = false }) => {
+        const LiveStreamViewerLayout = ({ viewer = false }) => {
         const call = useCall();
 
         const { useCameraState, useMicrophoneState, useCallCallingState, useHasOngoingScreenShare, useParticipants } =
@@ -200,21 +181,31 @@ const StreamBroadcast = ({ navigation, route }) => {
 
         const HostMode = () => {
             return (
-                <View style={styles.flexed}>
-                    <View style={styles.topLiveStreamBar}>
-                        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                            <Text style={{ color: 'white' }}>{totalParticipants}</Text>
-                            {/* <Eye size={24} color={'white'} /> */}
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Radio size={24} color={isCallLive ? '#FFB84F' : 'white'} />
-                        </TouchableOpacity>
+                <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
+                    <View style={[styles.topLiveStreamBar]}>
+                        <Text style={{ color: 'white' }}>{showName} </Text>
+                        <View style={{ flexDirection: 'row', gap: 8 }}>
+                            <TouchableOpacity
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: 4,
+                                }}
+                            >
+                                <Text style={{ color: 'white' }}>{totalParticipants}</Text>
+                                {/* <Eye size={24} color={'white'} /> */}
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                                <Radio size={24} color={isCallLive ? colors.primary : 'white'} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     <View style={[styles.flexed, { alignItems: 'center', justifyContent: 'center' }]}>
                         {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
                         {!isCallLive && (
                             <Pressable onPress={handleStreamStatus}>
-                                <Play size={48} color={'white'} style={styles.streamStartBtn} />
+                                <Play size={48} color={colors.primary} style={styles.streamStartBtn} />
                             </Pressable>
                         )}
                     </View>
@@ -259,23 +250,22 @@ const StreamBroadcast = ({ navigation, route }) => {
 
     if (call === null)
         return (
-            <View style={styles.liveStreamBroadcasttartContainer}>
+            <View style={styles.liveStreamBroadcastContainer}>
                 <TouchableOpacity onPress={createCall}>
                     <Radio size={48} color={colors.darkGray} />
                 </TouchableOpacity>
                 <Text style={{ fontSize: 20, color: colors.darkGray }}>Go Live</Text>
-                {/* <TouchableOpacity onPress={joinCall} style={styles.callJoinBtn}>
-                    <Text style={{ color: 'white' }}>Watch Stream</Text>
-                </TouchableOpacity> */}
             </View>
         );
 
     return (
-        <StreamCall call={call}>
-            <SafeAreaView style={{ flex: 1, marginTop: 64 }}>
-                <LiveStreamViewerLayout viewer={viewer} />
-            </SafeAreaView>
-        </StreamCall>
+        <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
+            <StreamCall call={call}>
+                <SafeAreaView style={{ flex: 1, marginTop: 64 }}>
+                    <LiveStreamViewerLayout viewer={viewer} />
+                </SafeAreaView>
+            </StreamCall>
+        </View>
     );
 };
 
@@ -284,11 +274,12 @@ export default StreamBroadcast;
 const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-    liveStreamBroadcasttartContainer: {
+    liveStreamBroadcastContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         gap: 8,
+        backgroundColor: colors.bgDark,
     },
     // callStartBtn: {
     //     justifyContent: 'center',
@@ -327,7 +318,7 @@ const styles = StyleSheet.create({
 
     topLiveStreamBar: {
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         paddingVertical: 8,

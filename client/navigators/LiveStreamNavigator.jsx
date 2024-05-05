@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { ActivityIndicator, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -21,7 +21,7 @@ const LiveStreamNavigator = () => {
     const [initialRoute, setInitialRoute] = useState('Streams')
 
     const { currentUser, loggedIn } = useUser();
-
+    
     useEffect(() => {
         const initializeClient = async () => {
             if (loggedIn && currentUser && Object.keys(currentUser).length !== 0) {

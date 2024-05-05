@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState({
         name: 'Johnny',
         // email: 'anissa.auer@example.org',
-        email: 'jhonny@mail.com',
+        email: 'ookeefe@example.net',
         password: 'password',
         about: '',
         picture: '',

@@ -12,6 +12,8 @@ import {
     Platform,
 } from 'react-native';
 
+import { CallingState, SfuEvents, useCall, useCallStateHooks, VideoRenderer } from '@stream-io/video-react-native-sdk';
+
 import CommentCard from '../components/CommentCard/CommentCard';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
 
@@ -199,6 +201,53 @@ const StreamView = ({ navigation, route }) => {
             joinCall();
             setVideoPlaying(true);
         }
+    };
+
+    const liveStreamViewLayout = () => {
+        const call = useCall();
+
+        const { useCameraState, useMicrophoneState, useCallCallingState, useHasOngoingScreenShare, useParticipants } =
+            useCallStateHooks();
+        const { useParticipantCount, useLocalParticipant, useRemoteParticipants, useIsCallLive } = useCallStateHooks();
+
+        const { status: microphoneStatus } = useMicrophoneState();
+        const { status: cameraStatus } = useCameraState();
+
+        const totalParticipants = useParticipantCount();
+        const localParticipant = useLocalParticipant();
+        const remoteParticipants = useRemoteParticipants();
+
+        const callingState = useCallCallingState();
+        const isCallLive = useIsCallLive();
+
+        useEffect(() => {
+            inCallManager.start({ media: 'video' });
+            return () => {
+                inCallManager.stop();
+                if (call && !viewer) {
+                    call.endCall();
+                    console.log('Ending Call!');
+                }
+            };
+        }, []);
+
+        const togglePauseStart = async () => {
+            console.log('Calling State:', callingState);
+            if (callingState === CallingState.JOINED) {
+                console.log('Calling state is Joined, Leaving');
+                await call.leave();
+            } else if (isCallLive) {
+                const call = client.call('livestream', showId);
+                await call.join();
+            } else {
+                console.log('Stream is in Backstage');
+            }
+        };
+
+        return (
+
+            
+        )
     };
 
     return (
