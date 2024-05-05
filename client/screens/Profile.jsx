@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'relative',
         height: height * 0.11,
-        backgroundColor: colors.bglighter,
+        backgroundColor: colors.primary,
     },
 
     profilePicture: {

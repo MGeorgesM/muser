@@ -51,7 +51,7 @@ const ChatCard = ({ chat, navigation }) => {
             style={styles.chatCardContainer}
             onPress={() =>
                 navigation.navigate('ChatDetails', {
-                    chatId: chat.id,
+                    id: chat.id,
                     chatParticipants: participants,
                     chatTitle: chat.chatTitle,
                 })

@@ -56,7 +56,7 @@ const Chat = ({ navigation, route }) => {
             headerTitle: () => {
                 if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
                 else {
-                    return <PictureHeader picture={receiver.picture} name={receiver.name} />;
+                    return <PictureHeader picture={receiver?.picture} name={receiver?.name} />;
                 }
             },
             headerLeft: () => (
@@ -81,6 +81,7 @@ const Chat = ({ navigation, route }) => {
         let unsubscribe;
 
         const fetchParticipants = async () => {
+            await getChatAndMessagesRef();
             await getChatParticipants();
         };
 
@@ -90,8 +91,6 @@ const Chat = ({ navigation, route }) => {
 
         fetchParticipants();
 
-        console.log('Chat ID:', id);
-        console.log('Chat Ref:', chatReferences.chatRef);
         console.log('Receiver:', receiver);
         console.log('Chat Title:', chatTitle);
 
@@ -105,6 +104,8 @@ const Chat = ({ navigation, route }) => {
     const createChatId = () => [currentUser.id, receiver.id].sort().join('-');
 
     const getChatAndMessagesRef = async () => {
+        setMessages([]);
+
         const currentChatId = id || createChatId();
         console.log('Current Chat ID:', currentChatId);
 
@@ -116,13 +117,19 @@ const Chat = ({ navigation, route }) => {
     };
 
     const checkIfChatExists = async () => {
+        const currentChatId = id || createChatId();
+
+        const chatRef = doc(fireStoreDb, 'chats', currentChatId);
+        const messagesRef = collection(chatRef, 'messages');
+
         try {
-            const docSnap = await getDoc(chatReferences.chatRef);
+            const docSnap = await getDoc(chatRef);
+
             if (docSnap.exists()) {
-                console.log('Chat document exists with ID:');
+                console.log('Chat document exists with ID:', currentChatId);
                 return true;
             } else {
-                console.log('No chat document found with ID:');
+                console.log('No chat document found with ID:', currentChatId);
                 return false;
             }
         } catch (error) {
@@ -157,7 +164,7 @@ const Chat = ({ navigation, route }) => {
     const getChatParticipants = async () => {
         const chatExists = await checkIfChatExists();
 
-        if (!chatExists) {
+        if (!chatExists && !id) {
             console.log('Chat reference is not available, getting Ids locally');
             const participants = [currentUser, receiver].map((user) => ({
                 id: user.id,
@@ -299,14 +306,15 @@ const Chat = ({ navigation, route }) => {
         await addToCurrentUserConnections(newParticipantId); //and add it to the state
     };
 
-    const updateLastMessageInFirestore = async (messageData) => {
+    const updateLastMessageInFirestore = async (messageData, chatRef) => {
         const { messageId, text, createdAt, userId, chatTitle } = messageData;
-        if (!chatReferences.chatRef) {
-            console.error('No chat reference available.');
+        if (!chatRef) {
+            console.error('Update Last Message - No chat reference available.');
             return;
         }
         try {
-            await updateDoc(chatReferences.chatRef, {
+            await updateDoc(chatRef, {
+                chatTitle,
                 lastMessage: {
                     messageId,
                     text,
@@ -319,36 +327,48 @@ const Chat = ({ navigation, route }) => {
         }
     };
 
-    const sendAndLogMessage = async (message, chatTitle = null) => {
+    const sendAndLogMessage = async (message, chatRef, messagesRef, chatTitle = null) => {
+        if (!messagesRef) return console.log('Send/Log no messagesRef');
+
         const { _id, text, createdAt, user } = message;
         try {
-            const messageDocRef = await addDoc(chatReferences.messagesRef, {
+            const messageDocRef = await addDoc(messagesRef, {
                 _id,
                 text,
                 createdAt,
                 userId: user._id,
             });
-            await updateLastMessageInFirestore({
-                messageId: messageDocRef.id,
-                text,
-                createdAt,
-                userId: user._id,
-                chatTitle,
-            });
+            await updateLastMessageInFirestore(
+                {
+                    messageId: messageDocRef.id,
+                    text,
+                    createdAt,
+                    userId: user._id,
+                    chatTitle,
+                },
+                chatRef
+            );
         } catch (error) {
             console.error('Error sending message:', error);
         }
     };
 
     const createNewChat = async (initialMessage) => {
-        console.log('Initial Message', initialMessage);
+        console.log('Initial Message', initialMessage._id);
+        const currentChatId = createChatId();
+        const chatRef = doc(fireStoreDb, 'chats', currentChatId);
+        const messagesRef = collection(chatRef, 'messages');
+
+        const chatParticipantsIds = chatParticipants.map((participant) => participant.id);
+
+        console.log('Creating Chat with Participants:', chatParticipantsIds);
 
         try {
-            await setDoc(chatReferences.chatRef, {
-                participantsIds: chatParticipants.map((participant) => participant.id),
+            await setDoc(chatRef, {
+                participantsIds: chatParticipantsIds,
                 chatTitle: null,
                 lastMessage: {
-                    messageId: initialMessage.id,
+                    messageId: initialMessage._id,
                     text: initialMessage.text,
                     createdAt: initialMessage.createdAt,
                     userId: initialMessage.user._id,
@@ -356,8 +376,8 @@ const Chat = ({ navigation, route }) => {
                 createdAt: serverTimestamp(),
             });
 
-            await sendAndLogMessage(initialMessage);
-            await addToCurrentUserConnections(initialMessage.user._id);
+            await sendAndLogMessage(initialMessage, chatRef, messagesRef);
+            await addToCurrentUserConnections(receiver.id);
         } catch (error) {
             console.error('Error creating new chat:', error);
             return null;
@@ -365,18 +385,19 @@ const Chat = ({ navigation, route }) => {
     };
 
     const onSend = useCallback(async (messages = []) => {
-        const [chatRef, messagesRef] = await getChatAndMessagesRef();
+        console.log('messages', messages);
+
+        console.log('first message', messages[0]);
+
         const chatExists = await checkIfChatExists();
 
-        console.log(chatExists);
-        if (!chatExists && messages.length > 0) {
+        if (!chatExists) {
             await createNewChat(messages[0]);
             await getChatParticipants();
             const participantIds = chatParticipants.map((participant) => participant.id);
             await updateChatParticipantsInFirestore(participantIds);
         } else {
-            const promises = messages.map((message) => sendAndLogMessage(message, messagesRef));
-            await Promise.all(promises);
+            await sendAndLogMessage(messages[0], chatTitle);
         }
         setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
     }, []);
