@@ -43,6 +43,8 @@ import ChatTextInput from '../components/ChatTextInput/ChatTextInput';
 const StreamView = ({ navigation, route }) => {
     const { show } = route.params;
 
+    console.log(show);
+
     const { currentUser } = useUser();
 
     const [userComment, setUserComment] = useState('');
@@ -247,7 +249,7 @@ const StreamView = ({ navigation, route }) => {
                 >
                     <View>
                         <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>
-                            {truncateText(show.name)}
+                            {`${show.band.name} Live`}
                         </Text>
                         <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
                     </View>
