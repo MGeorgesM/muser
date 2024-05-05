@@ -17,14 +17,16 @@ import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 import { FlatList } from 'react-native-gesture-handler';
 
 const Feed = ({ navigation }) => {
-    const dispatch = useDispatch();
-    const { currentUser } = useUser();
-    const users = useSelector((global) => global.usersSlice.feedUsers);
     const [refreshing, setRefreshing] = useState(false);
+    
+    const { currentUser } = useUser();
+    const dispatch = useDispatch();
+
+    const users = useSelector((global) => global.usersSlice.feedUsers);
 
     useEffect(() => {
         getUsers();
-    }, [currentUser?.id, refreshing]);
+    }, [currentUser, refreshing]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -55,9 +57,11 @@ const Feed = ({ navigation }) => {
     });
 
     const getUsers = async () => {
+        console.log('Fetching Users')
         try {
             const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
             if (response.status !== 200) throw new Error('Failed to fetch users');
+            console.log('Users:', response.data);
             dispatch(setConnectedUsers(response.data.connectedUsers));
             dispatch(setFeedUsers(response.data.feedUsers));
             setRefreshing(false);
@@ -104,8 +108,8 @@ const styles = StyleSheet.create({
     },
 
     listContainer: {
-        backgroundColor: colors.bgDark,
         flex: 1,
+        backgroundColor: colors.bgDark,
         paddingHorizontal: 16,
     },
     welcomeDisplay: {

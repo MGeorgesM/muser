@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { colors, utilities } from '../../styles/utilities';
 import { profilePicturesUrl } from '../../core/tools/apiRequest';
 
-import { Guitar } from 'lucide-react-native';
 import InstrumentIcon from '../InstrumentIcon/InstrumentIcon';
 
 const FeedMemberCard = ({ user, height = 180, navigation }) => {
@@ -27,7 +26,7 @@ export default FeedMemberCard;
 
 const styles = StyleSheet.create({
     cardContainer: {
-        width: 170,
+        width: '48%',
         borderRadius: utilities.borderRadius.s,
         overflow: 'hidden',
         margin: 4,
