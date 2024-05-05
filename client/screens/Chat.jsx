@@ -52,14 +52,11 @@ const Chat = ({ navigation, route }) => {
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
 
     useLayoutEffect(() => {
-        console.log('receiver', receiver);
         navigation.setOptions({
             headerTitle: () => {
                 if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
                 else {
-                    const receiverName = receiver?.map((user) => user.name).join(', ');
-                    const reciverPicture = receiver?.map((user) => user.picture).join(', ');
-                    return <PictureHeader picture={reciverPicture} name={receiverName} />;
+                    return <PictureHeader picture={receiver.picture} name={receiver.name} />;
                 }
             },
             headerLeft: () => (
@@ -82,11 +79,14 @@ const Chat = ({ navigation, route }) => {
 
     useEffect(() => {
         let unsubscribe;
+
+        getChatParticipants();
         setupMessagesListener().then((unsub) => {
             unsubscribe = unsub;
         });
 
         console.log('Chat ID:', chatId);
+        console.log('Chat Ref:', chatRef);
         console.log('Receiver:', receiver);
         console.log('Chat Title:', chatTitle);
         console.log('Chat Participants:', chatParticipants);
@@ -99,27 +99,45 @@ const Chat = ({ navigation, route }) => {
     }, [chatId, receiver]);
 
     const createChatId = () => [currentUser.id, receiver.id].sort().join('-');
-
+    
     const getChatRef = async () => {
         const currentChatId = chatId || createChatId();
         const chatRef = doc(fireStoreDb, 'chats', currentChatId);
-        setChatRef(chatRef);
-        return chatRef;
+
+        try {
+            const docSnap = await getDoc(chatRef);
+            if (docSnap.exists()) {
+                console.log('Document exists, setting chatRef');
+                setChatRef(chatRef);
+                return chatRef;
+            } else {
+                console.log('No such document, not setting chatRef');
+                return null;
+            }
+        } catch (error) {
+            console.error('Error checking document existence:', error);
+            return null;
+        }
     };
 
     const getChatParticipantsFromFirestore = async () => {
         if (!chatRef) return console.log('Chat reference is not available');
-        const chatSnapshot = await getDoc(chatRef);
-        if (!chatSnapshot.exists()) {
-            throw new Error('Chat document does not exist');
-        }
+        try {
+            const chatSnapshot = await getDoc(chatRef);
+            if (!chatSnapshot.exists()) {
+                throw new Error('Chat document does not exist');
+            }
 
-        const chatData = chatSnapshot.data();
-        return chatData.participantsIds.map((id) => ({
-            id,
-            name: '',
-            picture: '',
-        }));
+            const chatData = chatSnapshot.data();
+            return chatData.participantsIds.map((id) => ({
+                id,
+                name: '',
+                picture: '',
+            }));
+        } catch (error) {
+            console.error('Error fetching participants:', error);
+            return [];
+        }
     };
 
     const getChatParticipants = async () => {
@@ -130,6 +148,7 @@ const Chat = ({ navigation, route }) => {
                 name: user.name,
                 picture: user.picture,
             }));
+            console.log('Participants:', participants)
             setChatParticipants(participants);
         } else {
             console.log('Chat reference is available, fetching participants from Firestore');
