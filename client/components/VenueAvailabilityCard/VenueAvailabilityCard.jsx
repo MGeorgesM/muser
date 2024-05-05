@@ -3,12 +3,11 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { utilities, colors } from '../../styles/utilities';
 import { generateRandomDates, generateHours } from '../../core/data/generateDatetime';
 
-const VenueAvailabilityCard = ({ duration, setShowBooking }) => {
+const VenueAvailabilityCard = ({ duration, setShowBooking, isSelected, onSelect }) => {
     const [randomDate, setRandomDate] = useState('');
     const [formattedDate, setFormattedDate] = useState('');
     const [randomHour, setRandomHour] = useState('');
     const [endTime, setEndTime] = useState('');
-    const [selected, setSelected] = useState(false);
 
     useEffect(() => {
         const dates = generateRandomDates(1);
@@ -36,35 +35,24 @@ const VenueAvailabilityCard = ({ duration, setShowBooking }) => {
         setEndTime(endHour);
     }, [duration]);
 
-    const handlePress = () => {
-        setSelected((prevSelected) => {
-            const newSelected = !prevSelected;
-            setShowBooking((prev) => {
-                if (newSelected) {
-                    return {
-                        ...prev,
-                        date: randomDate,
-                        time: `${randomHour} - ${endTime}`,
-                    };
-                } else {
-                    return {
-                        ...prev,
-                        date: null,
-                        time: null,
-                    };
-                }
-            });
-            return newSelected;
-        });
-    };
-
     return (
         <Pressable
-            style={[styles.availabilityCard, utilities.justifyCenter, selected ? { backgroundColor: colors.white } : {}]}
-            onPress={handlePress}
+            style={[
+                styles.availabilityCard,
+                utilities.justifyCenter,
+                isSelected ? { backgroundColor: colors.white } : {},
+            ]}
+            onPress={() => {
+                onSelect();
+                setShowBooking((prev) => ({
+                    ...prev,
+                    date: randomDate,
+                    time: randomHour,
+                }));
+            }}
         >
-            <Text style={[utilities.myFontMedium, selected ? { color: colors.bgDarkest } : {}]}>{formattedDate}</Text>
-            <Text style={[utilities.myFontLight, selected ? { color: colors.bgDarkest } : {}]}>
+            <Text style={[utilities.myFontMedium, isSelected ? { color: colors.bgDarkest } : {}]}>{formattedDate}</Text>
+            <Text style={[utilities.myFontLight, isSelected ? { color: colors.bgDarkest } : {}]}>
                 {randomHour} - {endTime}
             </Text>
         </Pressable>
@@ -75,7 +63,7 @@ export default VenueAvailabilityCard;
 
 const styles = StyleSheet.create({
     availabilityCard: {
-        height:64,
+        height: 64,
         backgroundColor: colors.bgDark,
         paddingHorizontal: 24,
         borderRadius: utilities.borderRadius.m,

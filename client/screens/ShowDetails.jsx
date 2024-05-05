@@ -14,6 +14,7 @@ import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const ShowDetails = ({ route, navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
+    const [selectedCardId, setSelectedCardId] = useState(null);
     const [userBands, setUserBands] = useState([]);
     const [genres, setGenres] = useState([]);
     const hours = generateHours();
@@ -59,6 +60,22 @@ const ShowDetails = ({ route, navigation }) => {
         getUserBands();
         getGenres();
     }, []);
+
+    const handleSelectCard = (cardId) => {
+        setSelectedCardId((prevSelectedCardId) => {
+            if (prevSelectedCardId === cardId) {
+                // Deselect card and clear booking info
+                setShowBooking({
+                    ...showBooking,
+                    date: null,
+                    time: null,
+                });
+                return null;
+            } else {
+                return cardId;
+            }
+        });
+    };
 
     const handleProceed = () => {
         // navigation.navigate('ShowConfirmation')
@@ -115,20 +132,28 @@ const ShowDetails = ({ route, navigation }) => {
                             selectedValue={showBooking.duration}
                             onValueChange={(value) => setShowBooking((prev) => ({ ...prev, duration: value }))}
                         />
-                        <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18 }]}>Availability</Text>
-
-                        {showBooking.duration &&
-                            [...Array(3)].map((_, index) => (
-                                <VenueAvailabilityCard
-                                    key={index}
-                                    duration={showBooking.duration}
-                                    setShowBooking={setShowBooking}
-                                />
-                            ))}
+                        <>
+                            {showBooking.duration && (
+                                <>
+                                    <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18, marginBottom:12 }]}>
+                                        Availability
+                                    </Text>
+                                    {[...Array(2)].map((_, index) => (
+                                        <VenueAvailabilityCard
+                                            key={index}
+                                            duration={showBooking.duration}
+                                            setShowBooking={setShowBooking}
+                                            isSelected={selectedCardId === index}
+                                            onSelect={() => handleSelectCard(index)}
+                                        />
+                                    ))}
+                                </>
+                            )}
+                        </>
                     </View>
                     <View style={styles.bottomInnerContainer}>
                         <Text style={[utilities.errorText]}>Hello</Text>
-                        <PrimaryBtn text="Confrim" handlePress={handleProceed} />
+                        <PrimaryBtn text="Confirm" handlePress={handleProceed} />
                     </View>
                 </View>
             </View>
