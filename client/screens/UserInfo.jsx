@@ -152,10 +152,10 @@ const UserInfo = ({ navigation }) => {
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/register', formData);
             if (response.status === 201) {
-                setLoggedIn(true);
-                setCurrentUser(response.data.user);
                 await AsyncStorage.setItem('token', response.data.token);
                 await AsyncStorage.setItem('streamToken', response.data.stream_token);
+                setLoggedIn(true);
+                setCurrentUser(response.data.user);
                 loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
             }
         } catch (error) {
@@ -198,6 +198,7 @@ const UserInfo = ({ navigation }) => {
                 <View>
                     <Text style={styles.inputTextProfile}>{userInfo.role_id == 2 ? 'Description' : 'Bio'}</Text>
                     <TextInput
+                        key={'about'}
                         placeholder="Tell us about yourself!"
                         placeholderTextColor={colors.gray}
                         cursorColor={colors.primary}
@@ -209,6 +210,7 @@ const UserInfo = ({ navigation }) => {
                         <>
                             <Text style={styles.inputTextProfile}>Venue Name</Text>
                             <TextInput
+                                key={'venue_name'}
                                 placeholder="Venue Name"
                                 placeholderTextColor={colors.gray}
                                 cursorColor={colors.primary}
@@ -229,7 +231,7 @@ const UserInfo = ({ navigation }) => {
                                             {profileProperties[key].length > 0 &&
                                                 profileProperties[key].map((genre) => (
                                                     <DetailsPill
-                                                        key={genre.id}
+                                                        key={genre.id.toString()}
                                                         item={genre}
                                                         handlePress={handlePress}
                                                         isSelected={userInfo.genres.includes(genre.id)}

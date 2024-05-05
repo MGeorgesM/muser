@@ -25,7 +25,7 @@ const Feed = ({ navigation }) => {
     const users = useSelector((global) => global.usersSlice.feedUsers);
 
     useEffect(() => {
-        currentUser && getUsers();
+        getUsers();
     }, [currentUser, refreshing]);
 
     useLayoutEffect(() => {
