@@ -12,11 +12,18 @@ export function generateHours() {
 
 export const generateRandomDates = (numDates) => {
     const dates = [];
+    const today = new Date();
 
     for (let i = 0; i < numDates; i++) {
-        const year = Math.floor(Math.random() * 20) + 2000;
-        const month = Math.floor(Math.random() * 12) + 1;
-        const day = Math.floor(Math.random() * 28) + 1;
+        // Random number of days from 0 to 6
+        const daysToAdd = Math.floor(Math.random() * 7);
+
+        const futureDate = new Date(today);
+        futureDate.setDate(today.getDate() + daysToAdd);
+
+        const year = futureDate.getFullYear();
+        const month = futureDate.getMonth() + 1; // getMonth() returns month from 0-11
+        const day = futureDate.getDate();
 
         const date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
         dates.push({

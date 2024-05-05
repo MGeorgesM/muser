@@ -174,4 +174,16 @@ export const utilities = StyleSheet.create({
         l: 24,
         xl: 36,
     },
+    errorText: {
+        color: colors.primary,
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 10,
+    },
+    inputLabel: {
+        color: 'white',
+        fontSize: 14,
+        fontFamily: 'Montserrat-Bold',
+        textAlign: 'left',
+    },
 });

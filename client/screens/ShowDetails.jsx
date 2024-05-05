@@ -10,6 +10,7 @@ import { generateHours, generateRandomDates } from '../core/data/generateDatetim
 
 import DetailsPill from '../components/DetailsPill/DetailsPill';
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
+import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const ShowDetails = ({ route, navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
@@ -115,12 +116,12 @@ const ShowDetails = ({ route, navigation }) => {
                         <Text style={[utilities.textL, utilities.myFontBold]}>{title}</Text>
                     </View>
                     <View>
-                        <Text style={styles.inputTextProfile}>Show Name</Text>
+                        <Text style={[utilities.inputLabel]}>Show</Text>
                         <TextInput
-                            placeholder="Show Name"
+                            placeholder="What are you calling this show?"
                             placeholderTextColor={colors.gray}
                             cursorColor={colors.primary}
-                            style={{ marginBottom: 20, color:colors.gray }}
+                            style={[utilities.textM,{ marginBottom: 20, color: colors.gray }]}
                             value={showBooking.name}
                             onChangeText={(text) => setShowBooking((prev) => ({ ...prev, name: text }))}
                         />
@@ -135,7 +136,7 @@ const ShowDetails = ({ route, navigation }) => {
                                 }))
                             }
                         />
-                        <ProfileDetailsPicker
+                        {/* <ProfileDetailsPicker
                             items={dates}
                             label={'Date'}
                             selectedValue={showBooking.date}
@@ -146,7 +147,7 @@ const ShowDetails = ({ route, navigation }) => {
                             label={'Show Starts'}
                             selectedValue={showBooking.time}
                             onValueChange={(value) => setShowBooking((prev) => ({ ...prev, time: value }))}
-                        />
+                        /> */}
                         {genres && genres.length > 0 && (
                             <View style={styles.showGenresContainer}>
                                 <Text style={styles.inputTextProfile}>Music Genres</Text>
@@ -163,9 +164,10 @@ const ShowDetails = ({ route, navigation }) => {
 
                         {/* <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18 }]}>Availability</Text> */}
                     </View>
-                    <TouchableOpacity style={[utilities.primaryBtn, { marginBottom: 20 }]} onPress={handleProceed}>
-                        <Text style={[utilities.primaryBtnText]}>Confirm</Text>
-                    </TouchableOpacity>
+                    <View style={styles.bottomInnerContainer}>
+                        <Text style={[utilities.errorText]}>Hello</Text>
+                        <PrimaryBtn text="Confrim" handlePress={handleProceed} />
+                    </View>
                 </View>
             </View>
         );
