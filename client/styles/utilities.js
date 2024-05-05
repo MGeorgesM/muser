@@ -179,6 +179,7 @@ export const utilities = StyleSheet.create({
     },
     errorText: {
         color: colors.primary,
+        fontFamily: 'Montserrat-Bold',
         fontSize: 16,
         textAlign: 'center',
         marginBottom: 10,

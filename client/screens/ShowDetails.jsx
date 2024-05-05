@@ -12,9 +12,13 @@ import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDeta
 import VenueAvailabilityCard from '../components/VenueAvailabilityCard/VenueAvailabilityCard';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
+import { useDispatch } from 'react-redux';
+import { addShow } from '../store/Shows';
+
 const ShowDetails = ({ route, navigation }) => {
-    const {venueId, venueName} = route.params;
+    const { venueId, venueName } = route.params;
     const [switchHandler, setSwitchHandler] = useState(false);
+    const [validationError, setValidationError] = useState('');
     const [selectedCardId, setSelectedCardId] = useState(null);
     const [userBands, setUserBands] = useState([]);
     const [genres, setGenres] = useState([]);
@@ -29,7 +33,9 @@ const ShowDetails = ({ route, navigation }) => {
         picture: '',
         genre: '',
     });
- 
+
+    const dispatch = useDispatch();
+
     console.log('showbooking', showBooking);
 
     useEffect(() => {
@@ -59,10 +65,32 @@ const ShowDetails = ({ route, navigation }) => {
         getGenres();
     }, []);
 
+    const validateForm = () => {
+        setValidationError(null);
+
+        // if (!selectedPicture) {
+        //     setError('Please select a profile picture');
+        //     return false;
+        // }
+
+        if (
+            showBooking.date === '' ||
+            showBooking.time === '' ||
+            showBooking.duration === '' ||
+            showBooking.band_id === '' ||
+            showBooking.genre === ''
+        ) {
+            setValidationError('Please fill in all fields');
+            return false;
+        } else {
+            setValidationError(null);
+            return true;
+        }
+    };
+
     const handleSelectCard = (cardId) => {
         setSelectedCardId((prevSelectedCardId) => {
             if (prevSelectedCardId === cardId) {
-                // Deselect card and clear booking info
                 setShowBooking({
                     ...showBooking,
                     date: null,
@@ -76,64 +104,81 @@ const ShowDetails = ({ route, navigation }) => {
     };
 
     const handleProceed = () => {
-        // navigation.navigate('ShowConfirmation')
+        setValidationError(null);
+        const userInputValid = validateForm();
+        if (!userInputValid) return;
+
         try {
-        } catch (error) {}
+            const response = sendRequest(requestMethods.POST, 'shows', showBooking);
+            if (response.status !== 201) throw new Error('Failed to create show');
+            console.log('Show created:', response.data);
+            dispatch(addShow(response.data));
+        } catch (error) {
+            console.log('Error creating show:', error);
+        }
         setSwitchHandler(true);
     };
 
     if (userBands)
         return (
-            <View style={styles.main}>
-                <View style={[utilities.container, styles.overviewContainer]}>
-                    <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
-                        <ChevronLeft
-                            size={24}
-                            color="white"
-                            style={{ position: 'absolute', left: 0 }}
-                            onPress={() => navigation.goBack()}
-                        />
-                        <Text style={[utilities.textL, utilities.myFontBold]}>{venueName}</Text>
-                    </View>
-                    <View>
-                        <ProfileDetailsPicker
-                            items={userBands}
-                            label={'Band'}
-                            selectedValue={showBooking.band_id}
-                            onValueChange={(value) =>
-                                setShowBooking((prev) => ({
-                                    ...prev,
-                                    band_id: value,
-                                }))
-                            }
-                        />
-                        <ProfileDetailsPicker
-                            items={genres}
-                            label={'Main Genre'}
-                            selectedValue={showBooking.genre}
-                            onValueChange={(value) =>
-                                setShowBooking((prev) => ({
-                                    ...prev,
-                                    genre: value,
-                                }))
-                            }
-                        />
-                        <ProfileDetailsPicker
-                            items={hours}
-                            label={'Show Time'}
-                            selectedValue={showBooking.time}
-                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, time: value }))}
-                        />
-                        <ProfileDetailsPicker
-                            items={durations}
-                            label={'Duration'}
-                            selectedValue={showBooking.duration}
-                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, duration: value }))}
-                        />
-                        <>
+            <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
+                {!switchHandler ? (
+                    <View style={[utilities.flexed, styles.overviewContainer]}>
+                        <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
+                            <ChevronLeft
+                                size={24}
+                                color="white"
+                                style={{ position: 'absolute', left: 0 }}
+                                onPress={() => navigation.goBack()}
+                            />
+                            <Text style={[utilities.textL, utilities.myFontBold]}>{venueName}</Text>
+                        </View>
+                        <View style={{ marginBottom: 'auto', marginTop: 16 }}>
+                            <ProfileDetailsPicker
+                                items={userBands}
+                                label={'Band'}
+                                selectedValue={showBooking.band_id}
+                                onValueChange={(value) =>
+                                    setShowBooking((prev) => ({
+                                        ...prev,
+                                        band_id: value,
+                                    }))
+                                }
+                            />
+                            <ProfileDetailsPicker
+                                items={genres}
+                                label={'Main Genre'}
+                                selectedValue={showBooking.genre}
+                                onValueChange={(value) =>
+                                    setShowBooking((prev) => ({
+                                        ...prev,
+                                        genre: value,
+                                    }))
+                                }
+                            />
+                            <ProfileDetailsPicker
+                                items={hours}
+                                label={'Show Time'}
+                                selectedValue={showBooking.time}
+                                onValueChange={(value) => setShowBooking((prev) => ({ ...prev, time: value }))}
+                            />
+                            <ProfileDetailsPicker
+                                items={durations}
+                                label={'Duration'}
+                                selectedValue={showBooking.duration}
+                                onValueChange={(value) => setShowBooking((prev) => ({ ...prev, duration: value }))}
+                            />
+                        </View>
+                        <View>
                             {showBooking.duration && (
                                 <>
-                                    <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18, marginBottom:12 }]}>
+                                    <Text
+                                        style={[
+                                            utilities.textCenter,
+                                            utilities.myFontBold,
+                                            { fontSize: 18, marginBottom: 12 },
+                                        ]}
+                                    >
                                         Availability
                                     </Text>
                                     {[...Array(2)].map((_, index) => (
@@ -147,12 +192,17 @@ const ShowDetails = ({ route, navigation }) => {
                                     ))}
                                 </>
                             )}
-                        </>
+                        </View>
                     </View>
-                    <View style={styles.bottomInnerContainer}>
-                        <Text style={[utilities.errorText]}>Hello</Text>
-                        <PrimaryBtn text="Confirm" handlePress={handleProceed} />
+                ) : (
+                    <View style={[styles.overviewContainer, utilities.flexed, utilities.center, { gap: 16 }]}>
+                        <CircleCheckBig size={64} color={colors.primary} />
+                        <Text style={[utilities.textL, utilities.myFontMedium]}>Show successfully created!</Text>
                     </View>
+                )}
+                <View style={{ backgroundColor: colors.bgDark, paddingHorizontal: 20 }}>
+                    {validationError && <Text style={[utilities.errorText]}>{validationError}</Text>}
+                    <PrimaryBtn text="Confirm" handlePress={handleProceed} />
                 </View>
             </View>
         );
@@ -161,17 +211,14 @@ const ShowDetails = ({ route, navigation }) => {
 export default ShowDetails;
 
 const styles = StyleSheet.create({
-    main: {
-        flex: 1,
-        backgroundColor: colors.bgDarkest,
-    },
     overviewContainer: {
-        marginTop: 64,
+        justifyContent: 'space-between',
         backgroundColor: colors.bgDark,
+        marginTop: 64,
+        paddingTop: 24,
+        paddingHorizontal: 20,
         borderTopEndRadius: utilities.borderRadius.xl,
         borderTopLeftRadius: utilities.borderRadius.xl,
-        paddingTop: 24,
-        justifyContent: 'space-between',
     },
     showGenresContainer: {
         marginBottom: 20,
