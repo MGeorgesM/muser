@@ -48,6 +48,9 @@ class UserController extends Controller
         return response()->json($result);
     }
 
+
+
+
     // public function getUsersByRole($role)
     // {
     //     $current_user_id = auth()->id();
@@ -71,7 +74,7 @@ class UserController extends Controller
         //             return $conn->user_one_id === $current_user_id ? $conn->user_two_id : $conn->user_one_id;
         //         })->all();
         // }
-            
+
 
         // $users = User::whereHas('role', function ($query) use ($role) {
         //     $query->where('name', $role);
