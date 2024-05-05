@@ -49,6 +49,7 @@ class ShowController extends Controller
         if ($showId) {
             $show = Show::with([
                 'venue:id,name',
+                'genre:id,name',
                 'band.members' => function ($query) {
                     $query->select('users.id', 'users.name', 'users.picture', 'users.instrument_id')
                         ->with(['instrument:id,name']);
@@ -67,6 +68,7 @@ class ShowController extends Controller
 
         $query = Show::with([
             'venue:id,name',
+            'genre:id,name',
             'band.members' => function ($query) {
                 $query->select('users.id', 'users.name', 'users.picture', 'users.instrument_id')
                     ->with(['instrument:id,name']);
