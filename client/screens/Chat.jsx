@@ -35,16 +35,16 @@ import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
-    const { chatId, receiver, chatTitle } = route.params;
+    const { id, receiver, chatTitle } = route.params;
 
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
     const [bandModalVisible, setBandModalVisible] = useState(false);
 
-    const [chatParticipants, setChatParticipants] = useState([
-        { id: currentUser.id, name: currentUser.name, picture: currentUser.picture },
-    ]);
+    const [chatParticipants, setChatParticipants] = useState([]);
     const [messages, setMessages] = useState([]);
-    const [chatRef, setChatRef] = useState(null);
+    // const [chatRef, setChatRef] = useState(null);
+    const [chatReferences, setChatReferences] = useState({ chatRef: null, messagesRef: null });
+    const [messagesRef, setMessagesRef] = useState(null);
 
     const [bandName, setBandName] = useState('');
 
@@ -80,50 +80,64 @@ const Chat = ({ navigation, route }) => {
     useEffect(() => {
         let unsubscribe;
 
-        getChatParticipants();
+        const fetchParticipants = async () => {
+            await getChatParticipants();
+        };
+
         setupMessagesListener().then((unsub) => {
             unsubscribe = unsub;
         });
 
-        console.log('Chat ID:', chatId);
-        console.log('Chat Ref:', chatRef);
+        fetchParticipants();
+
+        console.log('Chat ID:', id);
+        console.log('Chat Ref:', chatReferences.chatRef);
         console.log('Receiver:', receiver);
         console.log('Chat Title:', chatTitle);
-        console.log('Chat Participants:', chatParticipants);
 
         return () => {
             if (unsubscribe) {
                 unsubscribe();
             }
         };
-    }, [chatId, receiver]);
+    }, [id, receiver]);
 
     const createChatId = () => [currentUser.id, receiver.id].sort().join('-');
-    
-    const getChatRef = async () => {
-        const currentChatId = chatId || createChatId();
-        const chatRef = doc(fireStoreDb, 'chats', currentChatId);
 
+    const getChatAndMessagesRef = async () => {
+        const currentChatId = id || createChatId();
+        console.log('Current Chat ID:', currentChatId);
+
+        const chatRef = doc(fireStoreDb, 'chats', currentChatId);
+        const messagesRef = collection(chatRef, 'messages');
+
+        setChatReferences({ chatRef, messagesRef });
+        return [chatRef, messagesRef];
+    };
+
+    const checkIfChatExists = async () => {
         try {
-            const docSnap = await getDoc(chatRef);
+            const docSnap = await getDoc(chatReferences.chatRef);
             if (docSnap.exists()) {
-                console.log('Document exists, setting chatRef');
-                setChatRef(chatRef);
-                return chatRef;
+                console.log('Chat document exists with ID:');
+                return true;
             } else {
-                console.log('No such document, not setting chatRef');
-                return null;
+                console.log('No chat document found with ID:');
+                return false;
             }
         } catch (error) {
-            console.error('Error checking document existence:', error);
-            return null;
+            console.error('Error accessing Firestore:', error);
+            return false;
         }
     };
 
     const getChatParticipantsFromFirestore = async () => {
-        if (!chatRef) return console.log('Chat reference is not available');
+        const chatExists = await checkIfChatExists();
+
+        if (!chatExists) return console.log('Chat does not Exist!');
+
         try {
-            const chatSnapshot = await getDoc(chatRef);
+            const chatSnapshot = await getDoc(chatReferences.chatRef);
             if (!chatSnapshot.exists()) {
                 throw new Error('Chat document does not exist');
             }
@@ -141,14 +155,16 @@ const Chat = ({ navigation, route }) => {
     };
 
     const getChatParticipants = async () => {
-        if (!chatRef) {
+        const chatExists = await checkIfChatExists();
+
+        if (!chatExists) {
             console.log('Chat reference is not available, getting Ids locally');
             const participants = [currentUser, receiver].map((user) => ({
                 id: user.id,
                 name: user.name,
                 picture: user.picture,
             }));
-            console.log('Participants:', participants)
+            console.log('Participants:', participants);
             setChatParticipants(participants);
         } else {
             console.log('Chat reference is available, fetching participants from Firestore');
@@ -231,11 +247,12 @@ const Chat = ({ navigation, route }) => {
     };
 
     const setupMessagesListener = async () => {
-        const chatRef = await getChatRef(chatId);
+        const [chatRef, messagesRef] = await getChatAndMessagesRef();
 
-        if (!chatRef) return;
+        if (!messagesRef) {
+            return;
+        }
 
-        const messagesRef = collection(chatRef, 'messages');
         const q = query(messagesRef, orderBy('createdAt', 'desc'));
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -256,13 +273,13 @@ const Chat = ({ navigation, route }) => {
     };
 
     const updateChatParticipantsInFirestore = async (newParticipantIdsList) => {
-        if (!chatRef) {
+        if (!chatReferences.chatRef) {
             console.error('No chat reference available.');
             return;
         }
 
         try {
-            await updateDoc(chatRef, {
+            await updateDoc(chatReferences.chatRef, {
                 participantsIds: newParticipantIdsList,
             });
             setConnectionModalVisible(false);
@@ -282,10 +299,30 @@ const Chat = ({ navigation, route }) => {
         await addToCurrentUserConnections(newParticipantId); //and add it to the state
     };
 
-    const sendAndLogMessage = async (message, messagesRef, chatTitle = null) => {
+    const updateLastMessageInFirestore = async (messageData) => {
+        const { messageId, text, createdAt, userId, chatTitle } = messageData;
+        if (!chatReferences.chatRef) {
+            console.error('No chat reference available.');
+            return;
+        }
+        try {
+            await updateDoc(chatReferences.chatRef, {
+                lastMessage: {
+                    messageId,
+                    text,
+                    createdAt,
+                    userId,
+                },
+            });
+        } catch (error) {
+            console.error('Error updating last message:', error);
+        }
+    };
+
+    const sendAndLogMessage = async (message, chatTitle = null) => {
         const { _id, text, createdAt, user } = message;
         try {
-            const messageDocRef = await addDoc(messagesRef, {
+            const messageDocRef = await addDoc(chatReferences.messagesRef, {
                 _id,
                 text,
                 createdAt,
@@ -303,38 +340,24 @@ const Chat = ({ navigation, route }) => {
         }
     };
 
-    const updateLastMessageInFirestore = async (messageData) => {
-        const { messageId, text, createdAt, userId, chatTitle } = messageData;
-        if (!chatRef) {
-            console.error('No chat reference available.');
-            return;
-        }
-        try {
-            await updateDoc(chatRef, {
-                lastMessage: {
-                    messageId,
-                    text,
-                    createdAt,
-                    userId,
-                },
-                ...(chatTitle && { chatTitle }),
-            });
-        } catch (error) {
-            console.error('Error updating last message:', error);
-        }
-    };
-
     const createNewChat = async (initialMessage) => {
-        const chatId = createChatId();
-        const newChatRef = doc(fireStoreDb, 'chats', chatId);
-        const messageRef = collection(newChatRef, 'messages');
+        console.log('Initial Message', initialMessage);
 
         try {
-            await sendAndLogMessage(initialMessage, messageRef);
-            await getChatParticipants();
-            const participantIds = chatParticipants.map((participant) => participant.id);
-            await updateChatParticipantsInFirestore(participantIds);
-            return newChatRef;
+            await setDoc(chatReferences.chatRef, {
+                participantsIds: chatParticipants.map((participant) => participant.id),
+                chatTitle: null,
+                lastMessage: {
+                    messageId: initialMessage.id,
+                    text: initialMessage.text,
+                    createdAt: initialMessage.createdAt,
+                    userId: initialMessage.user._id,
+                },
+                createdAt: serverTimestamp(),
+            });
+
+            await sendAndLogMessage(initialMessage);
+            await addToCurrentUserConnections(initialMessage.user._id);
         } catch (error) {
             console.error('Error creating new chat:', error);
             return null;
@@ -342,19 +365,19 @@ const Chat = ({ navigation, route }) => {
     };
 
     const onSend = useCallback(async (messages = []) => {
-        let chatRef = await getChatRef();
-        if (!chatRef && messages.length > 0) {
-            chatRef = await createNewChat(messages[0]);
-            setChatRef(chatRef);
-            await addToCurrentUserConnections();
-        }
+        const [chatRef, messagesRef] = await getChatAndMessagesRef();
+        const chatExists = await checkIfChatExists();
 
-        if (chatRef) {
-            const messagesRef = collection(chatRef, 'messages');
+        console.log(chatExists);
+        if (!chatExists && messages.length > 0) {
+            await createNewChat(messages[0]);
+            await getChatParticipants();
+            const participantIds = chatParticipants.map((participant) => participant.id);
+            await updateChatParticipantsInFirestore(participantIds);
+        } else {
             const promises = messages.map((message) => sendAndLogMessage(message, messagesRef));
             await Promise.all(promises);
         }
-
         setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
     }, []);
 
@@ -364,7 +387,7 @@ const Chat = ({ navigation, route }) => {
             return;
         }
 
-        if (!chatRef) {
+        if (!chatReferences.chatRef) {
             console.log('No chat reference available');
             setBandModalVisible(false);
             return;
@@ -391,7 +414,7 @@ const Chat = ({ navigation, route }) => {
                 createdAt: serverTimestamp(),
                 userId: currentUser.id,
             };
-            const messageRef = collection(chatRef, 'messages');
+            const messageRef = collection(chatReferences.chatRef, 'messages');
             await sendAndLogMessage(messageData, messageRef, bandName);
         } catch (error) {
             console.error('Error processing band formation:', error);

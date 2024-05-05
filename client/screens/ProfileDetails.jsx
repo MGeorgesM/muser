@@ -23,8 +23,6 @@ const ProfileDetails = ({ route }) => {
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
     const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
 
-    console.log('user profile', user);
-
     useEffect(() => {
         if (userId) {
             const foundUser = feedUsers.find((user) => user.id === userId);
