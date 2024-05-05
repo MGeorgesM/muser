@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     listContainer: {
         flex: 1,
         backgroundColor: colors.bgDark,
-        paddingHorizontal: 16,
+        paddingHorizontal: 14,
     },
     welcomeDisplay: {
         marginBottom: -2,

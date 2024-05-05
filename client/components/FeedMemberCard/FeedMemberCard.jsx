@@ -6,7 +6,7 @@ import { profilePicturesUrl } from '../../core/tools/apiRequest';
 
 import InstrumentIcon from '../InstrumentIcon/InstrumentIcon';
 
-const FeedMemberCard = ({ user, height = 180, navigation }) => {
+const FeedMemberCard = ({ user, height = 256, navigation }) => {
     const imageUrl = `${profilePicturesUrl + user.picture}`;
     return (
         <TouchableOpacity
