@@ -21,10 +21,12 @@ class UserFactory extends Factory
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password',
-            'about' => $this->faker->text(40),
-            'picture' => 'musician.jpg',
+            'about' => $this->faker->text(20),
+            'picture' => $this->faker->randomElement(array_map(function ($i) {
+                return "musician ({$i}).jpg";
+            }, range(1, 15))),
             'location_id' => Location::all()->random()->id,
-            // 'availability_id' => $this->faker->numberBetween(1, 4),
+            'availability_id' => $this->faker->numberBetween(1, 4),
             'experience_id' => $this->faker->numberBetween(1, 3),
             'instrument_id' => $this->faker->numberBetween(1, 6),
             'venue_type_id' => null,
@@ -36,13 +38,29 @@ class UserFactory extends Factory
 
     public function venue()
     {
-        return $this->state(function (array $attributes) {
+
+        $venueNames = [
+            "Mystic Grove Café",
+            "The Velvet Room",
+            "Lantern Light Tavern",
+            "Echoes Jazz Lounge",
+            "Starlight Rooftop Bar",
+            "Amber Moon Winery",
+            "Sapphire Seafront Bistro",
+            "Golden Oak Library",
+            "Twilight Vista Club",
+            "Azure Plateau Grill"
+        ];
+
+        return $this->state(function (array $attributes)  use ($venueNames) {
             return [
-                'name' => $this->faker->name,
+                'name' => $this->faker->randomElement($venueNames),
                 'email' => $this->faker->unique()->safeEmail,
                 'password' => 'password',
-                'about' => $this->faker->text(40),
-                'picture' => 'venue.jpg',
+                'about' => $this->faker->text(20),
+                'picture' => $this->faker->randomElement(array_map(function ($i) {
+                    return "venue ({$i}).jpg";
+                }, range(1, 4))),
                 'location_id' => Location::all()->random()->id,
                 'availability_id' => $this->faker->numberBetween(1, 4),
                 'experience_id' => null,
