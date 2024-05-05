@@ -26,7 +26,7 @@ export default FeedMemberCard;
 
 const styles = StyleSheet.create({
     cardContainer: {
-        width: '48%',
+        width: 180,
         borderRadius: utilities.borderRadius.s,
         overflow: 'hidden',
         margin: 4,

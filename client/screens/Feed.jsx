@@ -77,7 +77,7 @@ const Feed = ({ navigation }) => {
             <FlatList
                 data={users}
                 renderItem={({ item, i }) => {
-                    return <FeedMemberCard user={item} navigation={navigation} />;
+                    return <FeedMemberCard key={item.id} user={item} navigation={navigation} />;
                 }}
                 keyExtractor={(item) => item.id}
                 numColumns={2}

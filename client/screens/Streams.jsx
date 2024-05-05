@@ -8,6 +8,7 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import ModalHigh from '../components/Modals/ModalHigh';
 import ShowVenueCard from '../components/ShowVenueCards/ShowVenueCard';
+import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const Streams = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const Streams = ({ navigation }) => {
             : navigation.navigate('StreamView', { show });
     };
 
-    return (
+    return shows && shows.length > 0 ? (
         <ModalHigh
             title="Upcoming Shows"
             navigation={navigation}
@@ -53,6 +54,8 @@ const Streams = ({ navigation }) => {
                 <ShowVenueCard key={item.id} entity={item} handlePress={() => handleCardPress(item)} />
             )}
         />
+    ) : (
+        <LoadingScreen />
     );
 };
 

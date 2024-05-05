@@ -2,11 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
 import { profilePicturesUrl, showsPicturesUrl } from '../../core/tools/apiRequest';
-import { utilities } from '../../styles/utilities';
+import { colors, utilities } from '../../styles/utilities';
 import { formatDateString, truncateText } from '../../core/tools/formatDate';
 
 const ShowVenueCard = ({ entity, handlePress }) => {
-    const { picture, about, name, location, venueType, band, date } = entity;
+    const { picture, about, name, location, venueType, venue, band, date } = entity;
     const imageUrl = band ? `${showsPicturesUrl + picture}` : `${profilePicturesUrl + picture}`;
 
     return (
@@ -14,23 +14,25 @@ const ShowVenueCard = ({ entity, handlePress }) => {
             <Image source={{ uri: imageUrl }} style={styles.backgroundImage} />
             <View style={styles.overlay}>
                 <View>
-                    <Text style={[styles.entityName, { fontSize: band ? 18 : 20 }]}>{truncateText(name)}</Text>
+                    <Text style={[styles.entityName, { fontSize: band ? 18 : 20 }]}>
+                        {name ? truncateText(name) : band.name}
+                    </Text>
                     <Text style={[styles.entityInfo, { fontSize: band ? 14 : 16 }]}>
                         {(date && formatDateString(date)) || `${venueType.name} - ${location.name}`}
                     </Text>
                 </View>
-                {band && (
-                    <View style={styles.avatarsDisplay}>
-                        {band.members.map((member) => (
-                            <Image
-                                key={member.id}
-                                source={{ uri: profilePicturesUrl + member.picture }}
-                                style={{ width: 32, height: 32, borderRadius: 16 }}
-                            />
-                        ))}
-                    </View>
-                )}
             </View>
+            {band && (
+                <View style={styles.avatarsDisplay}>
+                    {band.members.map((member) => (
+                        <Image
+                            key={member.id}
+                            source={{ uri: profilePicturesUrl + member.picture }}
+                            style={{ width: 32, height: 32, borderRadius: 16, borderColor:colors.bglightest, borderWidth:0.5}}
+                        />
+                    ))}
+                </View>
+            )}
         </TouchableOpacity>
     );
 };
@@ -63,7 +65,7 @@ const styles = StyleSheet.create({
     },
     avatarsDisplay: {
         position: 'absolute',
-        right: 20,
+        right: 12,
         top: 12,
         flexDirection: 'row',
         alignItems: 'center',
