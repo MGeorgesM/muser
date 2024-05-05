@@ -4,7 +4,14 @@ import { Picker } from '@react-native-picker/picker';
 
 import { colors } from '../../styles/utilities';
 
-const ProfileDetailsPicker = ({ label, items, selectedValue, onValueChange, defaultLabel='Select an option' }) => (
+const ProfileDetailsPicker = ({
+    label,
+    items,
+    selectedValue,
+    onValueChange,
+    defaultLabel = 'Select an option',
+    customValue = false,
+}) => (
     <View style={{ borderBottomWidth: 0.5, marginBottom: 20, borderBottomColor: colors.white }}>
         <Text style={styles.inputTextProfile}>{label}</Text>
         <Picker
@@ -19,14 +26,9 @@ const ProfileDetailsPicker = ({ label, items, selectedValue, onValueChange, defa
             dropdownIconColor={colors.white}
             onValueChange={onValueChange}
         >
-            <Picker.Item label={defaultLabel} value="" color="black"/>
+            <Picker.Item label={defaultLabel} value="" color="black" />
             {items.map((item) => (
-                <Picker.Item
-                    key={item.id}
-                    value={item.id}
-                    label={item.name}
-                    color="black"
-                />
+                <Picker.Item key={item.id} value={customValue ? item.value : item.id} label={item.name} color="black" />
             ))}
         </Picker>
     </View>

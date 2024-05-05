@@ -8,7 +8,6 @@ import { colors, utilities } from '../styles/utilities';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import { generateHours, generateRandomDates } from '../core/data/generateDatetime';
 
-import DetailsPill from '../components/DetailsPill/DetailsPill';
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
@@ -17,17 +16,19 @@ const ShowDetails = ({ route, navigation }) => {
     const [userBands, setUserBands] = useState([]);
     const [genres, setGenres] = useState([]);
     const hours = generateHours();
-    const dates = generateRandomDates(5);
     const [showBooking, setShowBooking] = useState({
         name: '',
         date: '',
         time: '',
+        duration: '',
         band_id: '',
         venue_id: '',
         picture: '',
-        genres: [],
+        genre: '',
     });
     // const { venue } = route.params;
+
+    const title = 'VenueName'
 
     console.log('showbooking', showBooking);
 
@@ -57,33 +58,6 @@ const ShowDetails = ({ route, navigation }) => {
         getUserBands();
         getGenres();
     }, []);
-
-    const durations = [
-        {
-            id: 1,
-            name: '1 hour',
-        },
-        {
-            id: 2,
-            name: '2 hours',
-        },
-        {
-            id: 3,
-            name: '3 hours',
-        },
-        {
-            id: 4,
-            name: '> 3 hours',
-        },
-    ];
-
-    const availabilities = [
-        {
-            id: 1,
-        },
-    ];
-
-    const title = 'Paloma';
 
     const handleProceed = () => {
         // navigation.navigate('ShowConfirmation')
@@ -121,7 +95,7 @@ const ShowDetails = ({ route, navigation }) => {
                             placeholder="What are you calling this show?"
                             placeholderTextColor={colors.gray}
                             cursorColor={colors.primary}
-                            style={[utilities.textM,{ marginBottom: 20, color: colors.gray }]}
+                            style={[utilities.textM, { marginBottom: 20, color: colors.gray }]}
                             value={showBooking.name}
                             onChangeText={(text) => setShowBooking((prev) => ({ ...prev, name: text }))}
                         />
@@ -136,19 +110,36 @@ const ShowDetails = ({ route, navigation }) => {
                                 }))
                             }
                         />
+                        <ProfileDetailsPicker
+                            items={hours}
+                            label={'Show Time'}
+                            selectedValue={showBooking.time}
+                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, time: value }))}
+                        />
+
+                        <ProfileDetailsPicker
+                            items={genres}
+                            label={'Main Genre'}
+                            selectedValue={showBooking.genre}
+                            onValueChange={(value) =>
+                                setShowBooking((prev) => ({
+                                    ...prev,
+                                    genre: value,
+                                }))
+                            }
+                        />
+                        <View style={styles.availabilityCard}>
+                            <Text style={[utilities.myFontMedium]}>RandomDate</Text>
+                            <Text style={[utilities.myFontLight]}>RandomTime - RandTime+showBooking.duration</Text>
+                        </View>
                         {/* <ProfileDetailsPicker
                             items={dates}
                             label={'Date'}
                             selectedValue={showBooking.date}
                             onValueChange={(value) => setShowBooking((prev) => ({ ...prev, date: value }))}
                         />
-                        <ProfileDetailsPicker
-                            items={hours}
-                            label={'Show Starts'}
-                            selectedValue={showBooking.time}
-                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, time: value }))}
-                        /> */}
-                        {genres && genres.length > 0 && (
+ */}
+                        {/* {genres && genres.length > 0 && (
                             <View style={styles.showGenresContainer}>
                                 <Text style={styles.inputTextProfile}>Music Genres</Text>
                                 {genres.map((genre) => (
@@ -160,7 +151,7 @@ const ShowDetails = ({ route, navigation }) => {
                                     />
                                 ))}
                             </View>
-                        )}
+                        )} */}
 
                         {/* <Text style={[utilities.textCenter, utilities.myFontBold, { fontSize: 18 }]}>Availability</Text> */}
                     </View>
@@ -191,4 +182,5 @@ const styles = StyleSheet.create({
     showGenresContainer: {
         marginBottom: 20,
     },
+
 });

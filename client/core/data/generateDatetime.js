@@ -1,6 +1,6 @@
 export function generateHours() {
     const hours = [];
-    for (let i = 10; i < 24; i++) {
+    for (let i = 15; i < 24; i++) {
         const hourString = `${i < 10 ? '0' + i : i}:00`;
         hours.push({
             id: hourString,
@@ -34,3 +34,26 @@ export const generateRandomDates = (numDates) => {
 
     return dates;
 };
+
+export const durations = [
+    {
+        id: 1,
+        name: '1 hour',
+        value: 1,
+    },
+    {
+        id: 2,
+        name: '2 hours',
+        value: 2,
+    },
+    {
+        id: 3,
+        name: '3 hours',
+        value: 3,
+    },
+    {
+        id: 4,
+        name: '> 3 hours',
+        value: 4,
+    },
+];
