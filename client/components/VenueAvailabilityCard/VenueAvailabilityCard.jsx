@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { Text, StyleSheet, Pressable } from 'react-native';
 import { utilities, colors } from '../../styles/utilities';
 import { generateRandomDates, generateHours } from '../../core/data/generateDatetime';
 

@@ -20,7 +20,7 @@ const VenueDetails = ({ route, navigation }) => {
     const [shows, setShows] = useState([]);
     const [selectedShow, setSelectedShow] = useState();
 
-    console.log('selected show', selectedShow);
+    console.log('selected venue', venue.id);
 
     useEffect(() => {
         const getVenueDetails = async () => {
@@ -109,7 +109,7 @@ const VenueDetails = ({ route, navigation }) => {
                 <PrimaryBtn
                     text={'Book your Show'}
                     marginTop={'auto'}
-                    handlePress={() => navigation.navigate('ShowDetails')}
+                    handlePress={() => navigation.navigate('ShowDetails', { venueId: venue.id, venueName: venue.name })}
                 />
             </View>
         </View>

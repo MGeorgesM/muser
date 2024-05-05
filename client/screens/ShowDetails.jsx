@@ -13,6 +13,7 @@ import VenueAvailabilityCard from '../components/VenueAvailabilityCard/VenueAvai
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const ShowDetails = ({ route, navigation }) => {
+    const {venueId, venueName} = route.params;
     const [switchHandler, setSwitchHandler] = useState(false);
     const [selectedCardId, setSelectedCardId] = useState(null);
     const [userBands, setUserBands] = useState([]);
@@ -24,14 +25,13 @@ const ShowDetails = ({ route, navigation }) => {
         time: '',
         duration: '',
         band_id: '',
-        venue_id: '',
+        venue_id: venueId,
         picture: '',
         genre: '',
     });
     // const { venue } = route.params;
 
-    const title = 'VenueName';
-
+ 
     console.log('showbooking', showBooking);
 
     useEffect(() => {
@@ -95,7 +95,7 @@ const ShowDetails = ({ route, navigation }) => {
                             style={{ position: 'absolute', left: 0 }}
                             onPress={() => navigation.goBack()}
                         />
-                        <Text style={[utilities.textL, utilities.myFontBold]}>{title}</Text>
+                        <Text style={[utilities.textL, utilities.myFontBold]}>{venueName}</Text>
                     </View>
                     <View>
                         <ProfileDetailsPicker
