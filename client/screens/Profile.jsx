@@ -14,8 +14,14 @@ import SettingsCard from '../components/SettingsCard/SettingsCard';
 const Profile = ({ navigation }) => {
     const { currentUser } = useUser();
 
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerTitle:'Profile',
+        });
+    }, [navigation]);
+
     return currentUser ? (
-        <View style={[utilities.flexed, { backgroundColor: colors.bglight }]}>
+        <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
             <View style={styles.topProfileView}>
                 <View style={styles.profilePicture}>
                     <Image
@@ -77,7 +83,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'relative',
         height: height * 0.11,
-        backgroundColor: colors.bgDark,
+        backgroundColor: colors.bglighter,
     },
 
     profilePicture: {
