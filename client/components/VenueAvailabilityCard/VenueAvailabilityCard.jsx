@@ -29,9 +29,9 @@ const VenueAvailabilityCard = ({ duration, setShowBooking, isSelected, onSelect 
         const startHour = hours[hourIndex].name;
         setRandomHour(startHour);
 
-        const startTime = parseInt(startHour.split(':')[0], 10);
-        const calculatedEndTime = startTime + duration;
-        const endHour = `${calculatedEndTime.toString().padStart(2, '0')}:00`;
+        const startTimeHour = parseInt(startHour.split(':')[0], 10);
+        const calculatedEndTimeHour = (startTimeHour + duration) % 24;
+        const endHour = `${calculatedEndTimeHour.toString().padStart(2, '0')}:00`;
         setEndTime(endHour);
     }, [duration]);
 

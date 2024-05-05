@@ -24,7 +24,6 @@ const ShowDetails = ({ route, navigation }) => {
     const [genres, setGenres] = useState([]);
     const hours = generateHours();
     const [showBooking, setShowBooking] = useState({
-        name: '',
         date: '',
         time: '',
         duration: '',
@@ -115,6 +114,7 @@ const ShowDetails = ({ route, navigation }) => {
             dispatch(addShow(response.data));
         } catch (error) {
             console.log('Error creating show:', error);
+            setValidationError('Failed to create show');
         }
         setSwitchHandler(true);
     };
@@ -169,7 +169,7 @@ const ShowDetails = ({ route, navigation }) => {
                                 onValueChange={(value) => setShowBooking((prev) => ({ ...prev, duration: value }))}
                             />
                         </View>
-                        <View>
+                        <View style={validationError ? {} : { marginBottom: 36 }}>
                             {showBooking.duration && (
                                 <>
                                     <Text
@@ -219,8 +219,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderTopEndRadius: utilities.borderRadius.xl,
         borderTopLeftRadius: utilities.borderRadius.xl,
-    },
-    showGenresContainer: {
-        marginBottom: 20,
     },
 });

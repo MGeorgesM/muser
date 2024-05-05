@@ -60,6 +60,9 @@ export const utilities = StyleSheet.create({
     spaceBetween: {
         justifyContent: 'space-between',
     },
+    spaceAround: {
+        justifyContent: 'space-around',
+    },
     textCenter: {
         textAlign: 'center',
     },
@@ -179,7 +182,7 @@ export const utilities = StyleSheet.create({
     },
     errorText: {
         color: colors.primary,
-        fontFamily: 'Montserrat-Bold',
+        fontFamily: 'Montserrat-Regular',
         fontSize: 16,
         textAlign: 'center',
         marginBottom: 10,

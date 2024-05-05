@@ -137,6 +137,7 @@ export const styles = StyleSheet.create({
     errorText: {
         color: colors.primary,
         fontSize: 16,
+        fontFamily:'Montserrat-Regular',
         textAlign: 'center',
         marginBottom: 10,
     },

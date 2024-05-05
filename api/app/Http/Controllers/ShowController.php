@@ -11,11 +11,11 @@ class ShowController extends Controller
     public function addShow(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:60',
             'band_id' => 'required|exists:bands,id',
             'venue_id' => 'required|exists:users,id',
             'date' => 'required|date_format:Y-m-d',
             'time' => 'required|date_format:H:i',
+            'genre_id' => 'required|exists:genres,id',
             'picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
