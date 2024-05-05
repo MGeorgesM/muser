@@ -24,7 +24,7 @@ class ShowFactory extends Factory
             'genre_id' => $this->faker->numberBetween(1, 8),
             'status' => $this->faker->randomElement(['pending', 'set', 'live', 'cancelled']),
             'date' => $this->faker->dateTimeBetween('+1 week', '+1 month')->format('Y-m-d'),
-            'picture' => $this->faker->unique()->randomElement(array_map(function ($i) {
+            'picture' => $this->faker->randomElement(array_map(function ($i) {
                 return "show ({$i}).jpg";
             }, range(1, 5))),
         ];
