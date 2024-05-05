@@ -38,7 +38,7 @@ const Chat = ({ navigation, route }) => {
     const { chatId, receiver, chatTitle } = route.params;
 
     const [localChatId, setLocalChatId] = useState(chatId);
-    const [messages, setMessages] = useState([]);
+
     // const [participants, setParticipants] = useState(null);
     // const [receiver, setReceiver] = useState(null);
 
@@ -48,8 +48,8 @@ const Chat = ({ navigation, route }) => {
 
     const [bandName, setBandName] = useState(chatTitle || '');
 
-    const [chatParticipantsIds, setChatParticipantsIds] = useState([]);
     const [chatParticipants, setChatParticipants] = useState([]);
+    const [messages, setMessages] = useState([]);
     const [chatRef, setChatRef] = useState(null);
 
     const dispatch = useDispatch();
@@ -148,7 +148,7 @@ const Chat = ({ navigation, route }) => {
         }
     };
 
-    const getChatParticipantPicture = (userId) => {
+    const getChatParticipantPictureFromState = (userId) => {
         if (!userId || userId === currentUser.id) {
             console.log('No picture needed for current user.');
             return null;
@@ -162,6 +162,11 @@ const Chat = ({ navigation, route }) => {
 
         return `${profilePicturesUrl}${participant.picture}`;
     };
+
+    const checkIfParticipantExistsinState = (userId) => {
+        if (!userId) return false;
+        return chatParticipants.some((user) => user.id === userId);
+    }
 
     const setupMessagesListener = async () => {
         const chatRef = await getChatRef(chatId);
@@ -178,7 +183,7 @@ const Chat = ({ navigation, route }) => {
                 createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
                 user: {
                     _id: doc.data().userId,
-                    avatar: chatParticipants.length === 2 ? null : getChatParticipantPicture(doc.data().userId),
+                    avatar: chatParticipants.length === 2 ? null : getChatParticipantPictureFromState(doc.data().userId),
                 },
             }));
             setMessages(fetchedMessages);
@@ -200,12 +205,36 @@ const Chat = ({ navigation, route }) => {
         };
     }, [chatId, receiver]);
 
+    const updateChatParticipantInFirestore = async(newParticipantsList) => {
+
+        if (chatRef) {
+            try {
+                await updateDoc(chatRef, {
+                    participantsIds: newParticipantsList,
+                });
+                
+                setConnectionModalVisible(false);
+            } catch (error) {
+                console.error('Error adding participant', error);
+            }
+        }
+
+    }
+
     const addParticipant = async (newParticipantId) => {
-        if (newParticipantId && !participants.includes(newParticipantId)) {
-            const chatRef = await getChatRef();
+        const isAdded = checkIfParticipantExistsinState();
+        if(isAdded) {
+            console.log('Participant already in chat')
+            return
+        }
+        
+        
+        const newParticipantsList = chatParticipants.map(participant => participant.id);
+        newParticipantsList.push(newParticipantId);
+
+        const chatRef = await getChatRef();
             if (chatRef) {
                 try {
-                    const newParticipantsList = [...participants, newParticipantId].sort();
                     await updateDoc(chatRef, {
                         participantsIds: newParticipantsList,
                     });
