@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use OpenAI;
+use App\Models\User;
 use App\Models\Genre;
 use App\Models\Instrument;
 use App\Models\Location;
+use App\Models\MusicianGenre;
 use Illuminate\Http\Request;
-use OpenAI;
 use Illuminate\Support\Facades\Log;
 
 
@@ -41,7 +43,7 @@ class AiMatchMakingController extends Controller
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => "Identify 2 relevant musical genres from the artist or song or a genre that I specify, 3 close locations to me or the location I specify, and instruments I specify from my message. Use only the provided lists for matching."
+                        'content' => "You're the music expert. Identify 2 relevant musical genres from the artist or song or a genre that I specify, 3 close locations to me or the location I specify, and the instruments I specify from my message. Use only the provided lists for matching."
                     ],
                     [
                         'role' => 'system',
@@ -57,7 +59,7 @@ class AiMatchMakingController extends Controller
                     ],
                     [
                         'role' => 'system',
-                        'content' => "Possible locations: " . $availableLocations . "if i did not mention any location you should should 3 locations close to me: "
+                        'content' => "Possible locations: " . $availableLocations . " you must select 3 locations close to me or the location I specify."
                     ],
                     [
                         'role' => 'system',
@@ -80,4 +82,34 @@ class AiMatchMakingController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+
+    public function matchUsers(Request $request)
+    {
+        $genreIds = $request->genreIds;
+        $locationIds = $request->locationIds;
+        $instrumentIds = $request->instrumentIds;
+    
+        $users = User::query();
+    
+        if (empty($genreIds) && empty($locationIds) && empty($instrumentIds)) {
+            return response()->json(['error' => 'No search criteria provided'], 400);
+        }
+    
+        if (!empty($genreIds)) {
+            $userIdsFromGenres = MusicianGenre::whereIn('genre_id', $genreIds)->pluck('musician_id')->unique();
+            $users = $users->whereIn('id', $userIdsFromGenres);
+        }
+    
+        if (!empty($locationIds)) {
+            $users = $users->whereIn('location_id', $locationIds);
+        }
+    
+        if (!empty($instrumentIds)) {
+            $users = $users->whereIn('instrument_id', $instrumentIds);
+        }
+    
+        return response()->json($users->get());
+    }
+    
 }

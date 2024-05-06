@@ -86,6 +86,7 @@ class UserController extends Controller
         $current_user_id = auth()->id();
 
         $connectedUserIds = [];
+        
         if ($role === 'musician') {
             $connectedUserIds = Connection::where('user_one_id', $current_user_id)
                 ->orWhere('user_two_id', $current_user_id)
