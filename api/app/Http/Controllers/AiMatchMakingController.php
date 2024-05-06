@@ -24,18 +24,14 @@ class AiMatchMakingController extends Controller
 
         $result = OpenAI::chat()->create([
             'model' => 'gpt-3.5-turbo',
+            'responseo_format' => 'json',
             'messages' => [
-                ['role' => 'system', 'content' => 'You are a music expert, the user will insert an artist name in his message and you will provide the two music genres that goes with this artist.'],
-                ['role' => 'systme', 'content' => 'You should provide the two music genres that goes with this artist. If you do not know the artist, you can say "I do not know this artist".'],
-                
+                ['role' => 'system', 'content' => 'You are a music expert, you can help me find the music genre from my message which may include songs or artists'],
+                ['role' => 'system', 'content' => 'You should extract two music genres that goes with my message that may includes artists and or songs.'],
+                ['role' => 'system', 'content' => 'You should suggest the closest genres that goes wiht my input from this array of genres: ' . implode(", ", $available_genres_in_db)],
+                ['role' => 'system', 'content' => 'Always return JSON format no text.'],
 
-            ],
-        ]);
-
-        $result = OpenAI::chat()->create([
-            'model' => 'gpt-3.5-turbo',
-            'messages' => [
-                ['role' => 'user', 'content' => 'Hello!'],
+                ['role' => 'user', 'content' => $request->message],              
             ],
         ]);
 
