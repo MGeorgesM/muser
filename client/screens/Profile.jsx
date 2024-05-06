@@ -45,24 +45,15 @@ const Profile = ({ navigation }) => {
                 >
                     {currentUser.about}
                 </Text>
-                <Text style={[utilities.textM, utilities.myFontMedium]}>My Details</Text>
+                {/* <Text style={[utilities.textM, utilities.myFontMedium]}>My Details</Text>
                 <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 16, gap: 4 }]}>
                     <DetailsPill item={currentUser?.instrument} />
                     <DetailsPill item={currentUser?.experience} />
                     {currentUser?.genres &&
                         currentUser.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
-                </View>
+                </View> */}
             </View>
             <View style={styles.editProfileModal}>
-                {/* <TouchableOpacity style={styles.settingsCard}>
-                    <View style={styles.settingCardInner}>
-                        <View style={styles.settingsBtn}>
-                            <UserRoundCog size={16} color={colors.white} />
-                        </View>
-                        <Text style={styles.settingsDetails}>Edit Profile</Text>
-                    </View>
-                    <ChevronRight size={24} color={colors.white} />
-                </TouchableOpacity> */}
                 <SettingsCard iconComponent={<UserRoundCog color={'white'} />} text={'Edit Profile'} />
                 <SettingsCard iconComponent={<LockKeyhole color={'white'} />} text={'Edit Login Details'} />
             </View>

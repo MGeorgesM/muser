@@ -19,7 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { utilities } from '../styles/utilities';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
-const logoImg = require('../assets/logowhite.png');
+const logoImg = require('../assets/logolighter.png');
 const { styles } = require('../components/AuthenticationForms/styles');
 
 const Authentication = ({ navigation }) => {
@@ -30,7 +30,7 @@ const Authentication = ({ navigation }) => {
 
     const imageSource = switchHandler
         ? require('../assets/appImages/onboard00.jpg')
-        : require('../assets/appImages/onboard00.jpg');
+        : require('../assets/appImages/onboard011.jpg');
 
     useEffect(() => {
         if ((!userInfo.email.includes('@') || !userInfo.email.includes('.')) && userInfo.email.length > 0) {
