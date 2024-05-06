@@ -41,10 +41,10 @@ class AiMatchMakingController extends Controller
                 ],
                 'messages' => [
                     ['role' => 'system', 'content' => 'You are a music expert, find the music genre from my message that include songs or artists'],
-                    ['role' => 'system', 'content' => 'The extracted music genre should be included in this array of genres, if multiple genres applicable choose 2 maximum: ' . implode(", ", $available_genres_in_db)],
-                    ['role' => 'system', 'content' => 'My message may include a location, you should extract it and pick 3 locations that are close to it available in this array: ' . implode(", ", $available_locations_in_db)],
-                    ['role' => 'system', 'content' => 'My message may include an instrument, you should extract it and return the closest instrument found in this array: ' . implode(", ", $available_instruments_in_db)],
-                    ['role' => 'system', 'content' => 'Return JSON format of the music genres found, the closest 3 location. if not found return empty array'],
+                    ['role' => 'system', 'content' => 'The extracted music genre must be included in this array of genres, if multiple genres applicable choose 2 maximum: ' . implode(", ", $available_genres_in_db)],
+                    ['role' => 'system', 'content' => 'My message may include a location, it\'s very important to find atleast 3 locations close to it from this array: ' . implode(", ", $available_locations_in_db)],
+                    ['role' => 'system', 'content' => 'My message may include instruments, you msut extract it and return the closest instruments found in this array: ' . implode(", ", $available_instruments_in_db)],
+                    ['role' => 'system', 'content' => 'Return JSON object format of the music genres found as "genres", the closest 3 location as "locations". the closest instruments as "instrument" if not found return empty arrays'],
 
                     ['role' => 'user', 'content' => $request->message],
                 ],
