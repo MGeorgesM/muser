@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 class AiMatchMakingController extends Controller
 {
 
-    public function generateAssistantResponse(Request $request)
+    public function getMatch(Request $request)
     {
 
         $available_genres_in_db = Genre::all()->pluck('name')->toArray();
@@ -27,10 +27,9 @@ class AiMatchMakingController extends Controller
                 'model' => 'gpt-3.5-turbo',
                 'response_format' => 'json',
                 'messages' => [
-                    ['role' => 'system', 'content' => 'You are a music expert, you can help me find the music genre from my message which may include songs or artists'],
-                    ['role' => 'system', 'content' => 'You should extract two music genres that goes with my message that may includes artists and or songs.'],
-                    ['role' => 'system', 'content' => 'You should suggest the closest genres that goes wiht my input from this array of genres: ' . implode(", ", $available_genres_in_db)],
-                    ['role' => 'system', 'content' => 'Always return JSON format no text.'],
+                    ['role' => 'system', 'content' => 'You are a music expert, find the music genre from my message that include songs or artists'],
+                    ['role' => 'system', 'content' => 'The extracted music genres should be included in this array of genres: ' . implode(", ", $available_genres_in_db)],
+                    ['role' => 'system', 'content' => 'Return JSON format of the 2 music genres.'],
 
                     ['role' => 'user', 'content' => $request->message],
                 ],
@@ -38,9 +37,9 @@ class AiMatchMakingController extends Controller
 
             $response = $result->choices[0]->message->content;
             return response()->json($response);
-        } catch (\Exception $th) {
+        } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to process your request'], 500);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }
