@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { colors } from '../../styles/utilities';
+
+const  windowDimension = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
     container: {
@@ -45,7 +47,7 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
     },
     promptLink: {
-        color: colors.black,
+        color: colors.primary,
         textDecorationLine: 'underline',
     },
     welcomeLogo: {
@@ -58,6 +60,7 @@ export const styles = StyleSheet.create({
         marginTop: 128,
     },
     bottomInnerContainer: {
+        marginTop: 'auto',
         marginBottom: 64,
     },
     userTypeText: {
@@ -143,9 +146,10 @@ export const styles = StyleSheet.create({
     },
     imageBackground: {
         position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
+        flex:1,
+        bottom:0,
+        right:0,
+        width: windowDimension.width,
+        height: windowDimension.height * 1.065,
     },
 });

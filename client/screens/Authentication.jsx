@@ -93,8 +93,10 @@ const Authentication = ({ navigation }) => {
     };
 
     return (
-        <ImageBackground source={imageSource} style={styles.imageBackground}>
+        <>
+            <Image source={imageSource} style={styles.imageBackground} />
             <View style={[utilities.container, utilities.photoOverlayS]}>
+                <ScrollView showsHorizontalScrollIndicator={false}>
                 <View style={styles.topInnerContainer}>
                     <Image style={styles.welcomeLogo} source={logoImg} />
                     <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
@@ -104,6 +106,7 @@ const Authentication = ({ navigation }) => {
                         <SignInForm userInfo={userInfo} setUserInfo={setUserInfo} />
                     )}
                 </View>
+                </ScrollView>
                 <View style={styles.bottomInnerContainer}>
                     <Text style={styles.errorText}>{error}</Text>
                     <PrimaryBtn
@@ -126,7 +129,7 @@ const Authentication = ({ navigation }) => {
                 </View>
                 {/* </View> */}
             </View>
-        </ImageBackground>
+        </>
     );
 };
 

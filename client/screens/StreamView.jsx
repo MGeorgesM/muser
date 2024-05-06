@@ -120,27 +120,6 @@ const StreamView = ({ navigation, route }) => {
         };
     }, [show.id]);
 
-    const joinCall = async () => {
-        console.log('Joining call');
-
-        if (!client) {
-            console.log('No client found');
-            return;
-        }
-        // setViewer(true);
-        console.log('Client Found!');
-
-        try {
-            const call = client.call('livestream', showId);
-            await call.join();
-            setCall(call);
-            console.log('Call joined!', call);
-            call && setVideoPlaying(true);
-        } catch (error) {
-            console.log('Error joining call:', error);
-        }
-    };
-
     const createShowAndComments = async (initialComment) => {
         const newShowRef = doc(collection(fireStoreDb, 'shows'));
         const commentsRef = collection(newShowRef, 'comments');
@@ -190,6 +169,27 @@ const StreamView = ({ navigation, route }) => {
         }
     };
 
+    const joinCall = async () => {
+        console.log('Joining call');
+
+        if (!client) {
+            console.log('No client found');
+            return;
+        }
+        // setViewer(true);
+        console.log('Client Found!');
+
+        try {
+            const call = client.call('livestream', showId);
+            await call.join();
+            setCall(call);
+            console.log('Call joined!', call);
+            call && setVideoPlaying(true);
+        } catch (error) {
+            console.log('Error joining call:', error);
+        }
+    };
+
     const handleUserStreamInteraction = () => {
         if (!call) {
             joinCall();
@@ -201,53 +201,6 @@ const StreamView = ({ navigation, route }) => {
             joinCall();
             setVideoPlaying(true);
         }
-    };
-
-    const liveStreamViewLayout = () => {
-        const call = useCall();
-
-        const { useCameraState, useMicrophoneState, useCallCallingState, useHasOngoingScreenShare, useParticipants } =
-            useCallStateHooks();
-        const { useParticipantCount, useLocalParticipant, useRemoteParticipants, useIsCallLive } = useCallStateHooks();
-
-        const { status: microphoneStatus } = useMicrophoneState();
-        const { status: cameraStatus } = useCameraState();
-
-        const totalParticipants = useParticipantCount();
-        const localParticipant = useLocalParticipant();
-        const remoteParticipants = useRemoteParticipants();
-
-        const callingState = useCallCallingState();
-        const isCallLive = useIsCallLive();
-
-        useEffect(() => {
-            inCallManager.start({ media: 'video' });
-            return () => {
-                inCallManager.stop();
-                if (call && !viewer) {
-                    call.endCall();
-                    console.log('Ending Call!');
-                }
-            };
-        }, []);
-
-        const togglePauseStart = async () => {
-            console.log('Calling State:', callingState);
-            if (callingState === CallingState.JOINED) {
-                console.log('Calling state is Joined, Leaving');
-                await call.leave();
-            } else if (isCallLive) {
-                const call = client.call('livestream', showId);
-                await call.join();
-            } else {
-                console.log('Stream is in Backstage');
-            }
-        };
-
-        return (
-
-            
-        )
     };
 
     return (

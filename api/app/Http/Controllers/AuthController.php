@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Models\Location;
-use App\Models\Availability;
 use App\Models\Experience;
 use App\Models\Instrument;
 use App\Models\VenueType;
