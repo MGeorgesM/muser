@@ -12,11 +12,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 
+
 class AiMatchMakingController extends Controller
 {
 
     public function getMatch(Request $request)
     {
+        if (!auth()->user()->role_id == 2) {
+            return response()->json(['error' => 'Only musicians can use this feature'], 403);
+        }
 
         $currentUserLocation = auth()->user()->location_id;
         $currentUserLocation = Location::find($currentUserLocation)->name;
@@ -63,7 +67,7 @@ class AiMatchMakingController extends Controller
                     ],
                     [
                         'role' => 'system',
-                        'content' => 'Return the IDs of the two closest matching genres, the three closest locations, and the IDs of the instruments mentioned in the message. In JSON object format'
+                        'content' => 'Return the IDs of the two closest matching genres, the three closest locations, and the IDs of the instruments mentioned in the message. In JSON object format with keys: genreIds, locationIds, instrumentIds.'
                     ],
                     [
                         'role' => 'user',
@@ -75,8 +79,16 @@ class AiMatchMakingController extends Controller
                 ],
             ]);
 
-            $response = $result->choices[0]->message->content;
-            return response($response);
+            $response = json_decode($result->choices[0]->message->content, true);
+
+            if (!isset($response['genreIds'], $response['locationIds'], $response['instrumentIds'])) {
+                return response()->json(['error' => 'Invalid response format from AI'], 422);
+            }
+
+            $matchedUsers = $this->matchUsers($response['genreIds'], $response['locationIds'], $response['instrumentIds']);
+
+            return response()->json($matchedUsers);
+
         } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
@@ -86,8 +98,7 @@ class AiMatchMakingController extends Controller
 
     protected function matchUsers(array $genreIds, array $locationIds, array $instrumentIds)
     {
-          
-        $users = User::query();
+        $query = User::query()->where('role_id', 1);
     
         if (empty($genreIds) && empty($locationIds) && empty($instrumentIds)) {
             return response()->json(['error' => 'No search criteria provided'], 400);
@@ -95,18 +106,23 @@ class AiMatchMakingController extends Controller
     
         if (!empty($genreIds)) {
             $userIdsFromGenres = MusicianGenre::whereIn('genre_id', $genreIds)->pluck('musician_id')->unique();
-            $users = $users->whereIn('id', $userIdsFromGenres);
+            $query = $query->whereIn('id', $userIdsFromGenres);
         }
     
         if (!empty($locationIds)) {
-            $users = $users->whereIn('location_id', $locationIds);
+            $query = $query->whereIn('location_id', $locationIds);
         }
     
         if (!empty($instrumentIds)) {
-            $users = $users->whereIn('instrument_id', $instrumentIds);
+            $query = $query->whereIn('instrument_id', $instrumentIds);
         }
+
+        $users = $query->get();
     
-        return response()->json($users->get());
+        $users = $users->map(function ($user) {
+            return $user->full_details; 
+        });
+    
     }
     
 }
