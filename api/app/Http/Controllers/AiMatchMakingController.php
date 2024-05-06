@@ -84,12 +84,9 @@ class AiMatchMakingController extends Controller
     }
 
 
-    public function matchUsers(Request $request)
+    protected function matchUsers(array $genreIds, array $locationIds, array $instrumentIds)
     {
-        $genreIds = $request->genreIds;
-        $locationIds = $request->locationIds;
-        $instrumentIds = $request->instrumentIds;
-    
+          
         $users = User::query();
     
         if (empty($genreIds) && empty($locationIds) && empty($instrumentIds)) {

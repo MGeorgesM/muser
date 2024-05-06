@@ -35,7 +35,6 @@ Route::group([
 
 Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
-
     Route::middleware([AdminMiddleware::class])->group(function () {
 
         Route::delete('users/{id?}', [UserController::class, 'disableUser']);
@@ -82,8 +81,8 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
     Route::group(['prefix' => 'shows'], function ($router) {
 
-        Route::get('shows/{showId?}', [ShowController::class, 'getShows']);
-        Route::post('shows', [ShowController::class, 'addShow']);
+        Route::get('{showId?}', [ShowController::class, 'getShows']);
+        Route::post('/', [ShowController::class, 'addShow']);
 
     });
 
