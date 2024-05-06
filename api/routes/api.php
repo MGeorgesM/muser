@@ -60,7 +60,7 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
     Route::get('genres/', [GenreController::class, 'getGenres']);
 
 
-    Route::post('aimatch/', [AiMatchMakingController::class, 'generateAssistantsResponse']);
+    Route::post('aimatch/', [AiMatchMakingController::class, 'generateAssistantResponse']);
     // Route::get('venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
     // Route::get('shows', [VenueController::class, 'getShowsByVenue']);
 });

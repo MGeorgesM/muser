@@ -3,153 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\Genre;
+use App\Models\Instrument;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
 use OpenAI\Laravel\Facades\OpenAI;
-use Illuminate\Support\Facades\Log;
-
 
 
 class AiMatchMakingController extends Controller
-
 {
-    public function generateAssistantsResponse(Request $request)
+
+    public function generateAssistantResponse(Request $request)
     {
-        $assistantId = 'asst_H9CXvY23KTcANHSXiWlUE2lQ';
-        $userMessage = $request->message;
 
-        [$thread, $message, $run] = $this->createThreadAndRun($assistantId, $userMessage);
-
-        $run = $this->waitOnRun($run, $thread->id);
-
-        if ($run->status == 'completed') {
-            $messages = $this->getMessages($run->threadId, 'asc', $message->id);
-
-            $messagesData = $messages->data;
-
-            if (!empty($messagesData)) {
-                $messagesCount = count($messagesData);
-                $assistantResponseMessage = '';
-
-                if ($messagesCount > 1) {
-                    foreach ($messagesData as $message) {
-                        $assistantResponseMessage .= $message->content[0]->text->value . "\n\n";
-                    }
-
-                    $assistantResponseMessage = rtrim($assistantResponseMessage);
-                } else {
-                    $assistantResponseMessage = $messagesData[0]->content[0]->text->value;
-                }
-
-                return response()->json([
-                    "assistant_response" => $assistantResponseMessage,
-                ]);
-            } else {
-                Log::error('Something went wrong; assistant didn\'t respond');
-            }
-        } else {
-            Log::error('Something went wrong; assistant run wasn\'t completed successfully');
-        }
-    }
+        $available_genres_in_db = Genre::all()->pluck('name')->toArray();
+        $available_instruments_in_db = Instrument::all()->pluck('name')->toArray();
 
 
-    private function submitMessage($assistantId, $threadId, $userMessage)
-    {
-        $message = OpenAI::threads()->messages()->create($threadId, [
-            'role' => 'user',
-            'content' => $userMessage,
+        $request->validate([
+            'message' => 'required|string'
         ]);
 
-        $run = OpenAI::threads()->runs()->create(
-            threadId: $threadId,
-            parameters: [
-                'assistant_id' => $assistantId,
+        $result = OpenAI::chat()->create([
+            'model' => 'gpt-3.5-turbo',
+            'messages' => [
+                ['role' => 'system', 'content' => 'You are a music expert, the user will insert an artist name in his message and you will provide the two music genres that goes with this artist.'],
+                ['role' => 'systme', 'content' => 'You should provide the two music genres that goes with this artist. If you do not know the artist, you can say "I do not know this artist".'],
+                
+
             ],
-        );
+        ]);
 
-        return [
-            $message,
-            $run
-        ];
+        $result = OpenAI::chat()->create([
+            'model' => 'gpt-3.5-turbo',
+            'messages' => [
+                ['role' => 'user', 'content' => 'Hello!'],
+            ],
+        ]);
+
+        echo $result->choices[0]->message->content; // Hello! How can I assist you today?
     }
-
-
-    private function createThreadAndRun($assistantId, $userMessage)
-    {
-        $thread = OpenAI::threads()->create([]);
-
-        [$message, $run] = $this->submitMessage($assistantId, $thread->id, $userMessage);
-
-        return [
-            $thread,
-            $message,
-            $run
-        ];
-    }
-
-    private function waitOnRun($run, $threadId)
-    {
-        while ($run->status == "queued" || $run->status == "in_progress") {
-            $run = OpenAI::threads()->runs()->retrieve(
-                threadId: $threadId,
-                runId: $run->id,
-            );
-
-            sleep(1);
-        }
-
-        return $run;
-    }
-
-    private function getMessages($threadId, $order = 'asc', $messageId = null)
-    {
-        $params = [
-            'order' => $order,
-            'limit' => 10
-        ];
-
-        if ($messageId) {
-            $params['after'] = $messageId;
-        }
-
-        return OpenAI::threads()->messages()->list($threadId, $params);
-    }
-
-    // function analyzePrompt($prompt)
-    // {
-
-    //     $client = new Client();
-    //     $apiKey = env('OPENAI_API_KEY');
-    //         // dd($apiKey);
-    //     ;
-
-    //     $response = $client->post('https://api.openai.com/v1/completions', [
-    //         'headers' => [
-    //             'Authorization' => 'Bearer ' . 'sk-proj-qUoHGKqBJ8Un0geALXtMT3BlbkFJ7PhPMj9pt9TNS1ANfOpJ',
-    //             'Content-Type' => 'application/json',
-    //         ],
-    //         'json' => [
-    //             'model' => 'text-davinci-003',
-    //             'prompt' => $prompt,
-    //             'max_tokens' => 150
-    //         ]
-    //     ]);
-
-    //     $body = $response->getBody();
-    //     $responseArray = json_decode($body, true);
-    //     return $responseArray['choices'][0]['text'];
-    // }
-
-
-    // public function getMatch(Request $request)
-    // {
-    //     $prompt = $request->input('prompt');
-    //     $response = $this->analyzePrompt($prompt);
-    //     return response()->json(['response' => $response]);
-    // }
-
-    // public function categorizeResponse($response)
-    // {
-    //     $keywords = Genre::all()->pluck('name')->toArray();
-    // }
 }
