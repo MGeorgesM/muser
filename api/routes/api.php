@@ -28,6 +28,7 @@ Route::group([
 });
 
 Route::middleware([AuthenticatedMiddleware::class])->group(function () {
+    
 
     Route::middleware([AdminMiddleware::class])->group(function () {
         Route::delete('users/{id?}', [UserController::class, 'disableUser']);

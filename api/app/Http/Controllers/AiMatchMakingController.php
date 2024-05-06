@@ -16,37 +16,60 @@ class AiMatchMakingController extends Controller
     public function getMatch(Request $request)
     {
 
+        $currentUserLocation = auth()->user()->location_id;
+        $currentUserLocation = Location::find($currentUserLocation)->name;
 
-        $currect_user_instrument_id = auth()->user()->instrument_id;
-        $currect_user_instrument = Instrument::find($currect_user_instrument_id)->name;
+        $apiKey = getenv('OPENAI_API_KEY');
+        $client = OpenAI::client($apiKey);
 
-        // dd($currect_user_instrument);
+        $availableGenres = Genre::all()->toArray();
+        $availableGenres = json_encode($availableGenres);
 
-        $yourApiKey = getenv('OPENAI_API_KEY');
-        $client = OpenAI::client($yourApiKey);
+        $availableInstruments = Instrument::all()->toArray();
+        $availableInstruments = json_encode($availableInstruments);
 
-        $available_genres_in_db = Genre::all()->pluck('name')->toArray();
-        $available_instruments_in_db = Instrument::all()->pluck('name')->toArray();
-        $available_locations_in_db = Location::all()->pluck('name')->toArray();
+        $availableLocations = Location::all()->toArray();
+        $availableLocations = json_encode($availableLocations);
 
-        $request->validate([
+        $validatedData = $request->validate([
             'message' => 'required|string'
         ]);
 
         try {
             $result = $client->chat()->create([
-                'model' => 'gpt-3.5-turbo-0125',
+                'model' => 'gpt-3.5-turbo',
+                'messages' => [
+                    [
+                        'role' => 'system',
+                        'content' => "Identify 2 relevant musical genres from the artist or song or a genre that I specify, 3 close locations to me or the location I specify, and instruments I specify from my message. Use only the provided lists for matching."
+                    ],
+                    [
+                        'role' => 'system',
+                        'content' => "My location is " . $currentUserLocation
+                    ],
+                    [
+                        'role' => 'system',
+                        'content' => "Genres to consider: " . $availableGenres
+                    ],
+                    [
+                        'role' => 'system',
+                        'content' => "Potential instruments if i mentioned an instrument: " . $availableInstruments
+                    ],
+                    [
+                        'role' => 'system',
+                        'content' => "Possible locations: " . $availableLocations . "if i did not mention any location you should should 3 locations close to me: "
+                    ],
+                    [
+                        'role' => 'system',
+                        'content' => 'Return the IDs of the two closest matching genres, the three closest locations, and the IDs of the instruments mentioned in the message. In JSON object format'
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => $validatedData['message']
+                    ],
+                ],
                 'response_format' => [
                     'type' => 'json_object'
-                ],
-                'messages' => [
-                    ['role' => 'system', 'content' => 'You are a music expert, find the music genre from my message that include songs or artists'],
-                    ['role' => 'system', 'content' => 'The extracted music genre must be included in this array of genres, if multiple genres applicable choose 2 maximum: ' . implode(", ", $available_genres_in_db)],
-                    ['role' => 'system', 'content' => 'My message may include a location, it\'s very important to find atleast 3 locations close to it from this array: ' . implode(", ", $available_locations_in_db)],
-                    ['role' => 'system', 'content' => 'My message may include instruments, you msut extract it and return the closest instruments found in this array: ' . implode(", ", $available_instruments_in_db)],
-                    ['role' => 'system', 'content' => 'Return JSON object format of the music genres found as "genres", the closest 3 location as "locations". the closest instruments as "instrument" if not found return empty arrays'],
-
-                    ['role' => 'user', 'content' => $request->message],
                 ],
             ]);
 

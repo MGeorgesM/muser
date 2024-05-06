@@ -48,9 +48,7 @@ class UserController extends Controller
         return response()->json($result);
     }
 
-
-
-
+ 
     // public function getUsersByRole($role)
     // {
     //     $current_user_id = auth()->id();
