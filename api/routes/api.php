@@ -11,6 +11,7 @@ use App\Http\Controllers\GenreController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthenticatedMiddleware;
 use App\Http\Middleware\VenueMiddleware;
+use App\Http\Controllers\AiMatchMakingController;
 
 Route::group([
 
@@ -57,6 +58,9 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
     Route::post('shows', [ShowController::class, 'addShow']);
 
     Route::get('genres/', [GenreController::class, 'getGenres']);
+
+
+    Route::post('aimatch/', [AiMatchMakingController::class, 'generateAssistantsResponse']);
     // Route::get('venues/{venueId}/shows/{status?}', [VenueController::class, 'getShowsByVenue']);
     // Route::get('shows', [VenueController::class, 'getShowsByVenue']);
 });
