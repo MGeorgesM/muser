@@ -36,7 +36,6 @@ import {
 import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
 import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 
-import { truncateText } from '../core/tools/formatDate';
 import { colors, utilities } from '../styles/utilities';
 import { Heart, Play, Send, Pause } from 'lucide-react-native';
 import inCallManager from 'react-native-incall-manager';
@@ -51,7 +50,6 @@ const StreamView = ({ navigation, route }) => {
 
     const [userComment, setUserComment] = useState('');
     const [comments, setComments] = useState([]);
-    const [showCommentsRef, setShowCommentsRef] = useState(null);
     const [videoPlaying, setVideoPlaying] = useState(false);
 
     const [call, setCall] = useState(null);

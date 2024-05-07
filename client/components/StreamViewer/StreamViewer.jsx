@@ -128,75 +128,73 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
     //     );
     // };
 
-    const HostMode = () => {
-        return (
-            <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
-                <View style={[styles.topLiveStreamBar]}>
-                    <Text style={{ color: 'white' }}>{showName} </Text>
-                    <View style={{ flexDirection: 'row', gap: 8 }}>
-                        <TouchableOpacity
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: 4,
-                            }}
-                        >
-                            <Text style={{ color: 'white' }}>{totalParticipants}</Text>
-                            {/* <Eye size={24} color={'white'} /> */}
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Radio size={24} color={isCallLive ? colors.primary : 'white'} />
-                        </TouchableOpacity>
-                    </View>
+    return (
+        <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
+            <View style={[styles.topLiveStreamBar]}>
+                <Text style={{ color: 'white' }}>{showName} </Text>
+                <View style={{ flexDirection: 'row', gap: 8 }}>
+                    <TouchableOpacity
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 4,
+                        }}
+                    >
+                        <Text style={{ color: 'white' }}>{totalParticipants}</Text>
+                        {/* <Eye size={24} color={'white'} /> */}
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Radio size={24} color={isCallLive ? colors.primary : 'white'} />
+                    </TouchableOpacity>
                 </View>
-                <View style={[utilities.flexed, { alignItems: 'center', justifyContent: 'center' }]}>
-                    {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
-                    {!isCallLive && (
-                        <Pressable onPress={handleStreamStatus} style={styles.goliveBtnContainer}>
-                            <Play size={48} color={colors.primary} style={{marginLeft:3}} />
-                        </Pressable>
-                    )}
-                </View>
-                {!viewer && (
-                    <View style={styles.bottomLiveStreamBar}>
-                        <TouchableOpacity onPress={toggleVideoMuted}>
-                            {cameraStatus === 'disabled' ? (
-                                <VideoOff size={24} color={'white'} />
-                            ) : (
-                                <Video size={24} color={'white'} />
-                            )}
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={toggleCameraFacingMode}>
-                            <SwitchCamera size={24} color={'white'} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={toggleAudioMuted}>
-                            {microphoneStatus === 'disabled' ? (
-                                <MicOff size={24} color={'white'} />
-                            ) : (
-                                <Mic size={24} color={'white'} />
-                            )}
-                        </TouchableOpacity>
-                        {isCallLive && (
-                            <TouchableOpacity onPress={handleStreamStatus}>
-                                {<CircleStop size={24} color={'white'} />}
-                            </TouchableOpacity>
-                        )}
-                    </View>
+            </View>
+            <View style={[utilities.flexed, { alignItems: 'center', justifyContent: 'center' }]}>
+                {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
+                {!isCallLive && (
+                    <Pressable onPress={handleStreamStatus} style={styles.goliveBtnContainer}>
+                        <Play size={48} color={colors.primary} style={{ marginLeft: 3 }} />
+                    </Pressable>
                 )}
             </View>
-        );
-    };
-
-    return viewer ? (
-        <ViewerLivestream
-            ViewerLivestreamTopView={null}
-            ViewerLeaveStreamButton={null}
-            ViewerLivestreamControls={null}
-        />
-    ) : (
-        <HostMode />
+            {!viewer && (
+                <View style={styles.bottomLiveStreamBar}>
+                    <TouchableOpacity onPress={toggleVideoMuted}>
+                        {cameraStatus === 'disabled' ? (
+                            <VideoOff size={24} color={'white'} />
+                        ) : (
+                            <Video size={24} color={'white'} />
+                        )}
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={toggleCameraFacingMode}>
+                        <SwitchCamera size={24} color={'white'} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={toggleAudioMuted}>
+                        {microphoneStatus === 'disabled' ? (
+                            <MicOff size={24} color={'white'} />
+                        ) : (
+                            <Mic size={24} color={'white'} />
+                        )}
+                    </TouchableOpacity>
+                    {isCallLive && (
+                        <TouchableOpacity onPress={handleStreamStatus}>
+                            {<CircleStop size={24} color={'white'} />}
+                        </TouchableOpacity>
+                    )}
+                </View>
+            )}
+        </View>
     );
+
+    // return viewer ? (
+    //     <ViewerLivestream
+    //         ViewerLivestreamTopView={null}
+    //         ViewerLeaveStreamButton={null}
+    //         ViewerLivestreamControls={null}
+    //     />
+    // ) : (
+    //     <HostMode />
+    // );
 };
 
 export default StreamViewer;
@@ -236,8 +234,8 @@ const styles = StyleSheet.create({
     },
 
     goliveBtnContainer: {
-        backgroundColor:colors.bgDark,
-        borderRadius:32,
+        backgroundColor: colors.bgDark,
+        borderRadius: 32,
         padding: 12,
-    }
+    },
 });
