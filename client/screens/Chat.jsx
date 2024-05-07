@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
-import { TouchableOpacity, Image, View, StyleSheet, Dimensions, Text, Pressable } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Dimensions, Text, Pressable } from 'react-native';
 
 import { fireStoreDb } from '../config/firebase';
 import {
@@ -28,16 +28,17 @@ import { useUser } from '../contexts/UserContext';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
-import PictureHeader from '../components/PictureHeader/PictureHeader';
 import { colors, utilities } from '../styles/utilities';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
+
+import PictureHeader from '../components/PictureHeader/PictureHeader';
 import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
-    const { chatId, chatParticipants, chatTitle } = route.params;
+    const { id, chatParticipants, chatTitle } = route.params;
 
-    const [localChatId, setLocalChatId] = useState(chatId);
+    const [localChatId, setLocalChatId] = useState(id);
     const [messages, setMessages] = useState([]);
     const [participants, setParticipants] = useState(chatParticipants);
     const [receiver, setReceiver] = useState(null);
@@ -57,7 +58,10 @@ const Chat = ({ navigation, route }) => {
                 else {
                     const receiverName = receiver?.map((user) => user.name).join(', ');
                     const reciverPicture = receiver?.map((user) => user.picture).join(', ');
-                    const receiverId = receiver?.map((user) => user.id).join(', ').toString();
+                    const receiverId = receiver
+                        ?.map((user) => user.id)
+                        .join(', ')
+                        .toString();
 
                     return (
                         <PictureHeader
@@ -90,7 +94,7 @@ const Chat = ({ navigation, route }) => {
             ),
         });
     }, [navigation, addParticipant, receiver]);
-    
+
     useEffect(() => {
         setParticipants(chatParticipants);
         console.log('Chat participants:', chatParticipants);
@@ -129,7 +133,6 @@ const Chat = ({ navigation, route }) => {
         getUsersPicutresandNames();
     }, [participants]);
 
-
     useLayoutEffect(() => {
         let unsubscribe;
 
@@ -148,10 +151,11 @@ const Chat = ({ navigation, route }) => {
             }
         };
 
-        const setupMessagesListener = async () => {
-            const chatRef = await getChat();
-            if (!chatRef) return;
+        const createChatId = () => [currentUser.id, receiver.id].sort().join('-');
 
+        const setupMessagesListener = async () => {
+            const chatId = id || createChatId();
+            const chatRef = doc(fireStoreDb, 'chats', chatId);
             const messagesRef = collection(chatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
 
@@ -162,9 +166,10 @@ const Chat = ({ navigation, route }) => {
                     createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
                     user: {
                         _id: doc.data().userId,
-                        avatar: participants.length === 2 ? null : getReceiverPicture(doc.data().userId),
+                        avatar: participants.length < 3 ? null : getReceiverPicture(doc.data().userId),
                     },
                 }));
+
                 setMessages(fetchedMessages);
             });
         };
@@ -176,20 +181,20 @@ const Chat = ({ navigation, route }) => {
                 unsubscribe();
             }
         };
-    }, [participants, chatId, localChatId]);
+    }, [id]);
 
-    const getChat = async () => {
-        if (chatId) {
-            const chatRef = doc(fireStoreDb, 'chats', chatId);
-            return chatRef;
-        } else {
-            const chatRef = collection(fireStoreDb, 'chats');
-            const q = query(chatRef, where('participantsIds', '==', participants));
-            // const q = query(chatRef, where(`participantsIds.${participants[0]}`, '==', true));
-            const querySnapshot = await getDocs(q);
-            if (!querySnapshot.empty) return querySnapshot.docs[0].ref;
-        }
-    };
+    // const getChat = async () => {
+    //     if (chatId) {
+    //         const chatRef = doc(fireStoreDb, 'chats', chatId);
+    //         return chatRef;
+    //     } else {
+    //         const chatRef = collection(fireStoreDb, 'chats');
+    //         const q = query(chatRef, where('participantsIds', '==', participants));
+    //         // const q = query(chatRef, where(`participantsIds.${participants[0]}`, '==', true));
+    //         const querySnapshot = await getDocs(q);
+    //         if (!querySnapshot.empty) return querySnapshot.docs[0].ref;
+    //     }
+    // };
 
     const addParticipant = async (newParticipantId) => {
         if (newParticipantId && !participants.includes(newParticipantId)) {
@@ -255,7 +260,6 @@ const Chat = ({ navigation, route }) => {
         if (!chatRef) {
             const firstMessage = messages[0];
             chatRef = await createChat(firstMessage);
-            setLocalChatId(chatRef.id);
             await addConnection();
         } else {
             const messagesRef = collection(chatRef, 'messages');
