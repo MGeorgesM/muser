@@ -36,7 +36,7 @@ const ChatModal = ({ data, userInput, setUserInput, handlePress, modalVisible, s
                     >
                         {data && data.length > 0 ? (
                             <>
-                                <Text style={styles.modalTitle}>Your Connections</Text>}
+                                <Text style={styles.modalTitle}>Your Connections</Text>
                                 {/* <TextInput
                             style={[utilities.inputText]}
                             onChangeText={setUserInput}

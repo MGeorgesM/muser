@@ -5,7 +5,6 @@ import { fireStoreDb } from '../config/firebase';
 import {
     collection,
     query,
-    where,
     orderBy,
     onSnapshot,
     addDoc,
@@ -13,12 +12,11 @@ import {
     doc,
     getDoc,
     setDoc,
-    getDocs,
     updateDoc,
 } from 'firebase/firestore';
 
 import { PlusIcon, ArrowLeft, Send as SendIcon, ChevronLeft, X, Check } from 'lucide-react-native';
-import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
+import { GiftedChat } from 'react-native-gifted-chat';
 import { renderBubble, renderSend, renderInputToolbar, renderComposer } from '../core/tools/chatConfigurations';
 
 import { addConnectedUser } from '../store/Users';
@@ -145,13 +143,15 @@ const Chat = ({ navigation, route }) => {
             setParticipants(participants);
         }
 
-        const remainingConnections = userConnections.filter((connection) =>
-            participants?.some((participant) => participant?.id === connection?.id)
+        const remainingConnections = userConnections.filter(connection =>
+            participants.every(participant => participant.id !== connection.id)
         );
 
         setChatConnections(remainingConnections);
 
+        console.log('User Connections:', userConnections)
         console.log('Chat Participants:', participants);
+        console.log('Remainign Connections:', remainingConnections);
     };
 
     const getMessageAvatar = (userId) => {
@@ -361,19 +361,6 @@ const Chat = ({ navigation, route }) => {
                 renderActions={() => null}
             />
 
-            {/* {connectionModalVisible && (
-                <View style={styles.chatModal}>
-                    <Text style={[utilities.textL, utilities.textCenter, { marginBottom: 16 }]}>Your Connections</Text>
-                    <FlatList
-                        data={chatConnections}
-                        renderItem={({ item }) => (
-                            <BandMemberCard entity={item} handlePress={() => addParticipant(item.id)} />
-                        )}
-                        keyExtractor={(item) => item.id}
-                        showsVerticalScrollIndicator={false}
-                    />
-                </View>
-            )} */}
             {bandModalVisible && (
                 <View style={styles.chatModal}>
                     <Text style={[utilities.textL, utilities.myFontMedium, utilities.textCenter]}>Form Your Band</Text>
@@ -395,7 +382,7 @@ const Chat = ({ navigation, route }) => {
                     </View>
                 </View>
             )}
-            {connectionModalVisible && <ChatModal setModalVisible={setConnectionModalVisible} />}
+            {connectionModalVisible && <ChatModal data={chatConnections} setModalVisible={setConnectionModalVisible} />}
         </View>
     );
 };
@@ -418,7 +405,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primary,
         paddingHorizontal: 16,
         paddingVertical: 4,
-
         borderRadius: utilities.borderRadius.m,
         marginRight: 8,
         alignItems: 'center',
@@ -436,10 +422,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-
         borderBottomColor: colors.lightGray,
         borderBottomWidth: 0.5,
-
         marginBottom: 10,
     },
 
@@ -456,6 +440,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
+
     avatar: {
         width: 48,
         height: 48,
