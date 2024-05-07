@@ -193,4 +193,24 @@ export const utilities = StyleSheet.create({
         fontFamily: 'Montserrat-Bold',
         textAlign: 'left',
     },
+
+    label: {
+        fontSize: 16,
+        fontFamily: 'Montserrat-Regular',
+        marginBottom: 6,
+        marginLeft: 8,
+        color: colors.white,
+    },
+    
+    inputText: {
+        color: colors.offWhite,
+        fontFamily: 'Montserrat-Regular',
+        height: 48,
+        borderRadius: 24,
+        borderWidth: 0.5,
+        borderColor: colors.offWhite,
+        backgroundColor: '#2E2C2F20',
+        padding: 16,
+        marginBottom: 14,
+    },
 });

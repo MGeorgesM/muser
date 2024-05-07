@@ -13,6 +13,7 @@ import { colors, utilities } from '../styles/utilities';
 import { SearchIcon } from 'lucide-react-native';
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
+import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const Feed = ({ navigation }) => {
     const [refreshing, setRefreshing] = useState(false);
@@ -68,7 +69,17 @@ const Feed = ({ navigation }) => {
         }
     };
 
-    const AiMatchMakingModal = ({ modalVisible, handleProceed }) => {
+    const handleProceed = async () => {
+        try {
+            const response = await sendRequest(requestMethods.POST, 'ai/', { message: userInput });
+            if (response.status !== 200) throw new Error('Failed to fetch users');
+            dispatch(setFeedUsers(response.data));
+        } catch (error) {
+            
+        }
+    }
+
+    const AiMatchMakingModal = ({ modalVisible, handleProceed, userInput, setUserInput }) => {
         return (
             <Modal
                 animationType="slide"
@@ -80,22 +91,20 @@ const Feed = ({ navigation }) => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalTitle}>Your band formed by AI</Text>
-                        <Text style={styles.modalSubtitle}>What's on your mind (song, artist..)?</Text>
-                        <TextInput
-                            style={styles.modalTextInput}
-                            onChangeText={setUserInput}
-                            value={userInput}
-                            placeholder="Enter your thoughts here..."
-                        />
-                        <Button
-                            title="Submit"
-                            onPress={() => {
-                                // Action to perform on button press
-                                console.log('Input Submitted:', userInput);
-                                setModalVisible(false);
-                            }}
-                        />
+                        <Text style={styles.modalTitle}>
+                            Your Band with <Text style={{ color: colors.primary }}>Muser Ai</Text>
+                        </Text>
+                        <View>
+                            {/* <Text style={[utilities.label]}>What's your muse today?</Text> */}
+                            <TextInput
+                                style={[utilities.inputText]}
+                                onChangeText={setUserInput}
+                                placeholderTextColor={colors.gray}
+                                value={userInput}
+                                placeholder="Enter your thoughts here..."
+                            />
+                        </View>
+                        <PrimaryBtn text={'Match'} marginBottom={24} />
                     </View>
                 </View>
             </Modal>
@@ -105,24 +114,26 @@ const Feed = ({ navigation }) => {
     return users && users.length === 0 ? (
         <LoadingScreen />
     ) : (
-        // <View style={styles.listContainer}>
-        //     <FlatList
-        //         data={users}
-        //         renderItem={({ item, i }) => {
-        //             return <FeedMemberCard key={item.id} user={item} navigation={navigation} />;
-        //         }}
-        //         keyExtractor={(item) => item.id.toString()}
-        //         numColumns={2}
-        //         style={{ flex: 1 }}
-        //         contentContainerStyle={styles.cardsContainer}
-        //         refreshing={refreshing}
-        //         onRefresh={() => {
-        //             setRefreshing(true);
-        //             getUsers().finally(() => setRefreshing(false));
-        //         }}
-        //     />
-        // </View>
-        <AiMatchMakingModal />
+        <>
+            <View style={styles.listContainer}>
+                <FlatList
+                    data={users}
+                    renderItem={({ item, i }) => {
+                        return <FeedMemberCard key={item.id} user={item} navigation={navigation} />;
+                    }}
+                    keyExtractor={(item) => item.id.toString()}
+                    numColumns={2}
+                    style={{ flex: 1 }}
+                    contentContainerStyle={styles.cardsContainer}
+                    refreshing={refreshing}
+                    onRefresh={() => {
+                        setRefreshing(true);
+                        getUsers().finally(() => setRefreshing(false));
+                    }}
+                />
+            </View>
+            <AiMatchMakingModal />
+        </>
     );
 };
 
@@ -156,10 +167,6 @@ const styles = StyleSheet.create({
     },
 
     cardsContainer: {
-        // flexDirection: 'row',
-        // flexWrap: 'wrap',
-        // justifyContent: 'center',
-        // gap: 16,
         justifyContent: 'space-between',
         alignItems: 'center',
         paddding: 0,
@@ -167,45 +174,34 @@ const styles = StyleSheet.create({
 
     centeredView: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22,
+        justifyContent: 'flex-end',
     },
 
     modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        height: 0.3 * height, 
+        elevation: 2,
+        paddingTop: 32,
+        height: 0.3 * height,
+        paddingHorizontal: 20,
+        justifyContent: 'space-between',
+        backgroundColor: colors.bgDark,
+        borderTopLeftRadius: utilities.borderRadius.xl,
+        borderTopRightRadius: utilities.borderRadius.xl,
     },
 
     modalTitle: {
-        marginBottom: 15,
+        marginBottom: 16,
         textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 18,
+        fontFamily: 'Montserrat-Bold',
+        color: colors.white,
+        fontSize: 20,
     },
-    modalSubtitle: {
-        marginBottom: 20,
-        textAlign: 'center',
-    },
+
     modalTextInput: {
-        marginBottom: 15,
-        paddingHorizontal: 10,
+        paddingHorizontal: 12,
         paddingVertical: 8,
         borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 10,
+        borderColor: colors.white,
+        borderRadius: utilities.borderRadius.s,
         width: '100%',
     },
 });
