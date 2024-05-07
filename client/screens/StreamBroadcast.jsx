@@ -1,19 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Dimensions, Pressable } from 'react-native';
-import {
-    CallingState,
-    SfuEvents,
-    useCall,
-    useCallStateHooks,
-    useStreamVideoClient,
-    VideoRenderer,
-} from '@stream-io/video-react-native-sdk';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
+import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 
-import inCallManager from 'react-native-incall-manager';
+import { Radio } from 'lucide-react-native';
 
-import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop, Pause } from 'lucide-react-native';
-
-import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
+import { StreamCall } from '@stream-io/video-react-native-sdk';
 import { colors, utilities } from '../styles/utilities';
 import StreamViewer from '../components/StreamViewer/StreamViewer';
 
@@ -21,7 +12,7 @@ const StreamBroadcast = ({ navigation, route }) => {
     const { showId, showName } = route.params;
 
     // const showIdString = showId.toString() + 'TEST78' ?? {};
-    const showIdString = 'ajskdfjjsdkfjaksfdfffffi'
+    const showIdString = 'ajskdfjjsdkfjaksfdfffffi';
 
     const [call, setCall] = useState(null);
     const [viewer, setViewer] = useState(false);
@@ -83,7 +74,7 @@ const StreamBroadcast = ({ navigation, route }) => {
         <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
             <StreamCall call={call}>
                 <SafeAreaView style={{ flex: 1, marginTop: 64 }}>
-                    <StreamViewer viewer={viewer} showName={showName} setCall={setCall}/>
+                    <StreamViewer viewer={viewer} showName={showName} setCall={setCall} />
                 </SafeAreaView>
             </StreamCall>
         </View>

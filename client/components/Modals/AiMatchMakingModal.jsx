@@ -25,26 +25,23 @@ const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible
                 setModalVisible(!modalVisible);
             }}
         >
-            <View style={styles.bottomStickView} onTouchEnd={() => setModalVisible(false)}>
-                <TouchableWithoutFeedback onPressOut={() => setModalVisible(false)}>
-                    <View style={styles.modalView}>
+            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+                <View style={styles.bottomStickView}>
+                    <View style={styles.modalView} onStartShouldSetResponder={() => true}>
                         <Text style={styles.modalTitle}>
                             Your Band with <Text style={{ color: colors.primary }}>Muser Ai</Text>
                         </Text>
-                        <View>
-                            {/* <Text style={[utilities.label]}>What's your muse today?</Text> */}
-                            <TextInput
-                                style={[utilities.inputText]}
-                                onChangeText={setUserInput}
-                                placeholderTextColor={colors.gray}
-                                value={userInput}
-                                placeholder="Enter your thoughts here..."
-                            />
-                        </View>
+                        <TextInput
+                            style={[utilities.inputText]}
+                            onChangeText={setUserInput}
+                            placeholderTextColor={colors.gray}
+                            value={userInput}
+                            placeholder="Enter your thoughts here..."
+                        />
                         <PrimaryBtn text={'Match'} marginBottom={24} handlePress={handlePress} />
                     </View>
-                </TouchableWithoutFeedback>
-            </View>
+                </View>
+            </TouchableWithoutFeedback>
         </Modal>
     );
 };
