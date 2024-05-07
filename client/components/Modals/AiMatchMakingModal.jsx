@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Modal, Dimensions, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Modal, Dimensions, TextInput, Pressable } from 'react-native';
 
 import { colors, utilities } from '../../styles/utilities';
 
@@ -18,6 +18,7 @@ const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible
         >
 
                 <View style={styles.bottomStickView} onTouchEnd={()=> setModalVisible(false)}>
+                <TouchableWithoutFeedback onPressOut={() => setModalVisible(false)}>
 
                     <View style={styles.modalView}>
                         <Text style={styles.modalTitle}>
@@ -36,6 +37,7 @@ const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible
                         <PrimaryBtn text={'Match'} marginBottom={24} handlePress={handlePress} />
                     </View>
 
+                    </TouchableWithoutFeedback>
 
                 </View>
 

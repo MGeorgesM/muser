@@ -7,8 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import { colors, utilities } from '../styles/utilities';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { useSelector } from 'react-redux';
+
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
-import BackBtn from '../components/Elements/BackBtn';
 import InstrumentIcon from '../components/InstrumentIcon/InstrumentIcon';
 import DetailsPill from '../components/DetailsPill/DetailsPill';
 

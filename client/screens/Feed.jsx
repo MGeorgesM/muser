@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { StyleSheet, Text, FlatList, View, Image, Modal, Button, TextInput, Dimensions, Pressable } from 'react-native';
+import { StyleSheet, FlatList, View, Dimensions, RefreshControl } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +10,7 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
 
 import { colors, utilities } from '../styles/utilities';
-import { SearchIcon, AudioWaveform } from 'lucide-react-native';
+import { SearchIcon } from 'lucide-react-native';
 
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
@@ -29,7 +29,7 @@ const Feed = ({ navigation }) => {
 
     useEffect(() => {
         getUsers();
-    }, [currentUser, refreshing]);
+    }, [currentUser]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -61,6 +61,7 @@ const Feed = ({ navigation }) => {
 
     const getUsers = async () => {
         try {
+            setRefreshing(true);
             const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
             if (response.status !== 200) throw new Error('Failed to fetch users');
             dispatch(setConnectedUsers(response.data.connectedUsers));
@@ -68,6 +69,8 @@ const Feed = ({ navigation }) => {
             setRefreshing(false);
         } catch (error) {
             console.log('Error fetching users:', error);
+        } finally {
+            setRefreshing(false);
         }
     };
 
@@ -78,7 +81,7 @@ const Feed = ({ navigation }) => {
             const response = await sendRequest(requestMethods.POST, 'ai/', { message: userInput });
             if (response.status !== 200) throw new Error('Failed to fetch users');
             console.log('RESPONSE', response.data);
-            if(response.data.length === 0) {
+            if (response.data.length === 0) {
                 console.log('NO USERS');
 
                 return;
@@ -102,12 +105,19 @@ const Feed = ({ navigation }) => {
                     keyExtractor={(item) => item.id.toString()}
                     numColumns={2}
                     style={{ flex: 1 }}
+                    showsVerticalScrollIndicator={false}
                     contentContainerStyle={styles.cardsContainer}
-                    refreshing={refreshing}
-                    onRefresh={() => {
-                        setRefreshing(true);
-                        getUsers().finally(() => setRefreshing(false));
-                    }}
+                    refreshControl={
+                        <RefreshControl
+                            colors={[colors.white]}
+                            progressBackgroundColor={colors.primary}
+                            refreshing={refreshing}
+                            onRefresh={() => {
+                                setRefreshing(true);
+                                getUsers().finally(() => setRefreshing(false));
+                            }}
+                        />
+                    }
                 />
             </View>
             <AiMatchMakingModal
@@ -117,8 +127,7 @@ const Feed = ({ navigation }) => {
                 handlePress={handleProceed}
                 setModalVisible={setModalVisible}
             />
-            <FloatingActionButton onPress={() => setModalVisible(true)} text={'Ai'} />
-
+            <FloatingActionButton handlePress={() => setModalVisible(true)} />
         </>
     );
 };
