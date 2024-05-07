@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../../contexts/UserContext';
 
-import { formatDate } from '../../core/tools/formatDate';
-import { colors, utilities } from '../../styles/utilities';
+import { formatDate } from '../../../core/tools/formatDate';
+import { colors, utilities } from '../../../styles/utilities';
 
-import { defaultAvatar } from '../../core/tools/apiRequest';
-import { profilePicturesUrl } from '../../core/tools/apiRequest';
-import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
+import { defaultAvatar } from '../../../core/tools/apiRequest';
+import { profilePicturesUrl } from '../../../core/tools/apiRequest';
+import { sendRequest, requestMethods } from '../../../core/tools/apiRequest';
 
 const ChatCard = ({ chat, navigation }) => {
     const [participants, setParticipants] = useState(chat.participantsIds);

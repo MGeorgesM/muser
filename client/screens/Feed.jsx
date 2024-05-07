@@ -9,7 +9,7 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
 
-import { colors, utilities } from '../styles/utilities';
+import { colors } from '../styles/utilities';
 import { SearchIcon } from 'lucide-react-native';
 
 import PictureHeader from '../components/PictureHeader/PictureHeader';
@@ -75,8 +75,9 @@ const Feed = ({ navigation }) => {
     };
 
     const handleProceed = async () => {
-        console.log('HERE');
-        console.log({ message: userInput });
+        if (userInput === '') return;
+        setModalVisible(false);
+
         try {
             const response = await sendRequest(requestMethods.POST, 'ai/', { message: userInput });
             if (response.status !== 200) throw new Error('Failed to fetch users');
@@ -133,8 +134,6 @@ const Feed = ({ navigation }) => {
 };
 
 export default Feed;
-
-const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     headerContainer: {

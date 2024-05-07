@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 import { useNavigation } from '@react-navigation/native';
@@ -25,9 +25,9 @@ const ProfileDetails = ({ route }) => {
 
     useEffect(() => {
         if (userId) {
-            const foundUser = feedUsers.find((user) => user.id === userId);
+            const foundUser = feedUsers.find((user) => user.id == userId);
             if (foundUser) return setUser(foundUser);
-            const foundConnectedUser = connectedUsers.find((user) => user.id === userId);
+            const foundConnectedUser = connectedUsers.find((user) => user.id == userId);
             if (foundConnectedUser) {
                 setIsConnected(true);
                 return setUser(foundConnectedUser);

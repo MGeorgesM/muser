@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
-import { profilePicturesUrl, showsPicturesUrl } from '../../core/tools/apiRequest';
-import { colors, utilities } from '../../styles/utilities';
-import { formatDateString } from '../../core/tools/formatDate';
+import { profilePicturesUrl, showsPicturesUrl } from '../../../core/tools/apiRequest';
+import { colors, utilities } from '../../../styles/utilities';
+import { formatDateString } from '../../../core/tools/formatDate';
 
 const ShowVenueCard = ({ entity, handlePress }) => {
     const { picture, name, location, venueType, band, date } = entity;

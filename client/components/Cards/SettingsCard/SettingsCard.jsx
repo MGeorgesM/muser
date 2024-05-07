@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 
-import { colors, utilities } from '../../styles/utilities';
+import { colors, utilities } from '../../../styles/utilities';
 
 import { ChevronRight } from 'lucide-react-native';
 

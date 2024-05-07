@@ -96,7 +96,20 @@ const Chat = ({ navigation, route }) => {
                 else {
                     const receiverName = receiver?.map((user) => user.name).join(', ');
                     const reciverPicture = receiver?.map((user) => user.picture).join(', ');
-                    return <PictureHeader picture={reciverPicture} name={receiverName} />;
+                    const receiverId = receiver?.map((user) => user.id).join(', ').toString();
+
+                    return (
+                        <PictureHeader
+                            picture={reciverPicture}
+                            name={receiverName}
+                            handlePress={() =>
+                                navigation.navigate('Feed', {
+                                    screen: 'ProfileDetails',
+                                    params: { userId: receiverId },
+                                })
+                            }
+                        />
+                    );
                 }
             },
             headerLeft: () => (
@@ -237,6 +250,7 @@ const Chat = ({ navigation, route }) => {
     };
 
     const onSend = useCallback(async (messages = []) => {
+        setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
         let chatRef = await getChat();
         if (!chatRef) {
             const firstMessage = messages[0];
@@ -265,8 +279,6 @@ const Chat = ({ navigation, route }) => {
                 });
             });
         }
-
-        setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
     });
 
     const handleFormBand = async () => {

@@ -1,16 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 
 import { profilePicturesUrl } from '../../core/tools/apiRequest';
 
 import { utilities } from '../../styles/utilities';
 
-const PictureHeader = ({ name, picture, welcome = false }) => {
+const PictureHeader = ({ name, picture, handlePress, welcome = false }) => {
     if (name && picture)
         return (
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image source={{ uri: profilePicturesUrl + picture }} style={styles.avatar} />
+                    <Pressable onPress={handlePress}>
+                        <Image source={{ uri: profilePicturesUrl + picture }} style={styles.avatar} />
+                    </Pressable>
                     <View style={styles.textContainer}>
                         {welcome && (
                             <Text style={[styles.welcomeDisplay, utilities.textM, utilities.noMb]}>Welcome</Text>
@@ -28,7 +30,6 @@ const PictureHeader = ({ name, picture, welcome = false }) => {
                 </View>
             </View>
         );
-    return <Text>PictureHeader</Text>;
 };
 
 export default PictureHeader;

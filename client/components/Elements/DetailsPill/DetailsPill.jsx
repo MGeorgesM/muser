@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-import { colors } from '../../styles/utilities';
+import { colors } from '../../../styles/utilities';
 
 const DetailsPill = ({ item, handlePress = null, isSelected }) => {
     return (

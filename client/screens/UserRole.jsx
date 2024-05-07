@@ -1,14 +1,14 @@
 import React from 'react';
-import { StyleSheet, Image, View, Text, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
+import { Image, View, Text, ScrollView, ImageBackground } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 
-import { colors, utilities } from '../styles/utilities';
+import { colors } from '../styles/utilities';
 
 import { ChevronDown } from 'lucide-react-native';
 
-import BackBtn from '../components/Elements/BackBtn';
+import BackBtn from '../components/Elements/BackBtn/BackBtn';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const logoImg = require('../assets/logowhite.png');
@@ -16,7 +16,7 @@ const imageSource = require('../assets/appImages/onboard00.jpg');
 const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserRole = ({ navigation }) => {
-    const { userInfo, setUserInfo } = useUser();
+    const { setUserInfo } = useUser();
     return (
         <ImageBackground source={imageSource} style={{ flex: 1 }} resizeMode="cover">
             <ScrollView contentContainerStyle={styles.scrollContainer}>

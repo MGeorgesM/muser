@@ -3,8 +3,8 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import { ChevronRight, Play } from 'lucide-react-native';
 
-import { colors, utilities } from '../../styles/utilities';
-import { formatDate, formatDateString, truncateText } from '../../core/tools/formatDate';
+import { colors, utilities } from '../../../styles/utilities';
+import { formatDate, formatDateString, truncateText } from '../../../core/tools/formatDate';
 
 const ShowCard = ({ entity, navigation, handlePress }) => {
     return (
