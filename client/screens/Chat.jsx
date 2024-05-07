@@ -56,9 +56,9 @@ const Chat = ({ navigation, route }) => {
             headerTitle: () => {
                 if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
                 else {
-                    const receiverName = receiver.name;
-                    const reciverPicture = receiver.picture;
-                    const receiverId = receiver.id.toString();
+                    const receiverName = receiver?.name;
+                    const reciverPicture = receiver?.picture;
+                    const receiverId = receiver?.id.toString();
 
                     return (
                         <PictureHeader
@@ -242,6 +242,8 @@ const Chat = ({ navigation, route }) => {
             const newChatRef = doc(fireStoreDb, 'chats', chatId);
             const messageRef = collection(newChatRef, 'messages');
 
+            const participantsIds = participants.map((participant) => participant.id);
+
             const messageDocRef = await addDoc(messageRef, {
                 _id: initialMessage._id,
                 text: initialMessage.text,
@@ -250,7 +252,7 @@ const Chat = ({ navigation, route }) => {
             });
 
             await setDoc(newChatRef, {
-                participantsIds: participants,
+                participantsIds: participantsIds,
                 chatTitle: null,
                 lastMessage: {
                     messageId: messageDocRef.id,

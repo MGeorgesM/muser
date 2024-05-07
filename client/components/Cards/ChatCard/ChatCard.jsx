@@ -11,10 +11,13 @@ import { profilePicturesUrl } from '../../../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../../../core/tools/apiRequest';
 
 const ChatCard = ({ chat, navigation }) => {
+    const { currentUser } = useUser();
+
     const [participants, setParticipants] = useState(chat.participantsIds);
+    const [receiver, setReceiver] = useState(null);
+
     const [title, setTitle] = useState(chat.chatTitle);
     const [avatar, setAvatar] = useState(null);
-    const { currentUser } = useUser();
 
     useEffect(() => {
         const getUsersPicutresandNames = async () => {
@@ -25,12 +28,14 @@ const ChatCard = ({ chat, navigation }) => {
             const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
 
             try {
+
                 const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
                 if (response.status !== 200) throw new Error('Failed to fetch users');
-                console.log('Users fetched:', response.data);
-                console.log(`${profilePicturesUrl + response.data[0].picture}`);
+                
                 setTitle(response.data.map((user) => user.name).join(', '));
                 setAvatar(`${profilePicturesUrl + response.data[0].picture}`);
+
+                setReceiver(response.data[0]);
             } catch (error) {
                 console.log('Error fetching users:', error);
             }
@@ -42,8 +47,6 @@ const ChatCard = ({ chat, navigation }) => {
             setTitle(chat.chatTitle);
             setAvatar(defaultAvatar);
         }
-
-        console.log('Chat card participants', participants);
     }, [chat]);
 
     return (
@@ -54,6 +57,7 @@ const ChatCard = ({ chat, navigation }) => {
                     id: chat.id,
                     chatParticipants: participants,
                     chatTitle: chat.chatTitle,
+                    receiver,
                 })
             }
         >
