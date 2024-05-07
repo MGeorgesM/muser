@@ -44,8 +44,6 @@ const Chat = ({ navigation, route }) => {
     const [chatMessages, setChatMessages] = useState([]);
     const [participants, setParticipants] = useState(chatParticipants);
 
-    // const [receiver, setReceiver] = useState(null);
-
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
     const [bandModalVisible, setBandModalVisible] = useState(false);
 
@@ -92,43 +90,6 @@ const Chat = ({ navigation, route }) => {
         });
     }, [navigation, addParticipant, receiver]);
 
-    // useEffect(() => {
-    //     setParticipants(chatParticipants);
-    //     console.log('Chat participants:', chatParticipants);
-    // }, [chatParticipants]);
-
-    // useEffect(() => {
-    //     const getUsersPicutresandNames = async () => {
-    //         const otherParticipantIds = participants.filter((id) => id !== currentUser.id);
-
-    //         if (otherParticipantIds.length === 0) return;
-    //         const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
-
-    //         try {
-    //             const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
-    //             if (response.status !== 200) throw new Error('Failed to fetch users');
-    //             setReceiver(response.data);
-    //             console.log('Users fetched:', response.data);
-    //         } catch (error) {
-    //             console.log('Error fetching users:', error);
-    //         }
-    //     };
-
-    //     const getUserConnections = async () => {
-    //         try {
-    //             const response = await sendRequest(requestMethods.GET, 'users/type/musician?connected=true', null);
-    //             if (response.status !== 200) throw new Error('Failed to fetch connections');
-    //             console.log('Connections fetched:', response.data);
-    //             dispatch(setConnectedUsers(response.data));
-    //         } catch (error) {
-    //             console.log('Error fetching connections:', error);
-    //         }
-    //     };
-
-    //     // userConnections.length === 0 && getUserConnections();
-    //     // console.log('userConnections:', userConnections);
-    //     // getUsersPicutresandNames();
-    // }, [participants]);
 
     useEffect(() => {
         let unsubscribe;
@@ -140,7 +101,7 @@ const Chat = ({ navigation, route }) => {
 
             console.log('Starting listener');
             console.log('Chat ID:', chatId);
-
+   
             const newChatRef = doc(fireStoreDb, 'chats', chatId);
             const messagesRef = collection(newChatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
@@ -272,31 +233,41 @@ const Chat = ({ navigation, route }) => {
         console.log(chatMessages.length, messages.length);
 
         if (chatMessages.length === 0) {
-            const firstMessage = messages[0];
-            await createChat(firstMessage);
-            await addConnection();
+            try {
+                const firstMessage = messages[0];
+                await createChat(firstMessage);
+                await addConnection();
+            } catch (error) {
+                console.error('Error sending first message:', error);
+                setChatMessages((previousMessages) => previousMessages.slice(0, -1));
+            }
         } else {
-            const chatRef = doc(fireStoreDb, 'chats', id);
-            const messagesRef = collection(chatRef, 'messages');
+            try {
+                const chatRef = doc(fireStoreDb, 'chats', id);
+                const messagesRef = collection(chatRef, 'messages');
 
-            messages.forEach(async (message) => {
-                const { _id, text, createdAt, user } = message;
-                const messageDocRef = await addDoc(messagesRef, {
-                    _id,
-                    text,
-                    createdAt,
-                    userId: user._id,
-                });
-
-                await updateDoc(chatRef, {
-                    lastMessage: {
-                        messageId: messageDocRef.id,
+                messages.forEach(async (message) => {
+                    const { _id, text, createdAt, user } = message;
+                    const messageDocRef = await addDoc(messagesRef, {
+                        _id,
                         text,
                         createdAt,
                         userId: user._id,
-                    },
+                    });
+
+                    await updateDoc(chatRef, {
+                        lastMessage: {
+                            messageId: messageDocRef.id,
+                            text,
+                            createdAt,
+                            userId: user._id,
+                        },
+                    });
                 });
-            });
+            } catch (error) {
+                console.error('Error sending message:', error);
+                setChatMessages((previousMessages) => previousMessages.slice(0, -messages.length));
+            }
         }
     });
 
@@ -478,7 +449,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Montserrat-Bold',
         marginBottom: 1,
-        color: colors.black,
+        color: colors.white,
     },
 
     bandInputContainer: {
