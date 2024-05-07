@@ -33,6 +33,8 @@ import { FlatList, TextInput } from 'react-native-gesture-handler';
 
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
+import AiMatchMakingModal from '../components/Modals/AiMatchMakingModal';
+import ChatModal from '../components/Modals/ChatModal';
 
 const Chat = ({ navigation, route }) => {
     const dispatch = useDispatch();
@@ -43,6 +45,7 @@ const Chat = ({ navigation, route }) => {
 
     const [chatMessages, setChatMessages] = useState([]);
     const [participants, setParticipants] = useState(chatParticipants);
+    const [chatConnections, setChatConnections] = useState([]);
 
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
     const [bandModalVisible, setBandModalVisible] = useState(false);
@@ -100,7 +103,6 @@ const Chat = ({ navigation, route }) => {
 
             console.log('Starting listener');
             console.log('Chat ID:', chatId);
-            console.log('Connections:', userConnections);
 
             const newChatRef = doc(fireStoreDb, 'chats', chatId);
             const messagesRef = collection(newChatRef, 'messages');
@@ -143,9 +145,15 @@ const Chat = ({ navigation, route }) => {
                 picture: user.picture,
             }));
 
-            console.log('Chat Participants:', participants);
             setParticipants(participants);
         }
+
+        const remainingConnections = userConnections.filter(connection =>
+            participants?.some(participant => participant?.id === connection?.id));
+
+        setChatConnections(remainingConnections);
+
+        console.log('Chat Participants:', participants);
     };
 
     const getMessageAvatar = (userId) => {
@@ -175,22 +183,22 @@ const Chat = ({ navigation, route }) => {
     // };
 
     const addParticipant = async (newParticipantId) => {
-        if (newParticipantId && !participants.includes(newParticipantId)) {
-            const chatRef = await getChat();
-            if (chatRef) {
-                try {
-                    const newParticipantsList = [...participants, newParticipantId].sort();
-                    await updateDoc(chatRef, {
-                        participantsIds: newParticipantsList,
-                    });
 
-                    setParticipants([...participants, newParticipantId]);
-                    setConnectionModalVisible(false);
-                } catch (error) {
-                    console.error('Error adding participant', error);
-                }
-            }
+        if (!newParticipantId && participants.includes(newParticipantId)) return;
+
+        try {
+            const chatRef = doc(fireStoreDb, 'chats', id);
+            const newParticipantsList = [...participants, newParticipantId].sort();
+            await updateDoc(chatRef, {
+                participantsIds: newParticipantsList,
+            });
+
+            setParticipants([...participants, newParticipantId]);
+            setConnectionModalVisible(false);
+        } catch (error) {
+            console.error('Error adding participant', error);
         }
+
         setConnectionModalVisible(false);
     };
 
@@ -354,7 +362,7 @@ const Chat = ({ navigation, route }) => {
     }
 
     function renderInputToolbar(props) {
-        if (connectionModalVisible || bandModalVisible) return null;
+        // if (connectionModalVisible || bandModalVisible) return null;
 
         return (
             <InputToolbar
@@ -391,11 +399,11 @@ const Chat = ({ navigation, route }) => {
                 renderActions={() => null}
             />
 
-            {connectionModalVisible && (
+            {/* {connectionModalVisible && (
                 <View style={styles.chatModal}>
                     <Text style={[utilities.textL, utilities.textCenter, { marginBottom: 16 }]}>Your Connections</Text>
                     <FlatList
-                        data={userConnections}
+                        data={chatConnections}
                         renderItem={({ item }) => (
                             <BandMemberCard entity={item} handlePress={() => addParticipant(item.id)} />
                         )}
@@ -403,7 +411,7 @@ const Chat = ({ navigation, route }) => {
                         showsVerticalScrollIndicator={false}
                     />
                 </View>
-            )}
+            )} */}
             {bandModalVisible && (
                 <View style={styles.chatModal}>
                     <Text style={[utilities.textL, utilities.myFontMedium, utilities.textCenter]}>Form Your Band</Text>
@@ -425,6 +433,7 @@ const Chat = ({ navigation, route }) => {
                     </View>
                 </View>
             )}
+            {connectionModalVisible && <ChatModal setModalVisible={setConnectionModalVisible}/>}
         </View>
     );
 };
