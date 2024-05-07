@@ -79,7 +79,7 @@ const Feed = ({ navigation }) => {
             console.log('RESPONSE', response.data);
             if(response.data.length === 0) {
                 console.log('NO USERS');
-                
+
                 return;
             }
             dispatch(setFeedUsers(response.data));

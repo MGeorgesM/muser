@@ -45,7 +45,7 @@ class AiMatchMakingController extends Controller
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => "You're the music expert. From my message, extract up to two relevant musical genres, either directly mentioned or inferred from artists or songs mentioned.If a specified location was mentioned Identify three locations near it, also extract any instruments specified in my message or associated with mentioned musician roles only. Ensure all matches are drawn from predefined lists in the app. For example, if I say 'I need a singer and a drummer for a jazz concert in Beirut,' identify 'jazz' as the genres, 'Beirut' and nearby locations, and 'vocals' for the singer, 'percussion' for the drummer from the lists."
+                        'content' => "You're the music expert. From my message, extract up to two relevant musical genres, either directly mentioned or inferred from artists or songs mentioned. If a specified location was mentioned Identify three locations near it, also extract any instruments specified in my message or associated with mentioned musician roles only. Ensure all matches are drawn from predefined lists in the app. For example, if I say 'I need a singer and a drummer for a jazz concert in Beirut,' identify 'jazz' as the genres, 'Beirut' and nearby locations, and 'vocals' for the singer, 'percussion' for the drummer from the lists."
                     ],
                     [
                         'role' => 'system',
@@ -61,7 +61,7 @@ class AiMatchMakingController extends Controller
                     ],
                     [
                         'role' => 'system',
-                        'content' => "Please select three locations close to the specified location based on the provided list: " . $availableLocations . ". Use this information to identify locations that are geographically proximate to the given location. if no location is mentioned, consider the user's location as the reference point."
+                        'content' => "Please identify three locations that are geographically proximate to a specified or inferred location from my message, based on the provided list: " . $availableLocations
                     ],
                     [
                         'role' => 'system',
@@ -77,15 +77,18 @@ class AiMatchMakingController extends Controller
                 ],
             ]);
 
-            return response($result->choices[0]->message->content);
+            // return response($result->choices[0]->message->content);
 
             $response = json_decode($result->choices[0]->message->content, true);
+
+            // dd($response);
 
             if (!isset($response['genreIds'], $response['locationIds'], $response['instrumentIds'])) {
                 return response()->json(['error_OpenAi' => 'Invalid response format from AI'], 422);
             }
 
             $matchedUsers = $this->matchUsers($response['genreIds'], $response['locationIds'], $response['instrumentIds']);
+
 
             return response()->json($matchedUsers);
         } catch (\Exception $e) {
@@ -97,28 +100,39 @@ class AiMatchMakingController extends Controller
 
     protected function matchUsers(array $genreIds, array $locationIds, array $instrumentIds)
     {
-        $query = User::query()->where('role_id', 1);
-
-        if (empty($genreIds) && empty($locationIds) && empty($instrumentIds)) {
-            return response()->json(['error' => 'No search criteria provided'], 400);
-        }
-
+        $query = User::where('role_id', 1);
+    
+        $lastValidResult = $query->get();
+    
         if (!empty($genreIds)) {
             $userIdsFromGenres = MusicianGenre::whereIn('genre_id', $genreIds)->pluck('musician_id')->unique();
-            $query = $query->whereIn('id', $userIdsFromGenres);
+            $updatedQuery = $query->whereIn('id', $userIdsFromGenres);
+            $newResult = $updatedQuery->get();
+    
+            if ($newResult->isNotEmpty()) {
+                $lastValidResult = $newResult;
+            }
         }
-
+    
         if (!empty($locationIds)) {
-            $query = $query->whereIn('location_id', $locationIds);
+            $updatedQuery = $query->whereIn('location_id', $locationIds);
+            $newResult = $updatedQuery->get();
+    
+            if ($newResult->isNotEmpty()) {
+                $lastValidResult = $newResult;
+            }
         }
-
+    
         if (!empty($instrumentIds)) {
-            $query = $query->whereIn('instrument_id', $instrumentIds);
+            $updatedQuery = $query->whereIn('instrument_id', $instrumentIds);
+            $newResult = $updatedQuery->get();
+    
+            if ($newResult->isNotEmpty()) {
+                $lastValidResult = $newResult;
+            }
         }
-
-        $users = $query->get();
-
-        $users = $users->map(function ($user) {
+    
+        return $lastValidResult->map(function ($user) {
             return $user->full_details;
         });
     }
