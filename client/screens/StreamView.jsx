@@ -58,7 +58,7 @@ const StreamView = ({ navigation, route }) => {
 
     const client = useStreamVideoClient();
     // const showId = show.id.toString() + 'TEST78';
-    const showId = 'ajskdfjjsdkfjaksfdffi';
+    const showId = 'ajskdfjjsdkfjaksfdfffffi';
 
     client && console.log('Client Found!');
     console.log('Show ID:', show.id);
@@ -210,8 +210,12 @@ const StreamView = ({ navigation, route }) => {
         setVideoIsMaximized(!videoIsMaximized);
     };
 
+    const handleUserTouches = () => {
+        setControlsVisible(!controlsVisible);
+    };
+
     return (
-        <View style={[utilities.flexed, {backgroundColor:colors.bgDarkest}]}>
+        <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
             <View style={{ flex: 1, position: 'relative' }}>
                 {call ? (
                     <StreamCall call={call}>
@@ -237,28 +241,36 @@ const StreamView = ({ navigation, route }) => {
                         />
                     )
                 )}
-                <Pressable
-                    onPress={handleUserStreamInteraction}
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        marginTop: 24,
-                        transform: [{ translateX: -21 }, { translateY: -21 }],
-                    }}
-                >
-                    {!videoIsPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
-                </Pressable>
-                <Pressable
-                    onPress={handleVideoSizeToggle}
-                    style={{
-                        position: 'absolute',
-                        bottom: 12,
-                        right: 12,
-                        marginTop: 12,
-                    }}
-                >
-                    <Maximize size={24} color={'white'} />
+                <Pressable style={StyleSheet.absoluteFill} onPress={handleUserTouches}>
+                    <Pressable
+                        onPress={handleUserStreamInteraction}
+                        style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            marginTop: 24,
+                            transform: [{ translateX: -21 }, { translateY: -21 }],
+                        }}
+                    >
+                        {!videoIsPlaying ? (
+                            <Play size={42} color={'white'} />
+                        ) : (
+                            controlsVisible && <Pause size={42} color={'white'} />
+                        )}
+                    </Pressable>
+                    {videoIsPlaying && controlsVisible && (
+                        <Pressable
+                            onPress={handleVideoSizeToggle}
+                            style={{
+                                position: 'absolute',
+                                bottom: 12,
+                                right: 12,
+                                marginTop: 12,
+                            }}
+                        >
+                            <Maximize size={24} color={'white'} />
+                        </Pressable>
+                    )}
                 </Pressable>
             </View>
             {!videoIsMaximized && (
@@ -269,7 +281,7 @@ const StreamView = ({ navigation, route }) => {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             paddingTop: 20,
-                            paddingHorizontal:20,
+                            paddingHorizontal: 20,
                             paddingBottom: 8,
                         }}
                     >
@@ -277,7 +289,9 @@ const StreamView = ({ navigation, route }) => {
                             <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>
                                 {`${show.band.name} Live`}
                             </Text>
-                            <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
+                            <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
+                                {show.venue.name}
+                            </Text>
                         </View>
 
                         <Heart size={24} color={colors.primary} />
@@ -300,9 +314,11 @@ const StreamView = ({ navigation, route }) => {
                         </ScrollView>
                     </View>
                     <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
-                        {comments && comments.length >0 && comments.map((comment) => (
-                            <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
-                        ))}
+                        {comments &&
+                            comments.length > 0 &&
+                            comments.map((comment) => (
+                                <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
+                            ))}
                     </ScrollView>
                     {/* <View style={styles.commentsContainer}>
                 </View> */}

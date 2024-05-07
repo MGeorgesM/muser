@@ -21,7 +21,7 @@ const StreamBroadcast = ({ navigation, route }) => {
     const { showId, showName } = route.params;
 
     // const showIdString = showId.toString() + 'TEST78' ?? {};
-    const showIdString = 'ajskdfjjsdkfjaksfdffi'
+    const showIdString = 'ajskdfjjsdkfjaksfdfffffi'
 
     const [call, setCall] = useState(null);
     const [viewer, setViewer] = useState(false);
