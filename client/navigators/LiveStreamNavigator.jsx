@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 
-import Streams from '../screens/Streams'
+import Streams from '../screens/Streams';
 import StreamBroadcast from '../screens/StreamBroadcast';
 import StreamView from '../screens/StreamView';
 import { StreamVideo, StreamVideoClient } from '@stream-io/video-react-native-sdk';
@@ -18,29 +18,28 @@ const streamApiKey = process.env.EXPO_PUBLIC_STREAM_ACCESS_KEY;
 
 const LiveStreamNavigator = () => {
     const [client, setClient] = useState(null);
-    const [initialRoute, setInitialRoute] = useState('Streams')
+    const [initialRoute, setInitialRoute] = useState('Streams');
 
     const { currentUser, loggedIn } = useUser();
-    
+
     useEffect(() => {
         const initializeClient = async () => {
             if (loggedIn && currentUser && Object.keys(currentUser).length !== 0) {
-
                 // const initialRoute = currentUser.role.id === 1 ? 'Streams' : 'StreamBroadcast'
-                setInitialRoute(initialRoute)
+                setInitialRoute(initialRoute);
 
                 const token = await AsyncStorage.getItem('streamToken');
 
                 if (!token) return;
-                
+
                 const user = {
                     id: currentUser.id.toString(),
                     name: currentUser.name,
                     image: profilePicturesUrl + currentUser.picture,
                 };
-                
-                console.log('Initialized Client', user)
-                console.log('CurrentUser', currentUser)
+
+                console.log('Initialized Client', user);
+                console.log('CurrentUser', currentUser);
 
                 try {
                     const client = new StreamVideoClient({
@@ -52,7 +51,7 @@ const LiveStreamNavigator = () => {
                         },
                     });
                     setClient(client);
-                    console.log('Connected to GET stream client!')
+                    console.log('Connected to GET stream client!');
                 } catch (error) {
                     console.error('Error setting up Stream client:', error);
                 }
@@ -71,17 +70,14 @@ const LiveStreamNavigator = () => {
 
     return client ? (
         <StreamVideo client={client}>
-            <LiveStreamStack.Navigator
-                initialRouteName={initialRoute}
-                screenOptions={{ headerShown: false }}
-            >
+            <LiveStreamStack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
                 <LiveStreamStack.Screen name="Streams" component={Streams} />
                 <LiveStreamStack.Screen name="StreamBroadcast" component={StreamBroadcast} />
                 <LiveStreamStack.Screen name="StreamView" component={StreamView} />
             </LiveStreamStack.Navigator>
         </StreamVideo>
     ) : (
-        <ActivityIndicator size='large' color="#000ff" />
+        <ActivityIndicator size="large" color="#000ff" />
     );
 };
 

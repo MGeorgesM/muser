@@ -10,10 +10,7 @@ import {
     Pressable,
     KeyboardAvoidingView,
     Platform,
-    SafeAreaView,
 } from 'react-native';
-
-import { CallingState, SfuEvents, useCall, useCallStateHooks, VideoRenderer } from '@stream-io/video-react-native-sdk';
 
 import CommentCard from '../components/CommentCard/CommentCard';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
@@ -38,10 +35,9 @@ import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk'
 import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 
 import { colors, utilities } from '../styles/utilities';
-import { Heart, Play, Send, Pause } from 'lucide-react-native';
+import { Heart, Play, Send, Pause, Maximize } from 'lucide-react-native';
 import inCallManager from 'react-native-incall-manager';
 import ChatTextInput from '../components/ChatTextInput/ChatTextInput';
-import StreamViewer from '../components/StreamViewer/StreamViewer';
 
 const StreamView = ({ navigation, route }) => {
     const { show } = route.params;
@@ -52,20 +48,39 @@ const StreamView = ({ navigation, route }) => {
 
     const [userComment, setUserComment] = useState('');
     const [comments, setComments] = useState([]);
+
     const [videoPlaying, setVideoPlaying] = useState(false);
+    const [videoMaximized, setVideoMaximized] = useState(false);
 
     const [call, setCall] = useState(null);
-    const [viewer, setViewer] = useState(true);
-    const [showName, setShowName] = useState(`${show.band.name} @ ${show.venue.name}`);
 
     const client = useStreamVideoClient();
-    const showId = show.id.toString() + 'TEST78';
+    // const showId = show.id.toString() + 'TEST78';
+    const showId = 'ajskdfjjsdkfjaksfdffi';
 
     client && console.log('Client Found!');
     console.log('Show ID:', show.id);
     console.log('Call:', call);
 
     useEffect(() => {
+        if (!client || call) return;
+
+        const setupCall = async () => {
+            console.log('Setting up call');
+            try {
+                const call = client.call('livestream', showId);
+                await call.get();
+                call && console.log('Call set up!');
+
+                call.setCall(call);
+            } catch (error) {
+                setVideoPlaying(false);
+                console.log('Error setting up Call', error);
+            }
+        };
+
+        setupCall();
+
         return () => {
             if (call) {
                 call.leave();
@@ -153,22 +168,6 @@ const StreamView = ({ navigation, route }) => {
         }
     };
 
-    const setupCall = async () => {
-        if (!client || call) return;
-
-        console.log('Setting up call');
-        try {
-            const call = client.call('livestream', showId);
-            await call.get();
-            call && console.log('Call set up!');
-
-            call.setCall(call);
-        } catch (error) {
-            setVideoPlaying(false);
-            console.log('Error setting up Call', error);
-        }
-    };
-
     const joinCall = async () => {
         console.log('Joining call');
 
@@ -203,33 +202,13 @@ const StreamView = ({ navigation, route }) => {
         }
     };
 
+    const handleVideoSizeToggle = () => {
+        return
+    }
+
     return (
         <>
-            <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
-                {call ? (
-                    <StreamCall call={call}>
-                        <SafeAreaView style={{ flex: 1, marginTop: 64 }}>
-                            <StreamViewer viewer={viewer} showName={showName} setCall={setCall} />
-                        </SafeAreaView>
-                    </StreamCall>
-                ) : (
-                    <SafeAreaView style={{ flex: 1, marginTop: 64 }}>
-                        <Text>No Call Yet</Text>
-                        <Pressable
-                            onPress={setupCall}
-                            style={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: [{ translateX: -21 }, { translateY: -21 }],
-                            }}
-                        >
-                            {!videoPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
-                        </Pressable>
-                    </SafeAreaView>
-                )}
-            </View>
-            {/* <View style={{ flex: 1, position: 'relative' }}>
+            <View style={{ flex: 1, position: 'relative' }}>
                 {call ? (
                     <StreamCall call={call}>
                         <View style={{ height: height * 0.5 }}>
@@ -258,12 +237,24 @@ const StreamView = ({ navigation, route }) => {
                         position: 'absolute',
                         top: '50%',
                         left: '50%',
+                        marginTop: 12,
                         transform: [{ translateX: -21 }, { translateY: -21 }],
                     }}
                 >
                     {!videoPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
                 </Pressable>
-            </View> */}
+                <Pressable
+                    onPress={handleVideoSizeToggle}
+                    style={{
+                        position: 'absolute',
+                        bottom:12,
+                        right: 12,
+                        marginTop: 12,
+                    }}
+                >
+                    <Maximize size={24} color={'white'} />
+                </Pressable>
+            </View>
             <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
                 <View
                     style={{

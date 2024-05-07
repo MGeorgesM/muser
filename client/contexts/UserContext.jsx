@@ -36,19 +36,6 @@ export const UserProvider = ({ children }) => {
     console.log(userInfo);
 
     useEffect(() => {
-        // const subscriber = auth.onAuthStateChanged(async (user) => {
-        //     if (user) {
-        //         const token = await user.getIdToken();
-        //         await AsyncStorage.setItem('token', token);
-        //         console.log('User found:', token);
-        //         setCurrentUser(user);
-        //     } else {
-        //         await AsyncStorage.removeItem('token');
-        //         console.log('User not found');
-        //         setCurrentUser(null);
-        //     }
-        // });
-        // return subscriber;
 
         const checkUser = async () => {
             try {

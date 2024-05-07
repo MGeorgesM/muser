@@ -12,7 +12,6 @@ import MainTabs from './screens/MainTabs';
 import UserRole from './screens/UserRole';
 import UserInfo from './screens/UserInfo';
 import Welcome from './screens/Welcome';
-import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 // import {utilities, colors} from '../styles/utilities';
 
@@ -35,17 +34,6 @@ const AppNavigator = () => {
 };
 
 const App = () => {
-    // useEffect(() => {
-    //     const run = async () => {
-    //         if (Platform.OS === 'android') {
-    //             await PermissionsAndroid.requestMultiple([
-    //                 'android.permission.POST_NOTIFICATIONS',
-    //                 'android.permission.BLUETOOTH_CONNECT',
-    //             ]);
-    //         }
-    //     };
-    //     run();
-    // }, []);
     return (
         <Provider store={store}>
             <NavigationContainer>

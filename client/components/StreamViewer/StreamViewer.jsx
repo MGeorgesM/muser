@@ -130,25 +130,27 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
 
     return (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
-            <View style={[styles.topLiveStreamBar]}>
-                <Text style={{ color: 'white' }}>{showName} </Text>
-                <View style={{ flexDirection: 'row', gap: 8 }}>
-                    <TouchableOpacity
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: 4,
-                        }}
-                    >
-                        <Text style={{ color: 'white' }}>{totalParticipants}</Text>
-                        {/* <Eye size={24} color={'white'} /> */}
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Radio size={24} color={isCallLive ? colors.primary : 'white'} />
-                    </TouchableOpacity>
+            {!viewer && (
+                <View style={[styles.topLiveStreamBar]}>
+                    <Text style={{ color: 'white' }}>{showName} </Text>
+                    <View style={{ flexDirection: 'row', gap: 8 }}>
+                        <TouchableOpacity
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: 4,
+                            }}
+                        >
+                            <Text style={{ color: 'white' }}>{totalParticipants}</Text>
+                            {/* <Eye size={24} color={'white'} /> */}
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Radio size={24} color={isCallLive ? colors.primary : 'white'} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
+            )}
             <View style={[utilities.flexed, { alignItems: 'center', justifyContent: 'center' }]}>
                 {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
                 {!isCallLive && (
