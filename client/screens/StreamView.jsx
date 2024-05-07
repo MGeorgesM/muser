@@ -49,9 +49,10 @@ const StreamView = ({ navigation, route }) => {
     const [userComment, setUserComment] = useState('');
     const [comments, setComments] = useState([]);
 
-    const [videoPlaying, setVideoPlaying] = useState(false);
+    const [videoIsPlaying, setVideoIsPlaying] = useState(false);
     const [videoIsMaximized, setVideoIsMaximized] = useState(false);
     const [videoIsLiked, setVideoIsLiked] = useState(false);
+    const [controlsVisible, setControlsVisible] = useState(false);
 
     const [call, setCall] = useState(null);
 
@@ -75,7 +76,7 @@ const StreamView = ({ navigation, route }) => {
 
                 call.setCall(call);
             } catch (error) {
-                setVideoPlaying(false);
+                setVideoIsPlaying(false);
                 console.log('Error setting up Call', error);
             }
         };
@@ -184,7 +185,8 @@ const StreamView = ({ navigation, route }) => {
             await call.join();
             setCall(call);
             console.log('Call joined!', call);
-            call && setVideoPlaying(true);
+            call && setVideoIsPlaying(true);
+            setControlsVisible(false);
         } catch (error) {
             console.log('Error joining call:', error);
         }
@@ -194,12 +196,12 @@ const StreamView = ({ navigation, route }) => {
         if (!call) {
             joinCall();
             return;
-        } else if (videoPlaying) {
+        } else if (videoIsPlaying) {
             call.leave();
-            setVideoPlaying(false);
+            setVideoIsPlaying(false);
         } else {
             joinCall();
-            setVideoPlaying(true);
+            setVideoIsPlaying(true);
         }
     };
 
@@ -209,7 +211,7 @@ const StreamView = ({ navigation, route }) => {
     };
 
     return (
-        <>
+        <View style={[utilities.flexed, {backgroundColor:colors.bgDarkest}]}>
             <View style={{ flex: 1, position: 'relative' }}>
                 {call ? (
                     <StreamCall call={call}>
@@ -222,16 +224,18 @@ const StreamView = ({ navigation, route }) => {
                         </View>
                     </StreamCall>
                 ) : (
-                    <View
-                        style={[
-                            {
-                                height: height * 0.5,
-                                backgroundColor: 'red',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            },
-                        ]}
-                    ></View>
+                    !videoIsMaximized && (
+                        <View
+                            style={[
+                                {
+                                    height: height * 0.5,
+                                    backgroundColor: colors.bgDarkest,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                },
+                            ]}
+                        />
+                    )
                 )}
                 <Pressable
                     onPress={handleUserStreamInteraction}
@@ -239,11 +243,11 @@ const StreamView = ({ navigation, route }) => {
                         position: 'absolute',
                         top: '50%',
                         left: '50%',
-                        marginTop: 12,
+                        marginTop: 24,
                         transform: [{ translateX: -21 }, { translateY: -21 }],
                     }}
                 >
-                    {!videoPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
+                    {!videoIsPlaying ? <Play size={42} color={'white'} /> : <Pause size={42} color={'white'} />}
                 </Pressable>
                 <Pressable
                     onPress={handleVideoSizeToggle}
@@ -264,7 +268,9 @@ const StreamView = ({ navigation, route }) => {
                             flexDirection: 'row',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            padding: 20,
+                            paddingTop: 20,
+                            paddingHorizontal:20,
+                            paddingBottom: 8,
                         }}
                     >
                         <View>
@@ -280,12 +286,21 @@ const StreamView = ({ navigation, route }) => {
                         <Text style={[utilities.textM, utilities.myFontBold, { marginBottom: 8 }]}>Band</Text>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {show.band.members.map((member) => (
-                                <BandMemberCard key={member.id} entity={member} />
+                                <BandMemberCard
+                                    key={member.id}
+                                    entity={member}
+                                    handlePress={() => {
+                                        navigation.navigate('Feed', {
+                                            screen: 'ProfileDetails',
+                                            params: { userId: member.id },
+                                        });
+                                    }}
+                                />
                             ))}
                         </ScrollView>
                     </View>
                     <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
-                        {comments.map((comment) => (
+                        {comments && comments.length >0 && comments.map((comment) => (
                             <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
                         ))}
                     </ScrollView>
@@ -307,7 +322,7 @@ const StreamView = ({ navigation, route }) => {
                     />
                 </View>
             )}
-        </>
+        </View>
     );
 };
 
