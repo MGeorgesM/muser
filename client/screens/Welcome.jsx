@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, ImageBackground, StatusBar, SafeAreaView } from 'react-native';
 import { colors, utilities } from '../styles/utilities';
 
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const imageUrl = require('../assets/appImages/onboard00.jpg');
-
 const Welcome = ({ navigation }) => {
     return (
         <View style={{ flex: 1 }}>

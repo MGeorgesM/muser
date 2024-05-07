@@ -1,10 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View, Modal, Dimensions, TextInput, Pressable } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Modal,
+    Dimensions,
+    TextInput,
+    Pressable,
+    TouchableWithoutFeedback,
+} from 'react-native';
 
 import { colors, utilities } from '../../styles/utilities';
 
 import PrimaryBtn from '../Elements/PrimaryBtn';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+
 
 const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible, setModalVisible }) => {
     return (
@@ -16,10 +25,8 @@ const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible
                 setModalVisible(!modalVisible);
             }}
         >
-
-                <View style={styles.bottomStickView} onTouchEnd={()=> setModalVisible(false)}>
+            <View style={styles.bottomStickView} onTouchEnd={() => setModalVisible(false)}>
                 <TouchableWithoutFeedback onPressOut={() => setModalVisible(false)}>
-
                     <View style={styles.modalView}>
                         <Text style={styles.modalTitle}>
                             Your Band with <Text style={{ color: colors.primary }}>Muser Ai</Text>
@@ -36,11 +43,8 @@ const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible
                         </View>
                         <PrimaryBtn text={'Match'} marginBottom={24} handlePress={handlePress} />
                     </View>
-
-                    </TouchableWithoutFeedback>
-
-                </View>
-
+                </TouchableWithoutFeedback>
+            </View>
         </Modal>
     );
 };

@@ -3,7 +3,6 @@ import { Platform, StatusBar, PermissionsAndroid } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-
 import { store } from './store/store';
 import { Provider } from 'react-redux';
 import { UserProvider, useUser } from './contexts/UserContext';
@@ -13,6 +12,7 @@ import MainTabs from './screens/MainTabs';
 import UserRole from './screens/UserRole';
 import UserInfo from './screens/UserInfo';
 import Welcome from './screens/Welcome';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 // import {utilities, colors} from '../styles/utilities';
 
