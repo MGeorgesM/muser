@@ -34,10 +34,10 @@ export default ModalHigh;
 const styles = StyleSheet.create({
     main: {
         flex: 1,
-        backgroundColor: colors.bglight,
+        backgroundColor: colors.bgDarkest,
     },
     overviewContainer: {
-        marginTop: 64,
+        marginTop: 56,
         backgroundColor: colors.bgDark,
         borderTopEndRadius: utilities.borderRadius.xl,
         borderTopLeftRadius: utilities.borderRadius.xl,

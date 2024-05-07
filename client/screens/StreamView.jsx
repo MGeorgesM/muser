@@ -1,16 +1,5 @@
-import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Dimensions,
-    ScrollView,
-    TextInput,
-    TouchableOpacity,
-    Pressable,
-    KeyboardAvoidingView,
-    Platform,
-} from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { StyleSheet, Text, View, Dimensions, ScrollView, Pressable } from 'react-native';
 
 import CommentCard from '../components/CommentCard/CommentCard';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
@@ -21,7 +10,6 @@ import { fireStoreDb } from '../config/firebase';
 import {
     collection,
     query,
-    where,
     onSnapshot,
     serverTimestamp,
     orderBy,
@@ -33,18 +21,18 @@ import {
 
 import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
 import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
+import inCallManager from 'react-native-incall-manager';
 
 import { colors, utilities } from '../styles/utilities';
-import { Heart, Play, Send, Pause, Maximize } from 'lucide-react-native';
-import inCallManager from 'react-native-incall-manager';
+import { Heart, Play, Pause, Maximize } from 'lucide-react-native';
+
 import ChatTextInput from '../components/ChatTextInput/ChatTextInput';
 
 const StreamView = ({ navigation, route }) => {
     const { show } = route.params;
 
-    console.log(show);
-
     const { currentUser } = useUser();
+    const client = useStreamVideoClient();
 
     const [userComment, setUserComment] = useState('');
     const [comments, setComments] = useState([]);
@@ -56,13 +44,11 @@ const StreamView = ({ navigation, route }) => {
 
     const [call, setCall] = useState(null);
 
-    const client = useStreamVideoClient();
     // const showId = show.id.toString() + 'TEST78';
     const showId = 'ajskdfjjsdkfjaksfdfffffi';
-
-    client && console.log('Client Found!');
-    console.log('Show ID:', show.id);
-    console.log('Call:', call);
+    // client && console.log('Client Found!');
+    // console.log('Show ID:', show.id);
+    // console.log('Call:', call);
 
     useEffect(() => {
         if (!client || call) return;
@@ -215,7 +201,7 @@ const StreamView = ({ navigation, route }) => {
     };
 
     return (
-        <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
+        <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
             <View style={{ flex: 1, position: 'relative' }}>
                 {call ? (
                     <StreamCall call={call}>
@@ -320,16 +306,6 @@ const StreamView = ({ navigation, route }) => {
                                 <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
                             ))}
                     </ScrollView>
-                    {/* <View style={styles.commentsContainer}>
-                </View> */}
-                    {/* <KeyboardAvoidingView
-                    style={{ height: 48 }}
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                    keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
-                >
-                    <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.bgDark }}>
-                    </View>
-                </KeyboardAvoidingView> */}
                     <ChatTextInput
                         placeholder="Write a comment"
                         value={userComment}
@@ -350,17 +326,17 @@ const styles = StyleSheet.create({
     commentsContainer: {
         flex: 1,
         paddingTop: 16,
-        borderTopColor: colors.lightGray,
         borderTopWidth: 0.5,
+        borderTopColor: colors.lightGray,
     },
 
     userInputField: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingRight: 20,
         height: 48,
-        borderTopColor: colors.lightGray,
+        paddingRight: 20,
         borderTopWidth: 1,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderTopColor: colors.lightGray,
     },
 });
