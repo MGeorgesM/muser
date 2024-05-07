@@ -1,24 +1,22 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 
-import { setConnectedUsers, setFeedUsers, setUsers } from '../store/Users';
 import { useUser } from '../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
+import { setConnectedUsers, setFeedUsers } from '../store/Users';
 
-import { sendRequest, requestMethods, profilePicturesUrl } from '../core/tools/apiRequest';
+import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
-import MasonryList from '@react-native-seoul/masonry-list';
 import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
 
 import { colors, utilities } from '../styles/utilities';
 import { SearchIcon } from 'lucide-react-native';
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
-import { FlatList } from 'react-native-gesture-handler';
 
 const Feed = ({ navigation }) => {
     const [refreshing, setRefreshing] = useState(false);
-    
+
     const { currentUser } = useUser();
     const dispatch = useDispatch();
 
@@ -57,7 +55,7 @@ const Feed = ({ navigation }) => {
     });
 
     const getUsers = async () => {
-        console.log('Fetching Users')
+        console.log('Fetching Users');
         try {
             const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
             if (response.status !== 200) throw new Error('Failed to fetch users');
@@ -84,7 +82,10 @@ const Feed = ({ navigation }) => {
                 style={{ flex: 1 }}
                 contentContainerStyle={styles.cardsContainer}
                 refreshing={refreshing}
-                onRefresh={() => setRefreshing(true)}
+                onRefresh={() => {
+                    setRefreshing(true);
+                    getUsers().finally(() => setRefreshing(false));
+                }}
             />
         </View>
     );

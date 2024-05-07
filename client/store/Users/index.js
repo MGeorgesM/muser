@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     connectedUsers: [],
     feedUsers: [],
+    aiMatches: [],
 };
 
 const usersSlice = createSlice({
@@ -15,6 +16,9 @@ const usersSlice = createSlice({
         setFeedUsers(state, action) {
             state.feedUsers = action.payload;
         },
+        setAiMatches(state, action) {
+            state.aiMatches = action.payload;
+        },
         addConnectedUser(state, action) {
             const userId = action.payload;
             const userIndex = state.feedUsers.findIndex((user) => user.id === userId);
@@ -26,6 +30,6 @@ const usersSlice = createSlice({
     },
 });
 
-export const { setConnectedUsers, setFeedUsers, addConnectedUser } = usersSlice.actions;
+export const { setConnectedUsers, setFeedUsers, setAiMatches, addConnectedUser } = usersSlice.actions;
 export const usersSliceName = usersSlice.name;
 export default usersSlice.reducer;

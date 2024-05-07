@@ -84,7 +84,6 @@ class AiMatchMakingController extends Controller
                 return response()->json(['error' => 'Invalid response format from AI'], 422);
             }
 
-
             $matchedUsers = $this->matchUsers($response['genreIds'], $response['locationIds'], $response['instrumentIds']);
 
             return response()->json($matchedUsers);
