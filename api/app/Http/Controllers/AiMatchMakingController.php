@@ -10,6 +10,7 @@ use App\Models\Location;
 use App\Models\MusicianGenre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Arr;
 
 class AiMatchMakingController extends Controller
 {
@@ -44,7 +45,7 @@ class AiMatchMakingController extends Controller
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => "You're the music expert. From my message, extract up to two relevant musical genres, identify three locations near the specified place, and determine any instruments specified in my message or associated with mentioned musician roles. Ensure all matches are drawn from predefined lists in the app. For example, if I say 'I need a singer and a drummer for a jazz concert in Beirut,' identify 'jazz' as the genre, 'Beirut' and nearby locations, and 'vocals' for the singer, 'percussion' for the drummer from the lists."
+                        'content' => "You're the music expert. From my message, extract up to two relevant musical genres, either directly mentioned or inferred from artists or songs mentioned.If a specified location was mentioned Identify three locations near it, also extract any instruments specified in my message or associated with mentioned musician roles only. Ensure all matches are drawn from predefined lists in the app. For example, if I say 'I need a singer and a drummer for a jazz concert in Beirut,' identify 'jazz' as the genres, 'Beirut' and nearby locations, and 'vocals' for the singer, 'percussion' for the drummer from the lists."
                     ],
                     [
                         'role' => 'system',
@@ -64,7 +65,7 @@ class AiMatchMakingController extends Controller
                     ],
                     [
                         'role' => 'system',
-                        'content' => "Please provide the IDs of the two most relevant musical genres, the three nearest locations, and the IDs of any instruments you extracted from my message, all based on the provided lists. The response should be formatted as a JSON object with the keys: 'genreIds', 'locationIds', and 'instrumentIds'. Ensure accuracy in matching and formatting to facilitate seamless integration with our system."
+                        'content' => "Please provide the IDs of the two most relevant musical genres if applicable, the three nearest locations, and the IDs of any instruments you extracted from my message, all based on the provided lists. The response should be formatted as a JSON object with the keys: 'genreIds', 'locationIds', and 'instrumentIds' with value of array of IDs. Ensure accuracy in matching and formatting to facilitate seamless integration with our system."
                     ],
                     [
                         'role' => 'user',
@@ -76,18 +77,17 @@ class AiMatchMakingController extends Controller
                 ],
             ]);
 
-            // return response($result->choices[0]->message->content);
+            return response($result->choices[0]->message->content);
 
             $response = json_decode($result->choices[0]->message->content, true);
 
             if (!isset($response['genreIds'], $response['locationIds'], $response['instrumentIds'])) {
-                return response()->json(['error' => 'Invalid response format from AI'], 422);
+                return response()->json(['error_OpenAi' => 'Invalid response format from AI'], 422);
             }
 
             $matchedUsers = $this->matchUsers($response['genreIds'], $response['locationIds'], $response['instrumentIds']);
 
             return response()->json($matchedUsers);
-
         } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);

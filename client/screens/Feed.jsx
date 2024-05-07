@@ -11,9 +11,9 @@ import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
 
 import { colors, utilities } from '../styles/utilities';
 import { SearchIcon } from 'lucide-react-native';
+
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
-import PrimaryBtn from '../components/Elements/PrimaryBtn';
 import AiMatchMakingModal from '../components/Modals/AiMatchMakingModal';
 
 const Feed = ({ navigation }) => {
@@ -71,9 +71,17 @@ const Feed = ({ navigation }) => {
     };
 
     const handleProceed = async () => {
+        console.log('HERE');
+        console.log({ message: userInput });
         try {
             const response = await sendRequest(requestMethods.POST, 'ai/', { message: userInput });
             if (response.status !== 200) throw new Error('Failed to fetch users');
+            console.log('RESPONSE', response.data);
+            if(response.data.length === 0) {
+                console.log('NO USERS');
+                
+                return;
+            }
             dispatch(setFeedUsers(response.data));
         } catch (error) {
             console.log('Error fetching users:', error);
@@ -105,7 +113,7 @@ const Feed = ({ navigation }) => {
                 userInput={userInput}
                 setUserInput={setUserInput}
                 modalVisible={modalVisible}
-                handleProceed={handleProceed}
+                handlePress={handleProceed}
                 setModalVisible={setModalVisible}
             />
         </>
@@ -147,38 +155,5 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddding: 0,
-    },
-
-    centeredView: {
-        flex: 1,
-        justifyContent: 'flex-end',
-    },
-
-    modalView: {
-        elevation: 2,
-        paddingTop: 32,
-        height: 0.3 * height,
-        paddingHorizontal: 20,
-        justifyContent: 'space-between',
-        backgroundColor: colors.bgOffDark,
-        borderTopLeftRadius: utilities.borderRadius.xl,
-        borderTopRightRadius: utilities.borderRadius.xl,
-    },
-
-    modalTitle: {
-        marginBottom: 16,
-        textAlign: 'center',
-        fontFamily: 'Montserrat-Bold',
-        color: colors.white,
-        fontSize: 20,
-    },
-
-    modalTextInput: {
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-        borderWidth: 1,
-        borderColor: colors.white,
-        borderRadius: utilities.borderRadius.s,
-        width: '100%',
     },
 });
