@@ -51,6 +51,7 @@ const StreamView = ({ navigation, route }) => {
 
     const [videoPlaying, setVideoPlaying] = useState(false);
     const [videoMaximized, setVideoMaximized] = useState(false);
+    const [videoIsLiked, setVideoIsLiked] = useState(false);
 
     const [call, setCall] = useState(null);
 
@@ -203,8 +204,8 @@ const StreamView = ({ navigation, route }) => {
     };
 
     const handleVideoSizeToggle = () => {
-        return
-    }
+        return;
+    };
 
     return (
         <>
@@ -247,7 +248,7 @@ const StreamView = ({ navigation, route }) => {
                     onPress={handleVideoSizeToggle}
                     style={{
                         position: 'absolute',
-                        bottom:12,
+                        bottom: 12,
                         right: 12,
                         marginTop: 12,
                     }}
@@ -270,40 +271,38 @@ const StreamView = ({ navigation, route }) => {
                         </Text>
                         <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
                     </View>
-                    <View>
-                        <Heart size={24} color={colors.primary} />
-                    </View>
+
+                    <Heart size={24} color={colors.primary} />
                 </View>
                 <View style={[{ paddingLeft: 20 }]}>
-                    <Text style={[utilities.textM, utilities.textBold, { marginBottom: 8 }]}>Band</Text>
+                    <Text style={[utilities.textM, utilities.myFontBold, { marginBottom: 8 }]}>Band</Text>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                         {show.band.members.map((member) => (
                             <BandMemberCard key={member.id} entity={member} />
                         ))}
                     </ScrollView>
                 </View>
-                <View style={styles.commentsContainer}>
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        {comments.map((comment) => (
-                            <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
-                        ))}
-                    </ScrollView>
-                </View>
-
-                <KeyboardAvoidingView
+                <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
+                    {comments.map((comment) => (
+                        <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
+                    ))}
+                </ScrollView>
+                {/* <View style={styles.commentsContainer}>
+                </View> */}
+                {/* <KeyboardAvoidingView
                     style={{ height: 48 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                     keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
                 >
                     <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.bgDark }}>
-                        <ChatTextInput
-                            placeholder="Write a comment"
-                            value={userComment}
-                            onChangeText={setUserComment}
-                            onSendPress={handlePostComment}
-                        />
                     </View>
-                </KeyboardAvoidingView>
+                </KeyboardAvoidingView> */}
+                <ChatTextInput
+                    placeholder="Write a comment"
+                    value={userComment}
+                    onChangeText={setUserComment}
+                    onSendPress={handlePostComment}
+                />                
             </View>
         </>
     );
@@ -316,12 +315,9 @@ const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     commentsContainer: {
         flex: 1,
-        paddingTop: 24,
-        borderTopEndRadius: 36,
-        borderTopStartRadius: 36,
-        // borderColor: colors.lightGray,
-        // borderWidth: 0.5,
-        borderBottomWidth: 0,
+        paddingTop: 16,
+        borderTopColor: colors.lightGray,
+        borderTopWidth: 0.5,
     },
 
     userInputField: {

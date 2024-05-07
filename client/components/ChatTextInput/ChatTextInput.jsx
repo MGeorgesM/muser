@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { colors } from '../../styles/utilities';
 
@@ -7,18 +7,25 @@ import { Send } from 'lucide-react-native';
 
 const ChatTextInput = ({ placeholder, value, onChangeText, onSendPress }) => {
     return (
-        <View style={styles.userInputField}>
-            <TextInput
-                placeholder={placeholder}
-                placeholderTextColor={colors.gray}
-                value={value}
-                onChangeText={onChangeText}
-                style={styles.input}
-            />
-            <TouchableOpacity onPress={onSendPress}>
-                <Send size={24} color={colors.gray} />
-            </TouchableOpacity>
-        </View>
+        <KeyboardAvoidingView
+            style={{ height: 48 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+        >
+            {/* <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.bgDark }}></View> */}
+            <View style={styles.userInputField}>
+                <TextInput
+                    placeholder={placeholder}
+                    placeholderTextColor={colors.gray}
+                    value={value}
+                    onChangeText={onChangeText}
+                    style={styles.input}
+                />
+                <TouchableOpacity onPress={onSendPress}>
+                    <Send size={24} color={colors.gray} />
+                </TouchableOpacity>
+            </View>
+        </KeyboardAvoidingView>
     );
 };
 
@@ -26,7 +33,7 @@ export default ChatTextInput;
 
 const styles = StyleSheet.create({
     userInputField: {
-        flex:1,
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
