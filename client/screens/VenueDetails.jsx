@@ -3,14 +3,14 @@ import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity }
 
 import { setSelectedVenue } from '../store/Venues';
 
-import ShowCard from '../components/ShowCard/ShowCard';
-import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
-
 import { utilities, colors } from '../styles/utilities';
 import { profilePicturesUrl, showsPicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
-import { formatDateString, truncateText } from '../core/tools/formatDate';
+import { formatDateString, truncateText } from '../core/tools/formatDate'
+;
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
+import ShowCard from '../components/Cards/ShowCard/ShowCard';
+import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
 
 const VenueDetails = ({ route, navigation }) => {
     const { venue } = route.params;

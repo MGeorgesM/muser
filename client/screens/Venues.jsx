@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { requestMethods, sendRequest } from '../core/tools/apiRequest';
 
 import ModalHigh from '../components/Modals/ModalHigh';
-import ShowVenueCard from '../components/ShowVenueCards/ShowVenueCard';
+import ShowVenueCard from '../components/Cards/ShowVenueCards/ShowVenueCard';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const Venues = ({ navigation }) => {

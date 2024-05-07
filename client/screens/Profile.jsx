@@ -8,8 +8,8 @@ import { profilePicturesUrl } from '../core/tools/apiRequest';
 
 import { UserRoundCog, LockKeyhole, ChevronRight } from 'lucide-react-native';
 
-import DetailsPill from '../components/DetailsPill/DetailsPill';
-import SettingsCard from '../components/SettingsCard/SettingsCard';
+import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
+import SettingsCard from '../components/Cards/SettingsCard/SettingsCard';
 
 const Profile = ({ navigation }) => {
     const { currentUser } = useUser();

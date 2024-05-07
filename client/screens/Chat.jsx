@@ -31,7 +31,7 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import { colors, utilities } from '../styles/utilities';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
-import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
+import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
@@ -49,46 +49,7 @@ const Chat = ({ navigation, route }) => {
     const [bandName, setBandName] = useState(chatTitle || '');
 
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        setParticipants(chatParticipants);
-        console.log('Chat participants:', chatParticipants);
-    }, [chatParticipants]);
-
-    useEffect(() => {
-        const getUsersPicutresandNames = async () => {
-            const otherParticipantIds = participants.filter((id) => id !== currentUser.id);
-
-            if (otherParticipantIds.length === 0) return;
-            const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
-
-            try {
-                const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
-                if (response.status !== 200) throw new Error('Failed to fetch users');
-                setReceiver(response.data);
-                console.log('Users fetched:', response.data);
-            } catch (error) {
-                console.log('Error fetching users:', error);
-            }
-        };
-
-        const getUserConnections = async () => {
-            try {
-                const response = await sendRequest(requestMethods.GET, 'users/type/musician?connected=true', null);
-                if (response.status !== 200) throw new Error('Failed to fetch connections');
-                console.log('Connections fetched:', response.data);
-                dispatch(setConnectedUsers(response.data));
-            } catch (error) {
-                console.log('Error fetching connections:', error);
-            }
-        };
-
-        userConnections.length === 0 && getUserConnections();
-        console.log('userConnections:', userConnections);
-        getUsersPicutresandNames();
-    }, [participants]);
-
-    useEffect(() => {
+    useLayoutEffect(() => {
         console.log('receiver', receiver);
         navigation.setOptions({
             headerTitle: () => {
@@ -129,6 +90,45 @@ const Chat = ({ navigation, route }) => {
             ),
         });
     }, [navigation, addParticipant, receiver]);
+    
+    useEffect(() => {
+        setParticipants(chatParticipants);
+        console.log('Chat participants:', chatParticipants);
+    }, [chatParticipants]);
+
+    useEffect(() => {
+        const getUsersPicutresandNames = async () => {
+            const otherParticipantIds = participants.filter((id) => id !== currentUser.id);
+
+            if (otherParticipantIds.length === 0) return;
+            const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
+
+            try {
+                const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
+                if (response.status !== 200) throw new Error('Failed to fetch users');
+                setReceiver(response.data);
+                console.log('Users fetched:', response.data);
+            } catch (error) {
+                console.log('Error fetching users:', error);
+            }
+        };
+
+        const getUserConnections = async () => {
+            try {
+                const response = await sendRequest(requestMethods.GET, 'users/type/musician?connected=true', null);
+                if (response.status !== 200) throw new Error('Failed to fetch connections');
+                console.log('Connections fetched:', response.data);
+                dispatch(setConnectedUsers(response.data));
+            } catch (error) {
+                console.log('Error fetching connections:', error);
+            }
+        };
+
+        userConnections.length === 0 && getUserConnections();
+        console.log('userConnections:', userConnections);
+        getUsersPicutresandNames();
+    }, [participants]);
+
 
     useLayoutEffect(() => {
         let unsubscribe;

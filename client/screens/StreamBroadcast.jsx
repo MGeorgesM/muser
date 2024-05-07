@@ -6,7 +6,7 @@ import { Radio } from 'lucide-react-native';
 
 import { StreamCall } from '@stream-io/video-react-native-sdk';
 import { colors, utilities } from '../styles/utilities';
-import StreamViewer from '../components/StreamViewer/StreamViewer';
+import StreamViewer from '../components/Elements/LiveStreaming/StreamViewer/StreamViewer';
 
 const StreamBroadcast = ({ navigation, route }) => {
     const { showId, showName } = route.params;

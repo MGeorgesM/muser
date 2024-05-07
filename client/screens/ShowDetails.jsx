@@ -9,7 +9,7 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import { generateHours, durations } from '../core/data/generateDatetime';
 
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
-import VenueAvailabilityCard from '../components/VenueAvailabilityCard/VenueAvailabilityCard';
+import VenueAvailabilityCard from '../components/Cards/VenueAvailabilityCard/VenueAvailabilityCard';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 import { useDispatch } from 'react-redux';

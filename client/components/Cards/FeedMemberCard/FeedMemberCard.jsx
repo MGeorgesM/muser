@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
-import { colors, utilities } from '../../styles/utilities';
-import { profilePicturesUrl } from '../../core/tools/apiRequest';
+import { colors, utilities } from '../../../styles/utilities';
+import { profilePicturesUrl } from '../../../core/tools/apiRequest';
 
-import InstrumentIcon from '../InstrumentIcon/InstrumentIcon';
+import InstrumentIcon from '../../Elements/InstrumentIcon/InstrumentIcon';
 
 const FeedMemberCard = ({ user, height = 256, navigation }) => {
     const imageUrl = `${profilePicturesUrl + user.picture}`;
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems:'center',
+        alignItems: 'center',
         bottom: 0,
         left: 0,
         right: 0,

@@ -7,7 +7,7 @@ import { useUser } from '../contexts/UserContext';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import ModalHigh from '../components/Modals/ModalHigh';
-import ShowVenueCard from '../components/ShowVenueCards/ShowVenueCard';
+import ShowVenueCard from '../components/Cards/ShowVenueCards/ShowVenueCard';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const Streams = ({ navigation }) => {

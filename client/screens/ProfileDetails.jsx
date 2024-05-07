@@ -9,8 +9,8 @@ import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { useSelector } from 'react-redux';
 
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
-import InstrumentIcon from '../components/InstrumentIcon/InstrumentIcon';
-import DetailsPill from '../components/DetailsPill/DetailsPill';
+import InstrumentIcon from '../components/Elements/InstrumentIcon/InstrumentIcon';
+import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
 
 const ProfileDetails = ({ route }) => {
     const { userId } = route.params;

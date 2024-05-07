@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView, Pressable } from 'react-native';
 
-import CommentCard from '../components/CommentCard/CommentCard';
-import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
+import CommentCard from '../components/Cards/CommentCard/CommentCard';
+import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
 
 import { useUser } from '../contexts/UserContext';
 

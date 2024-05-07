@@ -8,7 +8,7 @@ import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
 import { colors, utilities } from '../styles/utilities';
 
-import ChatCard from '../components/ChatCard/ChatCard';
+import ChatCard from '../components/Cards/ChatCard/ChatCard';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const ChatOverview = ({ navigation }) => {

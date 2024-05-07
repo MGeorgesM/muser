@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
-import { colors, utilities } from '../../styles/utilities';
-import { profilePicturesUrl } from '../../core/tools/apiRequest';
+import { colors, utilities } from '../../../styles/utilities';
+import { profilePicturesUrl } from '../../../core/tools/apiRequest'
 
 const BandMemberCard = ({ entity, handlePress }) => {
     const entityImage = `${profilePicturesUrl + entity.picture}`;

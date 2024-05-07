@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Pressable, Icon } from 'react-native';
 
-import { colors } from '../../styles/utilities';
+import { colors } from '../../../styles/utilities';
 
 import { AudioWaveform } from 'lucide-react-native';
 

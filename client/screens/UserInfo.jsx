@@ -13,7 +13,7 @@ import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDeta
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import DetailsPill from '../components/DetailsPill/DetailsPill';
+import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const { styles } = require('../components/AuthenticationForms/styles');

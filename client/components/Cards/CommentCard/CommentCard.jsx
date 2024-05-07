@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
-import { colors, utilities } from '../../styles/utilities';
-import { profilePicturesUrl } from '../../core/tools/apiRequest';
+import { colors, utilities } from '../../../styles/utilities';
+import { profilePicturesUrl } from '../../../core/tools/apiRequest'
 
 const CommentCard = ({ avatar, text }) => {
     return (

@@ -7,7 +7,7 @@ import { setConnectedUsers, setFeedUsers } from '../store/Users';
 
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
-import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
+import FeedMemberCard from '../components/Cards/FeedMemberCard/FeedMemberCard';
 
 import { colors } from '../styles/utilities';
 import { SearchIcon } from 'lucide-react-native';
@@ -15,7 +15,7 @@ import { SearchIcon } from 'lucide-react-native';
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 import AiMatchMakingModal from '../components/Modals/AiMatchMakingModal';
-import FloatingActionButton from '../components/FloatingActionButton/FloatingActionButton';
+import FloatingActionButton from '../components/Elements/FloatingActionButton/FloatingActionButton';
 
 const Feed = ({ navigation }) => {
     const [refreshing, setRefreshing] = useState(false);

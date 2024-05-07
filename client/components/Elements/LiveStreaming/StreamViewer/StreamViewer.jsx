@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Dimensions, Pressable } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
 import {
     CallingState,
     SfuEvents,
     useCall,
     useCallStateHooks,
-    useStreamVideoClient,
     VideoRenderer,
 } from '@stream-io/video-react-native-sdk';
 
@@ -13,8 +12,7 @@ import inCallManager from 'react-native-incall-manager';
 
 import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop, Pause } from 'lucide-react-native';
 
-import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
-import { colors, utilities } from '../../styles/utilities';
+import { colors, utilities } from '../../../../styles/utilities';
 
 const StreamViewer = ({ viewer = false, showName, setCall }) => {
     const call = useCall();
