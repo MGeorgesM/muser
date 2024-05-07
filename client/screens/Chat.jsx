@@ -35,20 +35,22 @@ import PictureHeader from '../components/PictureHeader/PictureHeader';
 import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
 
 const Chat = ({ navigation, route }) => {
+    const dispatch = useDispatch();
     const { currentUser } = useUser();
+    const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
+
     const { id, chatParticipants, chatTitle, receiver } = route.params;
 
     const [chatMessages, setChatMessages] = useState([]);
     const [participants, setParticipants] = useState(chatParticipants);
+
     // const [receiver, setReceiver] = useState(null);
 
-    const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
     const [bandModalVisible, setBandModalVisible] = useState(false);
 
     const [bandName, setBandName] = useState(chatTitle || '');
 
-    const dispatch = useDispatch();
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: () => {
@@ -136,10 +138,11 @@ const Chat = ({ navigation, route }) => {
         const setupMessagesListener = async () => {
             const chatId = id || createChatId();
 
+            console.log('Starting listener');
             console.log('Chat ID:', chatId);
 
-            const chatRef = doc(fireStoreDb, 'chats', chatId);
-            const messagesRef = collection(chatRef, 'messages');
+            const newChatRef = doc(fireStoreDb, 'chats', chatId);
+            const messagesRef = collection(newChatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
 
             unsubscribe = onSnapshot(q, (snapshot) => {
@@ -159,6 +162,7 @@ const Chat = ({ navigation, route }) => {
         };
 
         setupMessagesListener();
+        getChatParticipants();
 
         return () => {
             if (unsubscribe) {
@@ -169,18 +173,20 @@ const Chat = ({ navigation, route }) => {
 
     const createChatId = () => [currentUser.id, receiver.id].sort().join('-');
 
-    // const getChat = async () => {
-    //     if (chatId) {
-    //         const chatRef = doc(fireStoreDb, 'chats', chatId);
-    //         return chatRef;
-    //     } else {
-    //         const chatRef = collection(fireStoreDb, 'chats');
-    //         const q = query(chatRef, where('participantsIds', '==', participants));
-    //         // const q = query(chatRef, where(`participantsIds.${participants[0]}`, '==', true));
-    //         const querySnapshot = await getDocs(q);
-    //         if (!querySnapshot.empty) return querySnapshot.docs[0].ref;
-    //     }
-    // };
+    const getChatParticipants = async () => {
+        if (!id) {
+            console.log('Getting chat participants from Ids Locally');
+
+            const participants = [currentUser, receiver].map((user) => ({
+                id: user.id,
+                name: user.name,
+                picture: user.picture,
+            }));
+
+            console.log('Chat Participants:', participants);
+            setParticipants(participants);
+        }
+    };
 
     getReceiverPicture = (userId) => {
         console.log('getting receivers pictures', userId);
@@ -230,31 +236,33 @@ const Chat = ({ navigation, route }) => {
     };
 
     const createChat = async (initialMessage) => {
-        const chatId = id || createChatId();
+        try {
+            const chatId = id || createChatId();
 
-        const newChatRef = doc(collection(fireStoreDb, 'chats', chatId));
-        const messageRef = collection(newChatRef, 'messages');
+            const newChatRef = doc(fireStoreDb, 'chats', chatId);
+            const messageRef = collection(newChatRef, 'messages');
 
-    
-
-        const messageDocRef = await addDoc(messageRef, {
-            _id: initialMessage._id,
-            text: initialMessage.text,
-            createdAt: initialMessage.createdAt,
-            userId: initialMessage.user._id,
-        });
-
-        await setDoc(newChatRef, {
-            participantsIds: participants,
-            chatTitle: null,
-            lastMessage: {
-                messageId: messageDocRef.id,
+            const messageDocRef = await addDoc(messageRef, {
+                _id: initialMessage._id,
                 text: initialMessage.text,
                 createdAt: initialMessage.createdAt,
                 userId: initialMessage.user._id,
-            },
-            createdAt: serverTimestamp(),
-        });
+            });
+
+            await setDoc(newChatRef, {
+                participantsIds: participants,
+                chatTitle: null,
+                lastMessage: {
+                    messageId: messageDocRef.id,
+                    text: initialMessage.text,
+                    createdAt: initialMessage.createdAt,
+                    userId: initialMessage.user._id,
+                },
+                createdAt: serverTimestamp(),
+            });
+        } catch (error) {
+            console.log('Error creating chat:', error);
+        }
     };
 
     const onSend = useCallback(async (messages = []) => {
@@ -265,8 +273,9 @@ const Chat = ({ navigation, route }) => {
         if (chatMessages.length === 0) {
             const firstMessage = messages[0];
             await createChat(firstMessage);
-            await addConnection();
+            // await addConnection();
         } else {
+            const chatRef = doc(fireStoreDb, 'chats', id);
             const messagesRef = collection(chatRef, 'messages');
 
             messages.forEach(async (message) => {
