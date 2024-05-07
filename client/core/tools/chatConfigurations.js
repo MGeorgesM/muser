@@ -2,7 +2,7 @@ import { TouchableOpacity } from 'react-native';
 
 import { Send as SendIcon } from 'lucide-react-native';
 import { Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
-
+import { colors } from '../../styles/utilities';
 
 export function renderBubble(props) {
     return (
@@ -13,7 +13,6 @@ export function renderBubble(props) {
                     backgroundColor: '#2E2E2E',
                     borderRadius: 12,
                     borderTopEndRadius: 0,
-                    
                 },
                 left: {
                     backgroundColor: '#D9D9D9',
@@ -84,7 +83,7 @@ export function renderInputToolbar(props) {
         <InputToolbar
             {...props}
             containerStyle={{
-                backgroundColor: '#1E1E1E',
+                backgroundColor: colors.bgDark,
                 padding: 6,
                 borderTopColor: '#fff',
                 borderTopWidth: 0.5,

@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
-import { TouchableOpacity, View, StyleSheet, Dimensions, Text, Pressable } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Dimensions, Text, Pressable, TextInput } from 'react-native';
 
 import { fireStoreDb } from '../config/firebase';
 import {
@@ -19,9 +19,9 @@ import {
 
 import { PlusIcon, ArrowLeft, Send as SendIcon, ChevronLeft, X, Check } from 'lucide-react-native';
 import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
-import { renderBubble, renderSend, renderInputToolbar } from '../core/tools/chatConfigurations';
+import { renderBubble, renderSend, renderInputToolbar, renderComposer } from '../core/tools/chatConfigurations';
 
-import { addConnectedUser, setConnectedUsers } from '../store/Users';
+import { addConnectedUser } from '../store/Users';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUser } from '../contexts/UserContext';
 
@@ -29,11 +29,8 @@ import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import { colors, utilities } from '../styles/utilities';
-import { FlatList, TextInput } from 'react-native-gesture-handler';
 
 import PictureHeader from '../components/PictureHeader/PictureHeader';
-import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
-import AiMatchMakingModal from '../components/Modals/AiMatchMakingModal';
 import ChatModal from '../components/Modals/ChatModal';
 
 const Chat = ({ navigation, route }) => {
@@ -148,8 +145,9 @@ const Chat = ({ navigation, route }) => {
             setParticipants(participants);
         }
 
-        const remainingConnections = userConnections.filter(connection =>
-            participants?.some(participant => participant?.id === connection?.id));
+        const remainingConnections = userConnections.filter((connection) =>
+            participants?.some((participant) => participant?.id === connection?.id)
+        );
 
         setChatConnections(remainingConnections);
 
@@ -183,7 +181,6 @@ const Chat = ({ navigation, route }) => {
     // };
 
     const addParticipant = async (newParticipantId) => {
-
         if (!newParticipantId && participants.includes(newParticipantId)) return;
 
         try {
@@ -346,41 +343,6 @@ const Chat = ({ navigation, route }) => {
         setBandModalVisible(false);
     };
 
-    function renderComposer(props) {
-        return (
-            <Composer
-                {...props}
-                textInputStyle={{
-                    color: '#fff',
-                    marginEnd: 8,
-                    borderTopWidth: 0,
-                    borderBottomWidth: 0,
-                    backgroundColor: 'transparent',
-                }}
-            />
-        );
-    }
-
-    function renderInputToolbar(props) {
-        // if (connectionModalVisible || bandModalVisible) return null;
-
-        return (
-            <InputToolbar
-                {...props}
-                containerStyle={{
-                    backgroundColor: '#1E1E1E',
-                    padding: 6,
-                    borderTopColor: '#fff',
-                    borderTopWidth: 0.5,
-                    borderBottomColor: '#fff',
-                    borderBottomWidth: 0.5,
-                }}
-                renderComposer={renderComposer}
-                primaryStyle={{ alignItems: 'center', justifyContent: 'center' }}
-            />
-        );
-    }
-
     return (
         <View style={{ flex: 1, backgroundColor: colors.bgDark }}>
             <GiftedChat
@@ -433,7 +395,7 @@ const Chat = ({ navigation, route }) => {
                     </View>
                 </View>
             )}
-            {connectionModalVisible && <ChatModal setModalVisible={setConnectionModalVisible}/>}
+            {connectionModalVisible && <ChatModal setModalVisible={setConnectionModalVisible} />}
         </View>
     );
 };

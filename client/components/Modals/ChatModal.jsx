@@ -27,7 +27,13 @@ const ChatModal = ({ data, userInput, setUserInput, handlePress, modalVisible, s
         >
             <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
                 <View style={styles.bottomStickView}>
-                    <View style={styles.modalView} onStartShouldSetResponder={() => true}>
+                    <View
+                        style={[
+                            styles.modalView,
+                            { justifyContent: data && data.length > 0 ? 'space-between' : 'center' },
+                        ]}
+                        onStartShouldSetResponder={() => true}
+                    >
                         {data && data.length > 0 ? (
                             <>
                                 <Text style={styles.modalTitle}>Your Connections</Text>}
@@ -54,7 +60,7 @@ const ChatModal = ({ data, userInput, setUserInput, handlePress, modalVisible, s
                                     utilities.textCenter,
                                     utilities.myFontRegular,
                                     utilities.textM,
-                                    { color: colors.white },
+                                    { color: colors.white, marginBottom: 12 },
                                 ]}
                             >
                                 No Connections Yet!
@@ -82,7 +88,6 @@ const styles = StyleSheet.create({
         paddingTop: 32,
         height: 0.5 * height,
         paddingHorizontal: 20,
-        justifyContent: 'space-between',
         backgroundColor: colors.bgOffDark,
         borderTopLeftRadius: utilities.borderRadius.xl,
         borderTopRightRadius: utilities.borderRadius.xl,
