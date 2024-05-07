@@ -1,12 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CommonActions } from '@react-navigation/native';
-
 import { createContext, useContext, useEffect, useState } from 'react';
 
-// import { auth } from '../config/firebase';
-// import { signInWithEmailAndPassword } from 'firebase/auth';
-
 import { useNavigation } from '@react-navigation/native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
@@ -52,9 +48,7 @@ export const UserProvider = ({ children }) => {
                         !loggedIn && navigation.navigate('Authentication');
                     }
                 }
-
                 token && setLoggedIn(true);
-                console.log('Token in UserContext:', token);
             } catch (error) {
                 console.log('Error getting token:', error);
             }

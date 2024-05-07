@@ -5,8 +5,7 @@ axios.defaults.baseURL = 'http://192.168.1.102:8000/api/';
 
 export const sendRequest = async (method, route, body) => {
     const token = await AsyncStorage.getItem('token');
-    // console.log('Token in sendRequest:', token);
-
+    
     try {
         const response = await axios.request({
             method: method,
@@ -26,27 +25,6 @@ export const sendRequest = async (method, route, body) => {
         }
         throw error;
     }
-    // try {
-    // } catch (error) {
-    //     // if (error.response) {
-    //     //     console.log(error.response.data);
-    //     //     console.log(error.response.status);
-    //     //     console.log(error.response.headers);
-    //     // } else if (error.request) {
-    //     //     console.log(error.request);
-    //     // } else {
-    //     //     console.log('Error', error.message);
-    //     // }
-    //     // console.log(error.config);
-
-    //     console.log('Error in Request', error);
-
-    //     if (error.response) {
-    //         console.log('Error Details', error.response.data.error);
-    //         console.log('Errors Details', error.response.data.errors);
-    //         console.log('Error Message', error.response.data.message);
-    //     }
-    // }
 };
 
 export const requestMethods = {

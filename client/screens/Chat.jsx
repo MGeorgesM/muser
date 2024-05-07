@@ -75,7 +75,7 @@ const Chat = ({ navigation, route }) => {
                 }
             },
             headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 20 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')} style={{ marginLeft: 20 }}>
                     <ChevronLeft size={24} color="white" />
                 </TouchableOpacity>
             ),
@@ -224,11 +224,10 @@ const Chat = ({ navigation, route }) => {
     };
 
     const addConnection = async () => {
-        const receiverId = participants.find((id) => id !== currentUser.id);
         try {
-            const response = await sendRequest(requestMethods.POST, `connections/${receiverId}`, null);
+            const response = await sendRequest(requestMethods.POST, `connections/${receiver.id}`, null);
             if (response.status !== 200) throw new Error('Failed to add connection');
-            dispatch(addConnectedUser(receiverId));
+            dispatch(addConnectedUser(receiver.id));
             console.log('Connection added:', response.data);
         } catch (error) {
             console.error('Error adding connection:', error);
@@ -275,7 +274,7 @@ const Chat = ({ navigation, route }) => {
         if (chatMessages.length === 0) {
             const firstMessage = messages[0];
             await createChat(firstMessage);
-            // await addConnection();
+            await addConnection();
         } else {
             const chatRef = doc(fireStoreDb, 'chats', id);
             const messagesRef = collection(chatRef, 'messages');
