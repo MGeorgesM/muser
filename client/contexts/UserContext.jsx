@@ -17,8 +17,9 @@ export const UserProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({
         name: 'Johnny',
+        email: 'jhonny@mail.com',
         // email: 'anissa.auer@example.org',
-        email: 'ookeefe@example.net',
+        // email: 'ookeefe@example.net',
         password: 'password',
         about: '',
         picture: '',
@@ -82,12 +83,12 @@ export const UserProvider = ({ children }) => {
             setLoggedIn(false);
             setCurrentUser(null);
             await AsyncStorage.clear();
-            navigation.dispatch(
-                CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: 'Welcome' }],
-                })
-            );
+            // navigation.dispatch(
+            //     CommonActions.reset({
+            //         index: 0,
+            //         routes: [{ name: 'Welcome' }],
+            //     })
+            // );
         } catch (error) {
             console.log('Error logging out:', error);
         }
