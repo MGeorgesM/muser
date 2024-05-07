@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { StyleSheet, Text, FlatList, View, Image, Modal, Button, TextInput, Dimensions } from 'react-native';
+import { StyleSheet, Text, FlatList, View, Image, Modal, Button, TextInput, Dimensions, Pressable } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,15 +10,16 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import FeedMemberCard from '../components/FeedMemberCard/FeedMemberCard';
 
 import { colors, utilities } from '../styles/utilities';
-import { SearchIcon } from 'lucide-react-native';
+import { SearchIcon, AudioWaveform } from 'lucide-react-native';
 
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 import AiMatchMakingModal from '../components/Modals/AiMatchMakingModal';
+import FloatingActionButton from '../components/FloatingActionButton/FloatingActionButton';
 
 const Feed = ({ navigation }) => {
     const [refreshing, setRefreshing] = useState(false);
-    const [modalVisible, setModalVisible] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
     const [userInput, setUserInput] = useState('');
 
     const { currentUser } = useUser();
@@ -116,6 +117,8 @@ const Feed = ({ navigation }) => {
                 handlePress={handleProceed}
                 setModalVisible={setModalVisible}
             />
+            <FloatingActionButton onPress={() => setModalVisible(true)} text={'Ai'} />
+
         </>
     );
 };

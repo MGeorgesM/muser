@@ -17,7 +17,7 @@ const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible
             }}
         >
 
-                <View style={styles.bottomStickView}>
+                <View style={styles.bottomStickView} onTouchEnd={()=> setModalVisible(false)}>
 
                     <View style={styles.modalView}>
                         <Text style={styles.modalTitle}>
