@@ -36,12 +36,11 @@ import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
 
 const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
-    const { id, chatParticipants, chatTitle } = route.params;
+    const { id, chatParticipants, chatTitle, receiver } = route.params;
 
-    const [localChatId, setLocalChatId] = useState(id);
-    const [messages, setMessages] = useState([]);
+    const [chatMessages, setChatMessages] = useState([]);
     const [participants, setParticipants] = useState(chatParticipants);
-    const [receiver, setReceiver] = useState(null);
+    // const [receiver, setReceiver] = useState(null);
 
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
@@ -51,17 +50,13 @@ const Chat = ({ navigation, route }) => {
 
     const dispatch = useDispatch();
     useLayoutEffect(() => {
-        console.log('receiver', receiver);
         navigation.setOptions({
             headerTitle: () => {
                 if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
                 else {
-                    const receiverName = receiver?.map((user) => user.name).join(', ');
-                    const reciverPicture = receiver?.map((user) => user.picture).join(', ');
-                    const receiverId = receiver
-                        ?.map((user) => user.id)
-                        .join(', ')
-                        .toString();
+                    const receiverName = receiver.name;
+                    const reciverPicture = receiver.picture;
+                    const receiverId = receiver.id.toString();
 
                     return (
                         <PictureHeader
@@ -95,66 +90,54 @@ const Chat = ({ navigation, route }) => {
         });
     }, [navigation, addParticipant, receiver]);
 
-    useEffect(() => {
-        setParticipants(chatParticipants);
-        console.log('Chat participants:', chatParticipants);
-    }, [chatParticipants]);
+    // useEffect(() => {
+    //     setParticipants(chatParticipants);
+    //     console.log('Chat participants:', chatParticipants);
+    // }, [chatParticipants]);
+
+    // useEffect(() => {
+    //     const getUsersPicutresandNames = async () => {
+    //         const otherParticipantIds = participants.filter((id) => id !== currentUser.id);
+
+    //         if (otherParticipantIds.length === 0) return;
+    //         const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
+
+    //         try {
+    //             const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
+    //             if (response.status !== 200) throw new Error('Failed to fetch users');
+    //             setReceiver(response.data);
+    //             console.log('Users fetched:', response.data);
+    //         } catch (error) {
+    //             console.log('Error fetching users:', error);
+    //         }
+    //     };
+
+    //     const getUserConnections = async () => {
+    //         try {
+    //             const response = await sendRequest(requestMethods.GET, 'users/type/musician?connected=true', null);
+    //             if (response.status !== 200) throw new Error('Failed to fetch connections');
+    //             console.log('Connections fetched:', response.data);
+    //             dispatch(setConnectedUsers(response.data));
+    //         } catch (error) {
+    //             console.log('Error fetching connections:', error);
+    //         }
+    //     };
+
+    //     // userConnections.length === 0 && getUserConnections();
+    //     // console.log('userConnections:', userConnections);
+    //     // getUsersPicutresandNames();
+    // }, [participants]);
 
     useEffect(() => {
-        const getUsersPicutresandNames = async () => {
-            const otherParticipantIds = participants.filter((id) => id !== currentUser.id);
-
-            if (otherParticipantIds.length === 0) return;
-            const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
-
-            try {
-                const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
-                if (response.status !== 200) throw new Error('Failed to fetch users');
-                setReceiver(response.data);
-                console.log('Users fetched:', response.data);
-            } catch (error) {
-                console.log('Error fetching users:', error);
-            }
-        };
-
-        const getUserConnections = async () => {
-            try {
-                const response = await sendRequest(requestMethods.GET, 'users/type/musician?connected=true', null);
-                if (response.status !== 200) throw new Error('Failed to fetch connections');
-                console.log('Connections fetched:', response.data);
-                dispatch(setConnectedUsers(response.data));
-            } catch (error) {
-                console.log('Error fetching connections:', error);
-            }
-        };
-
-        userConnections.length === 0 && getUserConnections();
-        console.log('userConnections:', userConnections);
-        getUsersPicutresandNames();
-    }, [participants]);
-
-    useLayoutEffect(() => {
         let unsubscribe;
 
-        getReceiverPicture = (userId) => {
-            console.log('getting receivers pictures', userId);
-
-            if (userId === currentUser.id) return null;
-
-            if (receiver && receiver.length > 1) {
-                let picture = null;
-                const receiverUser = receiver?.find((user) => user.id === userId);
-                if (receiverUser) {
-                    picture = `${profilePicturesUrl + receiverUser.picture}`;
-                    return picture;
-                }
-            }
-        };
-
-        const createChatId = () => [currentUser.id, receiver.id].sort().join('-');
+        setChatMessages([]);
 
         const setupMessagesListener = async () => {
             const chatId = id || createChatId();
+
+            console.log('Chat ID:', chatId);
+
             const chatRef = doc(fireStoreDb, 'chats', chatId);
             const messagesRef = collection(chatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
@@ -166,11 +149,12 @@ const Chat = ({ navigation, route }) => {
                     createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
                     user: {
                         _id: doc.data().userId,
-                        avatar: participants.length < 3 ? null : getReceiverPicture(doc.data().userId),
+                        avatar: null,
+                        // avatar: participants.length < 3 ? null : getReceiverPicture(doc.data().userId),
                     },
                 }));
 
-                setMessages(fetchedMessages);
+                setChatMessages(fetchedMessages);
             });
         };
 
@@ -181,7 +165,9 @@ const Chat = ({ navigation, route }) => {
                 unsubscribe();
             }
         };
-    }, [id]);
+    }, [id, receiver]);
+
+    const createChatId = () => [currentUser.id, receiver.id].sort().join('-');
 
     // const getChat = async () => {
     //     if (chatId) {
@@ -195,6 +181,21 @@ const Chat = ({ navigation, route }) => {
     //         if (!querySnapshot.empty) return querySnapshot.docs[0].ref;
     //     }
     // };
+
+    getReceiverPicture = (userId) => {
+        console.log('getting receivers pictures', userId);
+
+        if (userId === currentUser.id) return null;
+
+        if (receiver && receiver.length > 1) {
+            let picture = null;
+            const receiverUser = receiver?.find((user) => user.id === userId);
+            if (receiverUser) {
+                picture = `${profilePicturesUrl + receiverUser.picture}`;
+                return picture;
+            }
+        }
+    };
 
     const addParticipant = async (newParticipantId) => {
         if (newParticipantId && !participants.includes(newParticipantId)) {
@@ -229,8 +230,12 @@ const Chat = ({ navigation, route }) => {
     };
 
     const createChat = async (initialMessage) => {
-        const newChatRef = doc(collection(fireStoreDb, 'chats'));
+        const chatId = id || createChatId();
+
+        const newChatRef = doc(collection(fireStoreDb, 'chats', chatId));
         const messageRef = collection(newChatRef, 'messages');
+
+    
 
         const messageDocRef = await addDoc(messageRef, {
             _id: initialMessage._id,
@@ -250,16 +255,16 @@ const Chat = ({ navigation, route }) => {
             },
             createdAt: serverTimestamp(),
         });
-
-        return newChatRef;
     };
 
     const onSend = useCallback(async (messages = []) => {
-        setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
-        let chatRef = await getChat();
-        if (!chatRef) {
+        setChatMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
+
+        console.log(chatMessages.length, messages.length);
+
+        if (chatMessages.length === 0) {
             const firstMessage = messages[0];
-            chatRef = await createChat(firstMessage);
+            await createChat(firstMessage);
             await addConnection();
         } else {
             const messagesRef = collection(chatRef, 'messages');
@@ -381,7 +386,7 @@ const Chat = ({ navigation, route }) => {
     return (
         <View style={{ flex: 1, backgroundColor: colors.bgDark }}>
             <GiftedChat
-                messages={messages}
+                messages={chatMessages}
                 onSend={(messages) => onSend(messages)}
                 user={{
                     _id: currentUser.id,
