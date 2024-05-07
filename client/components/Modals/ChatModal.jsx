@@ -13,6 +13,7 @@ import {
 
 import { colors, utilities } from '../../styles/utilities';
 
+import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
 import PrimaryBtn from '../Elements/PrimaryBtn';
 
 const ChatModal = ({ data, userInput, setUserInput, handlePress, modalVisible, setModalVisible }) => {
@@ -51,8 +52,9 @@ const ChatModal = ({ data, userInput, setUserInput, handlePress, modalVisible, s
                                     )}
                                     keyExtractor={(item) => item.id}
                                     showsVerticalScrollIndicator={false}
+                                    contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' ,gap:8 }}
                                 />
-                                <PrimaryBtn text={'Add'} marginBottom={64} handlePress={handlePress} />
+                                <PrimaryBtn text={'Add'} marginBottom={32} handlePress={handlePress} />
                             </>
                         ) : (
                             <Text
@@ -86,7 +88,7 @@ const styles = StyleSheet.create({
     modalView: {
         elevation: 2,
         paddingTop: 32,
-        height: 0.5 * height,
+        height: 0.4 * height,
         paddingHorizontal: 20,
         backgroundColor: colors.bgOffDark,
         borderTopLeftRadius: utilities.borderRadius.xl,

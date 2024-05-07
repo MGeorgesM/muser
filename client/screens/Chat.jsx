@@ -143,13 +143,15 @@ const Chat = ({ navigation, route }) => {
             setParticipants(participants);
         }
 
-        const remainingConnections = userConnections.filter(connection =>
-            participants.every(participant => participant.id !== connection.id)
+        if (userConnections.length === 0 || Object.keys(participants).length === 0) return;
+
+        const remainingConnections = userConnections.filter((connection) =>
+            participants.every((participant) => participant.id !== connection.id)
         );
 
         setChatConnections(remainingConnections);
 
-        console.log('User Connections:', userConnections)
+        console.log('User Connections:', userConnections);
         console.log('Chat Participants:', participants);
         console.log('Remainign Connections:', remainingConnections);
     };
