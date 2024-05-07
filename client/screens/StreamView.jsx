@@ -50,7 +50,7 @@ const StreamView = ({ navigation, route }) => {
     const [comments, setComments] = useState([]);
 
     const [videoPlaying, setVideoPlaying] = useState(false);
-    const [videoMaximized, setVideoMaximized] = useState(false);
+    const [videoIsMaximized, setVideoIsMaximized] = useState(false);
     const [videoIsLiked, setVideoIsLiked] = useState(false);
 
     const [call, setCall] = useState(null);
@@ -204,7 +204,8 @@ const StreamView = ({ navigation, route }) => {
     };
 
     const handleVideoSizeToggle = () => {
-        return;
+        console.log('toggling video size');
+        setVideoIsMaximized(!videoIsMaximized);
     };
 
     return (
@@ -212,7 +213,7 @@ const StreamView = ({ navigation, route }) => {
             <View style={{ flex: 1, position: 'relative' }}>
                 {call ? (
                     <StreamCall call={call}>
-                        <View style={{ height: height * 0.5 }}>
+                        <View style={{ height: videoIsMaximized ? height * 1 : height * 0.5 }}>
                             <ViewerLivestream
                                 ViewerLeaveStreamButton={null}
                                 ViewerLivestreamTopView={null}
@@ -225,7 +226,7 @@ const StreamView = ({ navigation, route }) => {
                         style={[
                             {
                                 height: height * 0.5,
-                                backgroundColor: 'black',
+                                backgroundColor: 'red',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             },
@@ -256,40 +257,41 @@ const StreamView = ({ navigation, route }) => {
                     <Maximize size={24} color={'white'} />
                 </Pressable>
             </View>
-            <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: 20,
-                    }}
-                >
-                    <View>
-                        <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>
-                            {`${show.band.name} Live`}
-                        </Text>
-                        <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
-                    </View>
+            {!videoIsMaximized && (
+                <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: 20,
+                        }}
+                    >
+                        <View>
+                            <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>
+                                {`${show.band.name} Live`}
+                            </Text>
+                            <Text style={[utilities.textM, { color: colors.gray }]}>{show.venue.name}</Text>
+                        </View>
 
-                    <Heart size={24} color={colors.primary} />
-                </View>
-                <View style={[{ paddingLeft: 20 }]}>
-                    <Text style={[utilities.textM, utilities.myFontBold, { marginBottom: 8 }]}>Band</Text>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                        {show.band.members.map((member) => (
-                            <BandMemberCard key={member.id} entity={member} />
+                        <Heart size={24} color={colors.primary} />
+                    </View>
+                    <View style={[{ paddingLeft: 20 }]}>
+                        <Text style={[utilities.textM, utilities.myFontBold, { marginBottom: 8 }]}>Band</Text>
+                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                            {show.band.members.map((member) => (
+                                <BandMemberCard key={member.id} entity={member} />
+                            ))}
+                        </ScrollView>
+                    </View>
+                    <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
+                        {comments.map((comment) => (
+                            <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
                         ))}
                     </ScrollView>
-                </View>
-                <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
-                    {comments.map((comment) => (
-                        <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
-                    ))}
-                </ScrollView>
-                {/* <View style={styles.commentsContainer}>
+                    {/* <View style={styles.commentsContainer}>
                 </View> */}
-                {/* <KeyboardAvoidingView
+                    {/* <KeyboardAvoidingView
                     style={{ height: 48 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                     keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
@@ -297,13 +299,14 @@ const StreamView = ({ navigation, route }) => {
                     <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.bgDark }}>
                     </View>
                 </KeyboardAvoidingView> */}
-                <ChatTextInput
-                    placeholder="Write a comment"
-                    value={userComment}
-                    onChangeText={setUserComment}
-                    onSendPress={handlePostComment}
-                />                
-            </View>
+                    <ChatTextInput
+                        placeholder="Write a comment"
+                        value={userComment}
+                        onChangeText={setUserComment}
+                        onSendPress={handlePostComment}
+                    />
+                </View>
+            )}
         </>
     );
 };
