@@ -14,6 +14,7 @@ import { SearchIcon } from 'lucide-react-native';
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
+import AiMatchMakingModal from '../components/Modals/AiMatchMakingModal';
 
 const Feed = ({ navigation }) => {
     const [refreshing, setRefreshing] = useState(false);
@@ -75,40 +76,8 @@ const Feed = ({ navigation }) => {
             if (response.status !== 200) throw new Error('Failed to fetch users');
             dispatch(setFeedUsers(response.data));
         } catch (error) {
-            
+            console.log('Error fetching users:', error);
         }
-    }
-
-    const AiMatchMakingModal = ({ modalVisible, handleProceed, userInput, setUserInput }) => {
-        return (
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalTitle}>
-                            Your Band with <Text style={{ color: colors.primary }}>Muser Ai</Text>
-                        </Text>
-                        <View>
-                            {/* <Text style={[utilities.label]}>What's your muse today?</Text> */}
-                            <TextInput
-                                style={[utilities.inputText]}
-                                onChangeText={setUserInput}
-                                placeholderTextColor={colors.gray}
-                                value={userInput}
-                                placeholder="Enter your thoughts here..."
-                            />
-                        </View>
-                        <PrimaryBtn text={'Match'} marginBottom={24} />
-                    </View>
-                </View>
-            </Modal>
-        );
     };
 
     return users && users.length === 0 ? (
@@ -132,7 +101,13 @@ const Feed = ({ navigation }) => {
                     }}
                 />
             </View>
-            <AiMatchMakingModal />
+            <AiMatchMakingModal
+                userInput={userInput}
+                setUserInput={setUserInput}
+                modalVisible={modalVisible}
+                handleProceed={handleProceed}
+                setModalVisible={setModalVisible}
+            />
         </>
     );
 };
@@ -146,6 +121,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
+
     avatar: {
         width: 48,
         height: 48,
@@ -161,6 +137,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.bgDark,
         paddingHorizontal: 14,
     },
+
     welcomeDisplay: {
         marginBottom: -2,
         color: 'white',
@@ -183,7 +160,7 @@ const styles = StyleSheet.create({
         height: 0.3 * height,
         paddingHorizontal: 20,
         justifyContent: 'space-between',
-        backgroundColor: colors.bgDark,
+        backgroundColor: colors.bgOffDark,
         borderTopLeftRadius: utilities.borderRadius.xl,
         borderTopRightRadius: utilities.borderRadius.xl,
     },
