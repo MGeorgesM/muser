@@ -90,7 +90,6 @@ const Chat = ({ navigation, route }) => {
         });
     }, [navigation, addParticipant, receiver]);
 
-
     useEffect(() => {
         let unsubscribe;
 
@@ -101,7 +100,8 @@ const Chat = ({ navigation, route }) => {
 
             console.log('Starting listener');
             console.log('Chat ID:', chatId);
-   
+            console.log('Connections:', userConnections);
+
             const newChatRef = doc(fireStoreDb, 'chats', chatId);
             const messagesRef = collection(newChatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
@@ -113,8 +113,7 @@ const Chat = ({ navigation, route }) => {
                     createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
                     user: {
                         _id: doc.data().userId,
-                        avatar: null,
-                        // avatar: participants.length < 3 ? null : getReceiverPicture(doc.data().userId),
+                        avatar: getMessageAvatar(doc.data().userId),
                     },
                 }));
 
@@ -149,20 +148,31 @@ const Chat = ({ navigation, route }) => {
         }
     };
 
-    getReceiverPicture = (userId) => {
-        console.log('getting receivers pictures', userId);
-
-        if (userId === currentUser.id) return null;
-
-        if (receiver && receiver.length > 1) {
-            let picture = null;
-            const receiverUser = receiver?.find((user) => user.id === userId);
-            if (receiverUser) {
-                picture = `${profilePicturesUrl + receiverUser.picture}`;
-                return picture;
+    const getMessageAvatar = (userId) => {
+        if (participants && participants.length > 1 && userId !== currentUser.id) {
+            const user = participants.find((user) => user.id === userId);
+            if (user) {
+                return `${profilePicturesUrl + user.picture}`;
             }
         }
+
+        return null;
     };
+
+    // getReceiverPicture = (userId) => {
+    //     console.log('getting receivers pictures', userId);
+
+    //     if (userId === currentUser.id) return null;
+
+    //     if (receiver && receiver.length > 1) {
+    //         let picture = null;
+    //         const receiverUser = receiver?.find((user) => user.id === userId);
+    //         if (receiverUser) {
+    //             picture = `${profilePicturesUrl + receiverUser.picture}`;
+    //             return picture;
+    //         }
+    //     }
+    // };
 
     const addParticipant = async (newParticipantId) => {
         if (newParticipantId && !participants.includes(newParticipantId)) {
@@ -189,7 +199,6 @@ const Chat = ({ navigation, route }) => {
             const response = await sendRequest(requestMethods.POST, `connections/${receiver.id}`, null);
             if (response.status !== 200) throw new Error('Failed to add connection');
             dispatch(addConnectedUser(receiver.id));
-            console.log('Connection added:', response.data);
         } catch (error) {
             console.error('Error adding connection:', error);
         }
