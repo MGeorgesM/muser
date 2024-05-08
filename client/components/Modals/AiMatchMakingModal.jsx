@@ -29,7 +29,7 @@ const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible
                     <View style={styles.modalView} onStartShouldSetResponder={() => true}>
                         <View>
                             <Text style={[styles.modalTitle, { color: colors.primary, marginBottom:-3 }]}>Muser Ai</Text>
-                            <Text style={[utilities.textCenter, utilities.myFontRegular, {marginBottom:16}]}>
+                            <Text style={[utilities.textCenter, utilities.myFontRegular, {marginBottom:32}]}>
                                 Your Band Formed Effortlessly
                             </Text>
                         </View>
@@ -40,7 +40,7 @@ const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible
                             value={userInput}
                             placeholder="Enter your thoughts here..."
                         />
-                        <PrimaryBtn text={'Match'} marginBottom={36} handlePress={handlePress} />
+                        <PrimaryBtn text={'Match'} marginBottom={16} handlePress={handlePress} />
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
         paddingTop: 32,
         height: 0.35 * height,
         paddingHorizontal: 20,
+        paddingBottom:32,
         justifyContent: 'space-between',
         backgroundColor: colors.bgOffDark,
         borderTopLeftRadius: utilities.borderRadius.xl,

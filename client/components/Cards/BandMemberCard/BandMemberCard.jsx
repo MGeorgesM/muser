@@ -2,16 +2,29 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
 import { colors, utilities } from '../../../styles/utilities';
-import { profilePicturesUrl } from '../../../core/tools/apiRequest'
+import { profilePicturesUrl } from '../../../core/tools/apiRequest';
 
-const BandMemberCard = ({ entity, handlePress }) => {
+const BandMemberCard = ({ entity, handlePress, isSelected }) => {
     const entityImage = `${profilePicturesUrl + entity.picture}`;
+    console.log(isSelected);
+    console.log(entity.id)
     return (
-        <TouchableOpacity style={[utilities.flexRow, { marginBottom: 14, marginRight: 10 }]} onPress={handlePress}>
+        <TouchableOpacity
+            style={[utilities.flexRow, { marginBottom: 14, marginRight: 10 }]}
+            onPress={handlePress}
+        >
             <View style={[utilities.flexRow, utilities.center]}>
                 <Image source={{ uri: entityImage }} style={styles.bandMemberPhoto} />
                 <View style={{ marginStart: 8 }}>
-                    <Text style={[utilities.textM, utilities.myFontBold, { color: colors.white }]}>{entity?.name}</Text>
+                    <Text
+                        style={[
+                            utilities.textM,
+                            utilities.myFontBold,
+                            { color: isSelected ? colors.primary : colors.white },
+                        ]}
+                    >
+                        {entity?.name}
+                    </Text>
                     <Text style={[utilities.textXS, utilities.myFontRegular, { color: colors.gray }]}>
                         {entity?.instrument?.name}
                     </Text>

@@ -14,6 +14,7 @@ import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 const ChatOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);
     const { currentUser } = useUser();
+    const [isLoading, setIsLoading] = useState(true);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -37,7 +38,9 @@ const ChatOverview = ({ navigation }) => {
 
             chatsArray.sort((a, b) => b.lastMessage.createdAt - a.lastMessage.createdAt);
             // console.log('Chats:', chatsArray);
+
             setChats(chatsArray);
+            setIsLoading(false);
 
             if (!querySnapshot.empty) {
                 return querySnapshot.docs[0].ref;
@@ -49,9 +52,9 @@ const ChatOverview = ({ navigation }) => {
         return () => unsubscribe;
     }, [currentUser]);
 
-    return chats.length === 0 ? (
-        <View style={[utilities.container, {backgroundColor:colors.bgDark}]}>
-            <LoadingScreen message={'Start Connecting!'} />
+    return isLoading ? (
+        <View style={[utilities.container, { backgroundColor: colors.bgDark }]}>
+            <LoadingScreen message={chats.length === 0 ? 'Start Connecting!' : null} />
         </View>
     ) : (
         <View style={[utilities.darkContainer]}>

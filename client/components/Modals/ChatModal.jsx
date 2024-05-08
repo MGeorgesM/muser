@@ -18,6 +18,14 @@ import PrimaryBtn from '../Elements/PrimaryBtn';
 
 const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, input = false }) => {
     const [userInput, setUserInput] = useState('');
+    const [selectedMember, setSelectedMember] = useState(null);
+
+    const handleMemberSelect = (member) => {
+        setSelectedMember(member);
+    };
+
+    console.log('data', data);
+
     return (
         <Modal
             animationType="slide"
@@ -46,14 +54,17 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, in
                                     value={userInput}
                                     placeholder="As usual... be creative!"
                                 />
-                                <PrimaryBtn text={'Form Band!'} marginBottom={16} handlePress={() => handlePress(userInput)} />
                             </>
                         ) : data && data.length > 0 ? (
                             <>
                                 <FlatList
                                     data={data}
                                     renderItem={({ item }) => (
-                                        <BandMemberCard entity={item} handlePress={() => handlePress(item)} />
+                                        <BandMemberCard
+                                            entity={item}
+                                            isSelected={item.id === selectedMember?.id}
+                                            handlePress={() => handleMemberSelect(item)}
+                                        />
                                     )}
                                     keyExtractor={(item) => item.id.toString()}
                                     showsVerticalScrollIndicator={false}
@@ -72,6 +83,7 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, in
                                 No Connections Yet!
                             </Text>
                         )}
+                        <PrimaryBtn text={'Form Band!'} marginBottom={16} marginTop={16} handlePress={() => handlePress(userInput)} />
                     </View>
                 </View>
             </TouchableWithoutFeedback>
