@@ -18,12 +18,18 @@ class AiMatchMakingController extends Controller
         $apiKey = getenv('OPENAI_API_KEY');
         $client = OpenAI::client($apiKey);
 
-        $show_descrpition = $request->description;
-        $band_name = $request->bandName;
-
         $validatedData = $request->validate([
-            'message' => 'required|string'
+            'description' => 'required|string'
         ]);
+
+        $show_descrpition = $validatedData['description'];
+        $band_name = $request->bandName;
+        $music_genre = $this->getGenre($show_descrpition);
+
+        dd($music_genre);
+
+
+        $prompt = 'I have an app that displays music shows created by musicians, I want you to create an image for this music show poster. When generating the image, you should take in mind the band name: ' . $band_name . ', the show descripiton : ' . $show_descrpition . ' and the main music genre in this show: ' . $music_genre . 'The poster should include the band name, show description, and a background image that fits the show description.';
 
         try {
             $result = $client->images()->create([
@@ -31,19 +37,20 @@ class AiMatchMakingController extends Controller
                 'style' => 'natural',
                 'quality' => 'standard',
                 'response_format' => 'url',
-                'prompt' => $validatedData['message'],
+                'prompt' => $prompt,
                 'n' => 1,
                 'size' => '1024x1024',
             ]);
 
-            return response()->json($result->choices[0]->message->content);
+            return response()->json($result);
+
         } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function getGenre(string $description)
+    protected function getGenre(string $description)
     {
         $apiKey = getenv('OPENAI_API_KEY');
         $client = OpenAI::client($apiKey);
@@ -85,7 +92,6 @@ class AiMatchMakingController extends Controller
             $response = json_decode($result->choices[0]->message->content, true);
 
             return $response;
-
         } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
