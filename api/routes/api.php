@@ -89,6 +89,7 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
     Route::group(['prefix' => 'ai'], function ($router) {
 
         Route::post('/', [AiMatchMakingController::class, 'getMatches']);
+        Rout::post('/getGenre', [AiMatchMakingController::class, 'getGenre']);
         Route::post('/match', [AiMatchMakingController::class, 'matchUsers']);
 
     });
