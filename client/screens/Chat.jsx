@@ -87,7 +87,7 @@ const Chat = ({ navigation, route }) => {
                 </View>
             ),
         });
-    }, [navigation, addParticipant, chatParticipants]);
+    }, [navigation, chatParticipants]);
 
     useEffect(() => {
         let unsubscribe;
@@ -125,13 +125,14 @@ const Chat = ({ navigation, route }) => {
                 unsubscribe();
             }
         };
+
     }, [id, chatParticipants]);
 
     const getRemainingConnections = async () => {
         console.log('Chat Participants:', chatParticipants);
 
         const remainingConnections = userConnections.filter((connection) =>
-            chatParticipants.some((participant) => participant.id != connection.id)
+            chatParticipants.every((participant) => participant.id !== connection.id)
         );
 
         setChatConnections(remainingConnections);
@@ -174,8 +175,9 @@ const Chat = ({ navigation, route }) => {
     //     }
     // };
 
-    const addParticipant = async (chatParticipant) => {
-        const newParticipantId = chatParticipant.id;
+    const addParticipant = async (newParticipant) => {
+
+        const newParticipantId = newParticipant.id;
 
         if (!newParticipantId && participants.includes(newParticipantId)) {
             console.log('Participant already exists in chat!');
@@ -184,14 +186,20 @@ const Chat = ({ navigation, route }) => {
 
         try {
             const chatRef = doc(fireStoreDb, 'chats', id);
-            const newParticipantsList = [...participants, newParticipantId];
+
+            const newParticipantsList = [...participants, newParticipant];
+            const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
+
+            newParticipantsIdsList.push(currentUser.id);
 
             await updateDoc(chatRef, {
-                participantsIds: newParticipantsList,
+                participantsIds: newParticipantsIdsList,
             });
 
-            setParticipants([...participants, newParticipantId]);
+            setParticipants(newParticipantsList);
+
             setConnectionModalVisible(false);
+
         } catch (error) {
             console.error('Error adding participant', error);
         }
@@ -200,10 +208,12 @@ const Chat = ({ navigation, route }) => {
     };
 
     const addConnection = async () => {
+        const newConnectionId = chatParticipants.map((participant) => participant.id);
+        console.log('Adding connection:', newConnectionId);
         try {
-            const response = await sendRequest(requestMethods.POST, `connections/${receiver.id}`, null);
+            const response = await sendRequest(requestMethods.POST, `connections/${newConnectionId}`, null);
             if (response.status !== 200) throw new Error('Failed to add connection');
-            dispatch(addConnectedUser(receiver.id));
+            dispatch(addConnectedUser(newConnectionId));
         } catch (error) {
             console.error('Error adding connection:', error);
         }
@@ -211,9 +221,8 @@ const Chat = ({ navigation, route }) => {
 
     const createChat = async (initialMessage) => {
         try {
-            const chatId = id || createChatId();
 
-            const newChatRef = doc(fireStoreDb, 'chats', chatId);
+            const newChatRef = doc(fireStoreDb, 'chats', id);
             const messageRef = collection(newChatRef, 'messages');
 
             const participantsIds = participants.map((participant) => participant.id);
