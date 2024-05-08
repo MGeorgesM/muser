@@ -25,6 +25,7 @@ import { useUser } from '../contexts/UserContext';
 
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { truncateText } from '../core/tools/formatDate';
 
 import { colors, utilities } from '../styles/utilities';
 
@@ -61,7 +62,7 @@ const Chat = ({ navigation, route }) => {
                     return (
                         <PictureHeader
                             picture={reciverPicture}
-                            name={receiverName}
+                            name={truncateText(receiverName)}
                             handlePress={() =>
                                 navigation.navigate('Feed', {
                                     screen: 'ProfileDetails',
@@ -128,22 +129,28 @@ const Chat = ({ navigation, route }) => {
                 unsubscribe();
             }
         };
-    }, [id, receiver]);
+    }, [id, chatParticipants]);
 
     const createChatId = () => [currentUser.id, receiver.id].sort().join('-');
 
     const getChatParticipants = async () => {
-        if (!id) {
-            console.log('Getting chat participants from Ids Locally');
 
-            const participants = [currentUser, receiver].map((user) => ({
-                id: user.id,
-                name: user.name,
-                picture: user.picture,
-            }));
+        console.log('Chat Participants !:', chatParticipants);
 
-            setParticipants(participants);
-        }
+        return
+
+        // if (!id) {
+        //     console.log('Getting chat participants from Ids Locally');
+
+
+        //     // const participants = [currentUser, receiver].map((user) => ({
+        //     //     id: user.id,
+        //     //     name: user.name,
+        //     //     picture: user.picture,
+        //     // }));
+
+        //     setParticipants(participants);
+        // }
 
         console.log('User Connections:', userConnections);
         console.log('Chat Participants:', participants);

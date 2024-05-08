@@ -78,7 +78,7 @@ const ProfileDetails = ({ route }) => {
                         handlePress={() =>
                             navigation.navigate('Chat', {
                                 screen: 'ChatDetails',
-                                params: { chatParticipants: user },
+                                params: { chatParticipants: [{ id: user.id, name: user.name, picture: user.picture }] },
                             })
                         }
                     />
