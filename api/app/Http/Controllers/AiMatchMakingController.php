@@ -19,20 +19,20 @@ class AiMatchMakingController extends Controller
         $client = OpenAI::client($apiKey);
 
         $validatedData = $request->validate([
-            'description' => 'required|string'
+            'message' => 'required|string',
+            'bandname' => 'required|string'
         ]);
 
-        $show_descrpition = $validatedData['description'];
-        $band_name = $request->bandName;
+        $show_descrpition = json_encode($validatedData['message']);
+        $band_name = json_encode($validatedData['bandname']);
         $music_genre = $this->getGenre($show_descrpition);
 
-        dd($music_genre);
+        // dd($music_genre);
 
-
-        $prompt = 'I have an app that displays music shows created by musicians, I want you to create an image for this music show poster. When generating the image, you should take in mind the band name: ' . $band_name . ', the show descripiton : ' . $show_descrpition . ' and the main music genre in this show: ' . $music_genre . 'The poster should include the band name, show description, and a background image that fits the show description.';
+        $prompt = 'I have an app that displays music shows created by musicians, I want you to create an image for this music show poster. When generating the image, you should take in mind the band name: ' . $band_name . ', the show descripiton : ' . $show_descrpition . ' and the main music genre in this show: ' . $music_genre . 'The poster should include the band name, show description, and a background image that fits the show description, do not include people or animals in the design.';
 
         try {
-            $result = $client->images()->create([
+            $response = $client->images()->create([
                 'model' => 'dall-e-3',
                 'style' => 'natural',
                 'quality' => 'standard',
@@ -42,8 +42,16 @@ class AiMatchMakingController extends Controller
                 'size' => '1024x1024',
             ]);
 
-            return response()->json($result);
+            $response->created;
 
+            foreach ($response->data as $data) {
+                $data->url;
+                $data->b64_json;
+            }
+
+            $response->toArray();
+
+            return response()->json($response->data[0]->url);
         } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
@@ -55,15 +63,15 @@ class AiMatchMakingController extends Controller
         $apiKey = getenv('OPENAI_API_KEY');
         $client = OpenAI::client($apiKey);
 
-        $availableGenres = Genre::all()->toArray();
-        $availableGenres = json_encode($availableGenres);
-
-        if ($description  == null || $description == '') {
-            return;
+        if (empty($description)) {
+            return null;
         }
 
         $description = trim($description);
         $description = preg_replace('/[^a-zA-Z0-9 \'\.,-]/', '', $description);
+
+        $availableGenres = Genre::all()->toArray();
+        $availableGenres = json_encode($availableGenres);
 
         try {
             $result = $client->chat()->create([
@@ -71,7 +79,7 @@ class AiMatchMakingController extends Controller
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => "You're the music expert. From my message which respresents a music show description, you must extract one relevant musical genre, either directly mentioned or inferred from artists or songs mentioned. Ensure the music genre is drawn this predefined list . $availableGenres"
+                        'content' => "You're the music expert. From my message which represents a music show description, you must extract one relevant musical genre, either directly mentioned or inferred from artists or songs mentioned. Ensure the music genre is drawn from this predefined list: $availableGenres"
                     ],
                     [
                         'role' => 'system',
@@ -87,16 +95,15 @@ class AiMatchMakingController extends Controller
                 ],
             ]);
 
-            // return response($result->choices[0]->message->content);
-
             $response = json_decode($result->choices[0]->message->content, true);
+            return $response['id'] ?? null;  // Extract and return only the genre ID
 
-            return $response;
         } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
-            return response()->json(['error' => $e->getMessage()], 500);
+            return null;  // Return null on failure
         }
     }
+
 
 
 
