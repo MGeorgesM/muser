@@ -47,20 +47,18 @@ const Chat = ({ navigation, route }) => {
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
     const [bandModalVisible, setBandModalVisible] = useState(false);
 
-    const [bandName, setBandName] = useState(chatTitle || '');
-
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: () => {
                 if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
                 else {
-                    const receiverName = chatParticipants.map((participant) => participant.name).join(', ');
-                    const reciverPicture = chatParticipants[0].picture;
-                    const receiverId = chatParticipants[0].id;
+                    const receiverName = participants?.map((participant) => participant.name).join(', ');
+                    const reciverPicture = participants[0].picture;
+                    const receiverId = participants[0].id;
 
                     return (
                         <PictureHeader
-                            picture={reciverPicture}
+                            picture={participants.length > 1 ? null : reciverPicture}
                             name={truncateText(receiverName)}
                             handlePress={() =>
                                 navigation.navigate('Feed', {
@@ -88,7 +86,7 @@ const Chat = ({ navigation, route }) => {
                 </View>
             ),
         });
-    }, [navigation, chatParticipants]);
+    }, [participants]);
 
     useEffect(() => {
         let unsubscribe;
@@ -295,59 +293,64 @@ const Chat = ({ navigation, route }) => {
         }
     });
 
-    const handleFormBand = async () => {
-        if (bandName.length > 0) {
-            console.log('forming band includes', participants);
-            const chatRef = await getChat();
-            if (chatRef) {
-                const chatSnapshot = await getDoc(chatRef);
-                if (!chatSnapshot.exists()) {
-                    console.log('Chat document does not exist!');
-                    return;
-                }
-                const chatData = chatSnapshot.data();
-                const chatParticipantsIds = chatData.participantsIds;
+    const handleFormBand = async (bandName) => {
+        if (bandName.length === 0) return;
 
-                console.log('Using these participants IDs for forming the band:', chatParticipantsIds);
-                try {
-                    const response = await sendRequest(requestMethods.POST, `bands`, {
-                        name: bandName,
-                        members: chatParticipantsIds,
-                    });
-                    if (response.status !== 201) throw new Error('Failed to create band');
+        console.log('Forming band with name:', bandName);
+        console.log('Forming band with participants', participants);
+        
+        const chatRef = doc(fireStoreDb, 'chats', id);
+        // return
 
-                    console.log('Band created:', response.data);
+        // const chatSnapshot = await getDoc(chatRef);
+        // if (!chatSnapshot.exists()) {
+        //     console.log('Chat document does not exist!');
+        //     return;
+        // }
 
-                    await updateDoc(chatRef, {
-                        chatTitle: bandName,
-                    });
+        // const chatData = chatSnapshot.data();
+        // const chatParticipantsIds = chatData.participantsIds;
 
-                    const messageRef = collection(chatRef, 'messages');
-                    const messageData = {
-                        _id: `${currentUser.id}-${Date.now()}-${bandName}`,
-                        text: `${currentUser.name} has formed the band ${bandName}!`,
-                        createdAt: serverTimestamp(),
-                        userId: currentUser.id,
-                    };
 
-                    const messageDocRef = await addDoc(messageRef, messageData);
+        const participantsIds = participants.map((participant) => participant.id);
+        participantsIds.push(currentUser.id);
 
-                    await updateDoc(chatRef, {
-                        lastMessage: {
-                            messageId: messageDocRef.id,
-                            text: messageData.text,
-                            createdAt: serverTimestamp(),
-                            userId: currentUser.id,
-                        },
-                    });
-                } catch (error) {
-                    console.error('Error processing band formation:', error);
-                }
-            } else {
-                console.log('No chat reference available');
-            }
-        } else {
-            console.log('Band name is required');
+        console.log('Using these participants IDs for forming the band:', participantsIds);
+
+        return;
+        
+        try {
+            const response = await sendRequest(requestMethods.POST, `bands`, {
+                name: bandName,
+                members: chatParticipantsIds,
+            });
+
+            if (response.status !== 201) throw new Error('Failed to create band');
+            console.log('Band created:', response.data);
+            await updateDoc(chatRef, {
+                chatTitle: bandName,
+            });
+
+            const messageRef = collection(chatRef, 'messages');
+            const messageData = {
+                _id: `${currentUser.id}-${Date.now()}-${bandName}`,
+                text: `${currentUser.name} has formed the band ${bandName}!`,
+                createdAt: serverTimestamp(),
+                userId: currentUser.id,
+            };
+
+            const messageDocRef = await addDoc(messageRef, messageData);
+
+            await updateDoc(chatRef, {
+                lastMessage: {
+                    messageId: messageDocRef.id,
+                    text: messageData.text,
+                    createdAt: serverTimestamp(),
+                    userId: currentUser.id,
+                },
+            });
+        } catch (error) {
+            console.error('Error processing band formation:', error);
         }
 
         setBandModalVisible(false);

@@ -18,9 +18,6 @@ import PrimaryBtn from '../Elements/PrimaryBtn';
 
 const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, input = false }) => {
     const [userInput, setUserInput] = useState('');
-
-    console.log(userInput)
-
     return (
         <Modal
             animationType="slide"
