@@ -17,7 +17,7 @@ class ShowController extends Controller
             'time' => 'required|date_format:H:i',
             'duration' => 'required|integer',
             'genre_id' => 'required|exists:genres,id',
-            // 'picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $show = new Show();

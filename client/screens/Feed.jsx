@@ -18,6 +18,7 @@ import AiMatchMakingModal from '../components/Modals/AiMatchMakingModal';
 import FloatingActionButton from '../components/Elements/FloatingActionButton/FloatingActionButton';
 
 const Feed = ({ navigation }) => {
+    const [isLoading, setIsLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [userInput, setUserInput] = useState('');
@@ -66,18 +67,17 @@ const Feed = ({ navigation }) => {
             if (response.status !== 200) throw new Error('Failed to fetch users');
             dispatch(setConnectedUsers(response.data.connectedUsers));
             dispatch(setFeedUsers(response.data.feedUsers));
-            setRefreshing(false);
         } catch (error) {
             console.log('Error fetching users:', error);
         } finally {
+            setIsLoading(false);
             setRefreshing(false);
         }
     };
 
-    const handleProceed = async () => {
-        if (userInput === '') return;
+    const handleAiMatchMaking = async () => {
         setModalVisible(false);
-
+        setIsLoading(true);
         try {
             const response = await sendRequest(requestMethods.POST, 'ai/', { message: userInput });
             if (response.status !== 200) throw new Error('Failed to fetch users');
@@ -90,10 +90,17 @@ const Feed = ({ navigation }) => {
             dispatch(setFeedUsers(response.data));
         } catch (error) {
             console.log('Error fetching users:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    return users && users.length === 0 ? (
+    const handleProceed = async () => {
+        if (userInput === '') return;
+        handleAiMatchMaking();
+    };
+
+    return (users && users.length === 0) || isLoading ? (
         <LoadingScreen />
     ) : (
         <>
