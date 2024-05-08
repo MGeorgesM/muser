@@ -52,9 +52,7 @@ const Chat = ({ navigation, route }) => {
         navigation.setOptions({
             headerTitle: () => {
                 if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
-
                 else {
-                    
                     const receiverName = chatParticipants.map((participant) => participant.name).join(', ');
                     const reciverPicture = chatParticipants[0].picture;
                     const receiverId = chatParticipants[0].id;
@@ -122,7 +120,7 @@ const Chat = ({ navigation, route }) => {
         };
 
         setupMessagesListener();
-        getChatParticipants();
+        getRemainingConnections();
 
         return () => {
             if (unsubscribe) {
@@ -131,38 +129,27 @@ const Chat = ({ navigation, route }) => {
         };
     }, [id, chatParticipants]);
 
-    const createChatId = () => [currentUser.id, receiver.id].sort().join('-');
+    const createChatId = () => [currentUser.id, chatParticipants[0].id].sort().join('-');
 
-    const getChatParticipants = async () => {
+    const getRemainingConnections = async () => {
+        console.log('Chat Participants:', chatParticipants);
 
-        console.log('Chat Participants !:', chatParticipants);
+        const remainingConnections = userConnections.filter((connection) =>
+            chatParticipants.some((participant) => participant.id != connection.id)
+        );
 
-        return
-
-        // if (!id) {
-        //     console.log('Getting chat participants from Ids Locally');
-
-
-        //     // const participants = [currentUser, receiver].map((user) => ({
-        //     //     id: user.id,
-        //     //     name: user.name,
-        //     //     picture: user.picture,
-        //     // }));
-
-        //     setParticipants(participants);
-        // }
-
-        console.log('User Connections:', userConnections);
-        console.log('Chat Participants:', participants);
-
-        if ((userConnections && userConnections.length != 0) || Object.keys(participants).length != 0) {
-            const remainingConnections = userConnections.filter((connection) =>
-                participants.every((participant) => participant.id !== connection.id)
-            );
-
-            setChatConnections(remainingConnections);
-            console.log('Remainign Connections:', remainingConnections);
-        }
+        setChatConnections(remainingConnections);
+        
+        console.log(
+            'Remainign Connections:',
+            remainingConnections.map((connection) => {
+                return {
+                    id: connection.id,
+                    name: connection.name,
+                    picture: connection.picture,
+                };
+            })
+        );
     };
 
     const getMessageAvatar = (userId) => {

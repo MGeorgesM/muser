@@ -36,7 +36,7 @@ const ChatOverview = ({ navigation }) => {
             });
 
             chatsArray.sort((a, b) => b.lastMessage.createdAt - a.lastMessage.createdAt);
-            console.log('Chats:', chatsArray);
+            // console.log('Chats:', chatsArray);
             setChats(chatsArray);
 
             if (!querySnapshot.empty) {
