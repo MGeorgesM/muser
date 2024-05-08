@@ -37,6 +37,7 @@ class AiMatchMakingController extends Controller
             ]);
 
             return response()->json($result->choices[0]->message->content);
+            
         } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
