@@ -37,7 +37,7 @@ const ProfileDetails = ({ route }) => {
                 return setUser(foundConnectedUser);
             }
         }
-    }, [userId, feedUsers, connectedUsers]);
+    }, [userId]);
 
     const imageUrl = `${profilePicturesUrl + user.picture}`;
 

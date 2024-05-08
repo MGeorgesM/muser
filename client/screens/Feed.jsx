@@ -61,8 +61,8 @@ const Feed = ({ navigation }) => {
     });
 
     const getUsers = async () => {
+        console.log('calling api');
         try {
-            setRefreshing(true);
             const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
             if (response.status !== 200) throw new Error('Failed to fetch users');
             dispatch(setConnectedUsers(response.data.connectedUsers));
@@ -122,7 +122,7 @@ const Feed = ({ navigation }) => {
                             refreshing={refreshing}
                             onRefresh={() => {
                                 setRefreshing(true);
-                                getUsers().finally(() => setRefreshing(false));
+                                getUsers();
                             }}
                         />
                     }
