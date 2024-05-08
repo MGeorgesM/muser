@@ -14,8 +14,6 @@ const ChatCard = ({ chat, navigation }) => {
     const { currentUser } = useUser();
 
     const [participants, setParticipants] = useState(chat.participantsIds);
-    // const [receiver, setReceiver] = useState(null);
-
     const [title, setTitle] = useState(chat.chatTitle);
     const [avatar, setAvatar] = useState(null);
 
@@ -24,18 +22,13 @@ const ChatCard = ({ chat, navigation }) => {
             const otherParticipantIds = chat.participantsIds.filter((id) => id !== currentUser.id);
 
             if (otherParticipantIds.length === 0) return;
-
             const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
-
             try {
-
                 const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
                 if (response.status !== 200) throw new Error('Failed to fetch users');
-                
                 setTitle(response.data.map((user) => user.name).join(', '));
                 setAvatar(`${profilePicturesUrl + response.data[0].picture}`);
                 setParticipants(response.data);
-                // setReceiver(response.data[0]);
             } catch (error) {
                 console.log('Error fetching users:', error);
             }

@@ -22,7 +22,7 @@ const usersSlice = createSlice({
         addNewConnection(state, action) {
             console.log('Adding new connection:', action.payload)
             const userId = action.payload;
-            const userIndex = state.feedUsers.findIndex((user) => user.id == userId);
+            const userIndex = state.feedUsers.findIndex((user) => user.id === userId);
             if (userIndex !== -1) {
                 state.connectedUsers.push(state.feedUsers[userIndex]);
                 state.feedUsers.splice(userIndex, 1);

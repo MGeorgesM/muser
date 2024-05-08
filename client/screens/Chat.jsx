@@ -209,11 +209,11 @@ const Chat = ({ navigation, route }) => {
 
     const addConnection = async () => {
         const newConnectionId = chatParticipants.map((participant) => participant.id);
-        console.log('Adding connection:', newConnectionId);
+        console.log('Adding connection:', newConnectionId[0]);
         try {
             const response = await sendRequest(requestMethods.POST, `connections/${newConnectionId}`, null);
             if (response.status !== 200) throw new Error('Failed to add connection');
-            dispatch(addNewConnection(newConnectionId));
+            dispatch(addNewConnection(newConnectionId[0]));
         } catch (error) {
             console.error('Error adding connection:', error);
         }
