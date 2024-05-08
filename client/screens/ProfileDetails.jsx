@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
@@ -14,6 +14,7 @@ import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
 
 const ProfileDetails = ({ route }) => {
     const { userId } = route.params;
+    const { currentUser } = useUser();
     const navigation = useNavigation();
 
     const [user, setUser] = useState({});
@@ -21,6 +22,10 @@ const ProfileDetails = ({ route }) => {
 
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
     const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
+
+    const chatId = [currentUser.id, userId].sort().join('-');
+
+    console.log(chatId)
 
     useEffect(() => {
         if (userId) {
@@ -78,7 +83,10 @@ const ProfileDetails = ({ route }) => {
                         handlePress={() =>
                             navigation.navigate('Chat', {
                                 screen: 'ChatDetails',
-                                params: { chatParticipants: [{ id: user.id, name: user.name, picture: user.picture }] },
+                                params: {
+                                    id: chatId,
+                                    chatParticipants: [{ id: user.id, name: user.name, picture: user.picture }]
+                                },
                             })
                         }
                     />

@@ -95,12 +95,10 @@ const Chat = ({ navigation, route }) => {
         setChatMessages([]);
 
         const setupMessagesListener = async () => {
-            const chatId = id || createChatId();
-
             console.log('Starting listener');
-            console.log('Chat ID:', chatId);
+            console.log('Chat ID:', id);
 
-            const newChatRef = doc(fireStoreDb, 'chats', chatId);
+            const newChatRef = doc(fireStoreDb, 'chats', id);
             const messagesRef = collection(newChatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
 
@@ -129,8 +127,6 @@ const Chat = ({ navigation, route }) => {
         };
     }, [id, chatParticipants]);
 
-    const createChatId = () => [currentUser.id, chatParticipants[0].id].sort().join('-');
-
     const getRemainingConnections = async () => {
         console.log('Chat Participants:', chatParticipants);
 
@@ -139,7 +135,7 @@ const Chat = ({ navigation, route }) => {
         );
 
         setChatConnections(remainingConnections);
-        
+
         console.log(
             'Remainign Connections:',
             remainingConnections.map((connection) => {
@@ -178,12 +174,18 @@ const Chat = ({ navigation, route }) => {
     //     }
     // };
 
-    const addParticipant = async (newParticipantId) => {
-        if (!newParticipantId && participants.includes(newParticipantId)) return;
+    const addParticipant = async (chatParticipant) => {
+        const newParticipantId = chatParticipant.id;
+
+        if (!newParticipantId && participants.includes(newParticipantId)) {
+            console.log('Participant already exists in chat!');
+            return;
+        }
 
         try {
             const chatRef = doc(fireStoreDb, 'chats', id);
-            const newParticipantsList = [...participants, newParticipantId].sort();
+            const newParticipantsList = [...participants, newParticipantId];
+
             await updateDoc(chatRef, {
                 participantsIds: newParticipantsList,
             });
@@ -380,7 +382,13 @@ const Chat = ({ navigation, route }) => {
                     </View>
                 </View>
             )}
-            {connectionModalVisible && <ChatModal data={chatConnections} setModalVisible={setConnectionModalVisible} />}
+            {connectionModalVisible && (
+                <ChatModal
+                    data={chatConnections}
+                    setModalVisible={setConnectionModalVisible}
+                    handlePress={addParticipant}
+                />
+            )}
         </View>
     );
 };

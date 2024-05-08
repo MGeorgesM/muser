@@ -48,13 +48,13 @@ const ChatModal = ({ data, userInput, setUserInput, handlePress, modalVisible, s
                                 <FlatList
                                     data={data}
                                     renderItem={({ item }) => (
-                                        <BandMemberCard entity={item} handlePress={handlePress} />
+                                        <BandMemberCard entity={item} handlePress={()=>handlePress(item)} />
                                     )}
                                     keyExtractor={(item) => item.id}
                                     showsVerticalScrollIndicator={false}
                                     contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' ,gap:8 }}
                                 />
-                                <PrimaryBtn text={'Add'} marginBottom={32} handlePress={handlePress} />
+                                {/* <PrimaryBtn text={'Add'} marginBottom={32} handlePress={handlePress} /> */}
                             </>
                         ) : (
                             <Text
@@ -87,8 +87,8 @@ const styles = StyleSheet.create({
 
     modalView: {
         elevation: 2,
-        paddingTop: 32,
-        height: 0.4 * height,
+        paddingVertical: 32,
+        height: 'auto',
         paddingHorizontal: 20,
         backgroundColor: colors.bgOffDark,
         borderTopLeftRadius: utilities.borderRadius.xl,
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     },
 
     modalTitle: {
-        marginBottom: 16,
+        marginBottom: 32,
         textAlign: 'center',
         fontFamily: 'Montserrat-Bold',
         color: colors.white,
