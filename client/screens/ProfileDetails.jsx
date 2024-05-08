@@ -16,7 +16,6 @@ const ProfileDetails = ({ route }) => {
     const { userId } = route.params;
     const navigation = useNavigation();
 
-    const { currentUser } = useUser();
     const [user, setUser] = useState({});
     const [isConnected, setIsConnected] = useState(false);
 
@@ -25,9 +24,9 @@ const ProfileDetails = ({ route }) => {
 
     useEffect(() => {
         if (userId) {
-            const foundUser = feedUsers.find((user) => user.id == userId);
+            const foundUser = feedUsers.find((user) => user.id === userId);
             if (foundUser) return setUser(foundUser);
-            const foundConnectedUser = connectedUsers.find((user) => user.id == userId);
+            const foundConnectedUser = connectedUsers.find((user) => user.id === userId);
             if (foundConnectedUser) {
                 setIsConnected(true);
                 return setUser(foundConnectedUser);
@@ -79,7 +78,7 @@ const ProfileDetails = ({ route }) => {
                         handlePress={() =>
                             navigation.navigate('Chat', {
                                 screen: 'ChatDetails',
-                                params: { receiver: user },
+                                params: { chatParticipants: user },
                             })
                         }
                     />

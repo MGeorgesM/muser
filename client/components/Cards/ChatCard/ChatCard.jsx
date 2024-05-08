@@ -14,7 +14,7 @@ const ChatCard = ({ chat, navigation }) => {
     const { currentUser } = useUser();
 
     const [participants, setParticipants] = useState(chat.participantsIds);
-    const [receiver, setReceiver] = useState(null);
+    // const [receiver, setReceiver] = useState(null);
 
     const [title, setTitle] = useState(chat.chatTitle);
     const [avatar, setAvatar] = useState(null);
@@ -34,8 +34,8 @@ const ChatCard = ({ chat, navigation }) => {
                 
                 setTitle(response.data.map((user) => user.name).join(', '));
                 setAvatar(`${profilePicturesUrl + response.data[0].picture}`);
-
-                setReceiver(response.data[0]);
+                setParticipants(response.data);
+                // setReceiver(response.data[0]);
             } catch (error) {
                 console.log('Error fetching users:', error);
             }
@@ -57,7 +57,6 @@ const ChatCard = ({ chat, navigation }) => {
                     id: chat.id,
                     chatParticipants: participants,
                     chatTitle: chat.chatTitle,
-                    receiver,
                 })
             }
         >

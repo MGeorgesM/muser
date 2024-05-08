@@ -36,7 +36,7 @@ const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
 
-    const { id, chatParticipants, chatTitle, receiver } = route.params;
+    const { id, chatParticipants, chatTitle } = route.params;
 
     const [chatMessages, setChatMessages] = useState([]);
     const [participants, setParticipants] = useState(chatParticipants);
@@ -51,10 +51,12 @@ const Chat = ({ navigation, route }) => {
         navigation.setOptions({
             headerTitle: () => {
                 if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
+
                 else {
-                    const receiverName = receiver?.name;
-                    const reciverPicture = receiver?.picture;
-                    const receiverId = receiver?.id.toString();
+                    
+                    const receiverName = chatParticipants.map((participant) => participant.name).join(', ');
+                    const reciverPicture = chatParticipants[0].picture;
+                    const receiverId = chatParticipants[0].id;
 
                     return (
                         <PictureHeader
@@ -86,7 +88,7 @@ const Chat = ({ navigation, route }) => {
                 </View>
             ),
         });
-    }, [navigation, addParticipant, receiver]);
+    }, [navigation, addParticipant, chatParticipants]);
 
     useEffect(() => {
         let unsubscribe;
@@ -143,17 +145,17 @@ const Chat = ({ navigation, route }) => {
             setParticipants(participants);
         }
 
-        if (userConnections.length === 0 || Object.keys(participants).length === 0) return;
-
-        const remainingConnections = userConnections.filter((connection) =>
-            participants.every((participant) => participant.id !== connection.id)
-        );
-
-        setChatConnections(remainingConnections);
-
         console.log('User Connections:', userConnections);
         console.log('Chat Participants:', participants);
-        console.log('Remainign Connections:', remainingConnections);
+
+        if ((userConnections && userConnections.length != 0) || Object.keys(participants).length != 0) {
+            const remainingConnections = userConnections.filter((connection) =>
+                participants.every((participant) => participant.id !== connection.id)
+            );
+
+            setChatConnections(remainingConnections);
+            console.log('Remainign Connections:', remainingConnections);
+        }
     };
 
     const getMessageAvatar = (userId) => {
