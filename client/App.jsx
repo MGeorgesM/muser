@@ -1,32 +1,13 @@
-import React, { useEffect } from 'react';
-import { Platform, StatusBar, PermissionsAndroid } from 'react-native';
+import React from 'react';
+import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
 import { store } from './store/store';
 import { Provider } from 'react-redux';
 import { UserProvider, useUser } from './contexts/UserContext';
 
-import Authentication from './screens/Authentication';
 import MainTabs from './screens/MainTabs';
-import UserRole from './screens/UserRole';
-import UserInfo from './screens/UserInfo';
-import Welcome from './screens/Welcome';
-
-// import {utilities, colors} from '../styles/utilities';
-
-const Stack = createStackNavigator();
-
-const AuthenticationStack = () => {
-    return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Welcome" component={Welcome} />
-            <Stack.Screen name="Authentication" component={Authentication} />
-            <Stack.Screen name="UserRole" component={UserRole} />
-            <Stack.Screen name="UserInfo" component={UserInfo} />
-        </Stack.Navigator>
-    );
-};
+import AuthenticationStack from './navigators/AuthNavigator'
 
 const AppNavigator = () => {
     const { loggedIn } = useUser();
