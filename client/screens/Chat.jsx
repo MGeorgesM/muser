@@ -19,9 +19,9 @@ import { PlusIcon, ArrowLeft, Send as SendIcon, ChevronLeft, X, Check } from 'lu
 import { GiftedChat } from 'react-native-gifted-chat';
 import { renderBubble, renderSend, renderInputToolbar, renderComposer } from '../core/tools/chatConfigurations';
 
-import { addConnectedUser } from '../store/Users';
-import { useDispatch, useSelector } from 'react-redux';
+import { addNewConnection } from '../store/Users';
 import { useUser } from '../contexts/UserContext';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
@@ -125,11 +125,16 @@ const Chat = ({ navigation, route }) => {
                 unsubscribe();
             }
         };
-
     }, [id, chatParticipants]);
 
     const getRemainingConnections = async () => {
         console.log('Chat Participants:', chatParticipants);
+        console.log(
+            'User Connections:',
+            userConnections.map((connection) => {
+                return { id: connection.id, name: connection.name };
+            })
+        );
 
         const remainingConnections = userConnections.filter((connection) =>
             chatParticipants.every((participant) => participant.id !== connection.id)
@@ -176,7 +181,6 @@ const Chat = ({ navigation, route }) => {
     // };
 
     const addParticipant = async (newParticipant) => {
-
         const newParticipantId = newParticipant.id;
 
         if (!newParticipantId && participants.includes(newParticipantId)) {
@@ -189,7 +193,6 @@ const Chat = ({ navigation, route }) => {
 
             const newParticipantsList = [...participants, newParticipant];
             const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
-
             newParticipantsIdsList.push(currentUser.id);
 
             await updateDoc(chatRef, {
@@ -197,13 +200,10 @@ const Chat = ({ navigation, route }) => {
             });
 
             setParticipants(newParticipantsList);
-
             setConnectionModalVisible(false);
-
         } catch (error) {
             console.error('Error adding participant', error);
         }
-
         setConnectionModalVisible(false);
     };
 
@@ -213,7 +213,7 @@ const Chat = ({ navigation, route }) => {
         try {
             const response = await sendRequest(requestMethods.POST, `connections/${newConnectionId}`, null);
             if (response.status !== 200) throw new Error('Failed to add connection');
-            dispatch(addConnectedUser(newConnectionId));
+            dispatch(addNewConnection(newConnectionId));
         } catch (error) {
             console.error('Error adding connection:', error);
         }
@@ -221,11 +221,11 @@ const Chat = ({ navigation, route }) => {
 
     const createChat = async (initialMessage) => {
         try {
-
             const newChatRef = doc(fireStoreDb, 'chats', id);
             const messageRef = collection(newChatRef, 'messages');
 
             const participantsIds = participants.map((participant) => participant.id);
+            participantsIds.push(currentUser.id);
 
             const messageDocRef = await addDoc(messageRef, {
                 _id: initialMessage._id,
