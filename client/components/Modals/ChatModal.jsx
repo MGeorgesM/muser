@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     Text,
@@ -16,7 +16,9 @@ import { colors, utilities } from '../../styles/utilities';
 import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
 import PrimaryBtn from '../Elements/PrimaryBtn';
 
-const ChatModal = ({ data, userInput, setUserInput, handlePress, modalVisible, setModalVisible }) => {
+const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, input = false }) => {
+    const [userInput, setUserInput] = useState('');
+
     return (
         <Modal
             animationType="slide"
@@ -35,26 +37,29 @@ const ChatModal = ({ data, userInput, setUserInput, handlePress, modalVisible, s
                         ]}
                         onStartShouldSetResponder={() => true}
                     >
-                        {data && data.length > 0 ? (
+                        <Text style={styles.modalTitle}>{title}</Text>
+                        {input ? (
                             <>
-                                <Text style={styles.modalTitle}>Your Connections</Text>
-                                {/* <TextInput
-                            style={[utilities.inputText]}
-                            onChangeText={setUserInput}
-                            placeholderTextColor={colors.gray}
-                            value={userInput}
-                            placeholder="Enter your thoughts here..."
-                        /> */}
+                                <TextInput
+                                    style={[utilities.inputText]}
+                                    onChangeText={setUserInput}
+                                    placeholderTextColor={colors.gray}
+                                    value={userInput}
+                                    placeholder="As usual... be creative!"
+                                />
+                                <PrimaryBtn text={'Add'} marginBottom={32} handlePress={handlePress} />
+                            </>
+                        ) : data && data.length > 0 ? (
+                            <>
                                 <FlatList
                                     data={data}
                                     renderItem={({ item }) => (
-                                        <BandMemberCard entity={item} handlePress={()=>handlePress(item)} />
+                                        <BandMemberCard entity={item} handlePress={() => handlePress(item)} />
                                     )}
-                                    keyExtractor={(item) => item.id}
+                                    keyExtractor={(item) => item.id.toString()}
                                     showsVerticalScrollIndicator={false}
-                                    contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' ,gap:8 }}
+                                    contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', gap: 8 }}
                                 />
-                                {/* <PrimaryBtn text={'Add'} marginBottom={32} handlePress={handlePress} /> */}
                             </>
                         ) : (
                             <Text

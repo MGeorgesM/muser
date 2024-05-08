@@ -34,6 +34,7 @@ import ChatModal from '../components/Modals/ChatModal';
 
 const Chat = ({ navigation, route }) => {
     const dispatch = useDispatch();
+    
     const { currentUser } = useUser();
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
 
@@ -128,13 +129,13 @@ const Chat = ({ navigation, route }) => {
     }, [id, chatParticipants]);
 
     const getRemainingConnections = async () => {
-        console.log('Chat Participants:', chatParticipants);
-        console.log(
-            'User Connections:',
-            userConnections.map((connection) => {
-                return { id: connection.id, name: connection.name };
-            })
-        );
+        // console.log('Chat Participants:', chatParticipants);
+        // console.log(
+        //     'User Connections:',
+        //     userConnections.map((connection) => {
+        //         return { id: connection.id, name: connection.name };
+        //     })
+        // );
 
         const remainingConnections = userConnections.filter((connection) =>
             chatParticipants.every((participant) => participant.id !== connection.id)
@@ -142,16 +143,16 @@ const Chat = ({ navigation, route }) => {
 
         setChatConnections(remainingConnections);
 
-        console.log(
-            'Remainign Connections:',
-            remainingConnections.map((connection) => {
-                return {
-                    id: connection.id,
-                    name: connection.name,
-                    picture: connection.picture,
-                };
-            })
-        );
+        // console.log(
+        //     'Remainign Connections:',
+        //     remainingConnections.map((connection) => {
+        //         return {
+        //             id: connection.id,
+        //             name: connection.name,
+        //             picture: connection.picture,
+        //         };
+        //     })
+        // );
     };
 
     const getMessageAvatar = (userId) => {
@@ -370,7 +371,7 @@ const Chat = ({ navigation, route }) => {
                 renderActions={() => null}
             />
 
-            {bandModalVisible && (
+            {/* {bandModalVisible && (
                 <View style={styles.chatModal}>
                     <Text style={[utilities.textL, utilities.myFontMedium, utilities.textCenter]}>Form Your Band</Text>
                     <View style={styles.bandInputContainer}>
@@ -390,9 +391,11 @@ const Chat = ({ navigation, route }) => {
                         </Pressable>
                     </View>
                 </View>
-            )}
+            )} */}
+            {bandModalVisible && <ChatModal title={'Your Band'} input={true} />}
             {connectionModalVisible && (
                 <ChatModal
+                    title={'Your Connections'}
                     data={chatConnections}
                     setModalVisible={setConnectionModalVisible}
                     handlePress={addParticipant}
