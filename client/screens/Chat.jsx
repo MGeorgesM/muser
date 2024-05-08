@@ -34,7 +34,7 @@ import ChatModal from '../components/Modals/ChatModal';
 
 const Chat = ({ navigation, route }) => {
     const dispatch = useDispatch();
-    
+
     const { currentUser } = useUser();
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
 
@@ -370,29 +370,14 @@ const Chat = ({ navigation, route }) => {
                 alignTop={true}
                 renderActions={() => null}
             />
-
-            {/* {bandModalVisible && (
-                <View style={styles.chatModal}>
-                    <Text style={[utilities.textL, utilities.myFontMedium, utilities.textCenter]}>Form Your Band</Text>
-                    <View style={styles.bandInputContainer}>
-                        <TextInput
-                            style={[styles.formBandInput]}
-                            placeholder="Your band name"
-                            placeholderTextColor={colors.lightGray}
-                            value={bandName}
-                            onChangeText={(text) => setBandName(text)}
-                        />
-                        <Pressable onPress={handleFormBand} style={{ marginBottom: -8 }}>
-                            {bandName?.length > 0 ? (
-                                <Check size={32} color={colors.white} />
-                            ) : (
-                                <X size={24} color={colors.white} />
-                            )}
-                        </Pressable>
-                    </View>
-                </View>
-            )} */}
-            {bandModalVisible && <ChatModal title={'Your Band'} input={true} />}
+            {bandModalVisible && (
+                <ChatModal
+                    title={'You Band Name'}
+                    input={true}
+                    handlePress={handleFormBand}
+                    setModalVisible={setBandModalVisible}
+                />
+            )}
             {connectionModalVisible && (
                 <ChatModal
                     title={'Your Connections'}

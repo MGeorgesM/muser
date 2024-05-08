@@ -19,6 +19,8 @@ import PrimaryBtn from '../Elements/PrimaryBtn';
 const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, input = false }) => {
     const [userInput, setUserInput] = useState('');
 
+    console.log(userInput)
+
     return (
         <Modal
             animationType="slide"
@@ -47,7 +49,7 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, in
                                     value={userInput}
                                     placeholder="As usual... be creative!"
                                 />
-                                <PrimaryBtn text={'Add'} marginBottom={32} handlePress={handlePress} />
+                                <PrimaryBtn text={'Add'} marginBottom={16} handlePress={() => handlePress(userInput)} />
                             </>
                         ) : data && data.length > 0 ? (
                             <>
