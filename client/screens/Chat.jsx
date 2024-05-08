@@ -184,7 +184,7 @@ const Chat = ({ navigation, route }) => {
             setParticipants(newParticipantsList);
             setConnectionModalVisible(false);
         } catch (error) {
-            console.error('Error adding participant', error);
+            console.log('Error adding participant', error);
         }
         setConnectionModalVisible(false);
     };
@@ -197,7 +197,7 @@ const Chat = ({ navigation, route }) => {
             if (response.status !== 200) throw new Error('Failed to add connection');
             dispatch(addNewConnection(newConnectionId[0]));
         } catch (error) {
-            console.error('Error adding connection:', error);
+            console.log('Error adding connection:', error);
         }
     };
 
@@ -270,7 +270,7 @@ const Chat = ({ navigation, route }) => {
                     });
                 });
             } catch (error) {
-                console.error('Error sending message:', error);
+                console.log('Error sending message:', error);
                 setChatMessages((previousMessages) => previousMessages.slice(0, -messages.length));
             }
         }
@@ -307,7 +307,7 @@ const Chat = ({ navigation, route }) => {
                 chatTitle: bandName,
             });
         } catch (error) {
-            console.error('Error processing band formation:', error);
+            console.log('Error processing band formation:', error);
         }
 
         setBandModalVisible(false);

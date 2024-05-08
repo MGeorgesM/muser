@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useState } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, StatusBar } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 import { useNavigation } from '@react-navigation/native';
@@ -25,7 +25,7 @@ const ProfileDetails = ({ route }) => {
 
     const chatId = [currentUser.id, userId].sort().join('-');
 
-    console.log(chatId)
+    console.log(chatId);
 
     useEffect(() => {
         if (userId) {
@@ -43,55 +43,66 @@ const ProfileDetails = ({ route }) => {
 
     if (user.name)
         return (
-            <View style={utilities.flexed}>
-                <Image source={{ uri: imageUrl }} style={[styles.profileDetailsPicture]} />
-                <View style={[styles.detailContainer]}>
-                    <View
-                        style={[utilities.flexRow, utilities.alignCenter, utilities.spaceBetween, { marginRight: 20 }]}
-                    >
+            <>
+            <StatusBar hidden={true} />
+                <View style={utilities.flexed}>
+                    <Image source={{ uri: imageUrl }} style={[styles.profileDetailsPicture]} />
+                    <View style={[styles.detailContainer]}>
+                        <View
+                            style={[
+                                utilities.flexRow,
+                                utilities.alignCenter,
+                                utilities.spaceBetween,
+                                { marginRight: 20 },
+                            ]}
+                        >
+                            <View>
+                                <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12 }]}>
+                                    {user.name}
+                                </Text>
+                                <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.white }]}>
+                                    {user.instrument.name}
+                                </Text>
+                                <Text
+                                    style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}
+                                >{`${user.location.name}, Lebanon`}</Text>
+                            </View>
+                            <InstrumentIcon instrument={user.instrument} />
+                        </View>
                         <View>
-                            <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12 }]}>{user.name}</Text>
-                            <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.white }]}>
-                                {user.instrument.name}
+                            <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
+                                About Me
                             </Text>
-                            <Text
-                                style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}
-                            >{`${user.location.name}, Lebanon`}</Text>
+                            <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}>
+                                {user.about}
+                        </Text>
+                            <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
+                                My Details
+                            </Text>
+                            <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 8, gap: 4 }]}>
+                                <DetailsPill item={user?.instrument} />
+                                <DetailsPill item={user?.experience} />
+                                {user?.genres &&
+                                    user.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
+                            </View>
                         </View>
-                        <InstrumentIcon instrument={user.instrument} />
-                    </View>
-                    <View>
-                        <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
-                            About Me
-                        </Text>
-                        <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}>
-                            {user.about}
-                        </Text>
-                        <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
-                            My Details
-                        </Text>
-                        <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 8, gap: 4 }]}>
-                            <DetailsPill item={user?.instrument} />
-                            <DetailsPill item={user?.experience} />
-                            {user?.genres && user.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
-                        </View>
-                    </View>
 
-                    <PrimaryBtn
-                        text={isConnected ? 'Chat' : 'Say Hello!'}
-                        marginTop={'auto'}
-                        handlePress={() =>
-                            navigation.navigate('Chat', {
-                                screen: 'ChatDetails',
-                                params: {
-                                    id: chatId,
-                                    chatParticipants: [{ id: user.id, name: user.name, picture: user.picture }]
-                                },
-                            })
-                        }
-                    />
+                        <PrimaryBtn
+                            text={isConnected ? 'Chat' : 'Say Hello!'}
+                            marginTop={'auto'}
+                            handlePress={() =>
+                                navigation.navigate('Chat', {
+                                    screen: 'ChatDetails',
+                                    params: {
+                                        id: chatId,
+                                        chatParticipants: [{ id: user.id, name: user.name, picture: user.picture }],
+                                    },
+                                })
+                            }
+                        />
+                    </View>
                 </View>
-            </View>
+            </>
         );
 };
 

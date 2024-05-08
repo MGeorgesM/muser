@@ -18,8 +18,8 @@ class AiMatchMakingController extends Controller
         $apiKey = getenv('OPENAI_API_KEY');
         $client = OpenAI::client($apiKey);
 
-        $show_descrpition = $request->input('descrpition');
-        $band_name = $request->input('band_name');
+        $show_descrpition = $request->description;
+        $band_name = $request->bandName;
 
         $validatedData = $request->validate([
             'message' => 'required|string'
@@ -37,24 +37,26 @@ class AiMatchMakingController extends Controller
             ]);
 
             return response()->json($result->choices[0]->message->content);
-            
         } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function getGenre(Request $request)
+    public function getGenre(string $description)
     {
         $apiKey = getenv('OPENAI_API_KEY');
         $client = OpenAI::client($apiKey);
 
-        $validatedData = $request->validate([
-            'message' => 'required|string'
-        ]);
-
         $availableGenres = Genre::all()->toArray();
         $availableGenres = json_encode($availableGenres);
+
+        if ($description  == null || $description == '') {
+            return;
+        }
+
+        $description = trim($description);
+        $description = preg_replace('/[^a-zA-Z0-9 \'\.,-]/', '', $description);
 
         try {
             $result = $client->chat()->create([
@@ -66,11 +68,11 @@ class AiMatchMakingController extends Controller
                     ],
                     [
                         'role' => 'system',
-                        'content' => "You should return the music genre you extracted from my message. The response should be formatted as a JSON object with the key 'genreId' and the value of the genre ID found in . $availableGenres . Ensure accuracy in matching and formatting to facilitate seamless integration with our system."
+                        'content' => "You should return the id of the music genre you extracted from my message in JSON with key 'id'. Ensure accuracy in matching and formatting to facilitate seamless integration with our system."
                     ],
                     [
                         'role' => 'user',
-                        'content' => $validatedData['message']
+                        'content' => $description
                     ],
                 ],
                 'response_format' => [
@@ -78,16 +80,12 @@ class AiMatchMakingController extends Controller
                 ],
             ]);
 
-            return response($result->choices[0]->message->content);
+            // return response($result->choices[0]->message->content);
 
             $response = json_decode($result->choices[0]->message->content, true);
 
-            if (!isset($response['genreIds'], $response['locationIds'], $response['instrumentIds'])) {
-                return response()->json(
-                    ['error_OpenAi' => 'Invalid response format from AI'],
-                    422
-                );
-            }
+            return $response;
+
         } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);

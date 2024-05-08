@@ -211,6 +211,6 @@ export const utilities = StyleSheet.create({
         borderColor: colors.offWhite,
         backgroundColor: '#2E2C2F20',
         padding: 16,
-        marginBottom: 14,
+        marginBottom: 12,
     },
 });

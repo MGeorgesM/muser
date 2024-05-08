@@ -54,6 +54,7 @@ const StreamView = ({ navigation, route }) => {
         if (!client || call) return;
 
         const setupCall = async () => {
+            return;
             console.log('Setting up call');
             try {
                 const call = client.call('livestream', showId);

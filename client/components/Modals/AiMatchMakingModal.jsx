@@ -14,7 +14,6 @@ import { colors, utilities } from '../../styles/utilities';
 
 import PrimaryBtn from '../Elements/PrimaryBtn';
 
-
 const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible, setModalVisible }) => {
     return (
         <Modal
@@ -28,9 +27,12 @@ const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible
             <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
                 <View style={styles.bottomStickView}>
                     <View style={styles.modalView} onStartShouldSetResponder={() => true}>
-                        <Text style={styles.modalTitle}>
-                            Your Band with <Text style={{ color: colors.primary }}>Muser Ai</Text>
-                        </Text>
+                        <View>
+                            <Text style={[styles.modalTitle, { color: colors.primary, marginBottom:-3 }]}>Muser Ai</Text>
+                            <Text style={[utilities.textCenter, utilities.myFontRegular, {marginBottom:16}]}>
+                                Your Band Formed Effortlessly
+                            </Text>
+                        </View>
                         <TextInput
                             style={[utilities.inputText]}
                             onChangeText={setUserInput}
@@ -38,7 +40,7 @@ const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible
                             value={userInput}
                             placeholder="Enter your thoughts here..."
                         />
-                        <PrimaryBtn text={'Match'} marginBottom={24} handlePress={handlePress} />
+                        <PrimaryBtn text={'Match'} marginBottom={36} handlePress={handlePress} />
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     modalView: {
         elevation: 2,
         paddingTop: 32,
-        height: 0.3 * height,
+        height: 0.35 * height,
         paddingHorizontal: 20,
         justifyContent: 'space-between',
         backgroundColor: colors.bgOffDark,
@@ -68,19 +70,9 @@ const styles = StyleSheet.create({
     },
 
     modalTitle: {
-        marginBottom: 16,
         textAlign: 'center',
         fontFamily: 'Montserrat-Bold',
         color: colors.white,
-        fontSize: 20,
-    },
-
-    modalTextInput: {
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-        borderWidth: 1,
-        borderColor: colors.white,
-        borderRadius: utilities.borderRadius.s,
-        width: '100%',
+        fontSize: 24,
     },
 });
