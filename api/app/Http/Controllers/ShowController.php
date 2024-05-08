@@ -17,7 +17,7 @@ class ShowController extends Controller
             'time' => 'required|date_format:H:i',
             'duration' => 'required|integer',
             'genre_id' => 'required|exists:genres,id',
-            'picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $show = new Show();
@@ -42,6 +42,15 @@ class ShowController extends Controller
         }
 
         $show->save();
+
+        $show = Show::with([
+            'venue:id,name',
+            'genre:id,name',
+            'band.members' => function ($query) {
+                $query->select('users.id', 'users.name', 'users.picture', 'users.instrument_id')
+                      ->with(['instrument:id,name']);
+            }
+        ])->find($show->id);
 
         return response()->json($show, 201);
     }

@@ -60,7 +60,8 @@ const StreamView = ({ navigation, route }) => {
                 await call.get();
                 call && console.log('Call set up!');
 
-                call.setCall(call);
+                setCall(call);
+                console.log(call)
             } catch (error) {
                 setVideoIsPlaying(false);
                 console.log('Error setting up Call', error);
@@ -272,8 +273,8 @@ const StreamView = ({ navigation, route }) => {
                         }}
                     >
                         <View>
-                            <Text style={[utilities.textCenter, utilities.textL, utilities.textBold]}>
-                                {`${show.band.name} Live`}
+                            <Text style={[utilities.textCenter, utilities.textL, utilities.myFontBold]}>
+                                {`${show.band.name} - Live`}
                             </Text>
                             <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
                                 {show.venue.name}

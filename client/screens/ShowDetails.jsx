@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { ChevronLeft, CircleCheckBig } from 'lucide-react-native';
 
@@ -17,12 +17,12 @@ import { addShow } from '../store/Shows';
 
 const ShowDetails = ({ route, navigation }) => {
     const { venueId, venueName } = route.params;
+
     const [switchHandler, setSwitchHandler] = useState(false);
     const [validationError, setValidationError] = useState('');
     const [selectedCardId, setSelectedCardId] = useState(null);
     const [userBands, setUserBands] = useState([]);
     const [genres, setGenres] = useState([]);
-    const hours = generateHours();
     const [showBooking, setShowBooking] = useState({
         date: '',
         time: '',
@@ -30,19 +30,17 @@ const ShowDetails = ({ route, navigation }) => {
         band_id: 1,
         venue_id: venueId,
         picture: '',
-        genre: '',
+        genre_id: '',
     });
 
+    const hours = generateHours();
     const dispatch = useDispatch();
-
-    console.log('showbooking', showBooking);
 
     useEffect(() => {
         const getUserBands = async () => {
             try {
                 const response = await sendRequest(requestMethods.GET, 'bands/me', null);
                 if (response.status !== 200) throw new Error('Failed to fetch user bands');
-                console.log(response.data);
                 setUserBands(response.data);
             } catch (error) {
                 console.log('Error fetching user bands:', error);
@@ -53,7 +51,6 @@ const ShowDetails = ({ route, navigation }) => {
             try {
                 const response = await sendRequest(requestMethods.GET, 'genres', null);
                 if (response.status !== 200) throw new Error('Failed to fetch genres');
-                console.log(response.data);
                 setGenres(response.data);
             } catch (error) {
                 console.log('Error fetching genres:', error);
@@ -102,21 +99,25 @@ const ShowDetails = ({ route, navigation }) => {
         });
     };
 
-    const handleProceed = () => {
+    const handleCreateShow = async () => {
         setValidationError(null);
         const userInputValid = validateForm();
         if (!userInputValid) return;
 
         try {
-            const response = sendRequest(requestMethods.POST, 'shows', showBooking);
+            const response = await sendRequest(requestMethods.POST, 'shows', showBooking);
             if (response.status !== 201) throw new Error('Failed to create show');
             console.log('Show created:', response.data);
             dispatch(addShow(response.data));
+            setSwitchHandler(true);
         } catch (error) {
-            console.log('Error creating show:', error);
+            console.log('Error creating show:', error.message);
             setValidationError('Failed to create show');
         }
-        setSwitchHandler(true);
+    };
+
+    const handleProceed = () => {
+        switchHandler ? navigation.goBack() : handleCreateShow();
     };
 
     if (userBands)
@@ -148,11 +149,11 @@ const ShowDetails = ({ route, navigation }) => {
                             <ProfileDetailsPicker
                                 items={genres}
                                 label={'Main Genre'}
-                                selectedValue={showBooking.genre}
+                                selectedValue={showBooking.genre_id}
                                 onValueChange={(value) =>
                                     setShowBooking((prev) => ({
                                         ...prev,
-                                        genre: value,
+                                        genre_id: value,
                                     }))
                                 }
                             />
@@ -197,12 +198,12 @@ const ShowDetails = ({ route, navigation }) => {
                 ) : (
                     <View style={[styles.overviewContainer, utilities.flexed, utilities.center, { gap: 16 }]}>
                         <CircleCheckBig size={64} color={colors.primary} />
-                        <Text style={[utilities.textL, utilities.myFontMedium]}>Show successfully created!</Text>
+                        <Text style={[utilities.textL, utilities.myFontMedium]}>It's Showtime!'</Text>
                     </View>
                 )}
                 <View style={{ backgroundColor: colors.bgDark, paddingHorizontal: 20 }}>
                     {validationError && <Text style={[utilities.errorText]}>{validationError}</Text>}
-                    <PrimaryBtn text="Confirm" handlePress={handleProceed} />
+                    <PrimaryBtn text={switchHandler ? 'Close' : 'Confirm'} handlePress={handleProceed} />
                 </View>
             </View>
         );
