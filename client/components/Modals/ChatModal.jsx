@@ -46,7 +46,7 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, in
                                     value={userInput}
                                     placeholder="As usual... be creative!"
                                 />
-                                <PrimaryBtn text={'Add'} marginBottom={16} handlePress={() => handlePress(userInput)} />
+                                <PrimaryBtn text={'Form Band!'} marginBottom={16} handlePress={() => handlePress(userInput)} />
                             </>
                         ) : data && data.length > 0 ? (
                             <>

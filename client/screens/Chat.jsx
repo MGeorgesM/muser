@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
-import { TouchableOpacity, View, StyleSheet, Dimensions, Text, Pressable, TextInput } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Dimensions, Text, Pressable } from 'react-native';
 
 import { fireStoreDb } from '../config/firebase';
 import {
@@ -10,14 +10,13 @@ import {
     addDoc,
     serverTimestamp,
     doc,
-    getDoc,
     setDoc,
     updateDoc,
 } from 'firebase/firestore';
 
-import { PlusIcon, ArrowLeft, Send as SendIcon, ChevronLeft, X, Check } from 'lucide-react-native';
+import { PlusIcon, ChevronLeft } from 'lucide-react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
-import { renderBubble, renderSend, renderInputToolbar, renderComposer } from '../core/tools/chatConfigurations';
+import { renderBubble, renderSend, renderInputToolbar } from '../core/tools/chatConfigurations';
 
 import { addNewConnection } from '../store/Users';
 import { useUser } from '../contexts/UserContext';
@@ -55,11 +54,10 @@ const Chat = ({ navigation, route }) => {
                     const receiverName = participants?.map((participant) => participant.name).join(', ');
                     const reciverPicture = participants[0].picture;
                     const receiverId = participants[0].id;
-
                     return (
                         <PictureHeader
                             picture={participants.length > 1 ? null : reciverPicture}
-                            name={truncateText(receiverName)}
+                            name={truncateText(receiverName, 20)}
                             handlePress={() =>
                                 navigation.navigate('Feed', {
                                     screen: 'ProfileDetails',
@@ -86,7 +84,7 @@ const Chat = ({ navigation, route }) => {
                 </View>
             ),
         });
-    }, [participants]);
+    }, [id, participants]);
 
     useEffect(() => {
         let unsubscribe;
@@ -163,21 +161,6 @@ const Chat = ({ navigation, route }) => {
 
         return null;
     };
-
-    // getReceiverPicture = (userId) => {
-    //     console.log('getting receivers pictures', userId);
-
-    //     if (userId === currentUser.id) return null;
-
-    //     if (receiver && receiver.length > 1) {
-    //         let picture = null;
-    //         const receiverUser = receiver?.find((user) => user.id === userId);
-    //         if (receiverUser) {
-    //             picture = `${profilePicturesUrl + receiverUser.picture}`;
-    //             return picture;
-    //         }
-    //     }
-    // };
 
     const addParticipant = async (newParticipant) => {
         const newParticipantId = newParticipant.id;
@@ -294,60 +277,34 @@ const Chat = ({ navigation, route }) => {
     });
 
     const handleFormBand = async (bandName) => {
-        if (bandName.length === 0) return;
-
-        console.log('Forming band with name:', bandName);
-        console.log('Forming band with participants', participants);
-        
-        const chatRef = doc(fireStoreDb, 'chats', id);
-        // return
-
-        // const chatSnapshot = await getDoc(chatRef);
-        // if (!chatSnapshot.exists()) {
-        //     console.log('Chat document does not exist!');
-        //     return;
-        // }
-
-        // const chatData = chatSnapshot.data();
-        // const chatParticipantsIds = chatData.participantsIds;
-
+        if (bandName.length === 0 || participants.length === 0) return;
 
         const participantsIds = participants.map((participant) => participant.id);
         participantsIds.push(currentUser.id);
 
-        console.log('Using these participants IDs for forming the band:', participantsIds);
-
-        return;
-        
         try {
             const response = await sendRequest(requestMethods.POST, `bands`, {
                 name: bandName,
-                members: chatParticipantsIds,
+                members: participantsIds,
             });
 
             if (response.status !== 201) throw new Error('Failed to create band');
-            console.log('Band created:', response.data);
-            await updateDoc(chatRef, {
-                chatTitle: bandName,
-            });
 
-            const messageRef = collection(chatRef, 'messages');
             const messageData = {
                 _id: `${currentUser.id}-${Date.now()}-${bandName}`,
-                text: `${currentUser.name} has formed the band ${bandName}!`,
+                text: `We have formed the band ${bandName}!`,
                 createdAt: serverTimestamp(),
-                userId: currentUser.id,
+                user: {
+                    _id: currentUser.id,
+                    avatar: getMessageAvatar(currentUser.id),
+                },
             };
 
-            const messageDocRef = await addDoc(messageRef, messageData);
+            onSend([messageData]);
 
+            const chatRef = doc(fireStoreDb, 'chats', id);
             await updateDoc(chatRef, {
-                lastMessage: {
-                    messageId: messageDocRef.id,
-                    text: messageData.text,
-                    createdAt: serverTimestamp(),
-                    userId: currentUser.id,
-                },
+                chatTitle: bandName,
             });
         } catch (error) {
             console.error('Error processing band formation:', error);
@@ -363,15 +320,14 @@ const Chat = ({ navigation, route }) => {
                 onSend={(messages) => onSend(messages)}
                 user={{
                     _id: currentUser.id,
-                    // avatar: null,
+                    avatar: currentUser.picture,
                 }}
+                showUserAvatar={false}
                 renderBubble={renderBubble}
-                inverted={true}
                 renderSend={renderSend}
                 renderInputToolbar={renderInputToolbar}
                 messagesContainerStyle={{ backgroundColor: colors.bgDark, paddingVertical: 8 }}
                 alignTop={true}
-                renderActions={() => null}
             />
             {bandModalVisible && (
                 <ChatModal

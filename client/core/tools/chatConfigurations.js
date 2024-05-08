@@ -9,23 +9,35 @@ export function renderBubble(props) {
         <Bubble
             {...props}
             wrapperStyle={{
+    
                 right: {
-                    backgroundColor: '#2E2E2E',
+                    backgroundColor: colors.bgOffDark,
                     borderRadius: 12,
                     borderTopEndRadius: 0,
+                    marginBottom:2,
+
                 },
                 left: {
-                    backgroundColor: '#D9D9D9',
+                    backgroundColor: colors.bglightest,
                     borderRadius: 12,
                     borderTopLeftRadius: 0,
+                    marginBottom:2,
                 },
             }}
             textStyle={{
                 right: {
-                    color: '#fff',
+                    color: colors.white,
                 },
                 left: {
-                    color: '#1E1E1E',
+                    color: colors.bgDark,
+                },
+            }}
+            timeTextStyle={{
+                right: {
+                    color: colors.gray,
+                },
+                left: {
+                    color: colors.darkGray,
                 },
             }}
         />
