@@ -10,7 +10,7 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import FeedMemberCard from '../components/Cards/FeedMemberCard/FeedMemberCard';
 
 import { colors } from '../styles/utilities';
-import { SearchIcon } from 'lucide-react-native';
+import { Mail } from 'lucide-react-native';
 
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
@@ -48,7 +48,7 @@ const Feed = ({ navigation }) => {
                         justifyContent: 'center',
                     }}
                 >
-                    <SearchIcon size={20} color="white" />
+                    <Mail size={20} color="white" />
                 </View>
             ),
             headerStyle: {

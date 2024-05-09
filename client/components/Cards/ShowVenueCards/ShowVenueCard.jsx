@@ -23,17 +23,10 @@ const ShowVenueCard = ({ entity, handlePress }) => {
             {band && (
                 <View style={styles.avatarsDisplay}>
                     {band.members.map((member) => (
-                        <Image
-                            key={member.id}
-                            source={{ uri: profilePicturesUrl + member.picture }}
-                            style={{
-                                width: 32,
-                                height: 32,
-                                borderRadius: 16,
-                                borderColor: colors.bglightest,
-                                borderWidth: 0.5,
-                            }}
-                        />
+                        <View key={member.id} style={styles.avatarContainer}>
+                            <Image source={{ uri: profilePicturesUrl + member.picture }} style={styles.avatarImage} />
+                            <View style={styles.avatarOverlay} />
+                        </View>
                     ))}
                 </View>
             )}
@@ -73,7 +66,26 @@ const styles = StyleSheet.create({
         top: 12,
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 6,
+    },
+    avatarContainer: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        overflow: 'hidden',
+        marginRight: 6,
+    },
+    avatarImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 16,
+    },
+    avatarOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
     },
     entityName: {
         color: 'white',

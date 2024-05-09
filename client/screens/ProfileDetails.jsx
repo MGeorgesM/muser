@@ -44,7 +44,7 @@ const ProfileDetails = ({ route }) => {
     if (user.name)
         return (
             <>
-            <StatusBar hidden={true} />
+                <StatusBar hidden={true} />
                 <View style={utilities.flexed}>
                     <Image source={{ uri: imageUrl }} style={[styles.profileDetailsPicture]} />
                     <View style={[styles.detailContainer]}>
@@ -60,14 +60,16 @@ const ProfileDetails = ({ route }) => {
                                 <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12 }]}>
                                     {user.name}
                                 </Text>
-                                <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.white }]}>
+                                <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}>
                                     {user.instrument.name}
                                 </Text>
                                 <Text
                                     style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}
                                 >{`${user.location.name}, Lebanon`}</Text>
                             </View>
-                            <InstrumentIcon instrument={user.instrument} />
+                            <View style={{ marginTop: 12 }}>
+                                <InstrumentIcon instrument={user.instrument} />
+                            </View>
                         </View>
                         <View>
                             <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
@@ -75,7 +77,7 @@ const ProfileDetails = ({ route }) => {
                             </Text>
                             <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}>
                                 {user.about}
-                        </Text>
+                            </Text>
                             <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
                                 My Details
                             </Text>
