@@ -259,7 +259,7 @@ const UserInfo = ({ navigation }) => {
                 </View>
             </View>
                 <Text style={styles.errorText}>{error}</Text>
-                <PrimaryBtn text="Register" handlePress={handleSignUp} marginBottom={0}/>
+                <PrimaryBtn text="Register" handlePress={handleSignUp} marginBottom={36}/>
             {/* <View style={styles.bottomInnerContainer}>
             </View> */}
         </View>

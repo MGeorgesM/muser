@@ -16,7 +16,7 @@ const Profile = ({ navigation }) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle:'Profile',
+            headerTitle: 'Profile',
         });
     }, [navigation]);
 
@@ -32,7 +32,9 @@ const Profile = ({ navigation }) => {
             </View>
             <View style={styles.profileNameSecton}>
                 <Text style={[utilities.textL, utilities.myFontBold]}>{currentUser.name}</Text>
-                <Text style={[utilities.textM, utilities.myFontRegular, {color:colors.gray}]}>{currentUser.email}</Text>
+                <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
+                    {currentUser.email}
+                </Text>
             </View>
             <View style={styles.profileDetailsSection}>
                 <Text style={[utilities.textM, utilities.myFontMedium]}>Bio</Text>
@@ -45,13 +47,15 @@ const Profile = ({ navigation }) => {
                 >
                     {currentUser.about}
                 </Text>
-                {/* <Text style={[utilities.textM, utilities.myFontMedium]}>My Details</Text>
-                <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 16, gap: 4 }]}>
-                    <DetailsPill item={currentUser?.instrument} />
-                    <DetailsPill item={currentUser?.experience} />
-                    {currentUser?.genres &&
-                        currentUser.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
-                </View> */}
+                <Text style={[utilities.textM, utilities.myFontMedium]}>My Details</Text>
+                {currentUser && currentUser.role.id === 1 && (
+                    <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 16, gap: 4 }]}>
+                        <DetailsPill item={currentUser?.instrument} />
+                        <DetailsPill item={currentUser?.experience} />
+                        {currentUser?.genres &&
+                            currentUser.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
+                    </View>
+                )}
             </View>
             <View style={styles.editProfileModal}>
                 <SettingsCard iconComponent={<UserRoundCog color={'white'} />} text={'Edit Profile'} />
@@ -74,7 +78,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'relative',
         height: height * 0.11,
-        backgroundColor: colors.primary,
+        backgroundColor: colors.bgDarkest,
     },
 
     profilePicture: {

@@ -3,12 +3,12 @@ import { StyleSheet, Text, View, Pressable, Icon } from 'react-native';
 
 import { colors } from '../../../styles/utilities';
 
-import { AudioWaveform } from 'lucide-react-native';
+import { BrainCog } from 'lucide-react-native';
 
 const FloatingActionButton = ({ text, icon, handlePress }) => {
     return (
         <Pressable style={styles.fab} onPress={handlePress}>
-            {!text ? <AudioWaveform size={24} color={colors.white} /> : <Text style={styles.fabText}>{text}</Text>}
+            {!text ? <BrainCog size={24} color={colors.white} /> : <Text style={styles.fabText}>{text}</Text>}
         </Pressable>
     );
 };

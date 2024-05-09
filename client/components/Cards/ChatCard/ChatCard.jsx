@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
 import { useUser } from '../../../contexts/UserContext';
 
-import { formatDate } from '../../../core/tools/formatDate';
+import { formatDate, truncateText } from '../../../core/tools/formatDate';
 import { colors, utilities } from '../../../styles/utilities';
 
 import { defaultAvatar } from '../../../core/tools/apiRequest';
@@ -60,7 +60,7 @@ const ChatCard = ({ chat, navigation }) => {
                         {title || 'Chat'}
                     </Text>
                     <Text style={[utilities.textXS, utilities.myFontRegular, { color: colors.gray }]}>
-                        {chat.lastMessage.text}
+                        {truncateText(chat.lastMessage.text)}
                     </Text>
                 </View>
             </View>

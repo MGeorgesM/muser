@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList, Text, StatusBar } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 
@@ -52,19 +52,22 @@ const ChatOverview = ({ navigation }) => {
         return () => unsubscribe;
     }, [currentUser]);
 
-    return isLoading ? (
+    return isLoading || (chats && chats.length === 0) ? (
         <View style={[utilities.container, { backgroundColor: colors.bgDark }]}>
             <LoadingScreen message={chats.length === 0 ? 'Start Connecting!' : null} />
         </View>
     ) : (
-        <View style={[utilities.darkContainer]}>
-            <FlatList
-                style={[utilities.flexed]}
-                data={chats}
-                renderItem={({ item }) => <ChatCard chat={item} navigation={navigation} />}
-                keyExtractor={(item) => item.id}
-            />
-        </View>
+        <>
+        <StatusBar hidden={false} barStyle={'light-content'} />
+            <View style={[utilities.darkContainer]}>
+                <FlatList
+                    style={[utilities.flexed]}
+                    data={chats}
+                    renderItem={({ item }) => <ChatCard chat={item} navigation={navigation} />}
+                    keyExtractor={(item) => item.id}
+                />
+            </View>
+        </>
     );
 };
 

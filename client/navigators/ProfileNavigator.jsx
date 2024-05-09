@@ -19,7 +19,7 @@ const {handleSignOut} = useUser();
         <ProfileStack.Navigator
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: colors.primary,
+                    backgroundColor: colors.bgDarkest,
                     shadowColor: 'transparent',
                     elevation: 0,
                     height: 128,

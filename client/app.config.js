@@ -22,6 +22,7 @@ export default {
                 foregroundImage: './assets/adaptive-icon.png',
                 backgroundColor: '#ffffff',
             },
+            googleServicesFile: './google-services.json',
             package: 'com.sef.muser',
         },
         web: {
