@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-between',
         paddingHorizontal: 20,
-        paddingTop: 80,
+        paddingTop: 64,
         backgroundColor: colors.bgDark,
     },
     headerContainer: {
@@ -106,7 +106,6 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 16,
-        marginBottom: 16,
     },
 
     headerProfile: {

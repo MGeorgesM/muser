@@ -100,6 +100,18 @@ const Feed = ({ navigation }) => {
         handleAiMatchMaking();
     };
 
+    const renderItem = ({ item, index }) => {
+        const isLastItem = index === users.length - 1;
+        const isOddTotal = users.length % 2 !== 0;
+    
+        return (
+            <>
+                <FeedMemberCard key={item.id} user={item} navigation={navigation} />
+                {isLastItem && isOddTotal && <View style={{ width: '50%' }} />}
+            </>
+        );
+    };
+
     return (users && users.length === 0) || isLoading ? (
         <LoadingScreen />
     ) : (
@@ -107,9 +119,7 @@ const Feed = ({ navigation }) => {
             <View style={styles.listContainer}>
                 <FlatList
                     data={users}
-                    renderItem={({ item, i }) => {
-                        return <FeedMemberCard key={item.id} user={item} navigation={navigation} />;
-                    }}
+                    renderItem={renderItem}
                     keyExtractor={(item) => item.id.toString()}
                     numColumns={2}
                     style={{ flex: 1 }}

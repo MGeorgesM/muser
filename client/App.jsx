@@ -16,7 +16,7 @@ const AppNavigator = () => {
 };
 
 const App = () => {
-    
+
     async function requestUserPermission() {
         const authStatus = await messaging().requestPermission();
         const enabled =
@@ -36,7 +36,7 @@ const App = () => {
     useEffect(() => {
         requestUserPermission();
         getToken();
-    });
+    },[]);
 
     return (
         <Provider store={store}>

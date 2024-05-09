@@ -8,6 +8,7 @@
      <item name="android:navigationBarColor">#121212</item>
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="android:autofilledHighlight">@drawable/autofill_highlight</item>
   </style>
   <style name="ResetEditText" parent="@android:style/Widget.EditText">
     <item name="android:padding">0dp</item>
