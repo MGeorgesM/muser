@@ -29,6 +29,7 @@ export default {
             favicon: './assets/favicon.png',
         },
         plugins: [
+            '@react-native-firebase/app',
             'expo-build-properties',
             ['@stream-io/video-react-native-sdk'],
             [

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
@@ -13,6 +13,7 @@ import SettingsCard from '../components/Cards/SettingsCard/SettingsCard';
 
 const Profile = ({ navigation }) => {
     const { currentUser } = useUser();
+    const [userInfo, setUserInfo] = useState(currentUser)
 
     useLayoutEffect(() => {
         navigation.setOptions({

@@ -180,7 +180,7 @@ const UserInfo = ({ navigation }) => {
 
                     <Text style={styles.headerProfile}>Complete Your Profile</Text>
                 </View>
-                <View style={[styles.addPhotoPrompt, { marginVertical: selectedPicture ? 16 : 48 }]}>
+                <View style={[styles.addPhotoPrompt, { marginVertical: selectedPicture ? 32 : 48 }]}>
                     {selectedPicture ? (
                         <>
                             <Image
@@ -225,21 +225,20 @@ const UserInfo = ({ navigation }) => {
                         {Object.keys(profileProperties).map((key) => {
                             if (key === 'Music Genres') {
                                 return (
-                                    // <>
-                                    //     <Text style={styles.inputTextProfile}>Music Genres</Text>
-                                    //     <View style={styles.genresContainer}>
-                                    //         {profileProperties[key] && profileProperties[key].length > 0 &&
-                                    //             profileProperties[key].map((genre) => (
-                                    //                 <DetailsPill
-                                    //                     key={genre.id.toString()}
-                                    //                     item={genre}
-                                    //                     handlePress={handlePress}
-                                    //                     isSelected={userInfo.genres.includes(genre.id)}
-                                    //                 />
-                                    //             ))}
-                                    //     </View>
-                                    // </>
-                                    null
+                                    <View key={profileProperties[key]}>
+                                        <Text style={styles.inputTextProfile}>Music Genres</Text>
+                                        <View style={styles.genresContainer}>
+                                            {profileProperties[key] && profileProperties[key].length > 0 &&
+                                                profileProperties[key].map((genre) => (
+                                                    <DetailsPill
+                                                        key={genre.id.toString()}
+                                                        item={genre}
+                                                        handlePress={handlePress}
+                                                        isSelected={userInfo.genres.includes(genre.id)}
+                                                    />
+                                                ))}
+                                        </View>
+                                    </View>
                                 );
                             }
                             return (

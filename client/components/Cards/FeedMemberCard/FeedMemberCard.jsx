@@ -6,7 +6,7 @@ import { profilePicturesUrl } from '../../../core/tools/apiRequest';
 
 import InstrumentIcon from '../../Elements/InstrumentIcon/InstrumentIcon';
 
-const FeedMemberCard = ({ user, height = 232, navigation }) => {
+const FeedMemberCard = ({ user, height = 256, navigation }) => {
     const imageUrl = `${profilePicturesUrl + user.picture}`;
     return (
         <TouchableOpacity
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     username: {
         color: 'white',
         fontSize: 16,
-        fontFamily: 'Montserrat-Bold',
+        fontFamily: 'Montserrat-Regular',
         textAlign: 'center',
     },
 });
