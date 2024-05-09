@@ -22,14 +22,14 @@ export default {
                 foregroundImage: './assets/adaptive-icon.png',
                 backgroundColor: '#ffffff',
             },
-            googleServicesFile: './google-services.json',
+            // googleServicesFile: './google-services.json',
             package: 'com.sef.muser',
         },
         web: {
             favicon: './assets/favicon.png',
         },
         plugins: [
-            '@react-native-firebase/app',
+            // '@react-native-firebase/app',
             'expo-build-properties',
             ['@stream-io/video-react-native-sdk'],
             [
