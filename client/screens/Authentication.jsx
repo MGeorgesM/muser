@@ -1,28 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import {
-    Image,
-    ScrollView,
-    Text,
-    View,
-    TouchableOpacity,
-    ImageBackground,
-    KeyboardAvoidingView,
-    Platform,
-} from 'react-native';
+import { Image, ScrollView, Text, View, Keyboard } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useUser } from '../contexts/UserContext';
 
+import { utilities } from '../styles/utilities';
+import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+
 import SignInForm from '../components/AuthenticationForms/SignInForm';
 import SignUpForm from '../components/AuthenticationForms/SignUpForm';
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { utilities } from '../styles/utilities';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const logoImg = require('../assets/logowhite.png');
 const { styles } = require('../components/AuthenticationForms/styles');
 
 const Authentication = ({ navigation }) => {
+    const [keyboardVisible, setKeyboardVisible] = useState(false);
     const [switchHandler, setSwitchHandler] = useState(false);
     const [error, setError] = useState(null);
 
@@ -41,6 +34,15 @@ const Authentication = ({ navigation }) => {
             setError(null);
         }
     }, [userInfo, switchHandler, authError]);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => setKeyboardVisible(false));
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
 
     const handleSignIn = async () => {
         setError(null);
@@ -96,38 +98,39 @@ const Authentication = ({ navigation }) => {
         <>
             <Image source={imageSource} style={styles.imageBackground} />
             <View style={[utilities.container, utilities.photoOverlayS]}>
-                <ScrollView showsHorizontalScrollIndicator={false}>
-                <View style={styles.topInnerContainer}>
-                    <Image style={styles.welcomeLogo} source={logoImg} />
-                    <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
-                    {switchHandler ? (
-                        <SignUpForm userInfo={userInfo} setUserInfo={setUserInfo} />
-                    ) : (
-                        <SignInForm userInfo={userInfo} setUserInfo={setUserInfo} />
-                    )}
-                </View>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.topInnerContainer}>
+                        <Image style={styles.welcomeLogo} source={logoImg} />
+                        <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
+                        {switchHandler ? (
+                            <SignUpForm userInfo={userInfo} setUserInfo={setUserInfo} />
+                        ) : (
+                            <SignInForm userInfo={userInfo} setUserInfo={setUserInfo} />
+                        )}
+                    </View>
                 </ScrollView>
-                <View style={styles.bottomInnerContainer}>
-                    <Text style={styles.errorText}>{error}</Text>
-                    <PrimaryBtn
-                        text={!switchHandler ? 'Log In' : 'Continue'}
-                        handlePress={handleProceed}
-                        marginBottom={0}
-                    />
-                    <Text style={styles.promptText}>
-                        {switchHandler ? 'Have an account? ' : "Don't have an account? "}
-                        <Text
-                            style={styles.promptLink}
-                            onPress={() => {
-                                setSwitchHandler(!switchHandler);
-                                setError(null);
-                            }}
-                        >
-                            {switchHandler ? 'Log In' : 'Register'}
+                {!keyboardVisible && (
+                    <View style={styles.bottomInnerContainer}>
+                        <Text style={styles.errorText}>{error}</Text>
+                        <PrimaryBtn
+                            text={!switchHandler ? 'Log In' : 'Continue'}
+                            handlePress={handleProceed}
+                            marginBottom={0}
+                        />
+                        <Text style={styles.promptText}>
+                            {switchHandler ? 'Have an account? ' : "Don't have an account? "}
+                            <Text
+                                style={styles.promptLink}
+                                onPress={() => {
+                                    setSwitchHandler(!switchHandler);
+                                    setError(null);
+                                }}
+                            >
+                                {switchHandler ? 'Log In' : 'Register'}
+                            </Text>
                         </Text>
-                    </Text>
-                </View>
-                {/* </View> */}
+                    </View>
+                )}
             </View>
         </>
     );

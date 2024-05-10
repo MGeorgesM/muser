@@ -54,9 +54,10 @@ export const styles = StyleSheet.create({
         width: 140,
         height: 140,
         alignSelf: 'center',
+        objectFit: 'contain',
     },
     topInnerContainer: {
-        flex: 1,
+        flex: 1,        
         marginTop: 128,
     },
     bottomInnerContainer: {
@@ -150,6 +151,6 @@ export const styles = StyleSheet.create({
         bottom:0,
         right:0,
         width: windowDimension.width,
-        height: windowDimension.height * 1.065,
+        height: windowDimension.height * 1.1,
     },
 });
