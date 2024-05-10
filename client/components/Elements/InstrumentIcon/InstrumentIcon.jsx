@@ -16,7 +16,7 @@ const InstrumentIcon = ({ instrument, color = 'white', size = 24 }) => {
             return <MicVocal color={color} size={size} />;
         case 'keyboard':
             return <KeyboardMusic color={color} size={size} />;
-        case 'brass':
+        case 'wind':
             return <TestTubeDiagonal color={color} size={size} />;
         default:
             return <Piano color={color} size={size} />;

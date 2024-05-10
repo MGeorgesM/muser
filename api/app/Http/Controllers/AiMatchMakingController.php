@@ -129,7 +129,8 @@ class AiMatchMakingController extends Controller
 
         try {
             $result = $client->chat()->create([
-                'model' => 'gpt-4-turbo-preview',
+                // 'model' => 'gpt-4-turbo-preview',
+                'model' => 'gpt-3.5-turbo-0125',
                 'messages' => [
                     // [
                     //     'role' => 'system',
@@ -254,10 +255,16 @@ class AiMatchMakingController extends Controller
             // }
         }
 
-        $matchResult = $query->get();
-
-        return $matchResult->map(function ($user) {
-            return $user->full_details;
+        $users = $query->get();
+        
+        $selectedUsers = $users->groupBy('instrument_id')->map(function ($group) {
+            return $group->sortByDesc('experience_id')->first();
         });
+
+        $fullDetails = $selectedUsers->values()->map(function ($user) {
+            return $user->fullDetails;
+        });
+    
+        return $fullDetails;
     }
 }

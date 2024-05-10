@@ -11,6 +11,8 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import { colors } from '../styles/utilities';
 import { Mail } from 'lucide-react-native';
 
+import { BrainCog, MessageCirclePlus } from 'lucide-react-native';
+
 import PictureHeader from '../components/PictureHeader/PictureHeader';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 import AiMatchMakingModal from '../components/Modals/AiMatchMakingModal';
@@ -22,6 +24,7 @@ const Feed = ({ navigation }) => {
     const [refreshing, setRefreshing] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [userInput, setUserInput] = useState('');
+    const [matchedUsers, setMatchedUsers] = useState([]);
 
     const { currentUser } = useUser();
     const dispatch = useDispatch();
@@ -95,7 +98,8 @@ const Feed = ({ navigation }) => {
 
                 return;
             }
-            dispatch(setFeedUsers(response.data));
+            // dispatch(setFeedUsers(response.data));
+            setMatchedUsers(response.data);
         } catch (error) {
             console.log('Error fetching users:', error);
         } finally {
@@ -108,10 +112,14 @@ const Feed = ({ navigation }) => {
         handleAiMatchMaking();
     };
 
+    const handleChatInititation = () => {
+        return;
+    };
+
     const renderItem = ({ item, index }) => {
         const isLastItem = index === users.length - 1;
         const isOddTotal = users.length % 2 !== 0;
-    
+
         return (
             <>
                 <FeedMemberCard key={item.id} user={item} navigation={navigation} />
@@ -120,13 +128,21 @@ const Feed = ({ navigation }) => {
         );
     };
 
+    const listData = () => {
+        if (matchedUsers && matchedUsers.length > 0) {
+            return matchedUsers;
+        } else {
+            return users;
+        }
+    };
+
     return (users && users.length === 0) || isLoading ? (
         <LoadingScreen />
     ) : (
         <>
             <View style={styles.listContainer}>
                 <FlatList
-                    data={users}
+                    data={listData()}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id.toString()}
                     numColumns={2}
@@ -153,7 +169,10 @@ const Feed = ({ navigation }) => {
                 handlePress={handleProceed}
                 setModalVisible={setModalVisible}
             />
-            <FloatingActionButton handlePress={() => setModalVisible(true)} />
+            <FloatingActionButton icon={BrainCog} handlePress={() => setModalVisible(true)} />
+            {matchedUsers && matchedUsers.length > 0 && (
+                <FloatingActionButton icon={MessageCirclePlus} handlePress={handleChatInititation} bottom={88} />
+            )}
         </>
     );
 };

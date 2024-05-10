@@ -5,10 +5,10 @@ import { colors } from '../../../styles/utilities';
 
 import { BrainCog } from 'lucide-react-native';
 
-const FloatingActionButton = ({ text, icon, handlePress }) => {
+const FloatingActionButton = ({ text, icon: Icon, handlePress, bottom = 20 }) => {
     return (
-        <Pressable style={styles.fab} onPress={handlePress}>
-            {!text ? <BrainCog size={24} color={colors.white} /> : <Text style={styles.fabText}>{text}</Text>}
+        <Pressable style={[styles.fab, { bottom: bottom }]} onPress={handlePress}>
+            {Icon ? <Icon size={24} color={colors.white} /> : <Text style={styles.fabText}>{text}</Text>}
         </Pressable>
     );
 };
@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
         elevation: 10,
         backgroundColor: colors.primary,
         position: 'absolute',
-        bottom: 20,
         right: 20,
         alignItems: 'center',
         justifyContent: 'center',

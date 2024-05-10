@@ -50,7 +50,7 @@ const ProfileDetails = ({ route }) => {
                         style={[utilities.flexRow, utilities.alignCenter, utilities.spaceBetween, { marginRight: 20 }]}
                     >
                         <View>
-                            <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12 }]}>{user.name}</Text>
+                            <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12, marginBottom:-2 }]}>{user.name}</Text>
                             <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}>
                                 {user.instrument.name}
                             </Text>
@@ -72,7 +72,7 @@ const ProfileDetails = ({ route }) => {
                         <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
                             My Details
                         </Text>
-                        <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 8, gap: 4 }]}>
+                        <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 8, gap: 4}]}>
                             <DetailsPill item={user?.instrument} />
                             <DetailsPill item={user?.experience} />
                             {user?.genres && user.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
@@ -82,6 +82,7 @@ const ProfileDetails = ({ route }) => {
                     <PrimaryBtn
                         text={isConnected ? 'Chat' : 'Say Hello!'}
                         marginTop={'auto'}
+                        marginBottom={20}
                         handlePress={() =>
                             navigation.navigate('Chat', {
                                 screen: 'ChatDetails',
@@ -102,10 +103,6 @@ export default ProfileDetails;
 const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-    // container: {
-    //     flex: 1,
-    //     overflow: 'visible',
-    // },
     profileDetailsPicture: {
         width: '100%',
         height: height * 0.6,
