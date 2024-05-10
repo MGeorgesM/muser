@@ -43,6 +43,7 @@ const Profile = ({ navigation }) => {
                 {switchHandler ? (
                     <TextInput
                         key={'about'}
+                        autoCorrect={false}
                         placeholder="Tell us about yourself!"
                         placeholderTextColor={colors.gray}
                         cursorColor={colors.primary}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\User;
 use App\Models\Location;
@@ -139,8 +140,8 @@ class AuthController extends Controller
 
     public function generateStreamToken()
     {
-        $api_key = env('STREAM_API_KEY');
-        $api_secret = env('STREAM_API_SECRET');
+        $api_key = 'cpt9ax3gakj3';
+        $api_secret = 'zarnj2z22k3w5av4byqfe24c5h97htfb8arc8cghds777ytthxwqcrenbut8pgm5';
 
         $serverClient = new Client($api_key, $api_secret);
 

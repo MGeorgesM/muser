@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TextInput, Image, TouchableOpacity, View, StyleSheet, Pressable } from 'react-native';
+import { Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 import * as ImagePicker from 'expo-image-picker';
 
 import { useUser } from '../contexts/UserContext';
-import { colors, utilities } from '../styles/utilities';
+import { colors } from '../styles/utilities';
 import { requestMethods, sendRequest } from '../core/tools/apiRequest';
 
-import { CirclePlus, Plus, ArrowLeft, ChevronLeft } from 'lucide-react-native';
+import { CirclePlus, ChevronLeft } from 'lucide-react-native';
 
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
@@ -26,6 +27,7 @@ const UserInfo = ({ navigation }) => {
 
     const { userInfo, setUserInfo, setLoggedIn, setCurrentUser, loggedIn } = useUser();
 
+    
     useEffect(() => {
         const getProperties = async () => {
             try {
@@ -41,6 +43,14 @@ const UserInfo = ({ navigation }) => {
                 console.error('Error getting properties:', error);
             }
         };
+        const setNavigationBarColor = async () => {
+            try {
+                await SystemNavigationBar.setNavigationColor(colors.bgDark);
+            } catch (error) {
+                console.error('Failed to change system navigation bar color:', error);
+            }
+        };
+        setNavigationBarColor();
         getProperties();
     }, []);
 
@@ -228,7 +238,8 @@ const UserInfo = ({ navigation }) => {
                                     <View key={profileProperties[key]}>
                                         <Text style={styles.inputTextProfile}>Music Genres</Text>
                                         <View style={styles.genresContainer}>
-                                            {profileProperties[key] && profileProperties[key].length > 0 &&
+                                            {profileProperties[key] &&
+                                                profileProperties[key].length > 0 &&
                                                 profileProperties[key].map((genre) => (
                                                     <DetailsPill
                                                         key={genre.id.toString()}
@@ -258,8 +269,8 @@ const UserInfo = ({ navigation }) => {
                     </View>
                 </View>
             </View>
-                <Text style={styles.errorText}>{error}</Text>
-                <PrimaryBtn text="Register" handlePress={handleSignUp} marginBottom={36}/>
+            <Text style={styles.errorText}>{error}</Text>
+            <PrimaryBtn text="Register" handlePress={handleSignUp} marginBottom={56} />
             {/* <View style={styles.bottomInnerContainer}>
             </View> */}
         </View>

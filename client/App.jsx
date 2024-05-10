@@ -19,7 +19,7 @@ const App = () => {
         <Provider store={store}>
             <NavigationContainer>
                 <UserProvider>
-                    <StatusBar translucent={true} style='auto' />
+                    <StatusBar translucent={true} style='light' />
                     <AppNavigator />
                 </UserProvider>
             </NavigationContainer>

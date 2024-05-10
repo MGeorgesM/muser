@@ -22,13 +22,16 @@ class MusicianGenresTableSeed extends Seeder
         foreach ($musicians as $musician) {
 
             if (str_contains($musician->picture, 'modern')) {
+
                 $filteredGenres = $genres->whereNotIn('id', $excludedGenreIds);
             } elseif (str_contains($musician->picture, 'classical')) {
-                $filteredGenres = $genres->whereIn('name', ['Classical']);
+
+                $filteredGenres = $genres->whereNotIn('id', $excludedGenreIds);
             } else {
 
                 $filteredGenres = $genres->whereNotIn('name', ['Classical']);
             }
+
 
             if ($filteredGenres->isEmpty()) {
                 continue;
@@ -39,6 +42,7 @@ class MusicianGenresTableSeed extends Seeder
                 'musician_id' => $musician->id,
                 'genre_id' => $genre->id
             ]);
+
 
             if ($filteredGenres->count() > 1) {
                 $additionalGenres = $filteredGenres->where('id', '!=', $genre->id)->random(rand(0, min(3, $filteredGenres->count() - 1)));
