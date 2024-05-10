@@ -13,7 +13,7 @@ import SettingsCard from '../components/Cards/SettingsCard/SettingsCard';
 
 const Profile = ({ navigation }) => {
     const { currentUser } = useUser();
-    const [switchHandler, setSwitchHandler] = useState(true);
+    const [switchHandler, setSwitchHandler] = useState(false);
     const [userInfo, setUserInfo] = useState(currentUser);
 
     useLayoutEffect(() => {

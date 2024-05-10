@@ -1,14 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View, Pressable, Icon } from 'react-native';
+import { StyleSheet, Text, Pressable, ActivityIndicator } from 'react-native';
 
 import { colors } from '../../../styles/utilities';
 
-import { BrainCog } from 'lucide-react-native';
-
-const FloatingActionButton = ({ text, icon: Icon, handlePress, bottom = 20, primary = true }) => {
+const FloatingActionButton = ({ text, icon: Icon, handlePress, bottom = 20, primary = true, isLoading }) => {
     return (
-        <Pressable style={[styles.fab, { bottom: bottom, backgroundColor: primary ? colors.primary : colors.bglightest }]} onPress={handlePress}>
-            {Icon ? <Icon size={24} color={primary ? colors.white : colors.primary} /> : <Text style={styles.fabText}>{text}</Text>}
+        <Pressable
+            style={[styles.fab, { bottom: bottom, backgroundColor: primary ? colors.primary : colors.bglightest }]}
+            onPress={handlePress}
+        >
+            {isLoading ? (
+                <ActivityIndicator size="small" color={colors.white} />
+            ) : (
+                <Icon size={24} color={primary ? colors.white : colors.primary} />
+            )}
         </Pressable>
     );
 };

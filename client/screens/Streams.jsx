@@ -37,7 +37,7 @@ const Streams = ({ navigation }) => {
         };
 
         getShows();
-    }, [userIsVenue]);
+    }, [currentUser]);
 
     const handleCardPress = (show) => {
         userIsVenue

@@ -41,24 +41,24 @@ const StreamBroadcast = ({ navigation, route }) => {
         setViewer(false);
     };
 
-    const joinCall = async () => {
-        console.log('Joining call');
+    // const joinCall = async () => {
+    //     console.log('Joining call');
 
-        if (!client) {
-            console.log('No client found');
-            return;
-        }
-        setViewer(true);
-        console.log('Client Found!');
+    //     if (!client) {
+    //         console.log('No client found');
+    //         return;
+    //     }
+    //     setViewer(true);
+    //     console.log('Client Found!');
 
-        try {
-            const call = client.call('livestream', showIdString);
-            await call.join({ create: true });
-            setCall(call);
-        } catch (error) {
-            console.error('Error joining call:', error);
-        }
-    };
+    //     try {
+    //         const call = client.call('livestream', showIdString);
+    //         await call.join({ create: true });
+    //         setCall(call);
+    //     } catch (error) {
+    //         console.error('Error joining call:', error);
+    //     }
+    // };
 
     if (call === null)
         return (

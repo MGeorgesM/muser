@@ -163,7 +163,7 @@ const Feed = ({ navigation }) => {
         }
     };
 
-    return (users && users.length === 0) || isLoading ? (
+    return (users && users.length === 0) ? (
         <LoadingScreen />
     ) : (
         <>
@@ -196,7 +196,7 @@ const Feed = ({ navigation }) => {
                 handlePress={handleProceed}
                 setModalVisible={setModalVisible}
             />
-            <FloatingActionButton icon={BrainCog} handlePress={() => setModalVisible(true)} />
+            <FloatingActionButton icon={BrainCog} handlePress={() => setModalVisible(true)} isLoading={isLoading} />
             {matchedUsers && matchedUsers.length > 0 && (
                 <FloatingActionButton icon={MessageCirclePlus} handlePress={handleChatInititation} bottom={88} primary={false}/>
             )}

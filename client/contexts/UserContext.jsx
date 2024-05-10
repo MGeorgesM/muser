@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
         name: 'Ariana',
         // email: 'jhonny@mail.com',
         // email: 'anissa.auer@example.org',
-        email: 'caitlyn01@example.net',
+        email: 'fhills@example.net',
         password: 'password',
         about: '',
         picture: '',

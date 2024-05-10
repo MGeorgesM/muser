@@ -18,7 +18,9 @@ const ChatCard = ({ chat, navigation }) => {
     const [title, setTitle] = useState(chat.chatTitle);
     const [avatar, setAvatar] = useState(null);
 
-    const users = useSelector((global) => global.usersSlice.connectedUsers);
+    const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
+    const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
+
 
     useEffect(() => {
         chat && getUsersPicutresandNames();
@@ -56,10 +58,13 @@ const ChatCard = ({ chat, navigation }) => {
 
         const otherParticipantIds = chat.participantsIds.filter((id) => id !== currentUser.id);
 
+        const otherParticipants = connectedUsers.filter((user) => otherParticipantIds.includes(user.id));
         
-        const otherParticipants = users.filter((user) => otherParticipantIds.includes(user.id));
-        
-        if (otherParticipants?.length === 0) getUsersPicutresandNamesFromApi();
+        if (otherParticipants.length === 0) {
+            const otherParticipants = feedUsers.filter((user) => otherParticipantIds.includes(user.id));
+        } else {
+            getUsersPicutresandNamesFromApi()
+        }
         
         setTitle(chat.chatTitle || otherParticipants.map((user) => user.name).join(', '));
         setAvatar(chat.chatTitle ? defaultAvatar : `${profilePicturesUrl + otherParticipants[0].picture}`);
