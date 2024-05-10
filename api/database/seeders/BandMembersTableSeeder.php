@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Database\Factories\BandMemberFactory;
 use Illuminate\Database\Seeder;
 use App\Models\Band;
 use App\Models\BandMember;

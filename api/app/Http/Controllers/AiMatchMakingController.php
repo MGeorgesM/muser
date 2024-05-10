@@ -104,9 +104,6 @@ class AiMatchMakingController extends Controller
         }
     }
 
-
-
-
     public function getMatches(Request $request)
     {
         if (!auth()->user()->role_id == 2) {
@@ -134,11 +131,27 @@ class AiMatchMakingController extends Controller
 
         try {
             $result = $client->chat()->create([
-                'model' => 'gpt-3.5-turbo',
+                'model' => 'gpt-4',
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => "You're the music expert. From my message, extract up to two relevant musical genres, either directly mentioned or inferred from artists or songs mentioned. If a specified location was mentioned Identify three locations near it, also extract any instruments specified in my message or associated with mentioned musician roles only. Ensure all matches are drawn from predefined lists in the app. For example, if I say 'I need a singer and a drummer for a jazz concert in Beirut,' identify 'jazz' as the genres, 'Beirut' and nearby locations, and 'vocals' for the singer, 'percussion' for the drummer from the lists."
+                        'content' => "You're the music expert with a strong imagination. You'll receive my message that is posted on a musicians app that let's the user spontaneously form bands, my message could be related to anything in music, something the user is thinking about or planning to do or just single words."
+                    ],
+                    [
+                        'role' => 'system',
+                        'content' => "You must extract from my message what music genre i'm looking for, and find the nearest matching music genre available in the music genres list below and return it's id. My message also may not explicitly mention a music genre, in that case you must conclude it from artists or songs or anything that i've mentioned in my message and find the nearest matching music genre from the music genres list below and return it's id" 
+                    ],
+                    [
+                        'role' => 'system',
+                        'content' => "My message may specify a location from Lebanon, if so you must return this location id from the locations list below, also my message may infer a location related to me ('near me, nearby...), if so, you have to find two locations from the locations list below that are geographically close to the my location that is also mentioned below. If nothing related to location was mentioned you must ignore selecting any location from the locations list." 
+                    ],
+                    [
+                        'role' => 'system', 
+                        'content'=> 'My message may also specify a certain musical instrument, if so you must return only the closest matching instrument id from the instruments list below, my message may also mention explicility not wanting a certain instrument, you should be aware of this and avoid returning the closest instrument id from the instruments list below, if no instrument was mentioned in my message you have to return all of the instrument ids available in the instruments list below'
+                    ],
+                    [
+                        'role' => 'system',
+                        'content' => "Please provide the IDs of the two most relevant musical genres if applicable, the three nearest locations, and the IDs of any instruments you extracted from my message, all based on the provided lists. The response should be formatted as a JSON object with the keys: 'genreIds', 'locationIds', and 'instrumentIds' with value of array of IDs. Ensure accuracy in matching and formatting to facilitate seamless integration with our system."
                     ],
                     [
                         'role' => 'system',
@@ -146,19 +159,15 @@ class AiMatchMakingController extends Controller
                     ],
                     [
                         'role' => 'system',
-                        'content' => "Genres to consider: " . $availableGenres
+                        'content' => "Locations List:" . $availableLocations
                     ],
                     [
                         'role' => 'system',
-                        'content' => "Instruments to consider:  " . $availableInstruments
+                        'content' => "Music Genres List:" . $availableGenres
                     ],
                     [
                         'role' => 'system',
-                        'content' => "Please identify three locations that are geographically proximate to a specified or inferred location from my message, based on the provided list: " . $availableLocations
-                    ],
-                    [
-                        'role' => 'system',
-                        'content' => "Please provide the IDs of the two most relevant musical genres if applicable, the three nearest locations, and the IDs of any instruments you extracted from my message, all based on the provided lists. The response should be formatted as a JSON object with the keys: 'genreIds', 'locationIds', and 'instrumentIds' with value of array of IDs. Ensure accuracy in matching and formatting to facilitate seamless integration with our system."
+                        'content' => "Instruments List:" . $availableInstruments
                     ],
                     [
                         'role' => 'user',
