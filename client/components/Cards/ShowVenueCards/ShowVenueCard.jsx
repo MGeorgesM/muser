@@ -5,13 +5,21 @@ import { profilePicturesUrl, showsPicturesUrl } from '../../../core/tools/apiReq
 import { colors, utilities } from '../../../styles/utilities';
 import { formatDateString } from '../../../core/tools/formatDate';
 
-const ShowVenueCard = ({ entity, handlePress }) => {
+import { Radio } from 'lucide-react-native';
+
+const ShowVenueCard = ({ entity, handlePress, isSelected = false }) => {
     const { picture, name, location, venueType, band, date } = entity;
     const imageUrl = band ? `${showsPicturesUrl + picture}` : `${profilePicturesUrl + picture}`;
 
     return (
         <TouchableOpacity style={styles.cardContainer} onPress={handlePress}>
             <Image source={{ uri: imageUrl }} style={styles.backgroundImage} />
+            {isSelected && (
+                <View style={styles.fullOverlay}>
+                    <Radio size={48} color="white" onPress={() => handlePress(entity)} />
+                    <Text style={styles.liveText}>Go Live</Text>
+                </View>
+            )}
             <View style={styles.overlay}>
                 <View>
                     <Text style={[styles.entityName, { fontSize: band ? 18 : 20 }]}>{name || band.name}</Text>
@@ -94,5 +102,28 @@ const styles = StyleSheet.create({
     entityInfo: {
         color: 'white',
         fontFamily: 'Montserrat-Regular',
+    },
+    radioIconContainer: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: [{ translateX: -24 }, { translateY: -24 }],
+        zIndex: 10,
+    },
+    fullOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 100,
+    },
+    liveText: {
+        color: 'white',
+        fontFamily: 'Montserrat-Medium',
+        fontSize: 16,
     },
 });

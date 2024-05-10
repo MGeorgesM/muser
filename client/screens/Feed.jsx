@@ -31,7 +31,7 @@ const Feed = ({ navigation }) => {
 
     const users = useSelector((global) => global.usersSlice.feedUsers);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const showNavigationBar = async () => {
             try {
                 await SystemNavigationBar.navigationShow();

@@ -1,18 +1,14 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
-import {
-    CallingState,
-    SfuEvents,
-    useCall,
-    useCallStateHooks,
-    VideoRenderer,
-} from '@stream-io/video-react-native-sdk';
+import { CallingState, SfuEvents, useCall, useCallStateHooks, VideoRenderer } from '@stream-io/video-react-native-sdk';
 
 import inCallManager from 'react-native-incall-manager';
 
 import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop, Pause } from 'lucide-react-native';
 
 import { colors, utilities } from '../../../../styles/utilities';
+
+import { useNavigation } from '@react-navigation/native';
 
 const StreamViewer = ({ viewer = false, showName, setCall }) => {
     const call = useCall();
@@ -33,6 +29,8 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
 
     console.log('localParticipant:', localParticipant);
     console.log('remoteParticitPants', remoteParticipants);
+
+    const navigation = useNavigation();
 
     // const floatingParticipant = hasOngoingScreenShare && hasVideoTrack(currentSpeaker) && currentSpeaker;
     // const hasScreenShare = (p) => p?.publishedTracks.includes(SfuModels.TrackType.SCREEN_SHARE);
@@ -97,6 +95,9 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
         await call?.leave();
         call.off();
         setCall(null);
+        setTimeout(() => {
+            navigation.navigate('Streams');
+        }, 1500);
     };
 
     // const ViewerMode = () => {
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
     },
 
     goliveBtnContainer: {
-        backgroundColor: colors.bgDark,
+        backgroundColor: '#12121250',
         borderRadius: 32,
         padding: 12,
     },
