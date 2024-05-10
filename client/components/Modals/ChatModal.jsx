@@ -16,7 +16,7 @@ import { colors, utilities } from '../../styles/utilities';
 import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
 import PrimaryBtn from '../Elements/PrimaryBtn';
 
-const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, input = false }) => {
+const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, buttonText = 'Add', input = false }) => {
     const [userInput, setUserInput] = useState('');
     const [selectedMember, setSelectedMember] = useState(null);
 
@@ -48,7 +48,7 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, in
                         {input ? (
                             <>
                                 <TextInput
-                                    style={[utilities.inputText]}
+                                    style={[utilities.inputText, {marginBottom: 0}]}
                                     onChangeText={setUserInput}
                                     placeholderTextColor={colors.gray}
                                     value={userInput}
@@ -83,7 +83,7 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, in
                                 No Connections Yet!
                             </Text>
                         )}
-                        <PrimaryBtn text={'Form Band!'} marginBottom={16} marginTop={16} handlePress={() => handlePress(userInput)} />
+                        <PrimaryBtn text={buttonText} marginBottom={16} marginTop={16} handlePress={() => handlePress(userInput)} />
                     </View>
                 </View>
             </TouchableWithoutFeedback>

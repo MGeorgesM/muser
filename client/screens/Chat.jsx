@@ -332,6 +332,7 @@ const Chat = ({ navigation, route }) => {
             {bandModalVisible && (
                 <ChatModal
                     title={'You Band Name'}
+                    buttonText='Create Band'
                     input={true}
                     handlePress={handleFormBand}
                     setModalVisible={setBandModalVisible}
@@ -340,6 +341,7 @@ const Chat = ({ navigation, route }) => {
             {connectionModalVisible && (
                 <ChatModal
                     title={'Your Connections'}
+                    buttonText='Add'
                     data={chatConnections}
                     setModalVisible={setConnectionModalVisible}
                     handlePress={addParticipant}

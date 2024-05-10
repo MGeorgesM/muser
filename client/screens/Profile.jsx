@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, TextInput } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 
@@ -13,7 +13,8 @@ import SettingsCard from '../components/Cards/SettingsCard/SettingsCard';
 
 const Profile = ({ navigation }) => {
     const { currentUser } = useUser();
-    const [userInfo, setUserInfo] = useState(currentUser)
+    const [switchHandler, setSwitchHandler] = useState(true);
+    const [userInfo, setUserInfo] = useState(currentUser);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -39,15 +40,27 @@ const Profile = ({ navigation }) => {
             </View>
             <View style={styles.profileDetailsSection}>
                 <Text style={[utilities.textM, utilities.myFontMedium]}>Bio</Text>
-                <Text
-                    style={[
-                        utilities.textM,
-                        utilities.myFontRegular,
-                        { color: colors.gray, marginTop: 10, marginBottom: 24 },
-                    ]}
-                >
-                    {currentUser.about}
-                </Text>
+                {switchHandler ? (
+                    <TextInput
+                        key={'about'}
+                        placeholder="Tell us about yourself!"
+                        placeholderTextColor={colors.gray}
+                        cursorColor={colors.primary}
+                        style={[utilities.myFontRegular, styles.editBioInput]}
+                        value={userInfo.about}
+                        onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
+                    />
+                ) : (
+                    <Text
+                        style={[
+                            utilities.textM,
+                            utilities.myFontRegular,
+                            { color: colors.gray, marginTop: 10, marginBottom: 24 },
+                        ]}
+                    >
+                        {currentUser.about}
+                    </Text>
+                )}
                 <Text style={[utilities.textM, utilities.myFontMedium]}>My Details</Text>
                 {currentUser && currentUser.role.id === 1 && (
                     <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 16, gap: 4 }]}>
@@ -58,10 +71,14 @@ const Profile = ({ navigation }) => {
                     </View>
                 )}
             </View>
-            <View style={styles.editProfileModal}>
-                <SettingsCard iconComponent={<UserRoundCog color={'white'} />} text={'Edit Profile'} />
+            {!switchHandler && <View style={styles.editProfileModal}>
+                <SettingsCard
+                    iconComponent={<UserRoundCog color={'white'} />}
+                    text={'Edit Profile'}
+                    onPress={() => setSwitchHandler(false)}
+                />
                 <SettingsCard iconComponent={<LockKeyhole color={'white'} />} text={'Edit Login Details'} />
-            </View>
+            </View>}
         </View>
     ) : (
         <View style={[utilities.flexed, utilities.center, { backgroundColor: colors.bgDark }]}>
@@ -117,5 +134,12 @@ const styles = StyleSheet.create({
         backgroundColor: colors.bgDark,
         borderTopEndRadius: utilities.borderRadius.xl,
         borderTopLeftRadius: utilities.borderRadius.xl,
+    },
+
+    editBioInput: {
+        marginBottom: 20,
+        color: colors.lightGray,
+        borderBottomColor: colors.gray,
+        borderBottomWidth: 0.5,
     },
 });

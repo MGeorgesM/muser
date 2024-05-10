@@ -198,7 +198,7 @@ const ShowDetails = ({ route, navigation }) => {
                 ) : (
                     <View style={[styles.overviewContainer, utilities.flexed, utilities.center, { gap: 16 }]}>
                         <CircleCheckBig size={64} color={colors.primary} />
-                        <Text style={[utilities.textL, utilities.myFontMedium]}>It's Showtime!</Text>
+                        <Text style={[utilities.textL, utilities.myFontMedium]}>Your Show is Confirmed!</Text>
                     </View>
                 )}
                 <View style={{ backgroundColor: colors.bgDark, paddingHorizontal: 20 }}>

@@ -1,5 +1,5 @@
-import React, { useEffect, useId, useState } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 import { useNavigation } from '@react-navigation/native';
@@ -43,68 +43,57 @@ const ProfileDetails = ({ route }) => {
 
     if (user.name)
         return (
-            <>
-                <StatusBar hidden={true} />
-                <View style={utilities.flexed}>
-                    <Image source={{ uri: imageUrl }} style={[styles.profileDetailsPicture]} />
-                    <View style={[styles.detailContainer]}>
-                        <View
-                            style={[
-                                utilities.flexRow,
-                                utilities.alignCenter,
-                                utilities.spaceBetween,
-                                { marginRight: 20 },
-                            ]}
-                        >
-                            <View>
-                                <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12 }]}>
-                                    {user.name}
-                                </Text>
-                                <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}>
-                                    {user.instrument.name}
-                                </Text>
-                                <Text
-                                    style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}
-                                >{`${user.location.name}, Lebanon`}</Text>
-                            </View>
-                            <View style={{ marginTop: 12 }}>
-                                <InstrumentIcon instrument={user.instrument} />
-                            </View>
-                        </View>
+            <View style={utilities.flexed}>
+                <Image source={{ uri: imageUrl }} style={[styles.profileDetailsPicture]} />
+                <View style={[styles.detailContainer]}>
+                    <View
+                        style={[utilities.flexRow, utilities.alignCenter, utilities.spaceBetween, { marginRight: 20 }]}
+                    >
                         <View>
-                            <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
-                                About Me
-                            </Text>
+                            <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12 }]}>{user.name}</Text>
                             <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}>
-                                {user.about}
+                                {user.instrument.name}
                             </Text>
-                            <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
-                                My Details
-                            </Text>
-                            <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 8, gap: 4 }]}>
-                                <DetailsPill item={user?.instrument} />
-                                <DetailsPill item={user?.experience} />
-                                {user?.genres &&
-                                    user.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
-                            </View>
+                            <Text
+                                style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}
+                            >{`${user.location.name}, Lebanon`}</Text>
                         </View>
-
-                        <PrimaryBtn
-                            text={isConnected ? 'Chat' : 'Say Hello!'}
-                            marginTop={'auto'}
-                            handlePress={() =>
-                                navigation.navigate('Chat', {
-                                    screen: 'ChatDetails',
-                                    params: {
-                                        id: chatId,
-                                        chatParticipants: [{ id: user.id, name: user.name, picture: user.picture }],
-                                    },
-                                })
-                            }
-                        />
+                        <View style={{ marginTop: 12 }}>
+                            <InstrumentIcon instrument={user.instrument} />
+                        </View>
                     </View>
+                    <View>
+                        <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
+                            About Me
+                        </Text>
+                        <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}>
+                            {user.about}
+                        </Text>
+                        <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
+                            My Details
+                        </Text>
+                        <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 8, gap: 4 }]}>
+                            <DetailsPill item={user?.instrument} />
+                            <DetailsPill item={user?.experience} />
+                            {user?.genres && user.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
+                        </View>
+                    </View>
+
+                    <PrimaryBtn
+                        text={isConnected ? 'Chat' : 'Say Hello!'}
+                        marginTop={'auto'}
+                        handlePress={() =>
+                            navigation.navigate('Chat', {
+                                screen: 'ChatDetails',
+                                params: {
+                                    id: chatId,
+                                    chatParticipants: [{ id: user.id, name: user.name, picture: user.picture }],
+                                },
+                            })
+                        }
+                    />
                 </View>
-            </>
+            </View>
         );
 };
 

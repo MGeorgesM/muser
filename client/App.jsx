@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StatusBar} from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { store } from './store/store';
@@ -19,7 +19,7 @@ const App = () => {
         <Provider store={store}>
             <NavigationContainer>
                 <UserProvider>
-                    <StatusBar translucent={true} backgroundColor="transparent" barStyle={'light-content'} />
+                    <StatusBar translucent={true} style='auto' />
                     <AppNavigator />
                 </UserProvider>
             </NavigationContainer>

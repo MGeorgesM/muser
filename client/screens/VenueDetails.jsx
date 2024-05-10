@@ -6,8 +6,7 @@ import { setSelectedVenue } from '../store/Venues';
 import { utilities, colors } from '../styles/utilities';
 import { profilePicturesUrl, showsPicturesUrl } from '../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
-import { formatDateString, truncateText } from '../core/tools/formatDate'
-;
+import { formatDateString, truncateText } from '../core/tools/formatDate';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 import ShowCard from '../components/Cards/ShowCard/ShowCard';
 import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
@@ -71,6 +70,7 @@ const VenueDetails = ({ route, navigation }) => {
                 </Text>
                 {shows.length > 0 ? (
                     <FlatList
+                        style={{ marginBottom: 4 }}
                         data={!switchHandler ? shows : selectedShow.band.members}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) =>
