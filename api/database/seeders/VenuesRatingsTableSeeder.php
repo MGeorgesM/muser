@@ -12,6 +12,6 @@ class VenuesRatingsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        VenuesRatingFactory::new()->count(20)->create();
+        // VenuesRatingFactory::new()->count(20)->create();
     }
 }

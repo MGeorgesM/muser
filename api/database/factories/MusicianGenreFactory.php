@@ -17,7 +17,7 @@ class MusicianGenreFactory extends Factory
     public function definition(): array
     {
         return [
-            'musician_id' => $this->faker->numberBetween(1, 10),
+            'musician_id' => $this->faker->numberBetween(5, 24),
             'genre_id' => $this->faker->numberBetween(1, 8)
         ];
     }
