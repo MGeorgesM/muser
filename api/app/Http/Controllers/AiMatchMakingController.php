@@ -190,7 +190,7 @@ class AiMatchMakingController extends Controller
                 ],
             ]);
 
-            return response($result->choices[0]->message->content);
+            // return response($result->choices[0]->message->content);
 
             $response = json_decode($result->choices[0]->message->content, true);
 
@@ -200,10 +200,10 @@ class AiMatchMakingController extends Controller
                 return response()->json(['error_OpenAi' => 'Invalid response format from AI'], 422);
             }
 
-            $matchedUsers = $this->matchUsers($response['genreIds'], $response['locationIds'], $response['instrumentIds']);
-
+            $matchedUsers = $this->matchUsers($response['genreIds'], $response['locationIds'], $response['instrumentIds'], $response['experienceIds']);
 
             return response()->json($matchedUsers);
+
         } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
@@ -211,41 +211,52 @@ class AiMatchMakingController extends Controller
     }
 
 
-    protected function matchUsers(array $genreIds, array $locationIds, array $instrumentIds)
+    protected function matchUsers(array $genreIds, array $locationIds, array $instrumentIds, array $experienceIds)
     {
         $query = User::where('role_id', 1)->where('id', '!=', auth()->id());
 
-        $lastValidResult = $query->get();
+        // $lastValidResult = $query->get();
 
         if (!empty($genreIds)) {
             $userIdsFromGenres = MusicianGenre::whereIn('genre_id', $genreIds)->pluck('musician_id')->unique();
-            $updatedQuery = $query->whereIn('id', $userIdsFromGenres);
-            $newResult = $updatedQuery->get();
+            $query = $query->whereIn('id', $userIdsFromGenres);
+            // $newResult = $updatedQuery->get();
 
-            if ($newResult->isNotEmpty()) {
-                $lastValidResult = $newResult;
-            }
+            // if ($newResult->isNotEmpty()) {
+            //     $lastValidResult = $newResult;
+            // }
         }
 
         if (!empty($locationIds)) {
-            $updatedQuery = $query->whereIn('location_id', $locationIds);
-            $newResult = $updatedQuery->get();
+            $query = $query->whereIn('location_id', $locationIds);
+            // $newResult = $updatedQuery->get();
 
-            if ($newResult->isNotEmpty()) {
-                $lastValidResult = $newResult;
-            }
+            // if ($newResult->isNotEmpty()) {
+            //     $lastValidResult = $newResult;
+            // }
         }
 
         if (!empty($instrumentIds)) {
-            $updatedQuery = $query->whereIn('instrument_id', $instrumentIds);
-            $newResult = $updatedQuery->get();
+            $query = $query->whereIn('instrument_id', $instrumentIds);
+            // $newResult = $updatedQuery->get();
 
-            if ($newResult->isNotEmpty()) {
-                $lastValidResult = $newResult;
-            }
+            // if ($newResult->isNotEmpty()) {
+            //     $lastValidResult = $newResult;
+            // }
         }
 
-        return $lastValidResult->map(function ($user) {
+        if (!empty($experienceIds)) {
+            $query = $query->whereIn('experience_id', $experienceIds);
+            // $newResult = $updatedQuery->get();
+
+            // if ($newResult->isNotEmpty()) {
+            //     $lastValidResult = $newResult;
+            // }
+        }
+
+        $matchResult = $query->get();
+
+        return $matchResult->map(function ($user) {
             return $user->full_details;
         });
     }
