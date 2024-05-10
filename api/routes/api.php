@@ -70,7 +70,7 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
     Route::group(['prefix' => 'connections'], function ($router) {
 
         Route::get('/', [UserController::class, 'getConnections']);
-        Route::post('/{id}', [UserController::class, 'addConnection']);
+        Route::post('/', [UserController::class, 'addConnection']);
     });
 
     Route::group(['prefix' => 'shows'], function ($router) {

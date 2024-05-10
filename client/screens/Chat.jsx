@@ -189,15 +189,36 @@ const Chat = ({ navigation, route }) => {
         setConnectionModalVisible(false);
     };
 
+    // const addConnection = async () => {
+    //     const newConnectionId = chatParticipants.map((participant) => participant.id);
+    //     console.log('Adding connection:', newConnectionId[0]);
+    //     try {
+    //         const response = await sendRequest(requestMethods.POST, `connections/${newConnectionId}`, null);
+    //         if (response.status !== 200) throw new Error('Failed to add connection');
+    //         dispatch(addNewConnection(newConnectionId[0]));
+    //     } catch (error) {
+    //         console.log('Error adding connection:', error);
+    //     }
+    // };
+
     const addConnection = async () => {
-        const newConnectionId = chatParticipants.map((participant) => participant.id);
-        console.log('Adding connection:', newConnectionId[0]);
+        const newConnectionIds = chatParticipants.map((participant) => participant.id);
+        console.log('Adding connections for IDs:', newConnectionIds);
+
         try {
-            const response = await sendRequest(requestMethods.POST, `connections/${newConnectionId}`, null);
-            if (response.status !== 200) throw new Error('Failed to add connection');
-            dispatch(addNewConnection(newConnectionId[0]));
+            const response = await sendRequest(requestMethods.POST, `connections`, {
+                userIds: newConnectionIds,
+            });
+
+            if (response.status !== 200) throw new Error('Failed to add connections');
+
+            console.log('Connections added successfully:', response.data.connections);
+            
+            response.data.connections.forEach((connection) => {
+                dispatch(addNewConnection(connection.id));
+            });
         } catch (error) {
-            console.log('Error adding connection:', error);
+            console.error('Error adding connections:', error);
         }
     };
 
@@ -332,7 +353,7 @@ const Chat = ({ navigation, route }) => {
             {bandModalVisible && (
                 <ChatModal
                     title={'You Band Name'}
-                    buttonText='Create Band'
+                    buttonText="Create Band"
                     input={true}
                     handlePress={handleFormBand}
                     setModalVisible={setBandModalVisible}
@@ -341,7 +362,7 @@ const Chat = ({ navigation, route }) => {
             {connectionModalVisible && (
                 <ChatModal
                     title={'Your Connections'}
-                    buttonText='Add'
+                    buttonText="Add"
                     data={chatConnections}
                     setModalVisible={setConnectionModalVisible}
                     handlePress={addParticipant}

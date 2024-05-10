@@ -25,7 +25,7 @@ const usersSlice = createSlice({
             const userIndex = state.feedUsers.findIndex((user) => user.id === userId);
             if (userIndex !== -1) {
                 state.connectedUsers.push(state.feedUsers[userIndex]);
-                state.feedUsers.splice(userIndex, 1);
+                // state.feedUsers.splice(userIndex, 1);
             }
 
             console.log('New connected users:', state.connectedUsers);
