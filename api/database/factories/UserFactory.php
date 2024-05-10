@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Instrument;
 use App\Models\Location;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,18 +23,27 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password',
             'about' => $this->faker->text(20),
-            'picture' => $this->faker->unique()->randomElement(array_map(function ($i) {
-                return "musician ({$i}).jpg";
-            }, range(1, 15))),
             'location_id' => Location::all()->random()->id,
             'availability_id' => $this->faker->numberBetween(1, 4),
             'experience_id' => $this->faker->numberBetween(1, 3),
-            'instrument_id' => $this->faker->numberBetween(1, 6),
+            'instrument_id' => null, // Set in state method for style
             'venue_type_id' => null,
             'venue_name' => null,
             'role_id' => 1,
             'is_active' => 1,
         ];
+    }
+
+    public function style(string $style)
+    {
+        return $this->state(function (array $attributes) use ($style) {
+            $availableInstrumentIds = Instrument::pluck('id')->toArray();
+            $instrumentId = $this->faker->unique()->randomElement($availableInstrumentIds);
+            return [
+                'instrument_id' => $instrumentId,
+                'picture' => "musician ({$instrumentId}) {$style}.jpg",
+            ];
+        });
     }
 
     public function venue()
