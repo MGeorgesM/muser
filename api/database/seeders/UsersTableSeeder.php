@@ -12,7 +12,10 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        UserFactory::new()->count(10)->create();
+        UserFactory::new()->style('modern')->count(10)->create();
+
+        UserFactory::new()->style('classical')->count(10)->create();
+        
         UserFactory::new()->venue()->count(5)->create();
     }
 }

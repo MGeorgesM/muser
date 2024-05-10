@@ -68,7 +68,7 @@ class UserFactory extends Factory
                 'email' => $this->faker->unique()->safeEmail,
                 'password' => 'password',
                 'about' => $this->faker->text(20),
-                'picture' => $this->faker->randomElement(array_map(function ($i) {
+                'picture' => $this->faker->unique()->randomElement(array_map(function ($i) {
                     return "venue ({$i}).jpg";
                 }, range(1, 4))),
                 'location_id' => Location::all()->random()->id,
