@@ -26,20 +26,21 @@ const ChatCard = ({ chat, navigation }) => {
             try {
                 const response = await sendRequest(requestMethods.GET, `users/details?${query}`, null);
                 if (response.status !== 200) throw new Error('Failed to fetch users');
-                setTitle(response.data.map((user) => user.name).join(', '));
-                setAvatar(`${profilePicturesUrl + response.data[0].picture}`);
+
+                setTitle(chat.chatTitle || response.data.map((user) => user.name).join(', '));
+                setAvatar(chat.chatTitle ? defaultAvatar : `${profilePicturesUrl + response.data[0].picture}`);
                 setParticipants(response.data);
             } catch (error) {
                 console.log('Error fetching users:', error);
             }
         };
-
-        if (!chat.chatTitle) {
-            getUsersPicutresandNames();
-        } else {
-            setTitle(chat.chatTitle);
-            setAvatar(defaultAvatar);
-        }
+        getUsersPicutresandNames();
+        // if (!chat.chatTitle) {
+        //     getUsersPicutresandNames();
+        // } else {
+        //     setTitle(chat.chatTitle);
+        //     setAvatar(defaultAvatar);
+        // }
     }, [chat]);
 
     return (

@@ -198,7 +198,7 @@ const Feed = ({ navigation }) => {
             />
             <FloatingActionButton icon={BrainCog} handlePress={() => setModalVisible(true)} />
             {matchedUsers && matchedUsers.length > 0 && (
-                <FloatingActionButton icon={MessageCirclePlus} handlePress={handleChatInititation} bottom={88} />
+                <FloatingActionButton icon={MessageCirclePlus} handlePress={handleChatInititation} bottom={88} primary={false}/>
             )}
         </>
     );

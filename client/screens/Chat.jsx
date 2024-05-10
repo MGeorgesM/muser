@@ -94,6 +94,7 @@ const Chat = ({ navigation, route }) => {
         const setupMessagesListener = async () => {
             console.log('Starting listener');
             console.log('Chat ID:', id);
+            console.log('Chat Participants:', chatParticipants)
 
             const newChatRef = doc(fireStoreDb, 'chats', id);
             const messagesRef = collection(newChatRef, 'messages');
@@ -203,17 +204,12 @@ const Chat = ({ navigation, route }) => {
 
     const addConnection = async () => {
         const newConnectionIds = chatParticipants.map((participant) => participant.id);
-        console.log('Adding connections for IDs:', newConnectionIds);
-
         try {
             const response = await sendRequest(requestMethods.POST, `connections`, {
                 userIds: newConnectionIds,
             });
 
-            if (response.status !== 200) throw new Error('Failed to add connections');
-
-            console.log('Connections added successfully:', response.data.connections);
-            
+            if (response.status !== 200) throw new Error('Failed to add connections');            
             response.data.connections.forEach((connection) => {
                 dispatch(addNewConnection(connection.id));
             });
@@ -352,9 +348,10 @@ const Chat = ({ navigation, route }) => {
             />
             {bandModalVisible && (
                 <ChatModal
-                    title={'You Band Name'}
+                    title={chatTitle ? chatTitle : 'Your Band Name'}
                     buttonText="Create Band"
-                    input={true}
+                    data={chatTitle ? chatParticipants : null}
+                    input={chatTitle ? false : true}
                     handlePress={handleFormBand}
                     setModalVisible={setBandModalVisible}
                 />
