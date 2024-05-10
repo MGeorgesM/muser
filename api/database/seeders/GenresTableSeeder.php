@@ -41,7 +41,7 @@ class GenresTableSeeder extends Seeder
         $genre->save();
 
         $genre = new Genre();
-        $genre->name = 'Oriental';
+        $genre->name = 'Arabic';
         $genre->save();
     }
 }

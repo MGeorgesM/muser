@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Genre;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,17 +17,27 @@ class ShowFactory extends Factory
      */
     public function definition()
     {
+        static $availabeGenresIds = null;
+
+        if (is_null($availabeGenresIds)) {
+            $availabeGenresIds = Genre::pluck('id')->toArray();
+        }
+
+        try {
+            $genreId = $this->faker->unique()->randomElement($availabeGenresIds);
+        } catch (\OverflowException $e) {
+            $this->faker->unique(true);
+            $genreId = $this->faker->unique()->randomElement($availabeGenresIds);
+        }
+
         return [
             'time' => $this->faker->time('H:i'),
             'duration' => $this->faker->numberBetween(1, 4),
             'band_id' => $this->faker->numberBetween(1, 10),
             'venue_id' => $this->faker->numberBetween(11, 15),
-            'genre_id' => $this->faker->numberBetween(1, 8),
-            // 'status' => $this->faker->randomElement(['pending', 'set', 'live', 'cancelled']),
+            'genre_id' => $genreId,
             'date' => $this->faker->dateTimeBetween('+1 week', '+1 month')->format('Y-m-d'),
-            'picture' => $this->faker->unique()->randomElement(array_map(function ($i) {
-                return "show ({$i}).jpg";
-            }, range(1, 5))),
+            'picture' => 'show (' . $genreId . ').jpg',
         ];
     }
 }
