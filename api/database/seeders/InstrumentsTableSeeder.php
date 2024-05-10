@@ -22,7 +22,7 @@ class InstrumentsTableSeeder extends Seeder
         $intrument->save();
 
         $intrument = new Instrument();
-        $intrument->name = 'Brass';
+        $intrument->name = 'Wind';
         $intrument->save();
 
         $intrument = new Instrument();

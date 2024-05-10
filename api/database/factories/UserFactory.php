@@ -23,10 +23,11 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password',
             'about' => $this->faker->text(20),
+            'picture' => null, // This will be set explicitly
             'location_id' => Location::all()->random()->id,
             'availability_id' => $this->faker->numberBetween(1, 4),
             'experience_id' => $this->faker->numberBetween(1, 3),
-            'instrument_id' => null, // Set in state method for style
+            'instrument_id' => null, // Set in state method for picture
             'venue_type_id' => null,
             'venue_name' => null,
             'role_id' => 1,
@@ -34,14 +35,15 @@ class UserFactory extends Factory
         ];
     }
 
-    public function style(string $style)
+    /**
+     * Set the specific picture for the user.
+     */
+    public function withPicture(string $picture, int $instrumentId)
     {
-        return $this->state(function (array $attributes) use ($style) {
-            $availableInstrumentIds = Instrument::pluck('id')->toArray();
-            $instrumentId = $this->faker->unique()->randomElement($availableInstrumentIds);
+        return $this->state(function (array $attributes) use ($picture, $instrumentId) {
             return [
-                'instrument_id' => $instrumentId,
-                'picture' => "musician ({$instrumentId}) {$style}.jpg",
+                'picture' => $picture,
+                'instrument_id' => $instrumentId
             ];
         });
     }

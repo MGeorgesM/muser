@@ -34,7 +34,7 @@ class ShowFactory extends Factory
             'time' => $this->faker->time('H:i'),
             'duration' => $this->faker->numberBetween(1, 4),
             'band_id' => $this->faker->numberBetween(1, 10),
-            'venue_id' => $this->faker->numberBetween(11, 15),
+            'venue_id' => $this->faker->numberBetween(1, 4),
             'genre_id' => $genreId,
             'date' => $this->faker->dateTimeBetween('+1 week', '+1 month')->format('Y-m-d'),
             'picture' => 'show (' . $genreId . ').jpg',
