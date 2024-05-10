@@ -65,7 +65,7 @@ export const styles = StyleSheet.create({
         marginBottom: 64,
     },
     userTypeText: {
-        fontSize: 24,
+        fontSize: 28,
         paddingRight: 12,
         color: colors.white,
         fontFamily: 'Montserrat-Regular',

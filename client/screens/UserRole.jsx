@@ -1,14 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 import { Image, View, Text, ScrollView, ImageBackground } from 'react-native';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 import { useUser } from '../contexts/UserContext';
 
-import { colors } from '../styles/utilities';
+import { colors, utilities } from '../styles/utilities';
 
 import { ChevronDown } from 'lucide-react-native';
 
-import BackBtn from '../components/Elements/BackBtn/BackBtn';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const logoImg = require('../assets/logowhite.png');
@@ -16,11 +16,25 @@ const imageSource = require('../assets/appImages/onboard00.jpg');
 const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserRole = ({ navigation }) => {
+
     const { setUserInfo } = useUser();
+
+    useEffect(() => {
+        const showNavigationBar = async () => {
+            try {
+                await SystemNavigationBar.navigationShow();
+                await SystemNavigationBar.setNavigationColor('translucent');
+            } catch (error) {
+                console.error('Failed to show system navigation bar:', error);
+            }
+        };
+        showNavigationBar();
+    }, []);
+
     return (
         <ImageBackground source={imageSource} style={{ flex: 1 }} resizeMode="cover">
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <BackBtn color="white" backgroundColor="transparent" navigation={navigation}/>
+            <View style={[utilities.photoOverlayL, utilities.container]}>
+                {/* <BackBtn color="white" backgroundColor="transparent" navigation={navigation} /> */}
                 <View style={styles.topInnerContainer}>
                     <Image style={styles.welcomeLogo} source={logoImg} />
                     <Text style={styles.header}>What Brings You to Muser?</Text>
@@ -36,7 +50,7 @@ const UserRole = ({ navigation }) => {
                             placeholder={{}}
                             style={{
                                 inputAndroid: {
-                                    fontSize: 24,
+                                    fontSize: 28,
                                     fontFamily: 'Montserrat-Bold',
                                     color: colors.primary,
                                 },
@@ -47,13 +61,13 @@ const UserRole = ({ navigation }) => {
                             }}
                             useNativeAndroidPickerStyle={false}
                         />
-                        <ChevronDown size={24} color="white" style={{marginTop:4, marginLeft:6}} />
+                        <ChevronDown size={24} color="white" style={{ marginTop: 4, marginLeft: 6 }} />
                     </View>
                 </View>
-                <View style={styles.bottomInnerContainer}>
-                    <PrimaryBtn text={'Continue'} handlePress={() => navigation.navigate('UserInfo')}/>
-                </View>
-            </ScrollView>
+
+                    <PrimaryBtn text={'Continue'} handlePress={() => navigation.navigate('UserInfo')} marginBottom={88} />
+          
+            </View>
         </ImageBackground>
     );
 };

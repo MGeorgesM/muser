@@ -97,8 +97,8 @@ const Authentication = ({ navigation }) => {
     return (
         <>
             <Image source={imageSource} style={styles.imageBackground} />
-            <View style={[utilities.container, utilities.photoOverlayS]}>
-                <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={[utilities.container, utilities.photoOverlayM]}>
+                <ScrollView showsVerticalScrollIndicator = {false}>
                     <View style={styles.topInnerContainer}>
                         <Image style={styles.welcomeLogo} source={logoImg} />
                         <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>

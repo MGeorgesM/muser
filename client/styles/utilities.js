@@ -122,6 +122,14 @@ export const utilities = StyleSheet.create({
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
     },
+    photoOverlayM: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.25)',
+    },
+    photoOverlayL: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
     border: {
         borderWidth: 0.5,
         borderColor: colors.gray,
@@ -201,7 +209,7 @@ export const utilities = StyleSheet.create({
         marginLeft: 8,
         color: colors.white,
     },
-    
+
     inputText: {
         color: colors.offWhite,
         fontFamily: 'Montserrat-Regular',

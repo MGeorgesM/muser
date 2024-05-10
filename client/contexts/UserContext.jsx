@@ -12,10 +12,10 @@ export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({
-        name: 'Keira',
+        name: 'Ariana',
         // email: 'jhonny@mail.com',
         // email: 'anissa.auer@example.org',
-        email: 'keira@example.net',
+        email: 'ariana@mail.com',
         password: 'password',
         about: '',
         picture: '',
