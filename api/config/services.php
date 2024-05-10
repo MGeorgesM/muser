@@ -30,4 +30,14 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+
+    'stream' => [
+        'api_key' => env('STREAM_API_KEY'),
+        'api_secret' => env('STREAM_API_SECRET'),
+    ],
+
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY')
+    ]
+
 ];

@@ -114,20 +114,14 @@ class AiMatchMakingController extends Controller
         $currentUserLocation = auth()->user()->location_id;
         $currentUserLocation = Location::find($currentUserLocation)->name;
 
-        $apiKey = getenv('OPENAI_API_KEY');
+        $apiKey = config('services.openai.api_key');
         $client = OpenAI::client($apiKey);
 
-        $availableGenres = Genre::all()->toArray();
-        $availableGenres = json_encode($availableGenres);
+        $availableGenres = json_encode(Genre::all());
+        $availableInstruments = json_encode(Instrument::all());
+        $availableLocations = json_encode(Location::all());
+        $availableExperiences = json_encode(Experience::all());
 
-        $availableInstruments = Instrument::all()->toArray();
-        $availableInstruments = json_encode($availableInstruments);
-
-        $availableLocations = Location::all()->toArray();
-        $availableLocations = json_encode($availableLocations);
-
-        $availableExpreriences = Experience::all()->toArray();
-        $availableExpreriences = json_encode($availableExpreriences);
 
         $validatedData = $request->validate([
             'message' => 'required|string'
@@ -135,11 +129,11 @@ class AiMatchMakingController extends Controller
 
         try {
             $result = $client->chat()->create([
-                'model' => 'gpt-4',
+                'model' => 'gpt-4-turbo-preview',
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => "You're the music expert with a strong imagination. You'll receive my message that is posted on a musicians app that let's the user spontaneously form bands, my message is intented to quickly find and filter users that match what i wrote, this message could be related to anything in music, something i'm thinking about or planning to do or just single words."
+                        'content' => "You're the music expert. You'll receive my message that is posted on a musicians app that let's the user spontaneously form bands, my message is intented to quickly find and filter users that match what i wrote, this message could be related to anything in music, something i'm thinking about or planning to do or just single words."
                     ],
                     [
                         'role' => 'system',
@@ -159,7 +153,7 @@ class AiMatchMakingController extends Controller
                     ],
                     [
                         'role' => 'system',
-                        'content' => "Please provide the IDs of the two most relevant musical genres if applicable, the three nearest locations, and the IDs of any instruments you extracted from my message, all based on the provided lists. The response should be formatted as a JSON object with the keys: 'genreIds', 'locationIds', and 'instrumentIds' with value of array of IDs. Ensure accuracy in matching and formatting to facilitate seamless integration with our system."
+                        'content' => "The response should be formatted as a JSON object with the keys: 'genreIds', 'locationIds', and 'instrumentIds' with value of array of IDs that you return from my message. Ensure accuracy in matching and formatting."
                     ],
                     [
                         'role' => 'system',
@@ -179,7 +173,7 @@ class AiMatchMakingController extends Controller
                     ],
                     [
                         'role' => 'system',
-                        'content' => "Experiences List:" . $availableExpreriences
+                        'content' => "Experiences List:" . $availableExperiences
                     ],
                     [
                         'role' => 'user',
@@ -191,7 +185,7 @@ class AiMatchMakingController extends Controller
                 ],
             ]);
 
-            // return response($result->choices[0]->message->content);
+            return response($result->choices[0]->message->content);
 
             $response = json_decode($result->choices[0]->message->content, true);
 

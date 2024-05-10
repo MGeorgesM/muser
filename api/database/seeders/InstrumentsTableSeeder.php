@@ -26,7 +26,7 @@ class InstrumentsTableSeeder extends Seeder
         $intrument->save();
 
         $intrument = new Instrument();
-        $intrument->name = 'Bass';
+        $intrument->name = 'Double Bass';
         $intrument->save();
 
         $intrument = new Instrument();
@@ -35,6 +35,14 @@ class InstrumentsTableSeeder extends Seeder
 
         $intrument = new Instrument();
         $intrument->name = 'Vocals';
+        $intrument->save();
+
+        $intrument = new Instrument();
+        $intrument->name = 'Guitar';
+        $intrument->save();
+
+        $intrument = new Instrument();
+        $intrument->name = 'Bass';
         $intrument->save();
     }
 }
