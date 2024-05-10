@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Instrument;
+use App\Models\User;
 use App\Models\Location;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,11 +23,11 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password',
             'about' => $this->faker->text(20),
-            'picture' => null, // This will be set explicitly
+            'picture' => null,
             'location_id' => Location::all()->random()->id,
             'availability_id' => $this->faker->numberBetween(1, 4),
             'experience_id' => $this->faker->numberBetween(1, 3),
-            'instrument_id' => null, // Set in state method for picture
+            'instrument_id' => null,
             'venue_type_id' => null,
             'venue_name' => null,
             'role_id' => 1,
@@ -38,13 +38,15 @@ class UserFactory extends Factory
     /**
      * Set the specific picture for the user.
      */
-    public function withPicture(string $picture, int $instrumentId)
+    public function withPictureAndGenres(string $picture, int $instrumentId, array $genreIds)
     {
-        return $this->state(function (array $attributes) use ($picture, $instrumentId) {
+        return $this->state(function (array $attributes) use ($picture, $instrumentId, $genreIds) {
             return [
                 'picture' => $picture,
-                'instrument_id' => $instrumentId
+                'instrument_id' => $instrumentId,
             ];
+        })->afterCreating(function (User $user) use ($genreIds) {
+            $user->genres()->attach($genreIds);
         });
     }
 

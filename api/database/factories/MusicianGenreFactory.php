@@ -16,9 +16,16 @@ class MusicianGenreFactory extends Factory
      */
     public function definition(): array
     {
+        // Array of all genre IDs
+        $allGenreIds = range(1, 8);
+        
+        $excludedGenreIds = [1, 2, 5]; 
+
+        $allowedGenreIds = array_diff($allGenreIds, $excludedGenreIds);
+
         return [
             'musician_id' => $this->faker->numberBetween(5, 24),
-            'genre_id' => $this->faker->numberBetween(1, 8)
+            'genre_id' => $this->faker->randomElement($allowedGenreIds)
         ];
     }
 }
