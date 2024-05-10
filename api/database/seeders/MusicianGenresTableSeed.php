@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-
 use Illuminate\Database\Seeder;
 use App\Models\MusicianGenre;
 use App\Models\User;
@@ -18,7 +17,7 @@ class MusicianGenresTableSeed extends Seeder
         $musicians = User::where('role_id', 1)->get();
         $genres = Genre::all();
 
-        $excludedGenreIds = Genre::whereIn('name', ['Pop', 'Rock', 'Classical'])->pluck('id');
+        $excludedGenreIds = Genre::whereIn('name', ['Pop', 'Rock', 'Classical'])->pluck('id')->toArray();
 
         foreach ($musicians as $musician) {
 
@@ -27,7 +26,12 @@ class MusicianGenresTableSeed extends Seeder
             } elseif (str_contains($musician->picture, 'classical')) {
                 $filteredGenres = $genres->whereIn('name', ['Classical']);
             } else {
+
                 $filteredGenres = $genres->whereNotIn('name', ['Classical']);
+            }
+
+            if ($filteredGenres->isEmpty()) {
+                continue;
             }
 
             $genre = $filteredGenres->random();
@@ -36,12 +40,14 @@ class MusicianGenresTableSeed extends Seeder
                 'genre_id' => $genre->id
             ]);
 
-            $additionalGenres = $filteredGenres->except($genre->id)->random(rand(0, 3));
-            foreach ($additionalGenres as $genre) {
-                MusicianGenre::updateOrCreate(
-                    ['musician_id' => $musician->id, 'genre_id' => $genre->id],
-                    ['musician_id' => $musician->id, 'genre_id' => $genre->id]
-                );
+            if ($filteredGenres->count() > 1) {
+                $additionalGenres = $filteredGenres->where('id', '!=', $genre->id)->random(rand(0, min(3, $filteredGenres->count() - 1)));
+                foreach ($additionalGenres as $additionalGenre) {
+                    MusicianGenre::updateOrCreate(
+                        ['musician_id' => $musician->id, 'genre_id' => $additionalGenre->id],
+                        ['musician_id' => $musician->id, 'genre_id' => $additionalGenre->id]
+                    );
+                }
             }
         }
     }
