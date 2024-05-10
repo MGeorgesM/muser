@@ -48,45 +48,12 @@ class UserController extends Controller
         return response()->json($result);
     }
 
- 
-    // public function getUsersByRole($role)
-    // {
-    //     $current_user_id = auth()->id();
-    //     $users = User::whereHas('role', function ($query) use ($role) {
-    //         $query->where('name', $role);
-    //     })->where('is_active', 1)->where('id', '!=', $current_user_id)->get();
-
-    //     return response()->json($users->map->full_details);
-    // }
-
     public function getUsersByRole(Request $request, $role)
     {
-        // $current_user_id = auth()->id();
-
-        // $connectedUserIds = [];
-        // if ($role === 'musician') {
-        //     $connectedUserIds = Connection::where('user_one_id', $current_user_id)
-        //         ->orWhere('user_two_id', $current_user_id)
-        //         ->get()
-        //         ->map(function ($conn) use ($current_user_id) {
-        //             return $conn->user_one_id === $current_user_id ? $conn->user_two_id : $conn->user_one_id;
-        //         })->all();
-        // }
-
-
-        // $users = User::whereHas('role', function ($query) use ($role) {
-        //     $query->where('name', $role);
-        // })->where('is_active', 1)
-        //     ->where('id', '!=', $current_user_id)
-        //     ->whereNotIn('id', $connectedUserIds)
-        //     ->get();
-
-        // return response()->json($users->map->full_details);
-
         $current_user_id = auth()->id();
 
         $connectedUserIds = [];
-        
+
         if ($role === 'musician') {
             $connectedUserIds = Connection::where('user_one_id', $current_user_id)
                 ->orWhere('user_two_id', $current_user_id)
@@ -161,27 +128,67 @@ class UserController extends Controller
         return response()->json($connections);
     }
 
-    public function addConnection($id)
+    // public function addConnection($id)
+    // {
+    //     if (!$id) return response()->json(['message' => 'No user ID provided'], 400);
+
+    //     $userOneId = auth()->id();
+    //     $userTwoId = $id;
+
+    //     if ($userOneId == $userTwoId) return response()->json(['message' => 'You cannot connect with yourself'], 400);
+
+    //     $sortedIds = [$userOneId, $userTwoId];
+    //     sort($sortedIds);
+
+    //     Connection::firstOrCreate([
+    //         'user_one_id' => $sortedIds[0],
+    //         'user_two_id' => $sortedIds[1]
+    //     ]);
+
+    //     $userTwo = User::find($userTwoId);
+
+    //     return response()->json(['message' => 'Connection added successfully', 'user' => $userTwo->full_details]);
+    // }
+
+    public function addConnections(Request $request)
     {
-        if (!$id) return response()->json(['message' => 'No user ID provided'], 400);
+        $userIds = $request->input('userIds', []);
+
+        if (empty($userIds)) {
+            return response()->json(['message' => 'No user IDs provided'], 400);
+        }
 
         $userOneId = auth()->id();
-        $userTwoId = $id;
+        $connections = [];
+        $failedConnections = [];
 
-        if ($userOneId == $userTwoId) return response()->json(['message' => 'You cannot connect with yourself'], 400);
+        foreach ($userIds as $userTwoId) {
+            if ($userOneId == $userTwoId) {
+                $failedConnections[] = $userTwoId;
+                continue;
+            }
 
-        $sortedIds = [$userOneId, $userTwoId];
-        sort($sortedIds);
+            $sortedIds = [$userOneId, $userTwoId];
+            sort($sortedIds);
 
-        Connection::firstOrCreate([
-            'user_one_id' => $sortedIds[0],
-            'user_two_id' => $sortedIds[1]
+            $connection = Connection::firstOrCreate([
+                'user_one_id' => $sortedIds[0],
+                'user_two_id' => $sortedIds[1]
+            ]);
+
+            if ($connection->wasRecentlyCreated) {
+                $userTwo = User::find($userTwoId);
+                $connections[] = $userTwo->full_details;
+            }
+        }
+
+        return response()->json([
+            'message' => 'Connections processed',
+            'connections' => $connections,
+            'failed' => $failedConnections
         ]);
-
-        $userTwo = User::find($userTwoId);
-
-        return response()->json(['message' => 'Connection added successfully', 'user' => $userTwo->full_details]);
     }
+
 
     public function disableUser($id)
     {

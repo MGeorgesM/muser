@@ -89,6 +89,7 @@ const Feed = ({ navigation }) => {
     const handleAiMatchMaking = async () => {
         setModalVisible(false);
         setIsLoading(true);
+        console.log('Calling openAi');
         try {
             const response = await sendRequest(requestMethods.POST, 'ai/', { message: userInput });
             if (response.status !== 200) throw new Error('Failed to fetch users');
@@ -108,17 +109,44 @@ const Feed = ({ navigation }) => {
     };
 
     const handleProceed = async () => {
-        if (userInput === '') return;
+        if (userInput === '') {
+            setMatchedUsers([]);
+            setModalVisible(false);
+            return;
+        }
         handleAiMatchMaking();
     };
 
     const handleChatInititation = () => {
-        return;
+        const matchedUsersIds = matchedUsers.map((user) => user.id);
+        const chatId = [currentUser.id, ...matchedUsersIds].sort((a, b) => a - b).join('-');;
+        const chatParticipants = matchedUsers.map((user) => {
+            return {
+                id: user.id,
+                name: user.name,
+                picture: user.picture,
+            }
+        })
+
+        navigation.navigate('Chat',  { screen: 'ChatDetails', params:
+            {
+                id:chatId,
+                chatParticipants: chatParticipants
+            }
+          });
     };
 
     const renderItem = ({ item, index }) => {
-        const isLastItem = index === users.length - 1;
-        const isOddTotal = users.length % 2 !== 0;
+        let isLastItem;
+        let isOddTotal;
+
+        if (matchedUsers && matchedUsers.length > 0) {
+            isLastItem = index === matchedUsers.length - 1;
+            isOddTotal = matchedUsers.length % 2 !== 0;
+        } else {
+            isLastItem = index === users.length - 1;
+            isOddTotal = users.length % 2 !== 0;
+        }
 
         return (
             <>

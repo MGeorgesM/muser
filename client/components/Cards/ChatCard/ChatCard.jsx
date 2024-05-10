@@ -57,7 +57,7 @@ const ChatCard = ({ chat, navigation }) => {
                 {avatar && <Image source={{ uri: avatar }} style={styles.chatCardPhoto} />}
                 <View>
                     <Text style={[utilities.textM, utilities.myFontMedium, { color: colors.white, marginBottom: 6 }]}>
-                        {title || 'Chat'}
+                        {truncateText(title, 28)}
                     </Text>
                     <Text style={[utilities.textXS, utilities.myFontRegular, { color: colors.gray }]}>
                         {truncateText(chat.lastMessage.text)}
@@ -89,5 +89,6 @@ const styles = StyleSheet.create({
         height: 64,
         borderRadius: 32,
         marginRight: 16,
+        objectFit:'cover'
     },
 });

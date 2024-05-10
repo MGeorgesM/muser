@@ -23,9 +23,9 @@ const ProfileDetails = ({ route }) => {
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
     const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
 
-    const chatId = [currentUser.id, userId].sort().join('-');
-
-    console.log(chatId);
+    const chatId = [currentUser.id, userId].sort((a, b) => a - b).join('-');;
+    
+    const imageUrl = `${profilePicturesUrl + user.picture}`;
 
     useEffect(() => {
         if (userId) {
@@ -39,7 +39,6 @@ const ProfileDetails = ({ route }) => {
         }
     }, [userId]);
 
-    const imageUrl = `${profilePicturesUrl + user.picture}`;
 
     if (user.name)
         return (
