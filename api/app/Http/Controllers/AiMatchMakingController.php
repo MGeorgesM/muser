@@ -131,21 +131,25 @@ class AiMatchMakingController extends Controller
             $result = $client->chat()->create([
                 'model' => 'gpt-4-turbo-preview',
                 'messages' => [
+                    // [
+                    //     'role' => 'system',
+                    //     'content' => "Assist in extracting music preferences and user location details from the user's message. Utilize the lists provided to match closest genres, instruments, and locations. Ensure accurate matching for system integration."
+                    // ],
                     [
                         'role' => 'system',
                         'content' => "You're the music expert. You'll receive my message that is posted on a musicians app that let's the user spontaneously form bands, my message is intented to quickly find and filter users that match what i wrote, this message could be related to anything in music, something i'm thinking about or planning to do or just single words."
                     ],
                     [
                         'role' => 'system',
-                        'content' => "You must extract from my message what music genre i'm looking for, and find the nearest matching music genre available in the music genres list below and return it's id. My message also may not explicitly mention a music genre, in that case you must conclude it from artists or songs or anything that i've mentioned in my message and find the nearest matching music genre from the music genres list below and return it's id, if nothing related to a music genre can be concluded or found in my message you must the return all the music genres ids found in the music genres list below." 
+                        'content' => "You must extract from my message what music genre i'm looking for, and find the nearest matching music genre available in the music genres list below and return it's id. My message also may not explicitly mention a music genre, in that case you must conclude it from artists or songs or anything that i've mentioned in my message and find the nearest matching music genre from the music genres list below and return it's id, if nothing related to a music genre can be concluded or found in my message you must the return all the music genres ids found in the music genres list below."
                     ],
                     [
                         'role' => 'system',
-                        'content' => "My message may specify a location from Lebanon, if so you must return this location id from the locations list below, also my message may mention a location related to me ('near me, nearby...), if so, you have to find two locations from the locations list below that are geographically close to the my location that is also mentioned below. If nothing related to location was mentioned you must ignore selecting any location from the locations list." 
+                        'content' => "My message may specify a location from Lebanon, if so you must return this location id from the locations list below, also my message may mention a location related to me ('near me, nearby...), if so, you have to find two locations from the locations list below that are geographically close to the my location that is also mentioned below. If nothing related to location was mentioned you must return all the locations ids from the locations list."
                     ],
                     [
-                        'role' => 'system', 
-                        'content'=> 'My message may also specify a certain musical instrument, if so you must return only the closest matching instrument id from the instruments list below, my message may also mention explicility not wanting a certain instrument, you should be aware of this and avoid returning the closest instrument id from the instruments list below, if no instrument was mentioned in my message you have to return all of the instrument ids available in the instruments list below'
+                        'role' => 'system',
+                        'content' => 'My message may also specify a certain musical instrument, if so you must return only the closest matching instrument id from the instruments list below, my message may also mention explicility not wanting a certain instrument, you should be aware of this and avoid returning the closest instrument id from the instruments list below, if no instrument was mentioned in my message you have to return all of the instrument ids available in the instruments list below'
                     ],
                     [
                         'role' => 'system',
@@ -153,7 +157,8 @@ class AiMatchMakingController extends Controller
                     ],
                     [
                         'role' => 'system',
-                        'content' => "The response should be formatted as a JSON object with the keys: 'genreIds', 'locationIds', and 'instrumentIds' with value of array of IDs that you return from my message. Ensure accuracy in matching and formatting."
+                        'content' => "The response should be formatted as a JSON object with the keys: 'genreIds', 'locationIds', and 'instrumentIds' and 'experienceIds' with value of array of IDs that you return from my message. Ensure accuracy in matching and formatting."
+                        // 'content' => "The response should be formatted as a JSON object with the keys: 'genres', 'locations', and 'instruments' and 'experiences' with value of array of IDs that you return from my message and their respective names. Ensure accuracy in matching and formatting."
                     ],
                     [
                         'role' => 'system',

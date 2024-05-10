@@ -140,8 +140,8 @@ class AuthController extends Controller
 
     public function generateStreamToken()
     {
-        $api_key = 'cpt9ax3gakj3';
-        $api_secret = 'zarnj2z22k3w5av4byqfe24c5h97htfb8arc8cghds777ytthxwqcrenbut8pgm5';
+        $api_key = config('services.stream.api_key');
+        $api_secret = config('services.stream.api_secret');
 
         $serverClient = new Client($api_key, $api_secret);
 
