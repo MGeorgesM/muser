@@ -35,9 +35,15 @@ class UserFactory extends Factory
         ];
     }
 
-    /**
-     * Set the specific picture for the user.
-     */
+    public function withGender($gender)
+    {
+        return $this->state(function (array $attributes) use ($gender) {
+            return [
+                'name' => $gender === 'male' ? $this->faker->unique()->firstNameMale() : $this->faker->unique()->firstNameFemale(),
+            ];
+        });
+    }
+
     public function withPictureAndGenres(string $picture, int $instrumentId, array $genreIds)
     {
         return $this->state(function (array $attributes) use ($picture, $instrumentId, $genreIds) {

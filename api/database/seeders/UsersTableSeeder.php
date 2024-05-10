@@ -18,32 +18,32 @@ class UsersTableSeeder extends Seeder
         $genreIds = Genre::whereIn('name', ['Pop', 'Rock', 'Classical'])->get()->pluck('id', 'name');
 
         $usersInfo = [
-            ['musician (6) modern.jpg', 6, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (6) modern 2.jpg', 6, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (6) classical.jpg', 6, [$genreIds['Classical']]],
-            ['musician (5) modern.jpg', 5, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (5) modern 3.jpg', 5, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (5) modern 2.jpg', 5, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (5) classical.jpg', 5, [$genreIds['Classical']]],
-            ['musician (5) classical 2.jpg', 5, [$genreIds['Classical']]],
-            ['musician (4) modern.jpg', 4, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (4) modern 3.jpg', 4, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (4) modern 2.jpg', 4, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (3) modern.jpg', 3, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (3) classical.jpg', 3, [$genreIds['Classical']]],
-            ['musician (2) modern.jpg', 2, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (2) modern 3.jpg', 2, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (2) modern 2.jpg', 2, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (2) classical.jpg', 2, [$genreIds['Classical']]],
-            ['musician (2) classical 2.jpg', 2, [$genreIds['Classical']]],
-            ['musician (1) modern.jpg', 1, [$genreIds['Pop'], $genreIds['Rock']]],
-            ['musician (1) classical.jpg', 1, [$genreIds['Classical']]]
+            ['musician female (6) modern.jpg', 6, [$genreIds['Pop'], $genreIds['Rock']], 'female'],
+            ['musician male (6) modern 2.jpg', 6, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician male (6) classical.jpg', 6, [$genreIds['Classical']], 'male'],
+            ['musician male (5) modern.jpg', 5, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician male (5) modern 3.jpg', 5, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician male (5) modern 2.jpg', 5, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician female (5) classical.jpg', 5, [$genreIds['Classical']], 'female'],
+            ['musician male (5) classical 2.jpg', 5, [$genreIds['Classical']], 'male'],
+            ['musician male (4) modern.jpg', 4, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician male (4) modern 3.jpg', 4, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician male (4) modern 2.jpg', 4, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician male (3) modern.jpg', 3, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician female (3) classical.jpg', 3, [$genreIds['Classical']], 'female'],
+            ['musician male (2) modern.jpg', 2, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician male (2) modern 3.jpg', 2, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician male (2) modern 2.jpg', 2, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician female (2) classical.jpg', 2, [$genreIds['Classical']], 'female'],
+            ['musician male (2) classical 2.jpg', 2, [$genreIds['Classical']], 'male'],
+            ['musician male (1) modern.jpg', 1, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
+            ['musician male (1) classical.jpg', 1, [$genreIds['Classical']], 'male']
         ];
 
         UserFactory::new()->venue()->count(4)->create();
 
         foreach ($usersInfo as $info) {
-            UserFactory::new()->withPictureAndGenres($info[0], $info[1], $info[2])->create();
+            UserFactory::new()->withPictureAndGenres($info[0], $info[1], $info[2])->withGender($info[3])->create();
         }
     }
 }
