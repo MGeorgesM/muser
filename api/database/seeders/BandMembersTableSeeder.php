@@ -17,7 +17,7 @@ class BandMembersTableSeeder extends Seeder
     public function run(): void
     {
         $bands = Band::all();
-        $maxMembers = 6;
+        $maxMembers = 3;
 
         foreach ($bands as $band) {
             $usedUserIds = [];

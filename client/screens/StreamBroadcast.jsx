@@ -12,7 +12,7 @@ const StreamBroadcast = ({ navigation, route }) => {
     const { showId, showName } = route.params;
 
     // const showIdString = showId.toString() + 'TEST78' ?? {};
-    const showIdString = 'ajskdfjjsdkfjaksfdfffffi';
+    const showIdString = 'TEST112233X';
 
     const [call, setCall] = useState(null);
     const [viewer, setViewer] = useState(false);

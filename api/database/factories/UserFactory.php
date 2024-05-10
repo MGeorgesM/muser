@@ -60,16 +60,16 @@ class UserFactory extends Factory
     {
 
         $venueNames = [
-            "Mystic Grove Café",
-            "The Velvet Room",
-            "Lantern Light Tavern",
-            "Echoes Jazz Lounge",
-            "Starlight Rooftop Bar",
-            "Amber Moon Winery",
-            "Sapphire Seafront Bistro",
-            "Golden Oak Library",
-            "Twilight Vista Club",
-            "Azure Plateau Grill"
+            "Mystic Grove",
+            "The Velvet",
+            "Lantern Light",
+            "Echoes Jazz",
+            "Starlight",
+            "Amber Moon",
+            "Sapphire Seafront",
+            "Golden Oak",
+            "Twilight Vista",
+            "Azure Plateau"
         ];
 
         return $this->state(function (array $attributes)  use ($venueNames) {

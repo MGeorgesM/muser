@@ -18,7 +18,7 @@ class BandMemberFactory extends Factory
     {
         return [
             'band_id' => $this->faker->numberBetween(1, 10),
-            'user_id' => $this->faker->numberBetween(5, 24),
+            'user_id' => $this->faker->numberBetween(5, 25),
         ];
     }
 

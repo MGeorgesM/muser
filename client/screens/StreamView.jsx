@@ -45,7 +45,7 @@ const StreamView = ({ navigation, route }) => {
     const [call, setCall] = useState(null);
 
     // const showId = show.id.toString() + 'TEST78';
-    const showId = 'ajskdfjjsdkfjaksfdfffffi';
+    const showId = 'TEST112233X';
     // client && console.log('Client Found!');
     // console.log('Show ID:', show.id);
     // console.log('Call:', call);
@@ -303,10 +303,10 @@ const StreamView = ({ navigation, route }) => {
                     </View>
                     <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
                         {comments &&
-                            comments.length > 0 &&
+                            comments.length > 0 ?
                             comments.map((comment) => (
                                 <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
-                            ))}
+                            )) : <Text style={[utilities.textCenter, utilities.myFontRegular, {color:colors.gray}]}>No comments yet. Share your thoughts.</Text>}
                     </ScrollView>
                     <ChatTextInput
                         placeholder="Write a comment"

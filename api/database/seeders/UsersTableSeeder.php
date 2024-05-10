@@ -26,6 +26,7 @@ class UsersTableSeeder extends Seeder
             ['musician male (5) modern 2.jpg', 5, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
             ['musician female (5) classical.jpg', 5, [$genreIds['Classical']], 'female'],
             ['musician male (5) classical 2.jpg', 5, [$genreIds['Classical']], 'male'],
+            ['musician female (4) classical.jpg', 4, [$genreIds['Classical']], 'female'],
             ['musician male (4) modern.jpg', 4, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
             ['musician male (4) modern 3.jpg', 4, [$genreIds['Pop'], $genreIds['Rock']], 'male'],
             ['musician male (4) modern 2.jpg', 4, [$genreIds['Pop'], $genreIds['Rock']], 'male'],

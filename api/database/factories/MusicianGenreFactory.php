@@ -24,7 +24,7 @@ class MusicianGenreFactory extends Factory
         $allowedGenreIds = array_diff($allGenreIds, $excludedGenreIds);
 
         return [
-            'musician_id' => $this->faker->numberBetween(5, 24),
+            'musician_id' => $this->faker->numberBetween(5, 25),
             'genre_id' => $this->faker->randomElement($allowedGenreIds)
         ];
     }
