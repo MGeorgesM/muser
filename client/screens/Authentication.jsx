@@ -13,7 +13,9 @@ import SignInForm from '../components/AuthenticationForms/SignInForm';
 import SignUpForm from '../components/AuthenticationForms/SignUpForm';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
-const logoImg = require('../assets/logowhite.png');
+const logoImg = require('../assets/appImages/logoOnboard.png');
+const imageSource = require('../assets/appImages/onboard.jpg');
+
 const { styles } = require('../components/AuthenticationForms/styles');
 
 const Authentication = ({ navigation }) => {
@@ -21,10 +23,7 @@ const Authentication = ({ navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
     const [error, setError] = useState(null);
 
-    const { userInfo, setUserInfo, authError, setLoggedIn, loggedIn, setCurrentUser } = useUser();
-
-    const imageSource = require('../assets/appImages/onboard00.jpg');
-        
+    const { userInfo, setUserInfo, authError, setAuthError, handleSignIn } = useUser();
 
     useEffect(() => {
         if ((!userInfo.email.includes('@') || !userInfo.email.includes('.')) && userInfo.email.length > 0) {
@@ -33,8 +32,9 @@ const Authentication = ({ navigation }) => {
             setError('Password must be at least 6 characters long');
         } else {
             setError(null);
+            setAuthError(null);
         }
-    }, [userInfo, switchHandler, authError]);
+    }, [userInfo, switchHandler]);
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
@@ -45,24 +45,16 @@ const Authentication = ({ navigation }) => {
         };
     }, []);
 
-   const handleSignIn = async () => {
-        setError(null);
-        try {
-            const response = await sendRequest(requestMethods.POST, 'auth/login', userInfo);
-
-            if (response.status === 200) {
-                await AsyncStorage.setItem('token', response.data.token);
-                await AsyncStorage.setItem('streamToken', response.data.stream_token);
-                setLoggedIn(true);
-                setCurrentUser(response.data.user);
-                console.log('User login successful:', response.data.user);
-                loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
+    useEffect(() => {
+        const setNavigationBarColor = async (color) => {
+            try {
+                await SystemNavigationBar.setNavigationColor(color);
+            } catch (error) {
+                console.log('Error setting navigation bar color:', error);
             }
-        } catch (error) {
-            console.log('Error signing in:', error);
-            setError('Invalid email or password');
-        }
-    };
+        };
+        setNavigationBarColor(colors.bgDarkest);
+    }, []);
 
     const checkEmail = async () => {
         try {
@@ -100,7 +92,7 @@ const Authentication = ({ navigation }) => {
             <Image source={imageSource} style={styles.imageBackground} />
             <View style={[utilities.container, utilities.photoOverlayM]}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.topInnerContainer}>
+                    <View style={[styles.topInnerContainer]}>
                         <Image style={styles.welcomeLogo} source={logoImg} />
                         <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
                         {switchHandler ? (
@@ -112,7 +104,7 @@ const Authentication = ({ navigation }) => {
                 </ScrollView>
                 {!keyboardVisible && (
                     <View style={styles.bottomInnerContainer}>
-                        <Text style={styles.errorText}>{error}</Text>
+                        <Text style={styles.errorText}>{error || authError}</Text>
                         <PrimaryBtn
                             text={!switchHandler ? 'Sign In' : 'Continue'}
                             handlePress={handleProceed}

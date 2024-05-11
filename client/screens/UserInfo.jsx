@@ -25,7 +25,7 @@ const UserInfo = ({ navigation }) => {
     const [formTouched, setFormTouched] = useState(false);
     const [error, setError] = useState(null);
 
-    const { userInfo, setUserInfo, setLoggedIn, setCurrentUser, loggedIn } = useUser();
+    const { userInfo, setUserInfo, authError, setAuthError, handleSignUp } = useUser();
 
     
     useEffect(() => {
@@ -105,6 +105,7 @@ const UserInfo = ({ navigation }) => {
             return false;
         } else {
             setError(null);
+            setAuthError(null);
             return true;
         }
     };
@@ -149,21 +150,24 @@ const UserInfo = ({ navigation }) => {
         return formData;
     };
 
-    const handleSignUp = async () => {
+    const handleProceed = async () => {
         const formData = handleUserInfoInput();
-        try {
-            const response = await sendRequest(requestMethods.POST, 'auth/register', formData);
-            if (response.status === 201) {
-                await AsyncStorage.setItem('token', response.data.token);
-                await AsyncStorage.setItem('streamToken', response.data.stream_token);
-                setLoggedIn(true);
-                setCurrentUser(response.data.user);
-                loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
-            }
-        } catch (error) {
-            console.error('Error registering:', error);
-            setError('Failed to register user');
-        }
+        if (!formData) return;
+        handleSignUp(formData);
+
+        // try {
+        //     const response = await sendRequest(requestMethods.POST, 'auth/register', formData);
+        //     if (response.status === 201) {
+        //         await AsyncStorage.setItem('token', response.data.token);
+        //         await AsyncStorage.setItem('streamToken', response.data.stream_token);
+        //         setLoggedIn(true);
+        //         setCurrentUser(response.data.user);
+        //         loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
+        //     }
+        // } catch (error) {
+        //     console.error('Error registering:', error);
+        //     setError('Failed to register user');
+        // }
     };
     const handlePress = (genreId) => {
         let newGenres = [];
@@ -261,10 +265,8 @@ const UserInfo = ({ navigation }) => {
                     </View>
                 </View>
             </View>
-            <Text style={styles.errorText}>{error}</Text>
-            <PrimaryBtn text="Register" handlePress={handleSignUp} marginBottom={56} />
-            {/* <View style={styles.bottomInnerContainer}>
-            </View> */}
+            <Text style={[styles.errorText, {marginTop:24}]}>{error || authError}</Text>
+            <PrimaryBtn text="Register" handlePress={handleProceed} marginBottom={56} />
         </View>
     );
 };

@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Modal,
-    Dimensions,
-    TextInput,
-    Pressable,
-    FlatList,
-    TouchableWithoutFeedback,
-} from 'react-native';
+import { StyleSheet, Text, View, Modal, Dimensions, TextInput, FlatList, TouchableWithoutFeedback } from 'react-native';
 
 import { colors, utilities } from '../../styles/utilities';
 
@@ -31,7 +21,7 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, bu
             handlePress(selectedMember);
         }
     };
-    
+
     return (
         <Modal
             animationType="slide"
@@ -89,12 +79,9 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, bu
                                 No Connections Yet!
                             </Text>
                         )}
-                        {input && <PrimaryBtn
-                            text={buttonText}
-                            marginBottom={16}
-                            marginTop={16}
-                            handlePress={handleSubmit}
-                        />}
+                        {input && (
+                            <PrimaryBtn text={buttonText} marginBottom={16} marginTop={16} handlePress={handleSubmit} />
+                        )}
                     </View>
                 </View>
             </TouchableWithoutFeedback>

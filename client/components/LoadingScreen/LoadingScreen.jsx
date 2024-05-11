@@ -6,7 +6,7 @@ import { colors, utilities } from '../../styles/utilities';
 const LoadingScreen = ({ message = null }) => {
     return (
         <View style={[utilities.flexed, utilities.center, { backgroundColor: colors.bgDark }]}>
-            <Image source={require('../../assets/appImages/logoS.png')} style={{ height: 80, width: 80 }} />
+            <Image source={require('../../assets/appImages/logoLoading.png')} style={{ height: 80, width: 80 }} />
             {message && (
                 <Text style={[utilities.textCenter, utilities.myFontMedium, { color: colors.offWhite , marginTop:12 }]}>
                     {message}

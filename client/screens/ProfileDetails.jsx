@@ -23,8 +23,8 @@ const ProfileDetails = ({ route }) => {
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
     const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
 
-    const chatId = [currentUser.id, userId].sort((a, b) => a - b).join('-');;
-    
+    const chatId = [currentUser.id, userId].sort((a, b) => a - b).join('-');
+
     const imageUrl = `${profilePicturesUrl + user.picture}`;
 
     useEffect(() => {
@@ -39,7 +39,6 @@ const ProfileDetails = ({ route }) => {
         }
     }, [userId]);
 
-
     if (user.name)
         return (
             <View style={utilities.flexed}>
@@ -49,7 +48,9 @@ const ProfileDetails = ({ route }) => {
                         style={[utilities.flexRow, utilities.alignCenter, utilities.spaceBetween, { marginRight: 20 }]}
                     >
                         <View>
-                            <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12, marginBottom:-2 }]}>{user.name}</Text>
+                            <Text style={[utilities.textXL, utilities.myFontBold, { marginTop: 12, marginBottom: -2 }]}>
+                                {user.name}
+                            </Text>
                             <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.gray }]}>
                                 {user.instrument.name}
                             </Text>
@@ -71,7 +72,7 @@ const ProfileDetails = ({ route }) => {
                         <Text style={[utilities.textS, utilities.myFontRegular, styles.profileDetailsHeader]}>
                             My Details
                         </Text>
-                        <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 8, gap: 4}]}>
+                        <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 8, gap: 4 }]}>
                             <DetailsPill item={user?.instrument} />
                             <DetailsPill item={user?.experience} />
                             {user?.genres && user.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
@@ -87,7 +88,14 @@ const ProfileDetails = ({ route }) => {
                                 screen: 'ChatDetails',
                                 params: {
                                     id: chatId,
-                                    participants: [{ id: user.id, name: user.name, picture: user.picture }],
+                                    participants: [
+                                        {
+                                            id: user.id,
+                                            name: user.name,
+                                            picture: user.picture,
+                                            instrument: user.instrument,
+                                        },
+                                    ],
                                 },
                             })
                         }
