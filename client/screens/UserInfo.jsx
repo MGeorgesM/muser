@@ -14,16 +14,16 @@ const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserInfo = ({ navigation }) => {
     const {
-        handleImagePicker,
-        setUserInfo,
-        handlePickerChange,
-        handlePress,
-        handleProceed,
-        profileProperties,
-        selectedPicture,
+        error,
         userInfo,
         authError,
-        error,
+        setUserInfo,
+        handlePress,
+        handleProceed,
+        selectedPicture,
+        handleImagePicker,
+        profileProperties,
+        handlePickerChange,
     } = useUserInfoLogic();
 
     return (
