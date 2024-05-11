@@ -122,7 +122,7 @@ const Feed = ({ navigation }) => {
     const handleChatInititation = () => {
         const matchedUsersIds = matchedUsers.map((user) => user.id);
         const chatId = [currentUser.id, ...matchedUsersIds].sort((a, b) => a - b).join('-');;
-        const chatParticipants = matchedUsers.map((user) => {
+        const participants = matchedUsers.map((user) => {
             return {
                 id: user.id,
                 name: user.name,
@@ -133,7 +133,7 @@ const Feed = ({ navigation }) => {
         navigation.navigate('Chat',  { screen: 'ChatDetails', params:
             {
                 id:chatId,
-                chatParticipants: chatParticipants
+                participants
             }
           });
     };

@@ -35,12 +35,13 @@ const Chat = ({ navigation, route }) => {
     const dispatch = useDispatch();
 
     const { currentUser } = useUser();
+
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
 
     const { id, participants, chatTitle } = route.params;
 
     const [chatMessages, setChatMessages] = useState([]);
-    const [chatParticipants, setChatParticipants] = useState(participants);
+    const [chatParticipants, setChatParticipants] = useState([]);
     const [chatConnections, setChatConnections] = useState([]);
 
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
@@ -51,15 +52,17 @@ const Chat = ({ navigation, route }) => {
             headerTitle: () => {
                 if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
                 else {
-
                     if (!participants) return;
-                    const receiverName = participants.map((participant) => participant.name).join(', ');
-                    const reciverPicture = participants[0].picture;
-                    const receiverId = participants[0].id;
+
+                    const participantsList = chatParticipants.length > 0 ? chatParticipants : participants;
+                    const receiverName = participantsList.map((participant) => participant.name).join(', ');
+                    const reciverPicture = participantsList[0].picture;
+                    const receiverId = participantsList[0].id;
+
                     return (
                         <PictureHeader
-                            picture={participants.length > 1 ? null : reciverPicture}
-                            name={truncateText(receiverName, 15)}
+                            picture={participantsList.length > 1 ? null : reciverPicture}
+                            name={truncateText(receiverName, 20)}
                             handlePress={() =>
                                 navigation.navigate('Feed', {
                                     screen: 'ProfileDetails',
@@ -92,11 +95,12 @@ const Chat = ({ navigation, route }) => {
         let unsubscribe;
 
         setChatMessages([]);
+        setChatParticipants([])
 
         const setupMessagesListener = async () => {
             console.log('Starting listener');
             console.log('Chat ID:', id);
-            console.log('Chat Participants:', participants)
+            console.log('Chat Participants:', participants);
 
             const newChatRef = doc(fireStoreDb, 'chats', id);
             const messagesRef = collection(newChatRef, 'messages');
@@ -136,6 +140,10 @@ const Chat = ({ navigation, route }) => {
         //     })
         // );
 
+        console.log('user connections',userConnections)
+
+        if (!userConnections) return;
+
         const remainingConnections = userConnections.filter((connection) =>
             participants.every((participant) => participant.id !== connection.id)
         );
@@ -168,18 +176,16 @@ const Chat = ({ navigation, route }) => {
     const addParticipant = async (newParticipant) => {
         const newParticipantId = newParticipant.id;
 
-        // if (!newParticipantId && participants.includes(newParticipantId)) {
-        //     console.log('Participant already exists in chat!');
-        //     return;
-        // }
+        if (newParticipantId && participants.some((participant) => participant.id === newParticipantId)) {
+            console.log('Participant already exists in chat!');
+            return;
+        }
 
         try {
             const chatRef = doc(fireStoreDb, 'chats', id);
 
             const newParticipantsList = [...participants, newParticipant];
 
-            console.log(newParticipantsList)
-            return
             const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
             newParticipantsIdsList.push(currentUser.id);
 
@@ -214,7 +220,7 @@ const Chat = ({ navigation, route }) => {
                 userIds: newConnectionIds,
             });
 
-            if (response.status !== 200) throw new Error('Failed to add connections');            
+            if (response.status !== 200) throw new Error('Failed to add connections');
             response.data.connections.forEach((connection) => {
                 dispatch(addNewConnection(connection.id));
             });
