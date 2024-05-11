@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
@@ -8,12 +8,13 @@ import { colors, utilities } from '../styles/utilities';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 import { useSelector } from 'react-redux';
 
+import BackBtn from '../components/Elements/BackBtn/BackBtn';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 import InstrumentIcon from '../components/Elements/InstrumentIcon/InstrumentIcon';
 import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
 
 const ProfileDetails = ({ route }) => {
-    const { userId } = route.params;
+    const { userId, onBackPress } = route.params;
     const { currentUser } = useUser();
     const navigation = useNavigation();
 
@@ -27,7 +28,7 @@ const ProfileDetails = ({ route }) => {
 
     const imageUrl = `${profilePicturesUrl + user.picture}`;
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (userId) {
             const foundUser = feedUsers.find((user) => user.id === userId);
             if (foundUser) return setUser(foundUser);
@@ -42,6 +43,7 @@ const ProfileDetails = ({ route }) => {
     if (user.name)
         return (
             <View style={utilities.flexed}>
+                <BackBtn navigation={navigation} onBackPress={onBackPress} backgroundColor={null} color='white'/>
                 <Image source={{ uri: imageUrl }} style={[styles.profileDetailsPicture]} />
                 <View style={[styles.detailContainer]}>
                     <View

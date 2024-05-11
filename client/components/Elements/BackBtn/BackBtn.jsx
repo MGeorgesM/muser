@@ -4,11 +4,11 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
 import { colors } from '../../../styles/utilities';
 
-const BackBtn = ({ navigation, color = colors.black, backgroundColor = colors.lightGrayTrsp }) => {
+const BackBtn = ({ navigation, onBackPress, color = colors.black, backgroundColor = colors.lightGrayTrsp }) => {
     return (
         <TouchableOpacity
             style={[styles.backBtn, { backgroundColor: backgroundColor }]}
-            onPress={() => navigation.goBack()}
+            onPress={onBackPress || (() => navigation.goBack())}
         >
             <ChevronLeft style={styles.backBtnIcon} size={24} color={color} />
         </TouchableOpacity>

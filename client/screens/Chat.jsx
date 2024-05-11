@@ -51,7 +51,8 @@ const Chat = ({ navigation, route }) => {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: () => {
-                if (chatTitle || localChatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle || localChatTitle}</Text>;
+                if (chatTitle || localChatTitle)
+                    return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle || localChatTitle}</Text>;
                 else {
                     if (!participants) return;
 
@@ -320,7 +321,7 @@ const Chat = ({ navigation, route }) => {
 
             const messageData = {
                 _id: `${currentUser.id}-${Date.now()}-${bandName}`,
-                text: `We have formed the band ${bandName}!`,
+                text: `We have formed the band \'${bandName}\'!`,
                 createdAt: serverTimestamp(),
                 user: {
                     _id: currentUser.id,
@@ -352,6 +353,20 @@ const Chat = ({ navigation, route }) => {
                     _id: currentUser.id,
                     avatar: currentUser.picture,
                 }}
+                renderAvatarOnTop={true}
+                onPressAvatar={(user) => {
+                    navigation.navigate('Feed', {
+                        screen: 'ProfileDetails',
+                        params: {
+                            userId: user._id,
+                            onBackPress: () => navigation.navigate('ChatDetails' , {
+                                id: id,
+                                participants: participants,
+                                chatTitle: chatTitle,
+                            }),
+                        },
+                    });
+                }}
                 showUserAvatar={false}
                 renderBubble={renderBubble}
                 renderSend={renderSend}
@@ -363,9 +378,9 @@ const Chat = ({ navigation, route }) => {
                 <ChatModal
                     title={chatTitle ? chatTitle : 'Your Band Name'}
                     buttonText="Create Band"
-                    data={chatTitle ? participants : null}
-                    input={chatTitle ? false : true}
-                    handlePress={handleFormBand}
+                    data={chatTitle || localChatTitle ? participants : null}
+                    input={chatTitle || localChatTitle ? false : true}
+                    handlePress={chatTitle || localChatTitle ? null : handleFormBand}
                     setModalVisible={setBandModalVisible}
                 />
             )}
