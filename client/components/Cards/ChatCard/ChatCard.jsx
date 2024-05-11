@@ -96,7 +96,7 @@ const ChatCard = ({ chat, navigation }) => {
                         {title && truncateText(title, 25)}
                     </Text>
                     <Text style={[utilities.textXS, utilities.myFontRegular, { color: colors.gray }]}>
-                        {truncateText(chat.lastMessage.text)}
+                        {truncateText(chat.lastMessage.text,35)}
                     </Text>
                 </View>
             </View>

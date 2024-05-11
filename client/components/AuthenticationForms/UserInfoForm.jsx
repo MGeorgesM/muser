@@ -4,20 +4,20 @@ import { StyleSheet, Text, View, TextInput, SafeAreaView } from 'react-native';
 import DetailsPill from '../Elements/DetailsPill/DetailsPill';
 import ProfileDetailsPicker from '../ProfileDetailsPicker/ProfileDetailsPicker';
 
-import { colors } from '../../styles/utilities';
+import { colors, utilities } from '../../styles/utilities';
 
 const { styles } = require('./styles');
 
-const UserInfoForm = ({ userInfo, setUserInfo, handlePress, profileProperties }) => {
+const UserInfoForm = ({ userInfo, setUserInfo, handlePress, handlePickerChange, profileProperties }) => {
     return (
-        <View>
+        <View style={[utilities.flexed]}>
             <Text style={styles.inputTextProfile}>{userInfo.role_id == 2 ? 'Description' : 'Bio'}</Text>
             <TextInput
                 key={'about'}
                 placeholder="Tell us about yourself!"
                 placeholderTextColor={colors.gray}
                 cursorColor={colors.primary}
-                style={{ marginBottom: 20, color: colors.lightGray }}
+                style={[utilities.myFontRegular,{ marginBottom: 20, color: colors.lightGray }]}
                 value={userInfo.about}
                 onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
             />

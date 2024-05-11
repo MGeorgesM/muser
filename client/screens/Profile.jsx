@@ -1,12 +1,22 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, TextInput, Pressable, ScrollView, SafeAreaView } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Dimensions,
+    Image,
+    TextInput,
+    Pressable,
+    ScrollView,
+    SafeAreaView,
+} from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 
 import { colors, utilities } from '../styles/utilities';
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 
-import { UserRoundCog, LockKeyhole, ChevronRight } from 'lucide-react-native';
+import { UserRoundCog, LockKeyhole, ChevronRight, Scroll } from 'lucide-react-native';
 
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
@@ -16,18 +26,18 @@ import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 import { useUserInfoLogic } from './userInfoLogic';
 import UserInfoForm from '../components/AuthenticationForms/UserInfoForm';
+import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const Profile = ({ navigation }) => {
-    const { currentUser } = useUser();
+    const { currentUser, setCurrentUser } = useUser();
     const [switchHandler, setSwitchHandler] = useState(false);
     const {
-        error,
         userInfo,
-        authError,
         setUserInfo,
         handlePress,
         handleProceed,
         selectedPicture,
+        setSelectedPicture,
         handleImagePicker,
         profileProperties,
         handlePickerChange,
@@ -42,14 +52,15 @@ const Profile = ({ navigation }) => {
             } catch (error) {
                 console.log('Error getting user info:', error);
             }
-        }
+        };
 
         const genresArray = currentUser.genres.map((genre) => genre.id);
         console.log('Genres Array:', genresArray);
 
         getUserInfo();
         setUserInfo((prev) => ({ ...prev, genres: genresArray }));
-        
+        setSelectedPicture(currentUser.picture)
+
         setSwitchHandler(false);
         console.log('Current User:', currentUser);
         console.log('User Info:', userInfo);
@@ -61,8 +72,20 @@ const Profile = ({ navigation }) => {
         });
     }, [navigation]);
 
+    const updateUser = async (formData) => {
+        try {
+            const response = await sendRequest(requestMethods.PUT, 'users/', formData);
+            if (response.status !== 200) throw new Error('Error updating user info');
+            setCurrentUser(response.data);
+            console.log('Updated User:', response.data);
+            setSwitchHandler(false);
+        } catch (error) {
+            console.log('Error updating user info:', error);
+        }
+    };
+
     return currentUser ? (
-        <SafeAreaView style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
+        <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
             <View style={styles.topProfileView}>
                 <Pressable style={styles.profilePicture} onPress={handleImagePicker}>
                     <Image
@@ -77,7 +100,7 @@ const Profile = ({ navigation }) => {
                     {currentUser.email}
                 </Text>
             </View>
-            <ScrollView style={styles.profileDetailsSection}>
+            <View style={styles.profileDetailsSection}>
                 {!switchHandler ? (
                     <>
                         <Text
@@ -101,16 +124,21 @@ const Profile = ({ navigation }) => {
                         )}
                     </>
                 ) : (
+                    <>
+                        <ScrollView>
+                            <UserInfoForm
+                                userInfo={userInfo}
+                                setUserInfo={setUserInfo}
+                                profileProperties={profileProperties}
+                                handlePress={handlePress}
+                                handlePickerChange={handlePickerChange}
+                            />
+                        </ScrollView>
 
-                        <UserInfoForm
-                            userInfo={userInfo}
-                            setUserInfo={setUserInfo}
-                            profileProperties={profileProperties}
-                            handlePress={handlePress}
-                        />
-
+                        <PrimaryBtn text={'Save'} marginTop={12} handlePress={() => handleProceed(updateUser)} />
+                    </>
                 )}
-            </ScrollView>
+            </View>
             {!switchHandler && (
                 <View style={styles.editProfileModal}>
                     <SettingsCard
@@ -121,7 +149,7 @@ const Profile = ({ navigation }) => {
                     <SettingsCard iconComponent={<LockKeyhole color={'white'} />} text={'Edit Login Details'} />
                 </View>
             )}
-        </SafeAreaView>
+        </View>
     ) : (
         <LoadingScreen />
     );
@@ -159,9 +187,10 @@ const styles = StyleSheet.create({
     },
 
     profileDetailsSection: {
-        flex:1,
+        flex: 1,
         paddingTop: 24,
         paddingHorizontal: 20,
+        paddingBottom: 0,
     },
 
     editProfileModal: {

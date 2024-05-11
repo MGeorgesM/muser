@@ -57,7 +57,7 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
         Route::get('{id?}', [UserController::class, 'getUser'])->where('id', '[0-9]+');
         Route::get('details', [UserController::class, 'getUsersPicturesAndNames']);
         Route::get('type/{role}', [UserController::class, 'getUsersByRole']);
-        Route::post('{id}', [UserController::class, 'updateUser']);
+        Route::post('/', [UserController::class, 'updateUser']);
     });
 
     Route::group(['prefix' => 'bands'], function ($router) {

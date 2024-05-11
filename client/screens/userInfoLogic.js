@@ -68,7 +68,10 @@ export const useUserInfoLogic = () => {
             return false;
         }
 
-        if (userInfo.about.length > 40 || userInfo.venue_name.length > 40) {
+        if (
+            (userInfo.role_id === 1 && userInfo.about.length > 40) ||
+            (userInfo.role_id === 2 && userInfo.venue_name.length > 40)
+        ) {
             setError('Please keep your bio under 40 characters');
             return false;
         }
@@ -80,7 +83,6 @@ export const useUserInfoLogic = () => {
             userInfo.role_id == 1 &&
             (userInfo.genres.length === 0 || userInfo.instrument_id === '' || userInfo.experience_id === '')
         ) {
-            console.log('here');
             setError('Please fill in all fields');
             return false;
         } else if (userInfo.role_id == 2 && (userInfo.venue_type_id === '' || userInfo.venue_name === '')) {
@@ -106,7 +108,7 @@ export const useUserInfoLogic = () => {
         const formData = new FormData();
 
         for (const key in userInfo) {
-            if (userInfo[key] === '') continue;
+            if (!userInfo[key]) continue;
             if (key === 'picture') {
                 console.log('here!');
                 formData.append('picture', {
@@ -136,10 +138,12 @@ export const useUserInfoLogic = () => {
         setUserInfo((prev) => ({ ...prev, genres: newGenres }));
     };
 
-    const handleProceed = async () => {
+    const handleProceed = async (apiCall = handleSignUp) => {
+        console.log('Proceeding!');
         const formData = handleUserInfoInput();
         if (!formData) return;
-        handleSignUp(formData);
+        console.log('HERRRREEE');
+        apiCall(formData);
     };
 
     return {
@@ -152,6 +156,7 @@ export const useUserInfoLogic = () => {
         selectedPicture,
         profileProperties,
         handleImagePicker,
+        setSelectedPicture,
         handlePickerChange,
         handleUserInfoInput,
     };
