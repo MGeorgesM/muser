@@ -1,24 +1,12 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, ImageBackground, StatusBar } from 'react-native';
-import SystemNavigationBar from 'react-native-system-navigation-bar';
-
 import { utilities } from '../styles/utilities';
 
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 
 const imageUrl = require('../assets/appImages/onboard00.jpg');
-const Welcome = ({ navigation }) => {
-    useEffect(() => {
-        const hideNavigationBar = async () => {
-            try {
-                await SystemNavigationBar.navigationHide();
-            } catch (error) {
-                console.error('Failed to hide system navigation bar:', error);
-            }
-        };
 
-        hideNavigationBar();
-    }, []);
+const Welcome = ({ navigation }) => {
     return (
         <View style={{ flex: 1 }}>
             <StatusBar translucent hidden={true} />

@@ -19,7 +19,13 @@ import {
     setDoc,
 } from 'firebase/firestore';
 
-import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
+import {
+    StreamCall,
+    VideoRenderer,
+    ViewerLivestream,
+    useCall,
+    useCallStateHooks,
+} from '@stream-io/video-react-native-sdk';
 import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 import inCallManager from 'react-native-incall-manager';
 
@@ -62,7 +68,7 @@ const StreamView = ({ navigation, route }) => {
                 call && console.log('Call set up!');
 
                 setCall(call);
-                console.log(call)
+                console.log(call);
             } catch (error) {
                 setVideoIsPlaying(false);
                 console.log('Error setting up Call', error);
@@ -170,7 +176,7 @@ const StreamView = ({ navigation, route }) => {
 
         try {
             const call = client.call('livestream', showId);
-            await call.join();
+            await call.join({ create: false });
             setCall(call);
             console.log('Call joined!', call);
             call && setVideoIsPlaying(true);
@@ -202,17 +208,42 @@ const StreamView = ({ navigation, route }) => {
         setControlsVisible(!controlsVisible);
     };
 
+    const StreamViewerWatch = (setCall) => {
+        const call = useCall();
+        const { useParticipantCount, useLocalParticipant, useRemoteParticipants, useIsCallLive } = useCallStateHooks();
+
+        const totalParticipants = useParticipantCount();
+        const localParticipant = useLocalParticipant();
+        const remoteParticipants = useRemoteParticipants();
+
+        console.log('local participant view ', localParticipant);
+
+        useEffect(() => {
+            inCallManager.start({ media: 'video', auto: true });
+            return () => {
+                inCallManager.stop();
+                if (call) {
+                    call.leave();
+                    console.log('Leaving Call!');
+                }
+            };
+        }, []);
+
+        return localParticipant && <VideoRenderer participant={localParticipant} objectFit={'cover'} trackType="videoTrack" />;
+    };
+
     return (
-        <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
+        <View style={[utilities.flexed]}>
             <View style={{ flex: 1, position: 'relative' }}>
                 {call ? (
                     <StreamCall call={call}>
                         <View style={{ height: videoIsMaximized ? height * 1 : height * 0.5 }}>
-                            <ViewerLivestream
+                            {/* <ViewerLivestream
                                 ViewerLeaveStreamButton={null}
                                 ViewerLivestreamTopView={null}
                                 ViewerLivestreamControls={null}
-                            />
+                            /> */}
+                            <StreamViewerWatch />
                         </View>
                     </StreamCall>
                 ) : (
@@ -302,11 +333,15 @@ const StreamView = ({ navigation, route }) => {
                         </ScrollView>
                     </View>
                     <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
-                        {comments &&
-                            comments.length > 0 ?
+                        {comments && comments.length > 0 ? (
                             comments.map((comment) => (
                                 <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
-                            )) : <Text style={[utilities.textCenter, utilities.myFontRegular, {color:colors.gray}]}>No comments yet. Share your thoughts.</Text>}
+                            ))
+                        ) : (
+                            <Text style={[utilities.textCenter, utilities.myFontRegular, { color: colors.gray }]}>
+                                No comments yet. Share your thoughts.
+                            </Text>
+                        )}
                     </ScrollView>
                     <ChatTextInput
                         placeholder="Write a comment"

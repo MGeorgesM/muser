@@ -31,17 +31,6 @@ const Feed = ({ navigation }) => {
 
     const users = useSelector((global) => global.usersSlice.feedUsers);
 
-    useLayoutEffect(() => {
-        const showNavigationBar = async () => {
-            try {
-                await SystemNavigationBar.navigationShow();
-            } catch (error) {
-                console.error('Failed to hide system navigation bar:', error);
-            }
-        };
-        showNavigationBar();
-        getUsers();
-    }, [currentUser]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -69,7 +58,21 @@ const Feed = ({ navigation }) => {
                 elevation: 0,
             },
         });
+
+        const setNavigationBarColor = async () => {
+            try {
+                await SystemNavigationBar.setNavigationColor(colors.bgDark);
+            } catch (error) {
+                console.error('Failed to change system navigation bar color:', error);
+            }
+        };
+        setNavigationBarColor();
     });
+
+    useEffect(() => {
+        getUsers();        
+    }, [currentUser]);
+
 
     const getUsers = async () => {
         try {

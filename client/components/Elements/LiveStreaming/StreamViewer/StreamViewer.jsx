@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const StreamViewer = ({ viewer = false, showName, setCall }) => {
     const call = useCall();
+    const navigation = useNavigation();
 
     const { useCameraState, useMicrophoneState, useCallCallingState, useHasOngoingScreenShare, useParticipants } =
         useCallStateHooks();
@@ -30,7 +31,6 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
     console.log('localParticipant:', localParticipant);
     console.log('remoteParticitPants', remoteParticipants);
 
-    const navigation = useNavigation();
 
     // const floatingParticipant = hasOngoingScreenShare && hasVideoTrack(currentSpeaker) && currentSpeaker;
     // const hasScreenShare = (p) => p?.publishedTracks.includes(SfuModels.TrackType.SCREEN_SHARE);

@@ -12,11 +12,11 @@ import ShowCard from '../components/Cards/ShowCard/ShowCard';
 import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
 
 const VenueDetails = ({ route, navigation }) => {
-    const { venue } = route.params;
+    const { venue, show, switchView } = route.params;
 
-    const [switchHandler, setSwitchHandler] = useState(false);
+    const [switchHandler, setSwitchHandler] = useState(switchView ? true : false);
     const [shows, setShows] = useState([]);
-    const [selectedShow, setSelectedShow] = useState();
+    const [selectedShow, setSelectedShow] = useState(show);
 
     useEffect(() => {
         const getVenueDetails = async () => {
@@ -41,7 +41,7 @@ const VenueDetails = ({ route, navigation }) => {
             }
         };
         // getVenueDetails();
-        getVenueShows();
+        venue && getVenueShows();
     }, [venue]);
 
     return (

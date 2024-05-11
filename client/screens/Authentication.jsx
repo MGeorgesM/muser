@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, Text, View, Keyboard } from 'react-native';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 import { useUser } from '../contexts/UserContext';
 
-import { utilities } from '../styles/utilities';
+import { colors, utilities } from '../styles/utilities';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import SignInForm from '../components/AuthenticationForms/SignInForm';
@@ -44,7 +46,7 @@ const Authentication = ({ navigation }) => {
         };
     }, []);
 
-    const handleSignIn = async () => {
+   const handleSignIn = async () => {
         setError(null);
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/login', userInfo);
@@ -98,7 +100,7 @@ const Authentication = ({ navigation }) => {
         <>
             <Image source={imageSource} style={styles.imageBackground} />
             <View style={[utilities.container, utilities.photoOverlayM]}>
-                <ScrollView showsVerticalScrollIndicator = {false}>
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.topInnerContainer}>
                         <Image style={styles.welcomeLogo} source={logoImg} />
                         <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
@@ -113,7 +115,7 @@ const Authentication = ({ navigation }) => {
                     <View style={styles.bottomInnerContainer}>
                         <Text style={styles.errorText}>{error}</Text>
                         <PrimaryBtn
-                            text={!switchHandler ? 'Log In' : 'Continue'}
+                            text={!switchHandler ? 'Sign In' : 'Continue'}
                             handlePress={handleProceed}
                             marginBottom={0}
                         />
@@ -126,7 +128,7 @@ const Authentication = ({ navigation }) => {
                                     setError(null);
                                 }}
                             >
-                                {switchHandler ? 'Log In' : 'Register'}
+                                {switchHandler ? 'Sign In' : 'Register'}
                             </Text>
                         </Text>
                     </View>
