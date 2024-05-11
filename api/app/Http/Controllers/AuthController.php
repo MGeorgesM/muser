@@ -152,8 +152,8 @@ class AuthController extends Controller
     {
         return response()->json([
             'musician' => [
-                'Experience' => Experience::all(),
                 'Instrument' => Instrument::all(),
+                'Experience' => Experience::all(),
                 'Music Genres' => Genre::all(),
             ],
             'venue' => [

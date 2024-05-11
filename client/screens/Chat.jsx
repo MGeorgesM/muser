@@ -142,8 +142,6 @@ const Chat = ({ navigation, route }) => {
         //     })
         // );
 
-        console.log('user connections',userConnections)
-
         if (!userConnections) return;
 
         const remainingConnections = userConnections.filter((connection) =>

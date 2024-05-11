@@ -47,6 +47,7 @@ const ChatCard = ({ chat, navigation }) => {
             setTitle(chat.chatTitle || response.data.map((user) => user.name).join(', '));
             setAvatar(chat.chatTitle ? defaultAvatar : `${profilePicturesUrl + response.data[0].picture}`);
             setParticipants(response.data);
+
         } catch (error) {
             console.log('Error fetching users:', error);
         }
@@ -61,11 +62,12 @@ const ChatCard = ({ chat, navigation }) => {
         const otherParticipantIds = chat.participantsIds.filter((id) => id !== currentUser.id);
 
         otherParticipants = connectedUsers.filter((user) => otherParticipantIds.includes(user.id));
+
+        console.log('Getting user info from Card', otherParticipants)
         
         if (otherParticipants.length === 0) {
             otherParticipants = feedUsers.filter((user) => otherParticipantIds.includes(user.id));
-        } else {
-            getUsersPicutresandNamesFromApi()
+            otherParticipants ?? getUsersPicutresandNamesFromApi()
         }
         
         setTitle(chat.chatTitle || otherParticipants.map((user) => user.name).join(', '));

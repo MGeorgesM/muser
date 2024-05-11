@@ -89,12 +89,12 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, bu
                                 No Connections Yet!
                             </Text>
                         )}
-                        <PrimaryBtn
+                        {input && <PrimaryBtn
                             text={buttonText}
                             marginBottom={16}
                             marginTop={16}
                             handlePress={handleSubmit}
-                        />
+                        />}
                     </View>
                 </View>
             </TouchableWithoutFeedback>

@@ -11,6 +11,7 @@ export function renderBubble(props) {
             wrapperStyle={{
     
                 right: {
+
                     backgroundColor: colors.bgOffDark,
                     borderRadius: 12,
                     borderTopEndRadius: 0,
@@ -18,7 +19,7 @@ export function renderBubble(props) {
 
                 },
                 left: {
-                    backgroundColor: colors.bglightest,
+                    backgroundColor: colors.bglighter,
                     borderRadius: 12,
                     borderTopLeftRadius: 0,
                     marginBottom:2,
@@ -26,10 +27,14 @@ export function renderBubble(props) {
             }}
             textStyle={{
                 right: {
+                    fontFamily: 'Montserrat-Regular',
+                    fontSize: 14,
                     color: colors.white,
                 },
                 left: {
-                    color: colors.bgDark,
+                    fontFamily: 'Montserrat-Regular',
+                    fontSize: 14,
+                    color: colors.bgDarkest,
                 },
             }}
             timeTextStyle={{
