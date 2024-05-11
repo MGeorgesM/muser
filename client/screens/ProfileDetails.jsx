@@ -43,7 +43,7 @@ const ProfileDetails = ({ route }) => {
     if (user.name)
         return (
             <View style={utilities.flexed}>
-                <BackBtn navigation={navigation} onBackPress={onBackPress} backgroundColor={null} color='white'/>
+                <BackBtn navigation={navigation} onBackPress={onBackPress} backgroundColor={null} color="white" />
                 <Image source={{ uri: imageUrl }} style={[styles.profileDetailsPicture]} />
                 <View style={[styles.detailContainer]}>
                     <View
@@ -98,6 +98,10 @@ const ProfileDetails = ({ route }) => {
                                             instrument: user.instrument,
                                         },
                                     ],
+                                    onBackPress: () =>
+                                        navigation.navigate('ProfileDetails', {
+                                            userId: user.id,
+                                        }),
                                 },
                             })
                         }

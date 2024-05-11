@@ -38,7 +38,7 @@ const Chat = ({ navigation, route }) => {
 
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
 
-    const { id, participants, chatTitle } = route.params;
+    const { id, participants, chatTitle, onBackPress } = route.params;
 
     const [chatMessages, setChatMessages] = useState([]);
     const [chatParticipants, setChatParticipants] = useState([]);
@@ -76,7 +76,10 @@ const Chat = ({ navigation, route }) => {
                 }
             },
             headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.navigate('ChatMain')} style={{ marginLeft: 20 }}>
+                <TouchableOpacity
+                    onPress={onBackPress || (() => navigation.navigate('ChatMain'))}
+                    style={{ marginLeft: 20 }}
+                >
                     <ChevronLeft size={24} color="white" />
                 </TouchableOpacity>
             ),
@@ -359,11 +362,12 @@ const Chat = ({ navigation, route }) => {
                         screen: 'ProfileDetails',
                         params: {
                             userId: user._id,
-                            onBackPress: () => navigation.navigate('ChatDetails' , {
-                                id: id,
-                                participants: participants,
-                                chatTitle: chatTitle,
-                            }),
+                            onBackPress: () =>
+                                navigation.navigate('ChatDetails', {
+                                    id: id,
+                                    participants: participants,
+                                    chatTitle: chatTitle,
+                                }),
                         },
                     });
                 }}
