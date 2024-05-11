@@ -21,7 +21,6 @@ const ChatCard = ({ chat, navigation }) => {
     const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
 
-
     useEffect(() => {
         chat && getUsersPicutresandNames();
         // if (!chat.chatTitle) {
@@ -33,9 +32,8 @@ const ChatCard = ({ chat, navigation }) => {
     }, [chat]);
 
     const getUsersPicutresandNamesFromApi = async () => {
-        console.log('Calling api')
+        console.log('Calling api');
         const otherParticipantIds = chat.participantsIds.filter((id) => id !== currentUser.id);
-        
         if (otherParticipantIds.length === 0) return;
 
         const query = otherParticipantIds.map((id) => `ids[]=${id}`).join('&');
@@ -47,35 +45,31 @@ const ChatCard = ({ chat, navigation }) => {
             setTitle(chat.chatTitle || response.data.map((user) => user.name).join(', '));
             setAvatar(chat.chatTitle ? defaultAvatar : `${profilePicturesUrl + response.data[0].picture}`);
             setParticipants(response.data);
-
         } catch (error) {
             console.log('Error fetching users:', error);
         }
     };
 
     const getUsersPicutresandNames = async () => {
-        console.log(chat)
-        console.log(chat.participantsIds)
-
-        let otherParticipants
-
+        let otherParticipants = [];
         const otherParticipantIds = chat.participantsIds.filter((id) => id !== currentUser.id);
 
-        otherParticipants = connectedUsers.filter((user) => otherParticipantIds.includes(user.id));
-
-        console.log('Getting user info from Card', otherParticipants)
-        
-        if (otherParticipants.length === 0) {
-            otherParticipants = feedUsers.filter((user) => otherParticipantIds.includes(user.id));
-            otherParticipants ?? getUsersPicutresandNamesFromApi()
+        for (const id of otherParticipantIds) {
+            let user = connectedUsers.find((user) => user.id === id) || feedUsers.find((user) => user.id === id);
+            if (!user) {
+                console.log(`Fetching user info for ID: ${id} from API`);
+                user = await getUserInfoFromApi(id);
+            }
+            if (user) {
+                otherParticipants.push(user);
+            }
         }
-        
-        setTitle(chat.chatTitle || otherParticipants.map((user) => user.name).join(', '));
-        setAvatar(chat.chatTitle ? defaultAvatar : `${profilePicturesUrl + otherParticipants[0].picture}`);
-        setParticipants(otherParticipants);
 
-        console.log('otherParticipants', otherParticipants);
-
+        if (otherParticipants.length > 0) {
+            setTitle(chat.chatTitle || otherParticipants.map((user) => user.name).join(', '));
+            setAvatar(chat.chatTitle ? defaultAvatar : `${profilePicturesUrl + otherParticipants[0].picture}`);
+            setParticipants(otherParticipants);
+        }
     };
 
     return (
@@ -96,7 +90,7 @@ const ChatCard = ({ chat, navigation }) => {
                         {title && truncateText(title, 25)}
                     </Text>
                     <Text style={[utilities.textXS, utilities.myFontRegular, { color: colors.gray }]}>
-                        {truncateText(chat.lastMessage.text,35)}
+                        {truncateText(chat.lastMessage.text, 35)}
                     </Text>
                 </View>
             </View>
