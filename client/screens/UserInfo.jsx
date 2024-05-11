@@ -43,14 +43,6 @@ const UserInfo = ({ navigation }) => {
                 console.error('Error getting properties:', error);
             }
         };
-        const setNavigationBarColor = async () => {
-            try {
-                await SystemNavigationBar.setNavigationColor(colors.bgDark);
-            } catch (error) {
-                console.error('Failed to change system navigation bar color:', error);
-            }
-        };
-        setNavigationBarColor();
         getProperties();
     }, []);
 

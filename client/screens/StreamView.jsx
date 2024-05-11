@@ -208,29 +208,29 @@ const StreamView = ({ navigation, route }) => {
         setControlsVisible(!controlsVisible);
     };
 
-    const StreamViewerWatch = (setCall) => {
-        const call = useCall();
-        const { useParticipantCount, useLocalParticipant, useRemoteParticipants, useIsCallLive } = useCallStateHooks();
+    // const StreamViewerWatch = (setCall) => {
+    //     const call = useCall();
+    //     const { useParticipantCount, useLocalParticipant, useRemoteParticipants, useIsCallLive } = useCallStateHooks();
 
-        const totalParticipants = useParticipantCount();
-        const localParticipant = useLocalParticipant();
-        const remoteParticipants = useRemoteParticipants();
+    //     const totalParticipants = useParticipantCount();
+    //     const localParticipant = useLocalParticipant();
+    //     const remoteParticipants = useRemoteParticipants();
 
-        console.log('local participant view ', localParticipant);
+    //     console.log('local participant view ', localParticipant);
 
-        useEffect(() => {
-            inCallManager.start({ media: 'video', auto: true });
-            return () => {
-                inCallManager.stop();
-                if (call) {
-                    call.leave();
-                    console.log('Leaving Call!');
-                }
-            };
-        }, []);
+    //     useEffect(() => {
+    //         inCallManager.start({ media: 'video', auto: true });
+    //         return () => {
+    //             inCallManager.stop();
+    //             if (call) {
+    //                 call.leave();
+    //                 console.log('Leaving Call!');
+    //             }
+    //         };
+    //     }, []);
 
-        return localParticipant && <VideoRenderer participant={localParticipant} objectFit={'cover'} trackType="videoTrack" />;
-    };
+    //     return localParticipant && <VideoRenderer participant={localParticipant} objectFit={'cover'} trackType="videoTrack" />;
+    // };
 
     return (
         <View style={[utilities.flexed]}>
@@ -238,12 +238,12 @@ const StreamView = ({ navigation, route }) => {
                 {call ? (
                     <StreamCall call={call}>
                         <View style={{ height: videoIsMaximized ? height * 1 : height * 0.5 }}>
-                            {/* <ViewerLivestream
+                            <ViewerLivestream
                                 ViewerLeaveStreamButton={null}
                                 ViewerLivestreamTopView={null}
                                 ViewerLivestreamControls={null}
-                            /> */}
-                            <StreamViewerWatch />
+                            />
+                            {/* <StreamViewerWatch /> */}
                         </View>
                     </StreamCall>
                 ) : (

@@ -153,7 +153,7 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
             <View style={[utilities.flexed, { alignItems: 'center', justifyContent: 'center' }]}>
                 {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
                 {!isCallLive && (
-                    <Pressable onPress={handleStreamStatus} style={styles.goliveBtnContainer}>
+                    <Pressable onPress={handleStreamStatus}>
                         <Play size={48} color={colors.primary} style={{ marginLeft: 3 }} />
                     </Pressable>
                 )}
@@ -179,7 +179,7 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
                     </TouchableOpacity>
                     {isCallLive && (
                         <TouchableOpacity onPress={handleStreamStatus}>
-                            {<CircleStop size={24} color={'white'} />}
+                            {<CircleStop size={24} color={colors.primary} />}
                         </TouchableOpacity>
                     )}
                 </View>
