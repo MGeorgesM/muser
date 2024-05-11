@@ -6,8 +6,6 @@ import { profilePicturesUrl } from '../../../core/tools/apiRequest';
 
 const BandMemberCard = ({ entity, handlePress, isSelected }) => {
     const entityImage = `${profilePicturesUrl + entity.picture}`;
-    console.log(isSelected);
-    console.log(entity.id)
     return (
         <TouchableOpacity
             style={[utilities.flexRow, { marginBottom: 14, marginRight: 10 }]}

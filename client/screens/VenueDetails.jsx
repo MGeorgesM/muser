@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 
 import { setSelectedVenue } from '../store/Venues';
@@ -10,6 +10,7 @@ import { formatDateString, truncateText } from '../core/tools/formatDate';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 import ShowCard from '../components/Cards/ShowCard/ShowCard';
 import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
+import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const VenueDetails = ({ route, navigation }) => {
     const { venue, show, switchView } = route.params;
@@ -17,6 +18,12 @@ const VenueDetails = ({ route, navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(switchView ? true : false);
     const [shows, setShows] = useState([]);
     const [selectedShow, setSelectedShow] = useState(show);
+
+    useLayoutEffect(() => {
+        if (show) {
+            setSelectedShow(show);
+        } 
+    }, [show]);
 
     useEffect(() => {
         const getVenueDetails = async () => {
@@ -44,8 +51,21 @@ const VenueDetails = ({ route, navigation }) => {
         venue && getVenueShows();
     }, [venue]);
 
+    const handleProceed = () => {
+        switchView
+            ? navigation.navigate('Live', {
+                  screen: 'StreamBroadcast',
+                  params: {
+                      showId: show.id,
+                      showName: `${show.band.name} @ ${show.venue.name}`,
+                  },
+              })
+            : navigation.navigate('ShowDetails', { venueId: venue.id, venueName: venue.name });
+    };
+
     return (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
+            
             <View>
                 <Image
                     source={{
@@ -68,7 +88,7 @@ const VenueDetails = ({ route, navigation }) => {
                 <Text style={[utilities.textM, utilities.myFontBold, { marginVertical: 18 }]}>
                     {!switchHandler ? 'Upcoming Shows' : 'Band Members'}
                 </Text>
-                {shows.length > 0 ? (
+                {shows.length > 0 || switchHandler ? (
                     <FlatList
                         style={{ marginBottom: 4 }}
                         data={!switchHandler ? shows : selectedShow.band.members}
@@ -104,9 +124,9 @@ const VenueDetails = ({ route, navigation }) => {
                     </Text>
                 )}
                 <PrimaryBtn
-                    text={'Book your Show'}
+                    text={switchView ? 'Go Live' : 'Book your Show'}
                     marginTop={'auto'}
-                    handlePress={() => navigation.navigate('ShowDetails', { venueId: venue.id, venueName: venue.name })}
+                    handlePress={handleProceed}
                 />
             </View>
         </View>

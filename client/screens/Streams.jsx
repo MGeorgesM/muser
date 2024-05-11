@@ -12,15 +12,13 @@ import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const Streams = ({ navigation }) => {
     const dispatch = useDispatch();
-    const [userIsVenue, setUserIsVenue] = useState(false);
-
     const { currentUser } = useUser();
 
     const shows = useSelector((global) => global.showsSlice.shows);
 
-    useEffect(() => {
-        currentUser.role.id === 2 ? setUserIsVenue(true) : setUserIsVenue(false);
+    const [userIsVenue, setUserIsVenue] = useState(currentUser.role.id === 2);
 
+    useEffect(() => {
         const getShows = async () => {
             try {
                 const response = await sendRequest(
