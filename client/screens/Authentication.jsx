@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, Text, View, Keyboard } from 'react-native';
+import { Image, ScrollView, Text, View, Keyboard, KeyboardAvoidingView } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SystemNavigationBar from 'react-native-system-navigation-bar';

@@ -43,6 +43,7 @@ const Chat = ({ navigation, route }) => {
     const [chatMessages, setChatMessages] = useState([]);
     const [chatParticipants, setChatParticipants] = useState([]);
     const [chatConnections, setChatConnections] = useState([]);
+    const [localChatTitle, setLocalChatTitle] = useState('');
 
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
     const [bandModalVisible, setBandModalVisible] = useState(false);
@@ -50,7 +51,7 @@ const Chat = ({ navigation, route }) => {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: () => {
-                if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
+                if (chatTitle || localChatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle || localChatTitle}</Text>;
                 else {
                     if (!participants) return;
 
@@ -89,13 +90,14 @@ const Chat = ({ navigation, route }) => {
                 </View>
             ),
         });
-    }, [id, participants, chatParticipants]);
+    }, [id, participants, chatParticipants, localChatTitle, chatTitle]);
 
     useEffect(() => {
         let unsubscribe;
 
         setChatMessages([]);
-        setChatParticipants([])
+        setChatParticipants([]);
+        setLocalChatTitle('');
 
         const setupMessagesListener = async () => {
             console.log('Starting listener');
@@ -334,6 +336,8 @@ const Chat = ({ navigation, route }) => {
             await updateDoc(chatRef, {
                 chatTitle: bandName,
             });
+
+            setLocalChatTitle(bandName);
         } catch (error) {
             console.log('Error processing band formation:', error);
         }

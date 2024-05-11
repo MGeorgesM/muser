@@ -31,9 +31,7 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, bu
             handlePress(selectedMember);
         }
     };
-
-    console.log('data', data);
-
+    
     return (
         <Modal
             animationType="slide"

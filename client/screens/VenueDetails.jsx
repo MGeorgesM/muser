@@ -134,7 +134,7 @@ const VenueDetails = ({ route, navigation }) => {
                         No shows available, check back later!
                     </Text>
                 )}
-                {currentUser?.role.id === 1 && (
+                {(currentUser?.role.id === 1 || switchView) && (
                     <PrimaryBtn
                         text={switchView ? 'Go Live' : 'Book your Show'}
                         marginTop={'auto'}

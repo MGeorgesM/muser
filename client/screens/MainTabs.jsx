@@ -1,6 +1,8 @@
-import React, { useLayoutEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useLayoutEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 import { MessagesSquare, Store, Radio, AudioWaveform, UserRound } from 'lucide-react-native';
 
@@ -11,15 +13,18 @@ import ProfileNavigator from '../navigators/ProfileNavigator';
 import LiveStreamNavigator from '../navigators/LiveStreamNavigator';
 
 import { colors } from '../styles/utilities';
+import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const Tab = createBottomTabNavigator();
 
 const MainTabs = () => {
-    
+    const [isLoading, setIsLoading] = useState(true);
+
     useLayoutEffect(() => {
         const setNavigationBarColor = async (color) => {
             try {
                 await SystemNavigationBar.setNavigationColor(color);
+                setIsLoading(false);
             } catch (error) {
                 console.log('Error setting navigation bar color:', error);
             }
@@ -27,7 +32,9 @@ const MainTabs = () => {
         setNavigationBarColor(colors.bgDark);
     }, []);
 
-    return (
+    return isLoading ? (
+        <LoadingScreen />
+    ) : (
         <Tab.Navigator
             initialRouteName="Feed"
             screenOptions={({ route }) => ({
