@@ -24,6 +24,14 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, bu
         setSelectedMember(member);
     };
 
+    const handleSubmit = () => {
+        if (input) {
+            handlePress(userInput);
+        } else {
+            handlePress(selectedMember);
+        }
+    };
+
     console.log('data', data);
 
     return (
@@ -48,7 +56,7 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, bu
                         {input ? (
                             <>
                                 <TextInput
-                                    style={[utilities.inputText, {marginBottom: 0}]}
+                                    style={[utilities.inputText, { marginBottom: 0 }]}
                                     onChangeText={setUserInput}
                                     placeholderTextColor={colors.gray}
                                     value={userInput}
@@ -83,7 +91,12 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, bu
                                 No Connections Yet!
                             </Text>
                         )}
-                        <PrimaryBtn text={buttonText} marginBottom={16} marginTop={16} handlePress={() => handlePress(userInput)} />
+                        <PrimaryBtn
+                            text={buttonText}
+                            marginBottom={16}
+                            marginTop={16}
+                            handlePress={handleSubmit}
+                        />
                     </View>
                 </View>
             </TouchableWithoutFeedback>

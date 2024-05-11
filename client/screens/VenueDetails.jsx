@@ -1,16 +1,17 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, FlatList, Pressable } from 'react-native';
 
 import { setSelectedVenue } from '../store/Venues';
 
 import { utilities, colors } from '../styles/utilities';
-import { profilePicturesUrl, showsPicturesUrl } from '../core/tools/apiRequest';
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 import { formatDateString, truncateText } from '../core/tools/formatDate';
+import { profilePicturesUrl, showsPicturesUrl, sendRequest, requestMethods } from '../core/tools/apiRequest';
+
+import { ChevronLeft } from 'lucide-react-native';
+
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
 import ShowCard from '../components/Cards/ShowCard/ShowCard';
 import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
-import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const VenueDetails = ({ route, navigation }) => {
     const { venue, show, switchView } = route.params;
@@ -22,7 +23,7 @@ const VenueDetails = ({ route, navigation }) => {
     useLayoutEffect(() => {
         if (show) {
             setSelectedShow(show);
-        } 
+        }
     }, [show]);
 
     useEffect(() => {
@@ -36,7 +37,6 @@ const VenueDetails = ({ route, navigation }) => {
                 console.log('Error fetching venue details:', error);
             }
         };
-
         const getVenueShows = async () => {
             try {
                 const response = await sendRequest(requestMethods.GET, `shows?venue_id=${venue.id}&status=set`, null);
@@ -65,7 +65,9 @@ const VenueDetails = ({ route, navigation }) => {
 
     return (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
-            
+            {/* <Pressable style={styles.backBtn} onPress={()=>setSwitchHandler(!switchHandler)}>
+                <ChevronLeft size={24} color={colors.white} style={styles.backBtnIcon}/>
+            </Pressable> */}
             <View>
                 <Image
                     source={{
@@ -147,5 +149,20 @@ const styles = StyleSheet.create({
         height: height * 0.49,
         resizeMode: 'cover',
         position: 'relative',
+    },
+
+    backBtn: {
+        position: 'absolute',
+        height: 36,
+        width: 36,
+        borderRadius: 18,
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: 60,
+        left: 20,
+        zIndex: 1,
+    },
+    backBtnIcon: {
+        marginLeft: -2,
     },
 });

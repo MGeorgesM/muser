@@ -37,10 +37,10 @@ const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
 
-    const { id, chatParticipants, chatTitle } = route.params;
+    const { id, participants, chatTitle } = route.params;
 
     const [chatMessages, setChatMessages] = useState([]);
-    const [participants, setParticipants] = useState(chatParticipants);
+    const [chatParticipants, setChatParticipants] = useState(participants);
     const [chatConnections, setChatConnections] = useState([]);
 
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
@@ -51,13 +51,15 @@ const Chat = ({ navigation, route }) => {
             headerTitle: () => {
                 if (chatTitle) return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle}</Text>;
                 else {
-                    const receiverName = participants?.map((participant) => participant.name).join(', ');
+
+                    if (!participants) return;
+                    const receiverName = participants.map((participant) => participant.name).join(', ');
                     const reciverPicture = participants[0].picture;
                     const receiverId = participants[0].id;
                     return (
                         <PictureHeader
                             picture={participants.length > 1 ? null : reciverPicture}
-                            name={truncateText(receiverName, 20)}
+                            name={truncateText(receiverName, 15)}
                             handlePress={() =>
                                 navigation.navigate('Feed', {
                                     screen: 'ProfileDetails',
@@ -84,7 +86,7 @@ const Chat = ({ navigation, route }) => {
                 </View>
             ),
         });
-    }, [id, participants]);
+    }, [id, participants, chatParticipants]);
 
     useEffect(() => {
         let unsubscribe;
@@ -94,7 +96,7 @@ const Chat = ({ navigation, route }) => {
         const setupMessagesListener = async () => {
             console.log('Starting listener');
             console.log('Chat ID:', id);
-            console.log('Chat Participants:', chatParticipants)
+            console.log('Chat Participants:', participants)
 
             const newChatRef = doc(fireStoreDb, 'chats', id);
             const messagesRef = collection(newChatRef, 'messages');
@@ -123,10 +125,10 @@ const Chat = ({ navigation, route }) => {
                 unsubscribe();
             }
         };
-    }, [id, chatParticipants]);
+    }, [id, participants]);
 
     const getRemainingConnections = async () => {
-        // console.log('Chat Participants:', chatParticipants);
+        // console.log('Chat Participants:', participants);
         // console.log(
         //     'User Connections:',
         //     userConnections.map((connection) => {
@@ -135,7 +137,7 @@ const Chat = ({ navigation, route }) => {
         // );
 
         const remainingConnections = userConnections.filter((connection) =>
-            chatParticipants.every((participant) => participant.id !== connection.id)
+            participants.every((participant) => participant.id !== connection.id)
         );
 
         setChatConnections(remainingConnections);
@@ -166,15 +168,18 @@ const Chat = ({ navigation, route }) => {
     const addParticipant = async (newParticipant) => {
         const newParticipantId = newParticipant.id;
 
-        if (!newParticipantId && participants.includes(newParticipantId)) {
-            console.log('Participant already exists in chat!');
-            return;
-        }
+        // if (!newParticipantId && participants.includes(newParticipantId)) {
+        //     console.log('Participant already exists in chat!');
+        //     return;
+        // }
 
         try {
             const chatRef = doc(fireStoreDb, 'chats', id);
 
             const newParticipantsList = [...participants, newParticipant];
+
+            console.log(newParticipantsList)
+            return
             const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
             newParticipantsIdsList.push(currentUser.id);
 
@@ -182,7 +187,7 @@ const Chat = ({ navigation, route }) => {
                 participantsIds: newParticipantsIdsList,
             });
 
-            setParticipants(newParticipantsList);
+            setChatParticipants(newParticipantsList);
             setConnectionModalVisible(false);
         } catch (error) {
             console.log('Error adding participant', error);
@@ -191,7 +196,7 @@ const Chat = ({ navigation, route }) => {
     };
 
     // const addConnection = async () => {
-    //     const newConnectionId = chatParticipants.map((participant) => participant.id);
+    //     const newConnectionId = participants.map((participant) => participant.id);
     //     console.log('Adding connection:', newConnectionId[0]);
     //     try {
     //         const response = await sendRequest(requestMethods.POST, `connections/${newConnectionId}`, null);
@@ -203,7 +208,7 @@ const Chat = ({ navigation, route }) => {
     // };
 
     const addConnection = async () => {
-        const newConnectionIds = chatParticipants.map((participant) => participant.id);
+        const newConnectionIds = participants.map((participant) => participant.id);
         try {
             const response = await sendRequest(requestMethods.POST, `connections`, {
                 userIds: newConnectionIds,
@@ -350,7 +355,7 @@ const Chat = ({ navigation, route }) => {
                 <ChatModal
                     title={chatTitle ? chatTitle : 'Your Band Name'}
                     buttonText="Create Band"
-                    data={chatTitle ? chatParticipants : null}
+                    data={chatTitle ? participants : null}
                     input={chatTitle ? false : true}
                     handlePress={handleFormBand}
                     setModalVisible={setBandModalVisible}

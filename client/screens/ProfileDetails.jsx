@@ -87,7 +87,7 @@ const ProfileDetails = ({ route }) => {
                                 screen: 'ChatDetails',
                                 params: {
                                     id: chatId,
-                                    chatParticipants: [{ id: user.id, name: user.name, picture: user.picture }],
+                                    participants: [{ id: user.id, name: user.name, picture: user.picture }],
                                 },
                             })
                         }

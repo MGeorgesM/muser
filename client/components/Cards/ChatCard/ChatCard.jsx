@@ -56,12 +56,14 @@ const ChatCard = ({ chat, navigation }) => {
         console.log(chat)
         console.log(chat.participantsIds)
 
+        let otherParticipants
+
         const otherParticipantIds = chat.participantsIds.filter((id) => id !== currentUser.id);
 
-        const otherParticipants = connectedUsers.filter((user) => otherParticipantIds.includes(user.id));
+        otherParticipants = connectedUsers.filter((user) => otherParticipantIds.includes(user.id));
         
         if (otherParticipants.length === 0) {
-            const otherParticipants = feedUsers.filter((user) => otherParticipantIds.includes(user.id));
+            otherParticipants = feedUsers.filter((user) => otherParticipantIds.includes(user.id));
         } else {
             getUsersPicutresandNamesFromApi()
         }
@@ -80,7 +82,7 @@ const ChatCard = ({ chat, navigation }) => {
             onPress={() =>
                 navigation.navigate('ChatDetails', {
                     id: chat.id,
-                    chatParticipants: participants,
+                    participants: participants,
                     chatTitle: chat.chatTitle,
                 })
             }

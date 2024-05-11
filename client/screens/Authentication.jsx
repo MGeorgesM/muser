@@ -23,9 +23,8 @@ const Authentication = ({ navigation }) => {
 
     const { userInfo, setUserInfo, authError, setLoggedIn, loggedIn, setCurrentUser } = useUser();
 
-    const imageSource = switchHandler
-        ? require('../assets/appImages/onboard00.jpg')
-        : require('../assets/appImages/onboard00.jpg');
+    const imageSource = require('../assets/appImages/onboard00.jpg');
+        
 
     useEffect(() => {
         if ((!userInfo.email.includes('@') || !userInfo.email.includes('.')) && userInfo.email.length > 0) {
