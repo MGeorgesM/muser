@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, TextInput } from 'react-native';
+import React, { useLayoutEffect, useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Dimensions, Image, TextInput, Pressable, ScrollView } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 
@@ -10,11 +10,31 @@ import { UserRoundCog, LockKeyhole, ChevronRight } from 'lucide-react-native';
 
 import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
 import SettingsCard from '../components/Cards/SettingsCard/SettingsCard';
+import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
+import { useUserInfoLogic } from './userInfoLogic';
+import UserInfoForm from '../components/AuthenticationForms/UserInfoForm';
 
 const Profile = ({ navigation }) => {
     const { currentUser } = useUser();
     const [switchHandler, setSwitchHandler] = useState(false);
-    const [userInfo, setUserInfo] = useState(currentUser);
+    const {
+        error,
+        userInfo,
+        authError,
+        setUserInfo,
+        handlePress,
+        handleProceed,
+        selectedPicture,
+        handleImagePicker,
+        profileProperties,
+        handlePickerChange,
+    } = useUserInfoLogic();
+
+    useEffect(() => {
+        console.log('Current User:', currentUser);
+        console.log('User Info:', userInfo);
+        setUserInfo(currentUser);
+    }, []);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -25,12 +45,12 @@ const Profile = ({ navigation }) => {
     return currentUser ? (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
             <View style={styles.topProfileView}>
-                <View style={styles.profilePicture}>
+                <Pressable style={styles.profilePicture} onPress={handleImagePicker}>
                     <Image
                         source={{ uri: profilePicturesUrl + currentUser.picture }}
                         style={[styles.profileDetailsPicture]}
                     />
-                </View>
+                </Pressable>
             </View>
             <View style={styles.profileNameSecton}>
                 <Text style={[utilities.textL, utilities.myFontBold]}>{currentUser.name}</Text>
@@ -39,47 +59,49 @@ const Profile = ({ navigation }) => {
                 </Text>
             </View>
             <View style={styles.profileDetailsSection}>
-                <Text style={[utilities.textM, utilities.myFontMedium]}>Bio</Text>
-                {switchHandler ? (
-                    <TextInput
-                        key={'about'}
-                        autoCorrect={false}
-                        placeholder="Tell us about yourself!"
-                        placeholderTextColor={colors.gray}
-                        cursorColor={colors.primary}
-                        style={[utilities.myFontRegular, styles.editBioInput]}
-                        value={userInfo.about}
-                        onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
-                    />
+                {!switchHandler ? (
+                    <>
+                        <Text
+                            style={[
+                                utilities.textM,
+                                utilities.myFontRegular,
+                                { color: colors.gray, marginTop: 10, marginBottom: 24 },
+                            ]}
+                        >
+                            {currentUser.about}
+                        </Text>
+
+                        <Text style={[utilities.textM, utilities.myFontMedium]}>My Details</Text>
+                        {currentUser && currentUser.role.id === 1 && (
+                            <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 16, gap: 4 }]}>
+                                <DetailsPill item={currentUser?.instrument} />
+                                <DetailsPill item={currentUser?.experience} />
+                                {currentUser?.genres &&
+                                    currentUser.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
+                            </View>
+                        )}
+                    </>
                 ) : (
-                    <Text
-                        style={[
-                            utilities.textM,
-                            utilities.myFontRegular,
-                            { color: colors.gray, marginTop: 10, marginBottom: 24 },
-                        ]}
-                    >
-                        {currentUser.about}
-                    </Text>
-                )}
-                <Text style={[utilities.textM, utilities.myFontMedium]}>My Details</Text>
-                {currentUser && currentUser.role.id === 1 && (
-                    <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 16, gap: 4 }]}>
-                        <DetailsPill item={currentUser?.instrument} />
-                        <DetailsPill item={currentUser?.experience} />
-                        {currentUser?.genres &&
-                            currentUser.genres.map((genre) => <DetailsPill key={genre.id} item={genre} />)}
-                    </View>
+                    <ScrollView>
+                        <UserInfoForm
+                            userInfo={userInfo}
+                            setUserInfo={setUserInfo}
+                            profileProperties={profileProperties}
+                            handlePress={handlePress}
+                        />
+                    </ScrollView>
                 )}
             </View>
-            {!switchHandler && <View style={styles.editProfileModal}>
-                <SettingsCard
-                    iconComponent={<UserRoundCog color={'white'} />}
-                    text={'Edit Profile'}
-                    onPress={() => setSwitchHandler(false)}
-                />
-                <SettingsCard iconComponent={<LockKeyhole color={'white'} />} text={'Edit Login Details'} />
-            </View>}
+            {!switchHandler && (
+                <View style={styles.editProfileModal}>
+                    <SettingsCard
+                        iconComponent={<UserRoundCog color={'white'} />}
+                        text={'Edit Profile'}
+                        onPress={() => setSwitchHandler(!switchHandler)}
+                    />
+                    <SettingsCard iconComponent={<LockKeyhole color={'white'} />} text={'Edit Login Details'} />
+                </View>
+            )}
         </View>
     ) : (
         <View style={[utilities.flexed, utilities.center, { backgroundColor: colors.bgDark }]}>
@@ -142,5 +164,13 @@ const styles = StyleSheet.create({
         color: colors.lightGray,
         borderBottomColor: colors.gray,
         borderBottomWidth: 0.5,
+    },
+
+    genresContainer: {
+        marginTop: 16,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        gap: 10,
     },
 });

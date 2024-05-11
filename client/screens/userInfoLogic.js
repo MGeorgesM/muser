@@ -17,7 +17,6 @@ export const useUserInfoLogic = () => {
             try {
                 const response = await sendRequest(requestMethods.GET, 'auth/register/userinfo');
                 if (response.status === 200) {
-                    console.log('Properties:', response.data);
                     setProfileProperties(response.data.general);
                     userInfo.role_id == 1
                         ? setProfileProperties((prev) => ({ ...prev, ...response.data.musician }))
