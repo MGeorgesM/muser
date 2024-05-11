@@ -9,12 +9,12 @@ const ModalHigh = ({ title, navigation, items, renderItem }) => {
         <View style={styles.main}>
             <View style={[utilities.container, styles.overviewContainer]}>
                 <View style={[utilities.flexRow, utilities.center, { marginBottom: 24 }]}>
-                    {/* <ChevronLeft
+                    <ChevronLeft
                         size={24}
                         color="white"
                         style={{ position: 'absolute', left: 0 }}
                         onPress={() => navigation.goBack()}
-                    /> */}
+                    />
                     <Text style={[utilities.textL, utilities.myFontMedium]}>{title}</Text>
                 </View>
 

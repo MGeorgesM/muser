@@ -151,6 +151,6 @@ export const styles = StyleSheet.create({
         bottom:0,
         right:0,
         width: windowDimension.width,
-        height: windowDimension.height * 1.08,
+        height: windowDimension.height * 1.1,
     },
 });

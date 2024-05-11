@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -15,6 +15,18 @@ import { colors } from '../styles/utilities';
 const Tab = createBottomTabNavigator();
 
 const MainTabs = () => {
+    
+    useLayoutEffect(() => {
+        const setNavigationBarColor = async (color) => {
+            try {
+                await SystemNavigationBar.setNavigationColor(color);
+            } catch (error) {
+                console.log('Error setting navigation bar color:', error);
+            }
+        };
+        setNavigationBarColor(colors.bgDark);
+    }, []);
+
     return (
         <Tab.Navigator
             initialRouteName="Feed"
