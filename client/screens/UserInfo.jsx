@@ -1,183 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
-import SystemNavigationBar from 'react-native-system-navigation-bar';
 
-import * as ImagePicker from 'expo-image-picker';
+import { useUserInfoLogic } from './userInfoLogic';
 
-import { useUser } from '../contexts/UserContext';
 import { colors } from '../styles/utilities';
-import { requestMethods, sendRequest } from '../core/tools/apiRequest';
-
 import { CirclePlus, ChevronLeft } from 'lucide-react-native';
 
-import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
 import PrimaryBtn from '../components/Elements/PrimaryBtn';
+import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
+import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
 const { styles } = require('../components/AuthenticationForms/styles');
 
 const UserInfo = ({ navigation }) => {
-    const [profileProperties, setProfileProperties] = useState({});
-    const [selectedPicture, setSelectedPicture] = useState(null);
-    const [formTouched, setFormTouched] = useState(false);
-    const [error, setError] = useState(null);
+    const {
+        handleImagePicker,
+        setUserInfo,
+        handlePickerChange,
+        handlePress,
+        handleProceed,
+        profileProperties,
+        selectedPicture,
+        userInfo,
+        authError,
+        error,
+    } = useUserInfoLogic();
 
-    const { userInfo, setUserInfo, authError, setAuthError, handleSignUp } = useUser();
-
-    
-    useEffect(() => {
-        const getProperties = async () => {
-            try {
-                const response = await sendRequest(requestMethods.GET, 'auth/register/userinfo');
-                if (response.status === 200) {
-                    console.log('Properties:', response.data);
-                    setProfileProperties(response.data.general);
-                    userInfo.role_id == 1
-                        ? setProfileProperties((prev) => ({ ...prev, ...response.data.musician }))
-                        : setProfileProperties((prev) => ({ ...prev, ...response.data.venue }));
-                }
-            } catch (error) {
-                console.error('Error getting properties:', error);
-            }
-        };
-        getProperties();
-    }, []);
-
-    const handlePickerChange = (key, value) => {
-        if (key === 'Music Genres') {
-            setUserInfo((prev) => ({ ...prev, genres: [...prev.genres, value] }));
-        } else if (key === 'Venue Type') {
-            console.log('here');
-            setUserInfo((prev) => ({ ...prev, [`venue_type_id`]: value }));
-        } else {
-            setUserInfo((prev) => ({ ...prev, [`${key.toLowerCase()}_id`]: value }));
-        }
-    };
-
-    const handleImagePicker = async () => {
-        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (permissionResult.granted === false) {
-            console.error('Permission to access camera roll is required!');
-            return;
-        }
-
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
-        });
-
-        if (result.canceled) return;
-        setError(null);
-        setSelectedPicture(result);
-        setUserInfo((prev) => ({ ...prev, picture: result.uri }));
-    };
-
-    const validateForm = () => {
-        setError(null);
-
-        if (!selectedPicture) {
-            setError('Please select a profile picture');
-            return false;
-        }
-
-        if (userInfo.about.length > 40 || userInfo.venue_name.length > 40) {
-            setError('Please keep your bio under 40 characters');
-            return false;
-        }
-        if (userInfo.about === '' || userInfo.location_id === '') {
-            setError('Please fill in all fields');
-            return false;
-        }
-        if (
-            userInfo.role_id == 1 &&
-            (userInfo.genres.length === 0 || userInfo.instrument_id === '' || userInfo.experience_id === '')
-        ) {
-            console.log('here');
-            setError('Please fill in all fields');
-            return false;
-        } else if (userInfo.role_id == 2 && (userInfo.venue_type_id === '' || userInfo.venue_name === '')) {
-            setError('Please fill in all fields');
-            return false;
-        } else {
-            setError(null);
-            setAuthError(null);
-            return true;
-        }
-    };
-
-    const handleUserInfoInput = () => {
-        setError(null);
-        const userInputValid = validateForm();
-
-        if (!userInputValid) return;
-        console.log('Signing up:', userInfo);
-
-        const uri = selectedPicture.assets[0].uri;
-        const filename = selectedPicture.assets[0].uri.split('/').pop();
-        const match = /\.(\w+)$/.exec(filename);
-        const ext = match?.[1];
-        const type = match ? `picture/${match[1]}` : `picture`;
-
-        console.log('Selected Picture:', selectedPicture);
-
-        const formData = new FormData();
-
-        for (const key in userInfo) {
-            if (userInfo[key] === '') continue;
-            if (key === 'picture') {
-                console.log('here!');
-                formData.append('picture', {
-                    uri: selectedPicture.assets[0].uri,
-                    name: `photo.${ext}`,
-                    type: `image/${ext}`,
-                });
-            } else if (Array.isArray(userInfo[key])) {
-                userInfo[key].forEach((item) => {
-                    formData.append(`${key}[]`, item);
-                });
-            } else {
-                formData.append(key, userInfo[key]);
-            }
-        }
-
-        console.log('UserInfo:', userInfo);
-
-        return formData;
-    };
-
-    const handleProceed = async () => {
-        const formData = handleUserInfoInput();
-        if (!formData) return;
-        handleSignUp(formData);
-
-        // try {
-        //     const response = await sendRequest(requestMethods.POST, 'auth/register', formData);
-        //     if (response.status === 201) {
-        //         await AsyncStorage.setItem('token', response.data.token);
-        //         await AsyncStorage.setItem('streamToken', response.data.stream_token);
-        //         setLoggedIn(true);
-        //         setCurrentUser(response.data.user);
-        //         loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
-        //     }
-        // } catch (error) {
-        //     console.error('Error registering:', error);
-        //     setError('Failed to register user');
-        // }
-    };
-    const handlePress = (genreId) => {
-        let newGenres = [];
-        if (userInfo.genres.includes(genreId)) {
-            newGenres = userInfo.genres.filter((id) => id !== genreId);
-        } else {
-            newGenres = [...userInfo.genres, genreId];
-        }
-        setUserInfo((prev) => ({ ...prev, genres: newGenres }));
-    };
     return (
         <View style={styles.userInfoContainer}>
             <View>
@@ -265,7 +113,7 @@ const UserInfo = ({ navigation }) => {
                     </View>
                 </View>
             </View>
-            <Text style={[styles.errorText, {marginTop:24}]}>{error || authError}</Text>
+            <Text style={[styles.errorText, { marginTop: 24 }]}>{error || authError}</Text>
             <PrimaryBtn text="Register" handlePress={handleProceed} marginBottom={56} />
         </View>
     );
