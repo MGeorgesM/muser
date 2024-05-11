@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, SafeAreaView } from 'react-native';
 
 import DetailsPill from '../Elements/DetailsPill/DetailsPill';
 import ProfileDetailsPicker from '../ProfileDetailsPicker/ProfileDetailsPicker';

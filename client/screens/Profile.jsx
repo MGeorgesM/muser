@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, TextInput, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, TextInput, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import { useUser } from '../contexts/UserContext';
 
@@ -12,6 +12,7 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
 import SettingsCard from '../components/Cards/SettingsCard/SettingsCard';
+import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
 import { useUserInfoLogic } from './userInfoLogic';
 import UserInfoForm from '../components/AuthenticationForms/UserInfoForm';
@@ -61,7 +62,7 @@ const Profile = ({ navigation }) => {
     }, [navigation]);
 
     return currentUser ? (
-        <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
+        <SafeAreaView style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
             <View style={styles.topProfileView}>
                 <Pressable style={styles.profilePicture} onPress={handleImagePicker}>
                     <Image
@@ -76,7 +77,7 @@ const Profile = ({ navigation }) => {
                     {currentUser.email}
                 </Text>
             </View>
-            <View style={styles.profileDetailsSection}>
+            <ScrollView style={styles.profileDetailsSection}>
                 {!switchHandler ? (
                     <>
                         <Text
@@ -100,16 +101,16 @@ const Profile = ({ navigation }) => {
                         )}
                     </>
                 ) : (
-                    <ScrollView>
+
                         <UserInfoForm
                             userInfo={userInfo}
                             setUserInfo={setUserInfo}
                             profileProperties={profileProperties}
                             handlePress={handlePress}
                         />
-                    </ScrollView>
+
                 )}
-            </View>
+            </ScrollView>
             {!switchHandler && (
                 <View style={styles.editProfileModal}>
                     <SettingsCard
@@ -120,11 +121,9 @@ const Profile = ({ navigation }) => {
                     <SettingsCard iconComponent={<LockKeyhole color={'white'} />} text={'Edit Login Details'} />
                 </View>
             )}
-        </View>
+        </SafeAreaView>
     ) : (
-        <View style={[utilities.flexed, utilities.center, { backgroundColor: colors.bgDark }]}>
-            <Text>Loading...</Text>
-        </View>
+        <LoadingScreen />
     );
 };
 
@@ -160,6 +159,7 @@ const styles = StyleSheet.create({
     },
 
     profileDetailsSection: {
+        flex:1,
         paddingTop: 24,
         paddingHorizontal: 20,
     },

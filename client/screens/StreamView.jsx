@@ -338,8 +338,14 @@ const StreamView = ({ navigation, route }) => {
                                 <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
                             ))
                         ) : (
-                            <Text style={[utilities.textCenter, utilities.myFontRegular, { color: colors.gray }]}>
-                                No comments yet. Share your thoughts.
+                            <Text
+                                style={[
+                                    utilities.textCenter,
+                                    utilities.myFontRegular,
+                                    { marginTop: 64, color: colors.gray },
+                                ]}
+                            >
+                                Share your thoughts.
                             </Text>
                         )}
                     </ScrollView>
