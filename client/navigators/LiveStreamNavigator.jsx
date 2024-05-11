@@ -11,6 +11,7 @@ import Streams from '../screens/Streams';
 import StreamBroadcast from '../screens/StreamBroadcast';
 import StreamView from '../screens/StreamView';
 import { StreamVideo, StreamVideoClient } from '@stream-io/video-react-native-sdk';
+import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const LiveStreamStack = createStackNavigator();
 
@@ -22,7 +23,7 @@ const LiveStreamNavigator = () => {
 
     const { currentUser, loggedIn } = useUser();
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const initializeClient = async () => {
             if (loggedIn && currentUser && Object.keys(currentUser).length !== 0) {
                 // const initialRoute = currentUser.role.id === 1 ? 'Streams' : 'StreamBroadcast'
@@ -77,7 +78,7 @@ const LiveStreamNavigator = () => {
             </LiveStreamStack.Navigator>
         </StreamVideo>
     ) : (
-        <ActivityIndicator size="large" color="#000ff" />
+        <LoadingScreen />
     );
 };
 
