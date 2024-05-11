@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList, Pressable } from 'react-native';
 
 import { setSelectedVenue } from '../store/Venues';
+import { useUser } from '../contexts/UserContext';
 
 import { utilities, colors } from '../styles/utilities';
 import { formatDateString, truncateText } from '../core/tools/formatDate';
@@ -16,6 +17,8 @@ import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
 const VenueDetails = ({ route, navigation }) => {
     const { venue, show, switchView } = route.params;
 
+    const { currentUser } = useUser();
+
     const [switchHandler, setSwitchHandler] = useState(switchView ? true : false);
     const [shows, setShows] = useState([]);
     const [selectedShow, setSelectedShow] = useState(show);
@@ -24,7 +27,7 @@ const VenueDetails = ({ route, navigation }) => {
         if (show) {
             setSelectedShow(show);
         }
-    }, [show]);
+    }, [show, switchView]);
 
     useEffect(() => {
         const getVenueDetails = async () => {
@@ -63,26 +66,32 @@ const VenueDetails = ({ route, navigation }) => {
             : navigation.navigate('ShowDetails', { venueId: venue.id, venueName: venue.name });
     };
 
+    const handleBackBtn = () => {
+        switchView ? navigation.navigate('Live', { screen: 'Streams' }) : setSwitchHandler(!switchHandler);
+    };
+
     return (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
-            {/* <Pressable style={styles.backBtn} onPress={()=>setSwitchHandler(!switchHandler)}>
-                <ChevronLeft size={24} color={colors.white} style={styles.backBtnIcon}/>
-            </Pressable> */}
+            {switchHandler && (
+                <Pressable style={styles.backBtn} onPress={handleBackBtn}>
+                    <ChevronLeft size={24} color={colors.white} style={styles.backBtnIcon} />
+                </Pressable>
+            )}
             <View>
                 <Image
                     source={{
                         uri: switchHandler
-                            ? `${showsPicturesUrl + selectedShow.picture}`
-                            : `${profilePicturesUrl + venue.picture}`,
+                            ? `${showsPicturesUrl + selectedShow?.picture}`
+                            : `${profilePicturesUrl + venue?.picture}`,
                     }}
                     style={[styles.entityImage, styles.borderRadiusBottom]}
                 />
                 <View style={[utilities.overlay, styles.borderRadiusBottom, { height: 96, gap: 2 }]}>
                     <Text style={[utilities.textL, utilities.myFontBold, { color: 'white' }]}>
-                        {!switchHandler ? venue.name : selectedShow.band.name}
+                        {!switchHandler ? venue?.name : selectedShow?.band.name}
                     </Text>
                     <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.offWhite }]}>
-                        {switchHandler ? formatDateString(selectedShow.date) : `${venue.location.name}, Lebanon`}
+                        {switchHandler ? formatDateString(selectedShow.date) : `${venue?.location.name}, Lebanon`}
                     </Text>
                 </View>
             </View>
@@ -125,11 +134,13 @@ const VenueDetails = ({ route, navigation }) => {
                         No shows available, check back later!
                     </Text>
                 )}
-                <PrimaryBtn
-                    text={switchView ? 'Go Live' : 'Book your Show'}
-                    marginTop={'auto'}
-                    handlePress={handleProceed}
-                />
+                {currentUser?.role.id === 1 && (
+                    <PrimaryBtn
+                        text={switchView ? 'Go Live' : 'Book your Show'}
+                        marginTop={'auto'}
+                        handlePress={handleProceed}
+                    />
+                )}
             </View>
         </View>
     );
