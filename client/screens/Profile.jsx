@@ -8,6 +8,8 @@ import { profilePicturesUrl } from '../core/tools/apiRequest';
 
 import { UserRoundCog, LockKeyhole, ChevronRight } from 'lucide-react-native';
 
+import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+
 import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
 import SettingsCard from '../components/Cards/SettingsCard/SettingsCard';
 import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
@@ -31,10 +33,26 @@ const Profile = ({ navigation }) => {
     } = useUserInfoLogic();
 
     useEffect(() => {
+        const getUserInfo = async () => {
+            try {
+                const response = await sendRequest(requestMethods.GET, 'auth/me?flat=true', null);
+                if (response.status !== 200) throw new Error('Error getting user info');
+                setUserInfo((prev) => ({ ...prev, ...response.data }));
+            } catch (error) {
+                console.log('Error getting user info:', error);
+            }
+        }
+
+        const genresArray = currentUser.genres.map((genre) => genre.id);
+        console.log('Genres Array:', genresArray);
+
+        getUserInfo();
+        setUserInfo((prev) => ({ ...prev, genres: genresArray }));
+        
+        setSwitchHandler(false);
         console.log('Current User:', currentUser);
         console.log('User Info:', userInfo);
-        setUserInfo(currentUser);
-    }, []);
+    }, [currentUser]);
 
     useLayoutEffect(() => {
         navigation.setOptions({

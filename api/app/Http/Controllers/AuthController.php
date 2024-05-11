@@ -104,8 +104,12 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function me(Request $request)
     {
+        if ($request->query('flat')) {
+            return response()->json(auth()->user());
+        }
+        
         return response()->json(auth()->user()->full_details);
     }
 
