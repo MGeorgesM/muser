@@ -28,6 +28,7 @@ class User extends Authenticatable implements JWTSubject
         'venue_name',
         'venue_type_id',
         'role_id',
+        'fcmtoken'
     ];
 
     public function getJWTIdentifier()
