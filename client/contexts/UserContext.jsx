@@ -32,11 +32,19 @@ export const UserProvider = ({ children }) => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        getFcmToken();
         checkUser();
     }, []);
 
-    const getFcmToken = async () => {
+    const updateUserFcmtoken = async (fcmtoken) => {
+        try {
+            const response = await sendRequest(requestMethods.POST, 'users', { fcmtoken });
+            if (response.status !== 200) throw new Error('Failed to update user fcm token');
+        } catch (error) {
+            console.log('Error updating user fcm token:', error);
+        }
+    };
+
+    const getAndSaveFcmToken = async () => {
         // Register the device with FCM
         await messaging().registerDeviceForRemoteMessages();
 
@@ -44,11 +52,9 @@ export const UserProvider = ({ children }) => {
         const token = await messaging().getToken();
 
         // Save the token
-        console.log('FCM Token:', token)
-        await AsyncStorage.setItem('fcmToken', token);
+        console.log('FCM Token:', token);
+        updateUserFcmtoken(token);
     };
-
-    
 
     const checkUser = async () => {
         try {
@@ -57,6 +63,7 @@ export const UserProvider = ({ children }) => {
             if (token && currentUser === null) {
                 const response = await sendRequest(requestMethods.GET, 'auth/me');
                 if (response.status === 200) {
+                    await getAndSaveFcmToken();
                     setLoggedIn(true);
                     setCurrentUser(response.data);
                 } else {
@@ -79,6 +86,7 @@ export const UserProvider = ({ children }) => {
             if (response.status === 200) {
                 await AsyncStorage.setItem('token', response.data.token);
                 await AsyncStorage.setItem('streamToken', response.data.stream_token);
+                await getAndSaveFcmToken();
                 setLoggedIn(true);
                 setCurrentUser(response.data.user);
                 console.log('User login successful:', response.data.user);
@@ -115,6 +123,7 @@ export const UserProvider = ({ children }) => {
             if (response.status === 201) {
                 await AsyncStorage.setItem('token', response.data.token);
                 await AsyncStorage.setItem('streamToken', response.data.stream_token);
+                await getAndSaveFcmToken();
                 setLoggedIn(true);
                 setCurrentUser(response.data.user);
                 loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });

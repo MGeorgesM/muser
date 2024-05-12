@@ -66,8 +66,8 @@ const Welcome = ({ navigation }) => {
                     <Text style={styles.welcomeText}>BE PART OF MUSER</Text>
                     <PrimaryBtn
                         text={'Get Started'}
-                        // handlePress={() => navigation.navigate('Authentication')}
-                        handlePress={onDisplayNotification}
+                        handlePress={() => navigation.navigate('Authentication')}
+                        // handlePress={onDisplayNotification}
                         marginBottom={96}
                     />
                 </View>

@@ -134,6 +134,7 @@ class User extends Authenticatable implements JWTSubject
             'experience' => $this->experience,
             'venueType' => $this->venueType,
             'venueName' => $this->venue_name,
+            
         ];
     }
 }
