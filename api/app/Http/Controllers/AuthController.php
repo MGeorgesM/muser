@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
 
 use App\Models\User;
 use App\Models\Location;
@@ -55,6 +55,27 @@ class AuthController extends Controller
             'user' => auth()->user()->full_details,
         ]);
     }
+
+    public function handleGoogleLogin(Request $request)
+{
+    $user = Socialite::driver('google')->stateless()->userFromToken($request->token);
+
+    $existingUser = User::where('email', $user->email)->first();
+
+    if (!$existingUser) {
+        // Register the user or handle it according to your application requirements
+        $existingUser = User::create([
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => 'password', // random password, not to be used
+        ]);
+    }
+
+    // Create a personal access token for the user
+    $token = $existingUser->createToken('Personal Access Token')->accessToken;
+
+    return response()->json(['token' => $token, 'user' => $existingUser]);
+}
 
     /**
      * Register a User.

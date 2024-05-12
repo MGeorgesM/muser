@@ -10,6 +10,7 @@
         "kreait/laravel-firebase": "^5.8",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.14",
         "laravel/tinker": "^2.9",
         "openai-php/client": "^0.8.5",
         "php-open-source-saver/jwt-auth": "^2.2"
