@@ -46,6 +46,7 @@ const StreamView = ({ navigation, route }) => {
     const [videoIsPlaying, setVideoIsPlaying] = useState(false);
     const [videoIsMaximized, setVideoIsMaximized] = useState(false);
     const [videoIsLiked, setVideoIsLiked] = useState(false);
+    const [likes, setLikes] = useState([]);
     const [controlsVisible, setControlsVisible] = useState(false);
 
     const [call, setCall] = useState(null);
@@ -87,33 +88,75 @@ const StreamView = ({ navigation, route }) => {
     }, [client, show.id]);
 
     useEffect(() => {
-        let unsubscribe;
+        const showId = show.id;
+        const unsubscribeComments = setupCommentsListener(showId);
+        const unsubscribeLikes = setupLikesListener(showId);
 
-        const setupCommentsListener = async () => {
-            const commentsRef = collection(fireStoreDb, 'shows', show.id.toString(), 'comments');
-
-            if (!commentsRef) return;
-
-            const q = query(commentsRef, orderBy('createdAt', 'desc'));
-
-            unsubscribe = onSnapshot(q, (snapshot) => {
-                const fetchedComments = snapshot.docs.map((doc) => ({
-                    _id: doc.id,
-                    text: doc.data().text,
-                    createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
-                    userAvatar: doc.data().userAvatar,
-                    userId: doc.data().userId,
-                }));
-                setComments(fetchedComments);
-            });
-        };
-        setupCommentsListener();
         return () => {
-            if (unsubscribe) {
-                unsubscribe();
-            }
+            unsubscribeComments();
+            unsubscribeLikes();
         };
     }, [show.id]);
+
+    const setupCommentsListener = async (showId) => {
+        const commentsRef = collection(fireStoreDb, 'shows', showId.toString(), 'comments');
+        const q = query(commentsRef, orderBy('createdAt', 'desc'));
+
+        const unsubscribeComments = onSnapshot(q, (snapshot) => {
+            const fetchedComments = snapshot.docs.map((doc) => ({
+                _id: doc.id,
+                text: doc.data().text,
+                createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
+                userAvatar: doc.data().userAvatar,
+                userId: doc.data().userId,
+            }));
+            setComments(fetchedComments);
+        });
+
+        return unsubscribeComments;
+    };
+
+    const setupLikesListener = async (showId) => {
+        const likesRef = collection(fireStoreDb, 'shows', showId.toString(), 'likes');
+        const q = query(likesRef, orderBy('createdAt', 'desc'));
+
+        const unsubscribeLikes = onSnapshot(q, (snapshot) => {
+            const fetchedLikes = snapshot.docs.map((doc) => ({
+                _id: doc.id,
+                userId: doc.data().userId,
+                createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
+            }));
+            setLikes(fetchedLikes);
+        });
+
+        return unsubscribeLikes;
+    };
+
+    const handleLike = async () => {
+        const showRef = doc(fireStoreDb, 'shows', show.id.toString());
+        const likesRef = collection(showRef, 'likes');
+
+        setVideoIsLiked(!videoIsLiked);
+
+        if (!videoIsLiked) {
+            try {
+                const likeDoc = await getDoc(likesRef);
+                const likeId = likeDoc.docs.find((doc) => doc.data().userId === currentUser.id).id;
+                await deleteDoc(doc(likesRef, likeId));
+            } catch (error) {
+                console.log('Error deleting like:', error);
+            }
+        } else {
+            try {
+                await addDoc(likesRef, {
+                    createdAt: serverTimestamp(),
+                    userId: currentUser.id,
+                });
+            } catch (error) {
+                console.log('Error adding like:', error);
+            }
+        }
+    };
 
     const createShowAndComments = async (initialComment) => {
         const newShowRef = doc(collection(fireStoreDb, 'shows'));
@@ -233,7 +276,7 @@ const StreamView = ({ navigation, route }) => {
     // };
 
     return (
-        <View style={[utilities.flexed]}>
+        <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
             <View style={{ flex: 1, position: 'relative' }}>
                 {call ? (
                     <StreamCall call={call}>
@@ -312,8 +355,9 @@ const StreamView = ({ navigation, route }) => {
                                 {show.venue.name}
                             </Text>
                         </View>
-
-                        <Heart size={24} color={colors.primary} />
+                        <Pressable onPress={handleLike}>
+                            <Heart size={24} color={colors.primary} fill={videoIsLiked ? colors.primary : null} />
+                        </Pressable>
                     </View>
                     <View style={[{ paddingLeft: 20 }]}>
                         <Text style={[utilities.textM, utilities.myFontBold, { marginBottom: 8 }]}>Band</Text>
@@ -338,14 +382,8 @@ const StreamView = ({ navigation, route }) => {
                                 <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
                             ))
                         ) : (
-                            <Text
-                                style={[
-                                    utilities.textCenter,
-                                    utilities.myFontRegular,
-                                    { marginTop: 64, color: colors.gray },
-                                ]}
-                            >
-                                Share your thoughts.
+                            <Text style={[utilities.myFontRegular, { color: colors.gray, paddingLeft: 20 }]}>
+                                No comments yet
                             </Text>
                         )}
                     </ScrollView>

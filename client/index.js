@@ -1,20 +1,27 @@
-// import { AppRegistry, Platform } from "react-native";
+// index.js
+import { AppRegistry } from 'react-native';
+import notifee, { EventType } from '@notifee/react-native';
+import App from './App';
+import messaging from '@react-native-firebase/messaging';
 
-// import App from "./App";
-// import { name as appName } from "./app.json";
+messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+    console.log('Message handled in the background!', remoteMessage);
+});
 
-// import PushNotification from "react-native-push-notification";
+notifee.onBackgroundEvent(async ({ type, detail }) => {
+    const { notification, pressAction } = detail;
 
-// AppRegistry.registerComponent(appName, () => App);
+    // Check if the user pressed the "Mark as read" action
+    if (type === EventType.ACTION_PRESS && pressAction.id === 'mark-as-read') {
+        // Update external API
+        // await fetch(`https://my-api.com/chat/${notification.data.chatId}/read`, {
+        //   method: 'POST',
+        // });
 
-// PushNotification.configure({
-//     onRegister: function (token) {
-//         console.log("TOKEN:", token);
-//     },
+        // Remove the notification
+        await notifee.cancelNotification(notification.id);
+    }
+});
 
-//     onNotification: function (notification) {
-//         console.log("NOTIFICATION:", notification);
-//     },
-
-//     channelId: '1',
-//     });
+// Register main application
+AppRegistry.registerComponent('app', () => App);

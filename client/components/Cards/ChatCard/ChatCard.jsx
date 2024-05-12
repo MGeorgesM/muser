@@ -58,7 +58,7 @@ const ChatCard = ({ chat, navigation }) => {
             let user = connectedUsers.find((user) => user.id === id) || feedUsers.find((user) => user.id === id);
             if (!user) {
                 console.log(`Fetching user info for ID: ${id} from API`);
-                user = await getUserInfoFromApi(id);
+                user = await getUsersPicutresandNamesFromApi();
             }
             if (user) {
                 otherParticipants.push(user);

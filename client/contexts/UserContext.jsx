@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
@@ -31,28 +32,44 @@ export const UserProvider = ({ children }) => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        const checkUser = async () => {
-            try {
-                const token = await AsyncStorage.getItem('token');
-
-                if (token && currentUser === null) {
-                    const response = await sendRequest(requestMethods.GET, 'auth/me');
-                    if (response.status === 200) {
-                        setLoggedIn(true);
-                        setCurrentUser(response.data);
-                    } else {
-                        await AsyncStorage.clear();
-                        setLoggedIn(false);
-                        !loggedIn && navigation.navigate('Authentication');
-                    }
-                }
-                token && setLoggedIn(true);
-            } catch (authError) {
-                console.log('authError getting token:', authError);
-            }
-        };
+        getFcmToken();
         checkUser();
     }, []);
+
+    const getFcmToken = async () => {
+        // Register the device with FCM
+        await messaging().registerDeviceForRemoteMessages();
+
+        // Get the token
+        const token = await messaging().getToken();
+
+        // Save the token
+        console.log('FCM Token:', token)
+        await AsyncStorage.setItem('fcmToken', token);
+    };
+
+    
+
+    const checkUser = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+
+            if (token && currentUser === null) {
+                const response = await sendRequest(requestMethods.GET, 'auth/me');
+                if (response.status === 200) {
+                    setLoggedIn(true);
+                    setCurrentUser(response.data);
+                } else {
+                    await AsyncStorage.clear();
+                    setLoggedIn(false);
+                    !loggedIn && navigation.navigate('Authentication');
+                }
+            }
+            token && setLoggedIn(true);
+        } catch (authError) {
+            console.log('authError getting token:', authError);
+        }
+    };
 
     const handleSignIn = async () => {
         setAuthError(null);

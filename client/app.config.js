@@ -2,7 +2,7 @@ require('dotenv').config();
 
 export default {
     expo: {
-        name: 'client',
+        name: 'Muser',
         slug: 'client',
         version: '1.0.0',
         orientation: 'portrait',
