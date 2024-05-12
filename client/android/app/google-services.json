@@ -12,7 +12,12 @@
           "package_name": "com.sef.muser"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "346495985297-4t75dva7hb428hbs85d4olpvapsh5j7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAx1m7rDE6boxrhOku9Vg_PvObwLfGP050"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346495985297-4t75dva7hb428hbs85d4olpvapsh5j7m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
