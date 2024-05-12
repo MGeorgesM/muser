@@ -64,7 +64,7 @@ export const UserProvider = ({ children }) => {
         updateUserFcmtoken(token);
     };
 
-    const setupAuthenticatedUser = async () => {
+    const setupAuthenticatedUser = async (response) => {
         await AsyncStorage.setItem('token', response.data.token);
         await AsyncStorage.setItem('streamToken', response.data.stream_token);
         await getAndSaveFcmToken();
@@ -97,34 +97,34 @@ export const UserProvider = ({ children }) => {
     };
 
     const handleGoogleSignIn = async () => {
-        try {
-            await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
-            const token = userInfo.idToken;
+        return
+        // try {
+        //     await GoogleSignin.hasPlayServices();
+        //     const userInfo = await GoogleSignin.signIn();
+        //     const token = userInfo.idToken;
 
-            const response = await sendRequest(requestMethods.POST, 'auth/google', { token });
-            if (response.status === 200 && response.data.userExists) {
-                await setupAuthenticatedUser();
-            } else {
-                setUserInfo((prevState) => ({
-                    ...prevState,
-                    name: userInfo.user.name,
-                    email: userInfo.user.email,
-                }));
-                navigation.navigate('CompleteRegistration');
-            }
-        } catch (error) {
-            console.log('Google Sign-In Error:', error);
-        }
+        //     const response = await sendRequest(requestMethods.POST, 'auth/google', { token });
+        //     if (response.status === 200 && response.data.userExists) {
+        //         await setupAuthenticatedUser();
+        //     } else {
+        //         setUserInfo((prevState) => ({
+        //             ...prevState,
+        //             name: userInfo.user.name,
+        //             email: userInfo.user.email,
+        //         }));
+        //         navigation.navigate('CompleteRegistration');
+        //     }
+        // } catch (error) {
+        //     console.log('Google Sign-In Error:', error);
+        // }
     };
 
     const handleSignIn = async () => {
         setAuthError(null);
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/login', userInfo);
-
             if (response.status === 200) {
-                await setupAuthenticatedUser();
+                await setupAuthenticatedUser(response);
                 // await AsyncStorage.setItem('token', response.data.token);
                 // await AsyncStorage.setItem('streamToken', response.data.stream_token);
                 // await getAndSaveFcmToken();
@@ -162,7 +162,7 @@ export const UserProvider = ({ children }) => {
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/register', formData);
             if (response.status === 201) {
-                await setupAuthenticatedUser();
+                await setupAuthenticatedUser(response);
             }
         } catch (error) {
             console.error('Error registering:', error);
@@ -184,6 +184,7 @@ export const UserProvider = ({ children }) => {
                 handleSignUp,
                 handleSignOut,
                 setCurrentUser,
+                handleGoogleSignIn
             }}
         >
             {children}

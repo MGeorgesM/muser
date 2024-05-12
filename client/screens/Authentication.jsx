@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, Text, View, Keyboard, KeyboardAvoidingView } from 'react-native';
+import { Image, ScrollView, Text, View, Keyboard, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
@@ -23,7 +23,7 @@ const Authentication = ({ navigation }) => {
     const [switchHandler, setSwitchHandler] = useState(false);
     const [error, setError] = useState(null);
 
-    const { userInfo, setUserInfo, authError, setAuthError, handleSignIn } = useUser();
+    const { userInfo, setUserInfo, authError, setAuthError, handleSignIn, handleGoogleSignIn } = useUser();
 
     useEffect(() => {
         console.log('User Info:', userInfo);
@@ -93,7 +93,7 @@ const Authentication = ({ navigation }) => {
     return (
         <>
             <Image source={imageSource} style={styles.imageBackground} />
-            <View style={[utilities.container, utilities.photoOverlayM]}>
+            <View style={[utilities.container, utilities.photoOverlayL]}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={[styles.topInnerContainer]}>
                         <Image style={styles.welcomeLogo} source={logoImg} />
@@ -108,10 +108,17 @@ const Authentication = ({ navigation }) => {
                 {!keyboardVisible && (
                     <View style={styles.bottomInnerContainer}>
                         <Text style={styles.errorText}>{error || authError}</Text>
+                        {!switchHandler && <TouchableOpacity style={utilities.secondaryBtn} onPress={handleGoogleSignIn}>
+                            <Text style={[utilities.secondaryBtnText, { position: 'relative' }]}>
+                                Sign in with Google
+                            </Text>
+                            <Image source={require('../assets/appImages/googleLogo.png')} style={styles.googleLogo} />
+                        </TouchableOpacity>}
                         <PrimaryBtn
-                            text={!switchHandler ? 'Sign In' : 'Continue'}
+                            text={!switchHandler ? 'Sign in' : 'Continue'}
                             handlePress={handleProceed}
                             marginBottom={0}
+                            marginTop={12}
                         />
                         <Text style={styles.promptText}>
                             {switchHandler ? 'Have an account? ' : "Don't have an account? "}

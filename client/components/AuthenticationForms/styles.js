@@ -14,11 +14,11 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     header: {
-        color: colors.white,
+        color: colors.off,
         textAlign: 'center',
         fontSize: 32,
-        fontFamily: 'Montserrat-Bold',
-        marginTop: 24,
+        fontFamily: 'Montserrat-Medium',
+        marginTop: 12,
         marginBottom: 44,
     },
     label: {
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
         height: 48,
         borderRadius: 24,
         borderWidth: 0.5,
-        borderColor: colors.offWhite,
+        borderColor: colors.white,
         backgroundColor: '#2E2C2F20',
         padding: 16,
         marginBottom: 14,
@@ -58,7 +58,7 @@ export const styles = StyleSheet.create({
     },
     topInnerContainer: {
         flex: 1,        
-        marginTop: 128,
+        marginTop: 96,
     },
     bottomInnerContainer: {
         marginTop: 'auto',
@@ -153,4 +153,10 @@ export const styles = StyleSheet.create({
         width: windowDimension.width,
         height: windowDimension.height * 1.1,
     },
+    googleLogo: {
+        width: 24,
+        height: 24,
+        position: 'absolute',
+        right: 16,
+    }
 });

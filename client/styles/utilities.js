@@ -153,16 +153,17 @@ export const utilities = StyleSheet.create({
     secondaryBtn: {
         height: 48,
         borderRadius: 24,
-        borderWidth: 2,
-        borderColor: colors.black,
-        backgroundColor: colors.offWhite,
+        borderWidth: 0.5,
+        borderColor: colors.white,
+        // backgroundColor: colors.offWhite,
+        backgroundColor: '#2E2C2F50',
         alignItems: 'center',
         justifyContent: 'center',
     },
     secondaryBtnText: {
-        color: colors.black,
+        color: colors.offWhite,
         fontSize: 20,
-        fontWeight: 'bold',
+        fontFamily: 'Montserrat-Medium',
     },
     myFontRegular: {
         fontFamily: 'Montserrat-Regular',

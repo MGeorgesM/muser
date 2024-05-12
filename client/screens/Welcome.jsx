@@ -21,39 +21,39 @@ const Welcome = ({ navigation }) => {
         setNavigationBarColor('translucent');
     }, []);
 
-    async function onDisplayNotification() {
-        try {
-            console.log('Displaying notification');
-            // Request permissions (required for iOS)
-            await notifee.requestPermission();
+    // async function onDisplayNotification() {
+    //     try {
+    //         console.log('Displaying notification');
+    //         // Request permissions (required for iOS)
+    //         await notifee.requestPermission();
 
-            // Create a channel (required for Android)
-            const channelId = await notifee.createChannel({
-                id: 'default',
-                name: 'Default Channel',
+    //         // Create a channel (required for Android)
+    //         const channelId = await notifee.createChannel({
+    //             id: 'default',
+    //             name: 'Default Channel',
                 
-            });
+    //         });
 
-            // Display a notification
-            await notifee.displayNotification({
+    //         // Display a notification
+    //         await notifee.displayNotification({
 
-                title: 'Notification Title',
-                body: 'Main body content of the notification',
+    //             title: 'Notification Title',
+    //             body: 'Main body content of the notification',
                 
-                android: {
-                    channelId,
+    //             android: {
+    //                 channelId,
                     
-                    smallIcon: '@mipmap/ic_launcher', // optional, defaults to 'ic_launcher'.
-                    // pressAction is needed if you want the notification to open the app when pressed
-                    pressAction: {
-                        id: 'default',
-                    },
-                },
-            });
-        } catch (error) {
-            console.log('Error displaying notification:', error);
-        }
-    }
+    //                 smallIcon: '@mipmap/ic_launcher', // optional, defaults to 'ic_launcher'.
+    //                 // pressAction is needed if you want the notification to open the app when pressed
+    //                 pressAction: {
+    //                     id: 'default',
+    //                 },
+    //             },
+    //         });
+    //     } catch (error) {
+    //         console.log('Error displaying notification:', error);
+    //     }
+    // }
 
     return (
         <View style={{ flex: 1 }}>
