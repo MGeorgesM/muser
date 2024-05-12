@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
+// import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,6 +10,12 @@ import messaging from '@react-native-firebase/messaging';
 import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 
 const UserContext = createContext();
+
+// GoogleSignin.configure({
+//     webClientId: '346495985297-4t75dva7hb428hbs85d4olpvapsh5j7m.apps.googleusercontent.com',
+//     offlineAccess: true,
+//     forceCodeForRefreshToken: true,
+// });
 
 export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
@@ -56,6 +64,16 @@ export const UserProvider = ({ children }) => {
         updateUserFcmtoken(token);
     };
 
+    const setupAuthenticatedUser = async () => {
+        await AsyncStorage.setItem('token', response.data.token);
+        await AsyncStorage.setItem('streamToken', response.data.stream_token);
+        await getAndSaveFcmToken();
+        setLoggedIn(true);
+        setCurrentUser(response.data.user);
+        console.log('User login successful:', response.data.user);
+        // loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
+    };
+
     const checkUser = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
@@ -78,19 +96,42 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+    const handleGoogleSignIn = async () => {
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            const token = userInfo.idToken;
+
+            const response = await sendRequest(requestMethods.POST, 'auth/google', { token });
+            if (response.status === 200 && response.data.userExists) {
+                await setupAuthenticatedUser();
+            } else {
+                setUserInfo((prevState) => ({
+                    ...prevState,
+                    name: userInfo.user.name,
+                    email: userInfo.user.email,
+                }));
+                navigation.navigate('CompleteRegistration');
+            }
+        } catch (error) {
+            console.log('Google Sign-In Error:', error);
+        }
+    };
+
     const handleSignIn = async () => {
         setAuthError(null);
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/login', userInfo);
 
             if (response.status === 200) {
-                await AsyncStorage.setItem('token', response.data.token);
-                await AsyncStorage.setItem('streamToken', response.data.stream_token);
-                await getAndSaveFcmToken();
-                setLoggedIn(true);
-                setCurrentUser(response.data.user);
-                console.log('User login successful:', response.data.user);
-                loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
+                await setupAuthenticatedUser();
+                // await AsyncStorage.setItem('token', response.data.token);
+                // await AsyncStorage.setItem('streamToken', response.data.stream_token);
+                // await getAndSaveFcmToken();
+                // setLoggedIn(true);
+                // setCurrentUser(response.data.user);
+                // console.log('User login successful:', response.data.user);
+                // loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
             }
         } catch (authError) {
             console.log('authError signing in:', authError);
@@ -121,12 +162,7 @@ export const UserProvider = ({ children }) => {
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/register', formData);
             if (response.status === 201) {
-                await AsyncStorage.setItem('token', response.data.token);
-                await AsyncStorage.setItem('streamToken', response.data.stream_token);
-                await getAndSaveFcmToken();
-                setLoggedIn(true);
-                setCurrentUser(response.data.user);
-                loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
+                await setupAuthenticatedUser();
             }
         } catch (error) {
             console.error('Error registering:', error);

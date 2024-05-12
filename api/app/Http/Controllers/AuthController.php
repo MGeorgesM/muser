@@ -26,7 +26,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'getProperties', 'checkEmail']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'getProperties', 'checkEmail', 'handleGoogleLogin']]);
     }
 
     /**
@@ -57,25 +57,29 @@ class AuthController extends Controller
     }
 
     public function handleGoogleLogin(Request $request)
-{
-    $user = Socialite::driver('google')->stateless()->userFromToken($request->token);
+    {
+        $user = Socialite::driver('google')->stateless()->userFromToken($request->token);
 
-    $existingUser = User::where('email', $user->email)->first();
+        $existingUser = User::where('email', $user->email)->first();
 
-    if (!$existingUser) {
-        // Register the user or handle it according to your application requirements
-        $existingUser = User::create([
-            'name' => $user->name,
-            'email' => $user->email,
-            'password' => 'password', // random password, not to be used
-        ]);
+        if ($existingUser) {
+
+            $token = auth()->login($existingUser);
+
+            $stream_token = $this->generateStreamToken();
+
+            return response()->json([
+                'userExists' => true,
+                'token' => $token,
+                'stream_token' => $stream_token,
+                'user' => $existingUser->full_details,
+            ]);
+        } else {
+            return response()->json([
+                'userExists' => false,
+            ]);
+        }
     }
-
-    // Create a personal access token for the user
-    $token = $existingUser->createToken('Personal Access Token')->accessToken;
-
-    return response()->json(['token' => $token, 'user' => $existingUser]);
-}
 
     /**
      * Register a User.
@@ -117,7 +121,7 @@ class AuthController extends Controller
         if ($request->query('flat')) {
             return response()->json(auth()->user());
         }
-        
+
         return response()->json(auth()->user()->full_details);
     }
 
