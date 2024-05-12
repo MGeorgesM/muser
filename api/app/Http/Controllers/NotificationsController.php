@@ -15,18 +15,45 @@ class NotificationsController extends Controller
     {
         $userIds = $request->userIds;
         $title = $request->title;
-        $body = $request->body; 
+        $body = $request->body;
+
+        if (empty($userIds) || empty($body)) {
+            return response()->json(['success' => false, 'error' => 'Missing parameters']);
+        }
+
+        if (empty($title)) {
+            $currentUserName = auth()->user()->name;
+            $title = "$currentUserName sent you a message";
+        }
 
         $users = User::whereIn('id', $userIds)->get();
 
-        $factory = (new Factory)->withServiceAccount(config('firebase.projects.app.credentials'));
+        $factory = (new Factory)->withServiceAccount(storage_path('app/muser_adminsdk_service.json'));
         $messaging = $factory->createMessaging();
+
+        $data = [
+            'notifee' => json_encode([
+                'title' => $title,
+                'body' => $body,
+                'android' => [
+                    'channelId' => 'default',
+                    'actions' => [
+                        [
+                            'title' => 'Mark as Read',
+                            'pressAction' => [
+                                'id' => 'read',
+                            ],
+                        ],
+                    ],
+                ],
+            ]),
+        ];
 
         foreach ($users as $user) {
             if (!empty($user->fcmtoken)) {
                 $message = CloudMessage::withTarget('token', $user->fcmtoken)
                     ->withNotification(Notification::create($title, $body))
-                    ->withData(['key' => 'value']);
+                    ->withData($data);
 
                 try {
                     $messaging->send($message);

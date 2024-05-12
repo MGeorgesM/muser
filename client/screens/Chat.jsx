@@ -217,6 +217,27 @@ const Chat = ({ navigation, route }) => {
     //     }
     // };
 
+    const sendNotification = async (userIds, body, title = null) => {
+        try {
+            const response = await sendRequest(requestMethods.POST, `notifications`, {
+                userIds,
+                title,
+                body,
+            });
+
+            if (response.status !== 200) throw new Error('Failed to send notification');
+        } catch (error) {
+            console.log('Error sending notification:', error);
+        }
+    };
+
+    const getChatParticipantsAndNotify = async (body, title = null) => {
+        const participantSource = chatParticipants.length > 0 ? chatParticipants : participants;
+        const participantsIds = participantSource.map((participant) => participant.id);
+
+        await sendNotification(participantsIds, body, title);
+    };
+
     const addConnection = async () => {
         const newConnectionIds = participants.map((participant) => participant.id);
         try {
@@ -267,7 +288,7 @@ const Chat = ({ navigation, route }) => {
     const onSend = useCallback(async (messages = []) => {
         setChatMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
 
-        console.log(chatMessages.length, messages.length);
+        // console.log(chatMessages.length, messages.length);
 
         if (chatMessages.length === 0) {
             try {
@@ -306,6 +327,8 @@ const Chat = ({ navigation, route }) => {
                 setChatMessages((previousMessages) => previousMessages.slice(0, -messages.length));
             }
         }
+
+        getChatParticipantsAndNotify(messages[0].text);
     });
 
     const handleFormBand = async (bandName) => {

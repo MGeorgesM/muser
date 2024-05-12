@@ -31,6 +31,7 @@ const Welcome = ({ navigation }) => {
             const channelId = await notifee.createChannel({
                 id: 'default',
                 name: 'Default Channel',
+                
             });
 
             // Display a notification

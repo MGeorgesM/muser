@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { UserProvider, useUser } from './contexts/UserContext';
 
 import messaging from '@react-native-firebase/messaging';
-import notifee from '@notifee/react-native'
+import notifee from '@notifee/react-native';
 
 import MainTabs from './screens/MainTabs';
 import AuthenticationStack from './navigators/AuthNavigator';
@@ -20,12 +20,13 @@ const AppNavigator = () => {
 
 const App = () => {
     useEffect(() => {
-        const unsubscribe = messaging().onMessage(async remoteMessage => {         
-          console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+            notifee.displayNotification(JSON.parse(remoteMessage.data.notifee));
+            console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
         });
-    
+
         return unsubscribe;
-      }, []);
+    }, []);
     return (
         <Provider store={store}>
             <NavigationContainer>
