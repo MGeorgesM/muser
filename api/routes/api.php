@@ -10,6 +10,7 @@ use App\Http\Controllers\ShowController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\AiMatchMakingController;
 use App\Http\Middleware\AuthenticatedMiddleware;
 
@@ -88,4 +89,6 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
     });
 
     Route::get('genres/', [GenreController::class, 'getGenres']);
+
+    Route::post('notifications', [NotificationsController::class, 'sendNotification']);
 });
