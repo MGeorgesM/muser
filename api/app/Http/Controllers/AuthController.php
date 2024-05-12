@@ -86,19 +86,6 @@ class AuthController extends Controller
         ], 201);
     }
 
-    protected function handleFileUpload($request)
-    {
-        if (!$request->hasFile('picture')) {
-            return null;
-        }
-
-        $file = $request->file('picture');
-        $filename = time() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('/profile_pictures/'), $filename);
-
-        return $filename;
-    }
-
     /**
      * Get the authenticated User.
      *
@@ -167,5 +154,18 @@ class AuthController extends Controller
                 'Location' => Location::all(),
             ],
         ]);
+    }
+
+    protected function handleFileUpload($request)
+    {
+        if (!$request->hasFile('picture')) {
+            return null;
+        }
+
+        $file = $request->file('picture');
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('/profile_pictures/'), $filename);
+
+        return $filename;
     }
 }

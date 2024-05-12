@@ -33,6 +33,7 @@ class UpdateUserRequest extends FormRequest
             'venue_type_id' => 'exists:venue_types,id',
             'genres' => 'array',
             'genres.*' => 'exists:genres,id',
+            'fcmToken' => 'string',
         ];
     }
 }

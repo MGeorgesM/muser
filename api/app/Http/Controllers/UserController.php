@@ -129,28 +129,6 @@ class UserController extends Controller
         return response()->json($connections);
     }
 
-    // public function addConnection($id)
-    // {
-    //     if (!$id) return response()->json(['message' => 'No user ID provided'], 400);
-
-    //     $userOneId = auth()->id();
-    //     $userTwoId = $id;
-
-    //     if ($userOneId == $userTwoId) return response()->json(['message' => 'You cannot connect with yourself'], 400);
-
-    //     $sortedIds = [$userOneId, $userTwoId];
-    //     sort($sortedIds);
-
-    //     Connection::firstOrCreate([
-    //         'user_one_id' => $sortedIds[0],
-    //         'user_two_id' => $sortedIds[1]
-    //     ]);
-
-    //     $userTwo = User::find($userTwoId);
-
-    //     return response()->json(['message' => 'Connection added successfully', 'user' => $userTwo->full_details]);
-    // }
-
     public function addConnections(Request $request)
     {
         $userIds = $request->input('userIds', []);
