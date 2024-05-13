@@ -1,15 +1,15 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { MessagesSquare, Store, Radio, AudioWaveform, UserRound } from 'lucide-react-native';
 
 import FeedNavigator from '../navigators/FeedNavigator';
 import ChatNavigator from '../navigators/ChatNavigator';
-import VenueNavigator from '../navigators/VenueNavigator';
 import ShowsNavigator from '../navigators/ShowsNavigator';
+import VenuesNavigator from '../navigators/VenuesNavigator';
 import ProfileNavigator from '../navigators/ProfileNavigator';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
@@ -77,7 +77,7 @@ const MainTabs = () => {
         >
             <Tab.Screen
                 name="Venues"
-                component={VenueNavigator}
+                component={VenuesNavigator}
                 options={{ headerShown: false }}
                 listeners={({ navigation }) => ({
                     tabPress: (e) => {

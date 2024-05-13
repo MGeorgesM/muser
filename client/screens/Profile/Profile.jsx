@@ -24,7 +24,7 @@ import DetailsPill from '../../components/Elements/DetailsPill/DetailsPill';
 import SettingsCard from '../../components/Cards/SettingsCard/SettingsCard';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import ProfileDetailsPicker from '../../components/ProfileDetailsPicker/ProfileDetailsPicker';
-import { useUserInfoLogic } from '../Authentication/userInfoLogic';
+import { useUserInfoLogic } from '../Auth/userInfoLogic';
 import UserInfoForm from '../../components/AuthenticationForms/UserInfoForm';
 import PrimaryBtn from '../../components/Elements/PrimaryBtn';
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, Text, View, Keyboard, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { Image, ScrollView, Text, View, Keyboard, TouchableOpacity } from 'react-native';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 import { useUser } from '../../contexts/UserContext';
