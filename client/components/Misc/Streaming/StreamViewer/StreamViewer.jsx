@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
     },
 
     commentsContainer: {
+        opacity: 0.8,
         position: 'absolute',
         height: 72,
         bottom: 56,

@@ -37,6 +37,7 @@ const Chat = ({ navigation, route }) => {
     const { currentUser } = useUser();
 
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
+    const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
 
     const { id, participants, chatTitle, onBackPress } = route.params;
 
@@ -97,11 +98,49 @@ const Chat = ({ navigation, route }) => {
     }, [id, participants, chatParticipants, localChatTitle, chatTitle]);
 
     useEffect(() => {
-        let unsubscribe;
+        let messagesUnsubscribe;
+        let chatTitleUnsubscribe;
 
         setChatMessages([]);
         setChatParticipants([]);
         setLocalChatTitle('');
+
+        const setupChatTitleListener = async () => {
+
+            if (chatTitle) {
+                console.log('Chat Title present returning');
+                return;
+            }
+
+            const chatRef = doc(fireStoreDb, 'chats', id);
+
+            chatTitleUnsubscribe = onSnapshot(chatRef, (doc) => {
+                const chatData = doc.data();
+                console.log('Chat Data:', chatData)
+                if (chatData.chatTitle) {
+                    setLocalChatTitle(chatData.chatTitle);
+                } else if ( chatData.participantsIds.length > 1) {
+                    const chatParticipantsIds = chatData.participantsIds
+
+                    for (const id of chatParticipantsIds) {
+                        if (id !== currentUser.id) {
+                            let user = feedUsers.find((user) => user.id === participant) || userConnections.find((user) => user.id === participant);
+                            if (user) {
+                                setLocalChatTitle(user.name);
+                            }
+                        }
+                    }
+                }
+            });
+
+            return () => {
+                if (unsubscribe) {
+                    unsubscribe();
+                }
+            };
+            
+        }
+            
 
         const setupMessagesListener = async () => {
             console.log('Starting listener');
@@ -112,7 +151,7 @@ const Chat = ({ navigation, route }) => {
             const messagesRef = collection(newChatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
 
-            unsubscribe = onSnapshot(q, (snapshot) => {
+            messagesUnsubscribe = onSnapshot(q, (snapshot) => {
                 const fetchedMessages = snapshot.docs.map((doc) => ({
                     _id: doc.id,
                     text: doc.data().text,
@@ -128,11 +167,13 @@ const Chat = ({ navigation, route }) => {
         };
 
         setupMessagesListener();
+        setupChatTitleListener();
         getRemainingConnections();
 
         return () => {
-            if (unsubscribe) {
-                unsubscribe();
+            if (chatTitleUnsubscribe && messagesUnsubscribe) {
+                chatTitleUnsubscribe();
+                messagesUnsubscribe();
             }
         };
     }, [id, participants]);

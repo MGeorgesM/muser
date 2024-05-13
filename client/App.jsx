@@ -23,9 +23,8 @@ const App = () => {
     useEffect(() => {
         const unsubscribe = messaging().onMessage(async (remoteMessage) => {
             notifee.displayNotification(JSON.parse(remoteMessage.data.notifee));
-            console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
         });
-        // LogBox.ignoreAllLogs(true);
+
         return unsubscribe;
     }, []);
     return (
