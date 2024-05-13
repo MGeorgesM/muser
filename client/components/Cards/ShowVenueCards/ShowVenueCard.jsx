@@ -8,7 +8,7 @@ import { formatDateString } from '../../../core/tools/formatDate';
 import { Radio } from 'lucide-react-native';
 
 const ShowVenueCard = ({ entity, handlePress, isSelected = false }) => {
-    const { picture, name, location, venueType, band, date } = entity;
+    const { picture, venueName, location, venueType, band, date } = entity;
     const imageUrl = band ? `${showsPicturesUrl + picture}` : `${profilePicturesUrl + picture}`;
 
     return (
@@ -22,7 +22,7 @@ const ShowVenueCard = ({ entity, handlePress, isSelected = false }) => {
             )}
             <View style={styles.overlay}>
                 <View>
-                    <Text style={[styles.entityName, { fontSize: band ? 18 : 20 }]}>{name || band.name}</Text>
+                    <Text style={[styles.entityName, { fontSize: band ? 18 : 20 }]}>{venueName || band.name}</Text>
                     <Text style={[styles.entityInfo, { fontSize: band ? 14 : 16 }]}>
                         {(date && formatDateString(date)) || `${venueType.name} - ${location.name}`}
                     </Text>

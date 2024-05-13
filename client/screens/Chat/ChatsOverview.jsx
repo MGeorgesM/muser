@@ -29,16 +29,11 @@ const ChatsOverview = ({ navigation }) => {
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chatsArray = [];
-
-            // console.log('Snapshot size:', querySnapshot.size);
             querySnapshot.forEach((doc) => {
-                // console.log('raw data:', doc.data());
                 chatsArray.push({ id: doc.id, ...doc.data() });
             });
 
             chatsArray.sort((a, b) => b.lastMessage.createdAt - a.lastMessage.createdAt);
-            // console.log('Chats:', chatsArray);
-
             setChats(chatsArray);
             setIsLoading(false);
 
@@ -52,11 +47,11 @@ const ChatsOverview = ({ navigation }) => {
         return () => unsubscribe;
     }, [currentUser]);
 
-    return isLoading || (chats && chats.length === 0) ? (
+    return isLoading ? (
         <View style={[utilities.container, { backgroundColor: colors.bgDark }]}>
-            <LoadingScreen message={chats.length === 0 ? 'Start Connecting!' : null} />
+            <LoadingScreen />
         </View>
-    ) : (
+    ) : chats && chats.length > 0 ? (
         <View style={[utilities.darkContainer]}>
             <FlatList
                 style={[utilities.flexed]}
@@ -65,6 +60,8 @@ const ChatsOverview = ({ navigation }) => {
                 keyExtractor={(item) => item.id}
             />
         </View>
+    ) : (
+        <LoadingScreen message={'Start Connecting!'} />
     );
 };
 

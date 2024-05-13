@@ -30,16 +30,6 @@ const VenueDetails = ({ route, navigation }) => {
     }, [show, switchView]);
 
     useEffect(() => {
-        const getVenueDetails = async () => {
-            try {
-                const response = await sendRequest(requestMethods.GET, `users/${venue.id}`, null);
-                if (response.status !== 200) throw new Error('Failed to fetch venue details');
-                console.log(response.data);
-                dispatch(setSelectedVenue(response.data));
-            } catch (error) {
-                console.log('Error fetching venue details:', error);
-            }
-        };
         const getVenueShows = async () => {
             try {
                 const response = await sendRequest(requestMethods.GET, `shows?venue_id=${venue.id}&status=set`, null);
@@ -50,7 +40,6 @@ const VenueDetails = ({ route, navigation }) => {
                 console.log('Error fetching venue shows:', error);
             }
         };
-        // getVenueDetails();
         venue && getVenueShows();
     }, [venue]);
 
@@ -60,10 +49,10 @@ const VenueDetails = ({ route, navigation }) => {
                   screen: 'StreamBroadcast',
                   params: {
                       showId: show.id,
-                      showName: `${show.band.name} @ ${show.venue.name}`,
+                      showName: `${show.band.name} @ ${show.venue.venueName}`,
                   },
               })
-            : navigation.navigate('ShowDetails', { venueId: venue.id, venueName: venue.name });
+            : navigation.navigate('ShowDetails', { venueId: venue.id, venueName: venue.venueName });
     };
 
     const handleBackBtn = () => {
@@ -88,7 +77,7 @@ const VenueDetails = ({ route, navigation }) => {
                 />
                 <View style={[utilities.overlay, styles.borderRadiusBottom, { height: 96, gap: 2 }]}>
                     <Text style={[utilities.textL, utilities.myFontBold, { color: 'white' }]}>
-                        {!switchHandler ? venue?.name : selectedShow?.band.name}
+                        {!switchHandler ? venue?.venueName : selectedShow?.band.name}
                     </Text>
                     <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.offWhite }]}>
                         {switchHandler ? formatDateString(selectedShow.date) : `${venue?.location.name}, Lebanon`}

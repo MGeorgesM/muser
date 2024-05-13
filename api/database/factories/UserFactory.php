@@ -74,7 +74,7 @@ class UserFactory extends Factory
 
         return $this->state(function (array $attributes)  use ($venueNames) {
             return [
-                'name' => $this->faker->unique()->randomElement($venueNames),
+                'name' => $this->faker->unique()->firstName,
                 'email' => $this->faker->unique()->safeEmail,
                 'password' => 'password',
                 'about' => $this->faker->text(20),
@@ -86,7 +86,7 @@ class UserFactory extends Factory
                 'experience_id' => null,
                 'instrument_id' => null,
                 'venue_type_id' => $this->faker->numberBetween(1, 4),
-                'venue_name' => substr($this->faker->company(), 0, 50),
+                'venue_name' => $this->faker->unique()->randomElement($venueNames),
                 'role_id' => 2,
                 'is_active' => 1,
             ];
