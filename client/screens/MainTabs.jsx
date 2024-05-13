@@ -11,7 +11,7 @@ import ChatNavigator from '../navigators/ChatNavigator';
 import ShowsNavigator from '../navigators/ShowsNavigator';
 import VenuesNavigator from '../navigators/VenuesNavigator';
 import ProfileNavigator from '../navigators/ProfileNavigator';
-import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
+import LoadingScreen from '../components/Misc/LoadingScreen/LoadingScreen';
 
 import { colors } from '../styles/utilities';
 
