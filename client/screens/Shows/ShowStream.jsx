@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView, Pressable } from 'react-native';
 
-import ChatTextInput from '../components/UserComposer/UserComposer';
-import CommentCard from '../components/Cards/CommentCard/CommentCard';
-import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
+import UserComposer from '../../components/Misc/UserComposer/UserComposer';
+import CommentCard from '../../components/Cards/CommentCard/CommentCard';
+import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
 
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 
 import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
 import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 import inCallManager from 'react-native-incall-manager';
 
-import { colors, utilities } from '../styles/utilities';
+import { colors, utilities } from '../../styles/utilities';
 import { Heart, Play, Pause, Maximize } from 'lucide-react-native';
 
-import { fireStoreDb } from '../config/firebase';
+import { fireStoreDb } from '../../config/firebase';
 import {
     collection,
     query,
@@ -355,7 +355,7 @@ const ShowStream = ({ navigation, route }) => {
                             </Text>
                         )}
                     </ScrollView>
-                    <ChatTextInput
+                    <UserComposer
                         placeholder="Write a comment"
                         value={userComment}
                         onChangeText={setUserComment}

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 
+import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { store } from './store/store';
@@ -24,7 +25,7 @@ const App = () => {
             notifee.displayNotification(JSON.parse(remoteMessage.data.notifee));
             console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
         });
-
+        LogBox.ignoreAllLogs(true);
         return unsubscribe;
     }, []);
     return (

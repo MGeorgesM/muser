@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Modal, Dimensions, TextInput, FlatList, Touchab
 import { colors, utilities } from '../../styles/utilities';
 
 import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
-import PrimaryBtn from '../Misc/PrimaryBtn';
+import PrimaryBtn from '../Misc/PrimaryBtn/PrimaryBtn';
 
 const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, buttonText = 'Add', input = false }) => {
     const [userInput, setUserInput] = useState('');

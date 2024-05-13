@@ -7,7 +7,7 @@ import { requestMethods, sendRequest } from '../../core/tools/apiRequest';
 
 import ModalHigh from '../../components/Modals/ModalHigh';
 import ShowVenueCard from '../../components/Cards/ShowVenueCards/ShowVenueCard';
-import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 
 const Venues = ({ navigation }) => {
     const dispatch = useDispatch();

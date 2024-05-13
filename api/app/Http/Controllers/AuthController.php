@@ -56,30 +56,30 @@ class AuthController extends Controller
         ]);
     }
 
-    public function handleGoogleLogin(Request $request)
-    {
-        $user = Socialite::driver('google')->stateless()->userFromToken($request->token);
+    // public function handleGoogleLogin(Request $request)
+    // {
+    //     $user = Socialite::driver('google')->stateless()->userFromToken($request->token);
 
-        $existingUser = User::where('email', $user->email)->first();
+    //     $existingUser = User::where('email', $user->email)->first();
 
-        if ($existingUser) {
+    //     if ($existingUser) {
 
-            $token = auth()->login($existingUser);
+    //         $token = auth()->login($existingUser);
 
-            $stream_token = $this->generateStreamToken();
+    //         $stream_token = $this->generateStreamToken();
 
-            return response()->json([
-                'userExists' => true,
-                'token' => $token,
-                'stream_token' => $stream_token,
-                'user' => $existingUser->full_details,
-            ]);
-        } else {
-            return response()->json([
-                'userExists' => false,
-            ]);
-        }
-    }
+    //         return response()->json([
+    //             'userExists' => true,
+    //             'token' => $token,
+    //             'stream_token' => $stream_token,
+    //             'user' => $existingUser->full_details,
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'userExists' => false,
+    //         ]);
+    //     }
+    // }
 
     /**
      * Register a User.

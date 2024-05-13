@@ -12,7 +12,7 @@ import {
 
 import { colors, utilities } from '../../styles/utilities';
 
-import PrimaryBtn from '../Misc/PrimaryBtn';
+import PrimaryBtn from '../Misc/PrimaryBtn/PrimaryBtn';
 
 const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible, setModalVisible }) => {
     return (

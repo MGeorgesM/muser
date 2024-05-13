@@ -9,7 +9,7 @@ import { profilePicturesUrl } from '../../core/tools/apiRequest';
 import { useSelector } from 'react-redux';
 
 import BackBtn from '../../components/Misc/BackBtn/BackBtn';
-import PrimaryBtn from '../../components/Misc/PrimaryBtn';
+import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 import InstrumentIcon from '../../components/Misc/InstrumentIcon/InstrumentIcon';
 import DetailsPill from '../../components/Misc/DetailsPill/DetailsPill';
 

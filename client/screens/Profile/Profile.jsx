@@ -1,32 +1,20 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Dimensions,
-    Image,
-    TextInput,
-    Pressable,
-    ScrollView,
-    SafeAreaView,
-} from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, Pressable, ScrollView } from 'react-native';
 
 import { useUser } from '../../contexts/UserContext';
 
 import { colors, utilities } from '../../styles/utilities';
-import { profilePicturesUrl } from '../../core/tools/apiRequest';
+import { profilePicturesUrl, sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
-import { UserRoundCog, LockKeyhole, ChevronRight, Scroll } from 'lucide-react-native';
-
-import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
+import { UserRoundCog, LockKeyhole } from 'lucide-react-native';
 
 import DetailsPill from '../../components/Misc/DetailsPill/DetailsPill';
 import SettingsCard from '../../components/Cards/SettingsCard/SettingsCard';
-import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
-import ProfileDetailsPicker from '../../components/ProfileDetailsPicker/ProfileDetailsPicker';
+import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
+
 import { useUserInfoLogic } from '../Auth/userInfoLogic';
-import UserInfoForm from '../../components/AuthenticationForms/UserInfoForm';
-import PrimaryBtn from '../../components/Misc/PrimaryBtn';
+import UserInfoForm from '../../components/Forms/UserInfoForm';
+import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 
 const Profile = ({ navigation }) => {
     const { currentUser, setCurrentUser } = useUser();

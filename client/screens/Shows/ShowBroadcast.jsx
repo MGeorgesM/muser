@@ -3,9 +3,9 @@ import { View, SafeAreaView } from 'react-native';
 import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 
 import { StreamCall } from '@stream-io/video-react-native-sdk';
-import { colors, utilities } from '../styles/utilities';
-import StreamViewer from '../components/Elements/LiveStreaming/StreamViewer/StreamViewer';
-import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
+import { colors, utilities } from '../../styles/utilities';
+import StreamViewer from '../../components/Misc/Streaming/StreamViewer/StreamViewer';
+import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 
 const ShowBroadcast = ({ route }) => {
     const { showId, showName } = route.params;

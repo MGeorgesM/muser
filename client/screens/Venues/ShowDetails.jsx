@@ -8,9 +8,9 @@ import { colors, utilities } from '../../styles/utilities';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 import { generateHours, durations } from '../../core/data/generateDatetime';
 
-import ProfileDetailsPicker from '../../components/ProfileDetailsPicker/ProfileDetailsPicker';
+import ProfileDetailsPicker from '../../components/Misc/ProfileDetailsPicker/ProfileDetailsPicker';
 import VenueAvailabilityCard from '../../components/Cards/VenueAvailabilityCard/VenueAvailabilityCard';
-import PrimaryBtn from '../../components/Misc/PrimaryBtn';
+import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 
 import { useDispatch } from 'react-redux';
 import { addShow } from '../../store/Shows';

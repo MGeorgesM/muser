@@ -100,15 +100,20 @@ export const useUserInfoLogic = () => {
         const userInputValid = validateForm();
 
         if (!userInputValid) return;
+        console.log('Signing up:', userInfo);
 
+        const uri = selectedPicture.assets[0].uri;
         const filename = selectedPicture.assets[0].uri.split('/').pop();
         const match = /\.(\w+)$/.exec(filename);
         const ext = match?.[1];
+        const type = match ? `picture/${match[1]}` : `picture`;
+
+        console.log('Selected Picture:', selectedPicture);
 
         const formData = new FormData();
 
         for (const key in userInfo) {
-            if (!userInfo[key]) continue;
+            if (userInfo[key] === '') continue;
             if (key === 'picture') {
                 console.log('here!');
                 formData.append('picture', {
@@ -125,6 +130,8 @@ export const useUserInfoLogic = () => {
             }
         }
 
+        console.log('UserInfo:', userInfo);
+
         return formData;
     };
 
@@ -138,12 +145,10 @@ export const useUserInfoLogic = () => {
         setUserInfo((prev) => ({ ...prev, genres: newGenres }));
     };
 
-    const handleProceed = async (apiCall = handleSignUp) => {
-        console.log('Proceeding!');
+    const handleProceed = async () => {
         const formData = handleUserInfoInput();
         if (!formData) return;
-        console.log('HERRRREEE');
-        apiCall(formData);
+        handleSignUp(formData);
     };
 
     return {

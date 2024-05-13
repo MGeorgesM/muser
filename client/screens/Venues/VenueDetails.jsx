@@ -10,7 +10,7 @@ import { profilePicturesUrl, showsPicturesUrl, sendRequest, requestMethods } fro
 
 import { ChevronLeft } from 'lucide-react-native';
 
-import PrimaryBtn from '../../components/Misc/PrimaryBtn';
+import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 import ShowCard from '../../components/Cards/ShowCard/ShowCard';
 import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
 

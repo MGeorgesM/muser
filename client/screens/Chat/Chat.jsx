@@ -28,7 +28,7 @@ import { truncateText } from '../../core/tools/formatDate';
 
 import { colors, utilities } from '../../styles/utilities';
 
-import PictureHeader from '../../components/PictureHeader/PictureHeader';
+import PictureHeader from '../../components/Misc/PictureHeader/PictureHeader';
 import ChatModal from '../../components/Modals/ChatModal';
 
 const Chat = ({ navigation, route }) => {

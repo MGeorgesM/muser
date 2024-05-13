@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { StyleSheet, FlatList, View, Dimensions, RefreshControl } from 'react-native';
+import { StyleSheet, FlatList, View, RefreshControl } from 'react-native';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 import { useUser } from '../../contexts/UserContext';
@@ -13,8 +13,8 @@ import { Mail } from 'lucide-react-native';
 
 import { BrainCog, MessageCirclePlus } from 'lucide-react-native';
 
-import PictureHeader from '../../components/PictureHeader/PictureHeader';
-import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+import PictureHeader from '../../components/Misc/PictureHeader/PictureHeader';
+import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 import AiMatchMakingModal from '../../components/Modals/AiMatchMakingModal';
 import FeedMemberCard from '../../components/Cards/FeedMemberCard/FeedMemberCard';
 import FloatingActionButton from '../../components/Misc/FloatingActionButton/FloatingActionButton';

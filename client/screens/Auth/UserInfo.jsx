@@ -8,7 +8,7 @@ import { CirclePlus, ChevronLeft } from 'lucide-react-native';
 
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 import DetailsPill from '../../components/Misc/DetailsPill/DetailsPill';
-import ProfileDetailsPicker from '../../components/ProfileDetailsPicker/ProfileDetailsPicker';
+import ProfileDetailsPicker from '../../components/Misc/ProfileDetailsPicker/ProfileDetailsPicker';
 
 const { styles } = require('../../components/Forms/styles');
 

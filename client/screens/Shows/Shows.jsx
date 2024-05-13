@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import { setShows } from '../store/Shows';
+import { setShows } from '../../store/Shows';
 import { useDispatch, useSelector } from 'react-redux';
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
-import ModalHigh from '../components/Modals/ModalHigh';
-import ShowVenueCard from '../components/Cards/ShowVenueCards/ShowVenueCard';
-import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
+import ModalHigh from '../../components/Modals/ModalHigh';
+import ShowVenueCard from '../../components/Cards/ShowVenueCards/ShowVenueCard';
+import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 
 const Shows = ({ navigation }) => {
     const dispatch = useDispatch();

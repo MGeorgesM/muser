@@ -8,14 +8,14 @@ import { useUser } from '../../contexts/UserContext';
 import { colors, utilities } from '../../styles/utilities';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
-import SignInForm from '../../components/AuthenticationForms/SignInForm';
-import SignUpForm from '../../components/AuthenticationForms/SignUpForm';
-import PrimaryBtn from '../../components/Elements/PrimaryBtn';
+import SignInForm from '../../components/Forms/SignInForm';
+import SignUpForm from '../../components/Forms/SignUpForm';
+import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 
-const logoImg = require('../assets/appImages/logoOnboard.png');
-const imageSource = require('../assets/appImages/onboard.jpg');
+const logoImg = require('../../assets/appImages/logoOnboard.png');
+const imageSource = require('../../assets/appImages/onboard.jpg');
 
-const { styles } = require('../../components/AuthenticationForms/styles');
+const { styles } = require('../../components/Forms/styles');
 
 const Authentication = ({ navigation }) => {
     const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -107,12 +107,17 @@ const Authentication = ({ navigation }) => {
                 {!keyboardVisible && (
                     <View style={styles.bottomInnerContainer}>
                         <Text style={styles.errorText}>{error || authError}</Text>
-                        {!switchHandler && <TouchableOpacity style={utilities.secondaryBtn} onPress={handleGoogleSignIn}>
-                            <Text style={[utilities.secondaryBtnText, { position: 'relative' }]}>
-                                Sign in with Google
-                            </Text>
-                            <Image source={require('../assets/appImages/googleLogo.png')} style={styles.googleLogo} />
-                        </TouchableOpacity>}
+                        {/* {!switchHandler && (
+                            <TouchableOpacity style={utilities.secondaryBtn} onPress={handleGoogleSignIn}>
+                                <Text style={[utilities.secondaryBtnText, { position: 'relative' }]}>
+                                    Sign in with Google
+                                </Text>
+                                <Image
+                                    source={require('../assets/appImages/googleLogo.png')}
+                                    style={styles.googleLogo}
+                                />
+                            </TouchableOpacity>
+                        )} */}
                         <PrimaryBtn
                             text={!switchHandler ? 'Sign in' : 'Continue'}
                             handlePress={handleProceed}

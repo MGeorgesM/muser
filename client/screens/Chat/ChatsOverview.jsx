@@ -9,7 +9,7 @@ import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { colors, utilities } from '../../styles/utilities';
 
 import ChatCard from '../../components/Cards/ChatCard/ChatCard';
-import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 
 const ChatsOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);

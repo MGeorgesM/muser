@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, TextInput } from 'react-native';
 
 import DetailsPill from '../Misc/DetailsPill/DetailsPill';
-import ProfileDetailsPicker from '../ProfileDetailsPicker/ProfileDetailsPicker';
+import ProfileDetailsPicker from '../Misc/ProfileDetailsPicker/ProfileDetailsPicker';
 
 import { colors, utilities } from '../../styles/utilities';
 
