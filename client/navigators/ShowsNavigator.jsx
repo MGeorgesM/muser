@@ -41,7 +41,6 @@ const ShowsNavigator = () => {
                 };
 
                 console.log('Initialized Client', user);
-                console.log('CurrentUser', currentUser);
 
                 try {
                     const client = new StreamVideoClient({

@@ -25,6 +25,7 @@ const Authentication = ({ navigation }) => {
     const { userInfo, setUserInfo, authError, setAuthError, handleSignIn, handleGoogleSignIn } = useUser();
 
     useEffect(() => {
+
         if ((!userInfo.email.includes('@') || !userInfo.email.includes('.')) && userInfo.email.length > 0) {
             setError('Please enter a valid email address');
         } else if (userInfo.password.length < 6 && userInfo.password.length > 0) {

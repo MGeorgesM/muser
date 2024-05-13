@@ -47,11 +47,11 @@ return new class extends Migration
         });
         
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+        $table->id();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('about', 40);
+            $table->string('about', 50);
             $table->string('picture');
             $table->foreignId('location_id')->constrained('locations')->onDelete('cascade');
             $table->foreignId('availability_id')->nullable()->constrained('availabilities')->onDelete('cascade');

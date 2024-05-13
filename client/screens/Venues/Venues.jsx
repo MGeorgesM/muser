@@ -18,7 +18,6 @@ const Venues = ({ navigation }) => {
             try {
                 const response = await sendRequest(requestMethods.GET, 'users/type/venue', null);
                 if (response.status !== 200) throw new Error('Failed to fetch venues');
-                console.log('Venues:', response.data.feedUsers);
                 dispatch(setVenues(response.data.feedUsers));
             } catch (error) {
                 console.log('Error fetching venues:', error);

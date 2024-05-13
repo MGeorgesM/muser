@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     username: {
         color: 'white',
         fontSize: 16,
-        fontFamily: 'Montserrat-Regular',
+        fontFamily: 'Montserrat-Medium',
         textAlign: 'center',
     },
 });

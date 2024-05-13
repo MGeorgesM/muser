@@ -81,15 +81,22 @@ const ShowStream = ({ navigation, route }) => {
     }, [client, show.id]);
 
     useEffect(() => {
-        const showId = show.id;
-        const unsubscribeComments = setupCommentsListener(showId);
-        const unsubscribeLikes = setupLikesListener(showId);
+    let unsubscribeComments = () => {};
+    let unsubscribeLikes = () => {};
 
-        return () => {
-            unsubscribeComments();
-            unsubscribeLikes();
-        };
-    }, [show.id]);
+    const initializeListeners = async () => {
+        const showId = show.id;
+        unsubscribeComments = await setupCommentsListener(showId);
+        unsubscribeLikes = await setupLikesListener(showId);
+    };
+
+    initializeListeners();
+
+    return () => {
+        unsubscribeComments();
+        unsubscribeLikes();
+    };
+}, [show.id]);
 
     const setupCommentsListener = async (showId) => {
         const commentsRef = collection(fireStoreDb, 'shows', showId.toString(), 'comments');

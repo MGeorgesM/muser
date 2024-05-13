@@ -90,17 +90,13 @@ const Feed = ({ navigation }) => {
     const handleAiMatchMaking = async () => {
         setModalVisible(false);
         setIsLoading(true);
-        console.log('Calling openAi');
+        console.log('Calling OpenAi');
         try {
             const response = await sendRequest(requestMethods.POST, 'ai/', { message: userInput });
             if (response.status !== 200) throw new Error('Failed to fetch users');
-            console.log('RESPONSE', response.data);
             if (response.data.length === 0) {
-                console.log('NO USERS');
-
                 return;
             }
-            // dispatch(setFeedUsers(response.data));
             setMatchedUsers(response.data);
         } catch (error) {
             console.log('Error fetching users:', error);

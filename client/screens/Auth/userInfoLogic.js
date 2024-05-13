@@ -69,8 +69,8 @@ export const useUserInfoLogic = () => {
         }
 
         if (
-            (userInfo.role_id === 1 && userInfo.about.length > 40) ||
-            (userInfo.role_id === 2 && userInfo.venue_name.length > 40)
+            (userInfo.role_id == 1 && userInfo.about.length > 40) ||
+            (userInfo.role_id == 2 && userInfo.venue_name.length > 40)
         ) {
             setError('Please keep your bio under 40 characters');
             return false;
