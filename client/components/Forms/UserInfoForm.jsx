@@ -10,7 +10,7 @@ const { styles } = require('./styles');
 
 const UserInfoForm = ({ userInfo, setUserInfo, handlePress, handlePickerChange, profileProperties }) => {
     return (
-        <View style={[utilities.flexed]}>
+        <View>
             <Text style={styles.inputTextProfile}>{userInfo.role_id == 2 ? 'Description' : 'Bio'}</Text>
             <TextInput
                 key={'about'}

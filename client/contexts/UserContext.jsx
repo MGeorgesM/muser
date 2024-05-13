@@ -40,6 +40,7 @@ export const UserProvider = ({ children }) => {
     const navigation = useNavigation();
 
     useEffect(() => {
+        console.log('User Info:', userInfo);
         checkUser();
     }, []);
 

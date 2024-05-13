@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
         fontSize: 32,
         fontFamily: 'Montserrat-Medium',
         marginTop: 24,
-        marginBottom: 72,
+        marginBottom: 64,
     },
     label: {
         fontSize: 16,
@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
         borderRadius: 24,
         borderWidth: 0.5,
         borderColor: colors.white,
-        backgroundColor: '#2E2C2F20',
+        backgroundColor: '#2E2C2F15',
         padding: 16,
         marginBottom: 14,
     },
