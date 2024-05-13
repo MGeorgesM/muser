@@ -138,14 +138,6 @@ const Chat = ({ navigation, route }) => {
     }, [id, participants]);
 
     const getRemainingConnections = async () => {
-        // console.log('Chat Participants:', participants);
-        // console.log(
-        //     'User Connections:',
-        //     userConnections.map((connection) => {
-        //         return { id: connection.id, name: connection.name };
-        //     })
-        // );
-
         if (!userConnections) return;
 
         const remainingConnections = userConnections.filter((connection) =>
@@ -153,17 +145,6 @@ const Chat = ({ navigation, route }) => {
         );
 
         setChatConnections(remainingConnections);
-
-        // console.log(
-        //     'Remainign Connections:',
-        //     remainingConnections.map((connection) => {
-        //         return {
-        //             id: connection.id,
-        //             name: connection.name,
-        //             picture: connection.picture,
-        //         };
-        //     })
-        // );
     };
 
     const getMessageAvatar = (userId) => {
@@ -205,18 +186,6 @@ const Chat = ({ navigation, route }) => {
         setConnectionModalVisible(false);
     };
 
-    // const addConnection = async () => {
-    //     const newConnectionId = participants.map((participant) => participant.id);
-    //     console.log('Adding connection:', newConnectionId[0]);
-    //     try {
-    //         const response = await sendRequest(requestMethods.POST, `connections/${newConnectionId}`, null);
-    //         if (response.status !== 200) throw new Error('Failed to add connection');
-    //         dispatch(addNewConnection(newConnectionId[0]));
-    //     } catch (error) {
-    //         console.log('Error adding connection:', error);
-    //     }
-    // };
-
     const sendNotification = async (userIds, body, title = null) => {
         try {
             const response = await sendRequest(requestMethods.POST, `notifications`, {
@@ -232,8 +201,8 @@ const Chat = ({ navigation, route }) => {
     };
 
     const getChatParticipantsAndNotify = async (body, title = null) => {
-        const participantSource = chatParticipants.length > 0 ? chatParticipants : participants;
-        const participantsIds = participantSource.map((participant) => participant.id);
+        const participantsSource = chatParticipants.length > 0 ? chatParticipants : participants;
+        const participantsIds = participantsSource.map((participant) => participant.id);
 
         await sendNotification(participantsIds, body, title);
     };
@@ -283,12 +252,12 @@ const Chat = ({ navigation, route }) => {
         } catch (error) {
             console.log('Error creating chat:', error);
         }
+
+        getChatParticipantsAndNotify(initialMessage.text);
     };
 
     const onSend = useCallback(async (messages = []) => {
         setChatMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
-
-        // console.log(chatMessages.length, messages.length);
 
         if (chatMessages.length === 0) {
             try {
@@ -327,8 +296,6 @@ const Chat = ({ navigation, route }) => {
                 setChatMessages((previousMessages) => previousMessages.slice(0, -messages.length));
             }
         }
-
-        getChatParticipantsAndNotify(messages[0].text);
     });
 
     const handleFormBand = async (bandName) => {

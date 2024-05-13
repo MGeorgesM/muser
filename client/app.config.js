@@ -22,7 +22,7 @@ export default {
                 foregroundImage: './assets/adaptive-icon.png',
                 backgroundColor: '#ffffff',
             },
-            googleServicesFile: './google-services.json',
+            // googleServicesFile: './android/app/google-services.json',
             package: 'com.sef.muser',
         },
         web: {
@@ -30,7 +30,7 @@ export default {
         },
         plugins: [
             // '@react-native-firebase/app',
-            '@react-native-google-signin/google-signin',
+            // '@react-native-google-signin/google-signin',
             'expo-build-properties',
             ['@stream-io/video-react-native-sdk'],
             [
