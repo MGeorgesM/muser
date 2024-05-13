@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
 import { TouchableOpacity, View, StyleSheet, Dimensions, Text, Pressable } from 'react-native';
 
-import { fireStoreDb } from '../config/firebase';
+import { fireStoreDb } from '../../config/firebase';
 import {
     collection,
     query,
@@ -16,20 +16,20 @@ import {
 
 import { PlusIcon, ChevronLeft } from 'lucide-react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
-import { renderBubble, renderSend, renderInputToolbar } from '../core/tools/chatConfigurations';
+import { renderBubble, renderSend, renderInputToolbar } from '../../core/tools/chatConfigurations';
 
-import { addNewConnection } from '../store/Users';
-import { useUser } from '../contexts/UserContext';
+import { addNewConnection } from '../../store/Users';
+import { useUser } from '../../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { profilePicturesUrl } from '../core/tools/apiRequest';
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
-import { truncateText } from '../core/tools/formatDate';
+import { profilePicturesUrl } from '../../core/tools/apiRequest';
+import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
+import { truncateText } from '../../core/tools/formatDate';
 
-import { colors, utilities } from '../styles/utilities';
+import { colors, utilities } from '../../styles/utilities';
 
-import PictureHeader from '../components/PictureHeader/PictureHeader';
-import ChatModal from '../components/Modals/ChatModal';
+import PictureHeader from '../../components/PictureHeader/PictureHeader';
+import ChatModal from '../../components/Modals/ChatModal';
 
 const Chat = ({ navigation, route }) => {
     const dispatch = useDispatch();

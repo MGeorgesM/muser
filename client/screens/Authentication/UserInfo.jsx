@@ -3,14 +3,14 @@ import { Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
 
 import { useUserInfoLogic } from './userInfoLogic';
 
-import { colors } from '../styles/utilities';
+import { colors } from '../../styles/utilities';
 import { CirclePlus, ChevronLeft } from 'lucide-react-native';
 
-import PrimaryBtn from '../components/Elements/PrimaryBtn';
-import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
-import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
+import PrimaryBtn from '../../components/Elements/PrimaryBtn';
+import DetailsPill from '../../components/Elements/DetailsPill/DetailsPill';
+import ProfileDetailsPicker from '../../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
-const { styles } = require('../components/AuthenticationForms/styles');
+const { styles } = require('../../components/AuthenticationForms/styles');
 
 const UserInfo = ({ navigation }) => {
     const {

@@ -4,19 +4,19 @@ import { Image, ScrollView, Text, View, Keyboard, KeyboardAvoidingView, Touchabl
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 
-import { colors, utilities } from '../styles/utilities';
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { colors, utilities } from '../../styles/utilities';
+import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
-import SignInForm from '../components/AuthenticationForms/SignInForm';
-import SignUpForm from '../components/AuthenticationForms/SignUpForm';
-import PrimaryBtn from '../components/Elements/PrimaryBtn';
+import SignInForm from '../../components/AuthenticationForms/SignInForm';
+import SignUpForm from '../../components/AuthenticationForms/SignUpForm';
+import PrimaryBtn from '../../components/Elements/PrimaryBtn';
 
 const logoImg = require('../assets/appImages/logoOnboard.png');
 const imageSource = require('../assets/appImages/onboard.jpg');
 
-const { styles } = require('../components/AuthenticationForms/styles');
+const { styles } = require('../../components/AuthenticationForms/styles');
 
 const Authentication = ({ navigation }) => {
     const [keyboardVisible, setKeyboardVisible] = useState(false);

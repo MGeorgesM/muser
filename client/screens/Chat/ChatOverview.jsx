@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View, FlatList } from 'react-native';
 
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 
-import { fireStoreDb } from '../config/firebase';
+import { fireStoreDb } from '../../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
-import { colors, utilities } from '../styles/utilities';
+import { colors, utilities } from '../../styles/utilities';
 
-import ChatCard from '../components/Cards/ChatCard/ChatCard';
-import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
+import ChatCard from '../../components/Cards/ChatCard/ChatCard';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
 const ChatOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);

@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
 import { TouchableOpacity, Image, View, StyleSheet, Dimensions, Text, Pressable } from 'react-native';
 
-import { fireStoreDb } from '../config/firebase';
+import { fireStoreDb } from '../../config/firebase';
 import {
     collection,
     query,
@@ -19,17 +19,17 @@ import {
 
 import { PlusIcon, ArrowLeft, Send as SendIcon, ChevronLeft, X, Check } from 'lucide-react-native';
 import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
-import { renderBubble, renderSend, renderInputToolbar } from '../core/tools/chatConfigurations';
+import { renderBubble, renderSend, renderInputToolbar } from '../../core/tools/chatConfigurations';
 
-import { addConnectedUser, setConnectedUsers } from '../store/Users';
+import { addConnectedUser, setConnectedUsers } from '../../store/Users';
 import { useDispatch, useSelector } from 'react-redux';
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 
-import { profilePicturesUrl } from '../core/tools/apiRequest';
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { profilePicturesUrl } from '../../core/tools/apiRequest';
+import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
-import PictureHeader from '../components/PictureHeader/PictureHeader';
-import { colors, utilities } from '../styles/utilities';
+import PictureHeader from '../../components/PictureHeader/PictureHeader';
+import { colors, utilities } from '../../styles/utilities';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import BandMemberCard from '../components/BandMemberCard/BandMemberCard';
 

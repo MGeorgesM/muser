@@ -10,7 +10,7 @@ import ModalHigh from '../components/Modals/ModalHigh';
 import ShowVenueCard from '../components/Cards/ShowVenueCards/ShowVenueCard';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
-const Streams = ({ navigation }) => {
+const Shows = ({ navigation }) => {
     const dispatch = useDispatch();
     const { currentUser } = useUser();
 
@@ -62,4 +62,4 @@ const Streams = ({ navigation }) => {
     );
 };
 
-export default Streams;
+export default Shows;

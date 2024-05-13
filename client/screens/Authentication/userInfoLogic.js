@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 import * as ImagePicker from 'expo-image-picker';
 
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
 export const useUserInfoLogic = () => {
     const [profileProperties, setProfileProperties] = useState({});

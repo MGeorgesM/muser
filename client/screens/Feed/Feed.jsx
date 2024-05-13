@@ -2,22 +2,22 @@ import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { StyleSheet, FlatList, View, Dimensions, RefreshControl } from 'react-native';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { setConnectedUsers, setFeedUsers } from '../store/Users';
+import { setConnectedUsers, setFeedUsers } from '../../store/Users';
 
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
-import { colors } from '../styles/utilities';
+import { colors } from '../../styles/utilities';
 import { Mail } from 'lucide-react-native';
 
 import { BrainCog, MessageCirclePlus } from 'lucide-react-native';
 
-import PictureHeader from '../components/PictureHeader/PictureHeader';
-import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
-import AiMatchMakingModal from '../components/Modals/AiMatchMakingModal';
-import FeedMemberCard from '../components/Cards/FeedMemberCard/FeedMemberCard';
-import FloatingActionButton from '../components/Elements/FloatingActionButton/FloatingActionButton';
+import PictureHeader from '../../components/PictureHeader/PictureHeader';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+import AiMatchMakingModal from '../../components/Modals/AiMatchMakingModal';
+import FeedMemberCard from '../../components/Cards/FeedMemberCard/FeedMemberCard';
+import FloatingActionButton from '../../components/Elements/FloatingActionButton/FloatingActionButton';
 
 const Feed = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(true);

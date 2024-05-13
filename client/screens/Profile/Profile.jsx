@@ -11,22 +11,22 @@ import {
     SafeAreaView,
 } from 'react-native';
 
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 
-import { colors, utilities } from '../styles/utilities';
-import { profilePicturesUrl } from '../core/tools/apiRequest';
+import { colors, utilities } from '../../styles/utilities';
+import { profilePicturesUrl } from '../../core/tools/apiRequest';
 
 import { UserRoundCog, LockKeyhole, ChevronRight, Scroll } from 'lucide-react-native';
 
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
-import DetailsPill from '../components/Elements/DetailsPill/DetailsPill';
-import SettingsCard from '../components/Cards/SettingsCard/SettingsCard';
-import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
-import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
-import { useUserInfoLogic } from './userInfoLogic';
-import UserInfoForm from '../components/AuthenticationForms/UserInfoForm';
-import PrimaryBtn from '../components/Elements/PrimaryBtn';
+import DetailsPill from '../../components/Elements/DetailsPill/DetailsPill';
+import SettingsCard from '../../components/Cards/SettingsCard/SettingsCard';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+import ProfileDetailsPicker from '../../components/ProfileDetailsPicker/ProfileDetailsPicker';
+import { useUserInfoLogic } from '../Authentication/userInfoLogic';
+import UserInfoForm from '../../components/AuthenticationForms/UserInfoForm';
+import PrimaryBtn from '../../components/Elements/PrimaryBtn';
 
 const Profile = ({ navigation }) => {
     const { currentUser, setCurrentUser } = useUser();
@@ -59,7 +59,7 @@ const Profile = ({ navigation }) => {
 
         getUserInfo();
         setUserInfo((prev) => ({ ...prev, genres: genresArray }));
-        setSelectedPicture(currentUser.picture)
+        setSelectedPicture(currentUser.picture);
 
         setSwitchHandler(false);
         console.log('Current User:', currentUser);
