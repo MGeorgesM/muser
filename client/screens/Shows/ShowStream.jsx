@@ -45,7 +45,7 @@ const ShowStream = ({ navigation, route }) => {
     const [call, setCall] = useState(null);
 
     // const showId = show.id.toString() + 'TEST78';
-    const showId = 'TEST1122334X';
+    const showId = 'TEST1122334XX';
     // client && console.log('Client Found!');
     // console.log('Show ID:', show.id);
     // console.log('Call:', call);
@@ -55,18 +55,18 @@ const ShowStream = ({ navigation, route }) => {
 
         const setupCall = async () => {
             return;
-            console.log('Setting up call');
-            try {
-                const call = client.call('livestream', showId);
-                await call.get();
-                call && console.log('Call set up!');
+            // console.log('Setting up call');
+            // try {
+            //     const call = client.call('livestream', showId);
+            //     await call.get();
+            //     call && console.log('Call set up!');
 
-                setCall(call);
-                console.log(call);
-            } catch (error) {
-                setVideoIsPlaying(false);
-                console.log('Error setting up Call', error);
-            }
+            //     setCall(call);
+            //     console.log(call);
+            // } catch (error) {
+            //     setVideoIsPlaying(false);
+            //     console.log('Error setting up Call', error);
+            // }
         };
 
         setupCall();
@@ -81,22 +81,22 @@ const ShowStream = ({ navigation, route }) => {
     }, [client, show.id]);
 
     useEffect(() => {
-    let unsubscribeComments = () => {};
-    let unsubscribeLikes = () => {};
+        let unsubscribeComments = () => {};
+        let unsubscribeLikes = () => {};
 
-    const initializeListeners = async () => {
-        const showId = show.id;
-        unsubscribeComments = await setupCommentsListener(showId);
-        unsubscribeLikes = await setupLikesListener(showId);
-    };
+        const initializeListeners = async () => {
+            const showId = show.id;
+            unsubscribeComments = await setupCommentsListener(showId);
+            unsubscribeLikes = await setupLikesListener(showId);
+        };
 
-    initializeListeners();
+        initializeListeners();
 
-    return () => {
-        unsubscribeComments();
-        unsubscribeLikes();
-    };
-}, [show.id]);
+        return () => {
+            unsubscribeComments();
+            unsubscribeLikes();
+        };
+    }, [show.id]);
 
     const setupCommentsListener = async (showId) => {
         const commentsRef = collection(fireStoreDb, 'shows', showId.toString(), 'comments');

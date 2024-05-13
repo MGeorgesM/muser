@@ -25,7 +25,7 @@ const App = () => {
             notifee.displayNotification(JSON.parse(remoteMessage.data.notifee));
             console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
         });
-        LogBox.ignoreAllLogs(true);
+        // LogBox.ignoreAllLogs(true);
         return unsubscribe;
     }, []);
     return (

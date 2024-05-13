@@ -106,7 +106,7 @@ const Chat = ({ navigation, route }) => {
         const setupMessagesListener = async () => {
             console.log('Starting listener');
             console.log('Chat ID:', id);
-            console.log('Chat Participants:', participants);
+            // console.log('Chat Participants:', participants);
 
             const newChatRef = doc(fireStoreDb, 'chats', id);
             const messagesRef = collection(newChatRef, 'messages');
