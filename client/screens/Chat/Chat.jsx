@@ -44,7 +44,10 @@ const Chat = ({ navigation, route }) => {
     const [chatMessages, setChatMessages] = useState([]);
     const [chatParticipants, setChatParticipants] = useState([]);
     const [chatConnections, setChatConnections] = useState([]);
-    const [localChatTitle, setLocalChatTitle] = useState('');
+    const [localChatTitle, setLocalChatTitle] = useState({
+        bandName: '',
+        participantsNames: '',
+    });
 
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
     const [bandModalVisible, setBandModalVisible] = useState(false);
@@ -52,8 +55,9 @@ const Chat = ({ navigation, route }) => {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: () => {
-                if (chatTitle || localChatTitle)
-                    return <Text style={[utilities.textL, utilities.myFontMedium]}>{chatTitle || localChatTitle}</Text>;
+                const title = chatTitle || localChatTitle.bandName || localChatTitle.participantsNames;
+
+                if (title) return <Text style={[utilities.textL, utilities.myFontMedium]}>{title}</Text>;
                 else {
                     if (!participants) return;
 
@@ -103,11 +107,13 @@ const Chat = ({ navigation, route }) => {
 
         setChatMessages([]);
         setChatParticipants([]);
-        setLocalChatTitle('');
+        setLocalChatTitle({
+            bandName: '',
+            participantsNames: '',
+        });
 
         const setupChatTitleListener = async () => {
             if (chatTitle) {
-                console.log('Chat Title present returning');
                 return;
             }
 
@@ -116,11 +122,11 @@ const Chat = ({ navigation, route }) => {
             chatTitleUnsubscribe = onSnapshot(chatRef, (doc) => {
                 const chatData = doc.data();
 
-                if (chatData.chatTitle) {
-                    setLocalChatTitle(chatData.chatTitle);
+                if (chatData && chatData.chatTitle) {
+                    setLocalChatTitle((prev) => ({ ...prev, bandName: chatData.chatTitle }));
                     return;
                 }
-                if (chatData.participantsIds && chatData.participantsIds.length > 1) {
+                if (chatData && chatData.participantsIds && chatData.participantsIds.length > 1) {
                     const participantIds = chatData.participantsIds.filter((pid) => pid !== currentUser.id);
                     const participantNames = participantIds
                         .map((pid) => {
@@ -132,7 +138,7 @@ const Chat = ({ navigation, route }) => {
                         .filter((name) => name !== null);
 
                     if (participantNames.length > 0) {
-                        setLocalChatTitle(participantNames.join(', '));
+                        setLocalChatTitle((prev) => ({ ...prev, participantsNames: participantNames.join(', ') }));
                     }
                 }
             });
@@ -349,6 +355,14 @@ const Chat = ({ navigation, route }) => {
 
             if (response.status !== 201) throw new Error('Failed to create band');
 
+            const chatRef = doc(fireStoreDb, 'chats', id);
+            await updateDoc(chatRef, {
+                chatTitle: bandName,
+            });
+            
+            setLocalChatTitle((prev) => ({ ...prev, bandName }));
+            setBandModalVisible(false);
+            
             const messageData = {
                 _id: `${currentUser.id}-${Date.now()}-${bandName}`,
                 text: `We have formed the band \'${bandName}\'!`,
@@ -358,20 +372,12 @@ const Chat = ({ navigation, route }) => {
                     avatar: getMessageAvatar(currentUser.id),
                 },
             };
+            
+            onSend([messageData]);            
 
-            onSend([messageData]);
-
-            const chatRef = doc(fireStoreDb, 'chats', id);
-            await updateDoc(chatRef, {
-                chatTitle: bandName,
-            });
-
-            setLocalChatTitle(bandName);
         } catch (error) {
             console.log('Error processing band formation:', error);
         }
-
-        setBandModalVisible(false);
     };
 
     return (
@@ -407,11 +413,11 @@ const Chat = ({ navigation, route }) => {
             />
             {bandModalVisible && (
                 <ChatModal
-                    title={chatTitle ? chatTitle : 'Your Band Name'}
+                    title={chatTitle || localChatTitle || 'Your Band Name'}
                     buttonText="Create Band"
                     data={chatTitle || localChatTitle ? participants : null}
-                    input={chatTitle || localChatTitle ? false : true}
-                    handlePress={chatTitle || localChatTitle ? null : handleFormBand}
+                    input={chatTitle ? false : true}
+                    handlePress={(chatTitle || localChatTitle) && handleFormBand}
                     setModalVisible={setBandModalVisible}
                 />
             )}

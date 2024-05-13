@@ -33,6 +33,8 @@ const ChatsOverview = ({ navigation }) => {
                 chatsArray.push({ id: doc.id, ...doc.data() });
             });
 
+            console.log('Chat Overview Is Updating')
+
             chatsArray.sort((a, b) => b.lastMessage.createdAt - a.lastMessage.createdAt);
             setChats(chatsArray);
             setIsLoading(false);
