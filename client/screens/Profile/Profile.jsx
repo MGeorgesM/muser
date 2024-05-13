@@ -51,7 +51,7 @@ const Profile = ({ navigation }) => {
 
         setSwitchHandler(false);
         console.log('Current User:', currentUser);
-        console.log('User Info:', userInfo);
+        console.log('User Info Profile:', userInfo);
     }, [currentUser]);
 
     useLayoutEffect(() => {

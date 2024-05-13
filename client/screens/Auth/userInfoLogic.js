@@ -27,17 +27,17 @@ export const useUserInfoLogic = () => {
             }
         };
         getProperties();
-    }, []);
+    }, [userInfo.role_id]);
 
     const handlePickerChange = (key, value) => {
         if (key === 'Music Genres') {
             setUserInfo((prev) => ({ ...prev, genres: [...prev.genres, value] }));
         } else if (key === 'Venue Type') {
-            console.log('here');
             setUserInfo((prev) => ({ ...prev, [`venue_type_id`]: value }));
         } else {
             setUserInfo((prev) => ({ ...prev, [`${key.toLowerCase()}_id`]: value }));
         }
+        console.log('User Info:', userInfo);
     };
 
     const handleImagePicker = async () => {

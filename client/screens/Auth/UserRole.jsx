@@ -16,7 +16,7 @@ const imageSource = require('../../assets/appImages/onboardBlurredMax.jpg');
 const { styles } = require('../../components/Forms/styles');
 
 const UserRole = ({ navigation }) => {
-    const { setUserInfo } = useUser();
+    const { setUserInfo, userInfo } = useUser();
     return (
         <ImageBackground source={imageSource} style={{ flex: 1 }} resizeMode="cover">
             <View style={[utilities.photoOverlayM, utilities.container]}>
@@ -29,7 +29,7 @@ const UserRole = ({ navigation }) => {
                     <View style={styles.userTypePrompt}>
                         <Text style={styles.userTypeText}>I'm a</Text>
                         <RNPickerSelect
-                            value="1"
+                            value={userInfo.role_id}
                             onValueChange={(value) => setUserInfo((prev) => ({ ...prev, role_id: value }))}
                             items={[
                                 { label: 'Musician', value: '1', color: 'black' },

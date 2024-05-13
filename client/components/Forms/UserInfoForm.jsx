@@ -19,7 +19,7 @@ const UserInfoForm = ({ userInfo, setUserInfo, handlePress, handlePickerChange, 
                 cursorColor={colors.primary}
                 style={[utilities.myFontRegular, { marginBottom: 20, color: colors.lightGray }]}
                 value={userInfo.about}
-                onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
+                onChangeText={(text) => setUserInfo((prev) => ({ ...prev, 'about': text }))}
             />
             {userInfo.role_id == 2 && (
                 <>
@@ -29,9 +29,9 @@ const UserInfoForm = ({ userInfo, setUserInfo, handlePress, handlePickerChange, 
                         placeholder="Venue Name"
                         placeholderTextColor={colors.gray}
                         cursorColor={colors.primary}
-                        style={{ marginBottom: 20 }}
+                        style={[utilities.myFontRegular, { marginBottom: 20, color: colors.lightGray }]}
                         value={userInfo.venue_name}
-                        onChangeText={(text) => setUserInfo((prev) => ({ ...prev, venue_name: text }))}
+                        onChangeText={(text) => setUserInfo((prev) => ({ ...prev, 'venue_name': text }))}
                     />
                 </>
             )}

@@ -22,8 +22,8 @@ export const UserProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [authError, setAuthError] = useState(null);
     const [userInfo, setUserInfo] = useState({
-        name: 'Georges',
-        email: 'george@mail.com',
+        name: 'Jane',
+        email: 'jane@mail.com',
         password: 'password',
         about: '',
         picture: '',
@@ -40,7 +40,7 @@ export const UserProvider = ({ children }) => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        console.log('User Info:', userInfo);
+        console.log('User Info!:', userInfo);
         checkUser();
     }, []);
 
@@ -78,8 +78,8 @@ export const UserProvider = ({ children }) => {
     const checkUser = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-
             if (token && currentUser === null) {
+                console.log('here');
                 const response = await sendRequest(requestMethods.GET, 'auth/me');
                 if (response.status === 200) {
                     await getAndSaveFcmToken();
@@ -98,7 +98,7 @@ export const UserProvider = ({ children }) => {
     };
 
     const handleGoogleSignIn = async () => {
-        return
+        return;
         // try {
         //     await GoogleSignin.hasPlayServices();
         //     const userInfo = await GoogleSignin.signIn();
@@ -185,7 +185,7 @@ export const UserProvider = ({ children }) => {
                 handleSignUp,
                 handleSignOut,
                 setCurrentUser,
-                handleGoogleSignIn
+                handleGoogleSignIn,
             }}
         >
             {children}
