@@ -1,25 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, SafeAreaView, ScrollView, StyleSheet, Animated, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, SafeAreaView } from 'react-native';
 
 import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 
 import { StreamCall } from '@stream-io/video-react-native-sdk';
 import { colors, utilities } from '../../styles/utilities';
+
+import { fireStoreDb } from '../../config/firebase';
+import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
+
 import StreamViewer from '../../components/Misc/Streaming/StreamViewer/StreamViewer';
 import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
-import { fireStoreDb } from '../../config/firebase';
-import {
-    collection,
-    query,
-    onSnapshot,
-    serverTimestamp,
-    orderBy,
-    doc,
-    getDoc,
-    addDoc,
-    setDoc,
-} from 'firebase/firestore';
-import CommentCard from '../../components/Cards/CommentCard/CommentCard';
 
 const ShowBroadcast = ({ route }) => {
     const { showId, showName } = route.params;
@@ -28,12 +19,8 @@ const ShowBroadcast = ({ route }) => {
 
     const [call, setCall] = useState(null);
     const [comments, setComments] = useState([]);
-    const [viewer, setViewer] = useState(false);
 
     const client = useStreamVideoClient();
-
-    const fadeAnim = useRef(new Animated.Value(1)).current;
-
 
     client && console.log('Client Found!');
     console.log('orifinal show id', showId);
@@ -88,22 +75,13 @@ const ShowBroadcast = ({ route }) => {
         } catch (error) {
             console.error('Error joining call:', error);
         }
-
-        setViewer(false);
     };
 
     return call ? (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
             <StreamCall call={call}>
-                <SafeAreaView style={{ flex: 1, marginTop: 64, position:'relative' }}>
-                    <StreamViewer viewer={viewer} showName={showName} setCall={setCall} />
-                    <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
-                        {comments && comments.length > 0 && (
-                            comments.map((comment) => (
-                                <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
-                            ))
-                        )}
-                    </ScrollView>
+                <SafeAreaView style={{ flex: 1, marginTop: 64, position: 'relative' }}>
+                    <StreamViewer showName={showName} setCall={setCall} comments={comments} />
                 </SafeAreaView>
             </StreamCall>
         </View>
@@ -113,12 +91,3 @@ const ShowBroadcast = ({ route }) => {
 };
 
 export default ShowBroadcast;
-
-const styles = StyleSheet.create({
-    commentsContainer: {
-        position: 'absolute',
-        height: 64,
-        bottom: 48,
-
-    },
-})

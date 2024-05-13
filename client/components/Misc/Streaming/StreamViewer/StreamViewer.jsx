@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Pressable, ScrollView } from 'react-native';
 import { CallingState, SfuEvents, useCall, useCallStateHooks, VideoRenderer } from '@stream-io/video-react-native-sdk';
 
 import inCallManager from 'react-native-incall-manager';
@@ -9,8 +9,9 @@ import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop } f
 import { colors, utilities } from '../../../../styles/utilities';
 
 import { useNavigation } from '@react-navigation/native';
+import CommentCard from '../../../Cards/CommentCard/CommentCard';
 
-const StreamViewer = ({ viewer = false, showName, setCall }) => {
+const StreamViewer = ({ showName, setCall, comments }) => {
     const call = useCall();
     const navigation = useNavigation();
 
@@ -32,7 +33,7 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
         inCallManager.start({ media: 'video' });
         return () => {
             inCallManager.stop();
-            if (call && !viewer) {
+            if (call) {
                 call.endCall();
                 console.log('Ending Call!');
             }
@@ -74,10 +75,10 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
 
     const handleExit = async () => {
         inCallManager.stop();
-        if (viewer) {
-            togglePauseStart();
-            return;
-        }
+        // if (viewer) {
+        //     togglePauseStart();
+        //     return;
+        // }
         await call?.stopLive();
         await call?.stopPublish(SfuEvents.HealthCheckRequest, true);
         await call?.leave();
@@ -90,26 +91,24 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
 
     return (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
-            {!viewer && (
-                <View style={[styles.topLiveStreamBar]}>
-                    <Text style={{ color: 'white' }}>{showName} </Text>
-                    <View style={{ flexDirection: 'row', gap: 8 }}>
-                        <TouchableOpacity
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: 4,
-                            }}
-                        >
-                            <Text style={{ color: 'white' }}>{totalParticipants}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Radio size={24} color={isCallLive ? colors.primary : 'white'} />
-                        </TouchableOpacity>
-                    </View>
+            <View style={[styles.topLiveStreamBar]}>
+                <Text style={{ color: 'white' }}>{showName} </Text>
+                <View style={{ flexDirection: 'row', gap: 8 }}>
+                    <TouchableOpacity
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 4,
+                        }}
+                    >
+                        <Text style={{ color: 'white' }}>{totalParticipants}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Radio size={24} color={isCallLive ? colors.primary : 'white'} />
+                    </TouchableOpacity>
                 </View>
-            )}
+            </View>
             <View style={[utilities.flexed, { alignItems: 'center', justifyContent: 'center' }]}>
                 {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />}
                 {!isCallLive && (
@@ -118,32 +117,37 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
                     </Pressable>
                 )}
             </View>
-            {!viewer && (
-                <View style={styles.bottomLiveStreamBar}>
-                    <TouchableOpacity onPress={toggleVideoMuted}>
-                        {cameraStatus === 'disabled' ? (
-                            <VideoOff size={24} color={'white'} />
-                        ) : (
-                            <Video size={24} color={'white'} />
-                        )}
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={toggleCameraFacingMode}>
-                        <SwitchCamera size={24} color={'white'} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={toggleAudioMuted}>
-                        {microphoneStatus === 'disabled' ? (
-                            <MicOff size={24} color={'white'} />
-                        ) : (
-                            <Mic size={24} color={'white'} />
-                        )}
-                    </TouchableOpacity>
-                    {isCallLive && (
-                        <TouchableOpacity onPress={handleStreamStatus}>
-                            {<CircleStop size={24} color={colors.primary} />}
-                        </TouchableOpacity>
+            <View style={styles.bottomLiveStreamBar}>
+                <TouchableOpacity onPress={toggleVideoMuted}>
+                    {cameraStatus === 'disabled' ? (
+                        <VideoOff size={24} color={'white'} />
+                    ) : (
+                        <Video size={24} color={'white'} />
                     )}
-                </View>
-            )}
+                </TouchableOpacity>
+                <TouchableOpacity onPress={toggleCameraFacingMode}>
+                    <SwitchCamera size={24} color={'white'} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={toggleAudioMuted}>
+                    {microphoneStatus === 'disabled' ? (
+                        <MicOff size={24} color={'white'} />
+                    ) : (
+                        <Mic size={24} color={'white'} />
+                    )}
+                </TouchableOpacity>
+                {isCallLive && (
+                    <TouchableOpacity onPress={handleStreamStatus}>
+                        {<CircleStop size={24} color={colors.primary} />}
+                    </TouchableOpacity>
+                )}
+            </View>
+            {isCallLive && <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
+                {comments &&
+                    comments.length > 0 &&
+                    comments.map((comment) => (
+                        <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
+                    ))}
+            </ScrollView>}
         </View>
     );
 };
@@ -188,5 +192,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#12121250',
         borderRadius: 32,
         padding: 12,
+    },
+
+    commentsContainer: {
+        position: 'absolute',
+        height: 72,
+        bottom: 56,
     },
 });
