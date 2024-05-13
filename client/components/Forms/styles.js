@@ -18,8 +18,8 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 32,
         fontFamily: 'Montserrat-Medium',
-        marginTop: 12,
-        marginBottom: 44,
+        marginTop: 48,
+        marginBottom: 48,
     },
     label: {
         fontSize: 16,
@@ -47,18 +47,19 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
     },
     promptLink: {
+        fontFamily: 'Montserrat-Bold',
         color: colors.primary,
         textDecorationLine: 'underline',
     },
     welcomeLogo: {
-        width: 140,
-        height: 140,
+        width: 155,
+        height: 155,
         alignSelf: 'center',
         objectFit: 'contain',
     },
     topInnerContainer: {
         flex: 1,        
-        marginTop: 96,
+        marginTop: 80,
     },
     bottomInnerContainer: {
         marginTop: 'auto',
@@ -141,9 +142,8 @@ export const styles = StyleSheet.create({
     errorText: {
         color: colors.primary,
         fontSize: 16,
-        fontFamily:'Montserrat-Regular',
+        fontFamily:'Montserrat-Bold',
         textAlign: 'center',
-        marginBottom: 10,
     },
     imageBackground: {
         position: 'absolute',

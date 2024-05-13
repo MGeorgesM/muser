@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
 import Welcome from '../screens/Auth/Welcome';
 import UserRole from '../screens/Auth/UserRole';
@@ -12,7 +12,7 @@ const AuthenticationStack = () => {
     return (
         <AuthStack.Navigator screenOptions={{ headerShown: false }}>
             <AuthStack.Screen name="Welcome" component={Welcome} />
-            <AuthStack.Screen name="Authentication" component={Authentication} />
+            <AuthStack.Screen name="Authentication" component={Authentication} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} />
             <AuthStack.Screen name="UserRole" component={UserRole} />
             <AuthStack.Screen name="UserInfo" component={UserInfo} />
         </AuthStack.Navigator>

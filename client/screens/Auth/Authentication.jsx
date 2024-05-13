@@ -13,7 +13,7 @@ import SignUpForm from '../../components/Forms/SignUpForm';
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 
 const logoImg = require('../../assets/appImages/logoOnboard.png');
-const imageSource = require('../../assets/appImages/onboard.jpg');
+const imageSource = require('../../assets/appImages/onboardBlurred.jpg');
 
 const { styles } = require('../../components/Forms/styles');
 
@@ -92,11 +92,11 @@ const Authentication = ({ navigation }) => {
     return (
         <>
             <Image source={imageSource} style={styles.imageBackground} />
-            <View style={[utilities.container, utilities.photoOverlayL]}>
+            <View style={[utilities.container, utilities.photoOverlayM]}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={[styles.topInnerContainer]}>
                         <Image style={styles.welcomeLogo} source={logoImg} />
-                        <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back!'}</Text>
+                        <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back'}</Text>
                         {switchHandler ? (
                             <SignUpForm userInfo={userInfo} setUserInfo={setUserInfo} />
                         ) : (

@@ -32,7 +32,6 @@ const Welcome = ({ navigation }) => {
                     <PrimaryBtn
                         text={'Get Started'}
                         handlePress={() => navigation.navigate('Authentication')}
-                        // handlePress={onDisplayNotification}
                         marginBottom={96}
                     />
                 </View>
