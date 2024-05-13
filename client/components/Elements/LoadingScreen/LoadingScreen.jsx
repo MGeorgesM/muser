@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Image, View, Text } from 'react-native';
 
-import { colors, utilities } from '../../styles/utilities';
+import { colors, utilities } from '../../../styles/utilities';
 
 const LoadingScreen = ({ message = null }) => {
     return (

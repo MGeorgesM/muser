@@ -6,7 +6,7 @@ import { useUserInfoLogic } from './userInfoLogic';
 import { colors } from '../../styles/utilities';
 import { CirclePlus, ChevronLeft } from 'lucide-react-native';
 
-import PrimaryBtn from '../../components/Elements/PrimaryBtn';
+import PrimaryBtn from '../../components/Elements/PrimaryBtn/PrimaryBtn';
 import DetailsPill from '../../components/Elements/DetailsPill/DetailsPill';
 import ProfileDetailsPicker from '../../components/ProfileDetailsPicker/ProfileDetailsPicker';
 

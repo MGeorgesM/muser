@@ -8,7 +8,7 @@ import { colors, utilities } from '../../styles/utilities';
 
 import { ChevronDown } from 'lucide-react-native';
 
-import PrimaryBtn from '../../components/Elements/PrimaryBtn';
+import PrimaryBtn from '../../components/Elements/PrimaryBtn/PrimaryBtn';
 
 const logoImg = require('../assets/appImages/logoOnboard.png');
 const imageSource = require('../assets/appImages/onboard.jpg');

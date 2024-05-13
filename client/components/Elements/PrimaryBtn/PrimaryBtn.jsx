@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import { utilities } from '../../styles/utilities';
+import { utilities } from '../../../styles/utilities';
 
 const PrimaryBtn = ({ text, handlePress, margin = 0, marginBottom = 24, marginTop = 0 }) => {
     return (

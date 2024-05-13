@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 
-import { profilePicturesUrl } from '../../core/tools/apiRequest';
+import { profilePicturesUrl } from '../../../core/tools/apiRequest';
 
-import { utilities } from '../../styles/utilities';
+import { utilities } from '../../../styles/utilities';
 
 const PictureHeader = ({ name, picture, handlePress, welcome = false }) => {
     return (

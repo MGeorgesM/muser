@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView, Pressable } from 'react-native';
 
+import ChatTextInput from '../components/UserComposer/UserComposer';
 import CommentCard from '../components/Cards/CommentCard/CommentCard';
 import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
 
@@ -12,8 +13,6 @@ import inCallManager from 'react-native-incall-manager';
 
 import { colors, utilities } from '../styles/utilities';
 import { Heart, Play, Pause, Maximize } from 'lucide-react-native';
-
-import ChatTextInput from '../components/ChatTextInput/ChatTextInput';
 
 import { fireStoreDb } from '../config/firebase';
 import {

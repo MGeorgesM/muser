@@ -1,18 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 
-import { colors } from '../../styles/utilities';
+import { colors } from '../../../styles/utilities';
 
 import { Send } from 'lucide-react-native';
 
-const ChatTextInput = ({ placeholder, value, onChangeText, onSendPress }) => {
+const UserComposer = ({ placeholder, value, onChangeText, onSendPress }) => {
     return (
         <KeyboardAvoidingView
             style={{ height: 48 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
         >
-            {/* <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.bgDark }}></View> */}
             <View style={styles.userInputField}>
                 <TextInput
                     placeholder={placeholder}
@@ -29,7 +28,7 @@ const ChatTextInput = ({ placeholder, value, onChangeText, onSendPress }) => {
     );
 };
 
-export default ChatTextInput;
+export default UserComposer;
 
 const styles = StyleSheet.create({
     userInputField: {

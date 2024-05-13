@@ -5,7 +5,7 @@ import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 import notifee from '@notifee/react-native';
 
-import PrimaryBtn from '../../components/Elements/PrimaryBtn';
+import PrimaryBtn from '../../components/Elements/PrimaryBtn/PrimaryBtn';
 
 const imageUrl = require('../assets/appImages/onboard.jpg');
 
@@ -31,7 +31,7 @@ const Welcome = ({ navigation }) => {
     //         const channelId = await notifee.createChannel({
     //             id: 'default',
     //             name: 'Default Channel',
-                
+
     //         });
 
     //         // Display a notification
@@ -39,10 +39,10 @@ const Welcome = ({ navigation }) => {
 
     //             title: 'Notification Title',
     //             body: 'Main body content of the notification',
-                
+
     //             android: {
     //                 channelId,
-                    
+
     //                 smallIcon: '@mipmap/ic_launcher', // optional, defaults to 'ic_launcher'.
     //                 // pressAction is needed if you want the notification to open the app when pressed
     //                 pressAction: {

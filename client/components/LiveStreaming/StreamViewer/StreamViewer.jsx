@@ -4,9 +4,9 @@ import { CallingState, SfuEvents, useCall, useCallStateHooks, VideoRenderer } fr
 
 import inCallManager from 'react-native-incall-manager';
 
-import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop, Pause } from 'lucide-react-native';
+import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop } from 'lucide-react-native';
 
-import { colors, utilities } from '../../../../styles/utilities';
+import { colors, utilities } from '../../../styles/utilities';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -27,18 +27,6 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
 
     const callingState = useCallCallingState();
     const isCallLive = useIsCallLive();
-
-    console.log('localParticipant:', localParticipant);
-    console.log('remoteParticitPants', remoteParticipants);
-
-
-    // const floatingParticipant = hasOngoingScreenShare && hasVideoTrack(currentSpeaker) && currentSpeaker;
-    // const hasScreenShare = (p) => p?.publishedTracks.includes(SfuModels.TrackType.SCREEN_SHARE);
-    // const hasOngoingScreenShare = useHasOngoingScreenShare();
-    // const [currentSpeaker, ...otherParticipants] = useParticipants();
-    // const presenter = hasOngoingScreenShare
-
-    // console.log('Presenter', presenter);
 
     useEffect(() => {
         inCallManager.start({ media: 'video' });
@@ -100,33 +88,6 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
         }, 1500);
     };
 
-    // const ViewerMode = () => {
-    //     return (
-    //         <View
-    //             style={[
-    //                 {
-    //                     height: height * 0.5,
-    //                     backgroundColor: 'black',
-    //                     alignItems: 'center',
-    //                     justifyContent: 'center',
-    //                 },
-    //             ]}
-    //         >
-    //             {/* {remoteParticipants.length > 0 && <VideoRenderer participant={local} trackType="videoTrack" />} */}
-    //             {/* {presenter && <VideoRenderer participant={presenter} trackType="videoTrack" />} */}
-    //             {/* {localParticipant && <VideoRenderer participant={localParticipant} trackType="videoTrack" />} */}
-
-    //             <TouchableOpacity onPress={handleExit}>
-    //                 {callingState === CallingState.JOINED ? (
-    //                     <Pause size={42} color={'white'} />
-    //                 ) : (
-    //                     <Play size={42} color={'white'} />
-    //                 )}
-    //             </TouchableOpacity>
-    //         </View>
-    //     );
-    // };
-
     return (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
             {!viewer && (
@@ -142,7 +103,6 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
                             }}
                         >
                             <Text style={{ color: 'white' }}>{totalParticipants}</Text>
-                            {/* <Eye size={24} color={'white'} /> */}
                         </TouchableOpacity>
                         <TouchableOpacity>
                             <Radio size={24} color={isCallLive ? colors.primary : 'white'} />
@@ -186,16 +146,6 @@ const StreamViewer = ({ viewer = false, showName, setCall }) => {
             )}
         </View>
     );
-
-    // return viewer ? (
-    //     <ViewerLivestream
-    //         ViewerLivestreamTopView={null}
-    //         ViewerLeaveStreamButton={null}
-    //         ViewerLivestreamControls={null}
-    //     />
-    // ) : (
-    //     <HostMode />
-    // );
 };
 
 export default StreamViewer;
