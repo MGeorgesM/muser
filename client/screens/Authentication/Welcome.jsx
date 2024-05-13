@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, ImageBackground, StatusBar } from 'react-native';
-import { utilities } from '../styles/utilities';
+import { utilities } from '../../styles/utilities';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 import notifee from '@notifee/react-native';
 
-import PrimaryBtn from '../components/Elements/PrimaryBtn';
+import PrimaryBtn from '../../components/Elements/PrimaryBtn';
 
 const imageUrl = require('../assets/appImages/onboard.jpg');
 

@@ -9,11 +9,11 @@ import { MessagesSquare, Store, Radio, AudioWaveform, UserRound } from 'lucide-r
 import FeedNavigator from '../navigators/FeedNavigator';
 import ChatNavigator from '../navigators/ChatNavigator';
 import VenueNavigator from '../navigators/VenueNavigator';
+import ShowsNavigator from '../navigators/ShowsNavigator';
 import ProfileNavigator from '../navigators/ProfileNavigator';
-import LiveStreamNavigator from '../navigators/LiveStreamNavigator';
+import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 import { colors } from '../styles/utilities';
-import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -106,7 +106,7 @@ const MainTabs = () => {
                     },
                 })}
             />
-            <Tab.Screen name="Live" component={LiveStreamNavigator} />
+            <Tab.Screen name="Live" component={ShowsNavigator} />
             <Tab.Screen name="Profile" component={ProfileNavigator} />
         </Tab.Navigator>
     );

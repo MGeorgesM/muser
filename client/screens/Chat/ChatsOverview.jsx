@@ -11,7 +11,7 @@ import { colors, utilities } from '../../styles/utilities';
 import ChatCard from '../../components/Cards/ChatCard/ChatCard';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
-const ChatOverview = ({ navigation }) => {
+const ChatsOverview = ({ navigation }) => {
     const [chats, setChats] = useState([]);
     const { currentUser } = useUser();
     const [isLoading, setIsLoading] = useState(true);
@@ -68,4 +68,4 @@ const ChatOverview = ({ navigation }) => {
     );
 };
 
-export default ChatOverview;
+export default ChatsOverview;

@@ -6,6 +6,15 @@ import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
 
 import { useUser } from '../contexts/UserContext';
 
+import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
+import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
+import inCallManager from 'react-native-incall-manager';
+
+import { colors, utilities } from '../styles/utilities';
+import { Heart, Play, Pause, Maximize } from 'lucide-react-native';
+
+import ChatTextInput from '../components/ChatTextInput/ChatTextInput';
+
 import { fireStoreDb } from '../config/firebase';
 import {
     collection,
@@ -19,22 +28,7 @@ import {
     setDoc,
 } from 'firebase/firestore';
 
-import {
-    StreamCall,
-    VideoRenderer,
-    ViewerLivestream,
-    useCall,
-    useCallStateHooks,
-} from '@stream-io/video-react-native-sdk';
-import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
-import inCallManager from 'react-native-incall-manager';
-
-import { colors, utilities } from '../styles/utilities';
-import { Heart, Play, Pause, Maximize } from 'lucide-react-native';
-
-import ChatTextInput from '../components/ChatTextInput/ChatTextInput';
-
-const StreamView = ({ navigation, route }) => {
+const ShowStream = ({ navigation, route }) => {
     const { show } = route.params;
 
     const { currentUser } = useUser();
@@ -251,30 +245,6 @@ const StreamView = ({ navigation, route }) => {
         setControlsVisible(!controlsVisible);
     };
 
-    // const StreamViewerWatch = (setCall) => {
-    //     const call = useCall();
-    //     const { useParticipantCount, useLocalParticipant, useRemoteParticipants, useIsCallLive } = useCallStateHooks();
-
-    //     const totalParticipants = useParticipantCount();
-    //     const localParticipant = useLocalParticipant();
-    //     const remoteParticipants = useRemoteParticipants();
-
-    //     console.log('local participant view ', localParticipant);
-
-    //     useEffect(() => {
-    //         inCallManager.start({ media: 'video', auto: true });
-    //         return () => {
-    //             inCallManager.stop();
-    //             if (call) {
-    //                 call.leave();
-    //                 console.log('Leaving Call!');
-    //             }
-    //         };
-    //     }, []);
-
-    //     return localParticipant && <VideoRenderer participant={localParticipant} objectFit={'cover'} trackType="videoTrack" />;
-    // };
-
     return (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
             <View style={{ flex: 1, position: 'relative' }}>
@@ -286,7 +256,6 @@ const StreamView = ({ navigation, route }) => {
                                 ViewerLivestreamTopView={null}
                                 ViewerLivestreamControls={null}
                             />
-                            {/* <StreamViewerWatch /> */}
                         </View>
                     </StreamCall>
                 ) : (
@@ -399,7 +368,7 @@ const StreamView = ({ navigation, route }) => {
     );
 };
 
-export default StreamView;
+export default ShowStream;
 
 const height = Dimensions.get('window').height;
 

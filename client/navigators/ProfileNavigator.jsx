@@ -1,19 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { useUser } from '../contexts/UserContext';
 
-import Profile from '../screens/Profile';
-import ProfileEdit from '../screens/ProfileEdit';
+import Profile from '../screens/Profile/Profile';
 
 import { colors } from '../styles/utilities';
 import { ChevronLeft, LogOut } from 'lucide-react-native';
 
 const ProfileStack = createStackNavigator();
 
-const ProfileNavigator = ({navigation}) => {
-const {handleSignOut} = useUser();
+const ProfileNavigator = ({ navigation }) => {
+    const { handleSignOut } = useUser();
 
     return (
         <ProfileStack.Navigator
@@ -45,7 +44,6 @@ const {handleSignOut} = useUser();
             }}
         >
             <ProfileStack.Screen name="ProfileMain" component={Profile} />
-            <ProfileStack.Screen name="ProfileEdit" component={ProfileEdit} />
         </ProfileStack.Navigator>
     );
 };

@@ -2,18 +2,18 @@ import React from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 import { Image, View, Text, ImageBackground } from 'react-native';
 
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 
-import { colors, utilities } from '../styles/utilities';
+import { colors, utilities } from '../../styles/utilities';
 
 import { ChevronDown } from 'lucide-react-native';
 
-import PrimaryBtn from '../components/Elements/PrimaryBtn';
+import PrimaryBtn from '../../components/Elements/PrimaryBtn';
 
 const logoImg = require('../assets/appImages/logoOnboard.png');
 const imageSource = require('../assets/appImages/onboard.jpg');
 
-const { styles } = require('../components/AuthenticationForms/styles');
+const { styles } = require('../../components/AuthenticationForms/styles');
 
 const UserRole = ({ navigation }) => {
     const { setUserInfo } = useUser();

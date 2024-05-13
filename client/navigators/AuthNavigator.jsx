@@ -1,10 +1,10 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Welcome from '../screens/Welcome';
-import UserRole from '../screens/UserRole';
-import UserInfo from '../screens/UserInfo';
-import Authentication from '../screens/Authentication';
+import Welcome from '../screens/Authentication/Welcome';
+import UserRole from '../screens/Authentication/UserRole';
+import UserInfo from '../screens/Authentication/UserInfo';
+import Authentication from '../screens/Authentication/Authentication';
 
 const AuthStack = createStackNavigator();
 

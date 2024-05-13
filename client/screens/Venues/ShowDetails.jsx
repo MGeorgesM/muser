@@ -3,17 +3,17 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { ChevronLeft, CircleCheckBig } from 'lucide-react-native';
 
-import { colors, utilities } from '../styles/utilities';
+import { colors, utilities } from '../../styles/utilities';
 
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
-import { generateHours, durations } from '../core/data/generateDatetime';
+import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
+import { generateHours, durations } from '../../core/data/generateDatetime';
 
-import ProfileDetailsPicker from '../components/ProfileDetailsPicker/ProfileDetailsPicker';
-import VenueAvailabilityCard from '../components/Cards/VenueAvailabilityCard/VenueAvailabilityCard';
-import PrimaryBtn from '../components/Elements/PrimaryBtn';
+import ProfileDetailsPicker from '../../components/ProfileDetailsPicker/ProfileDetailsPicker';
+import VenueAvailabilityCard from '../../components/Cards/VenueAvailabilityCard/VenueAvailabilityCard';
+import PrimaryBtn from '../../components/Elements/PrimaryBtn';
 
 import { useDispatch } from 'react-redux';
-import { addShow } from '../store/Shows';
+import { addShow } from '../../store/Shows';
 
 const ShowDetails = ({ route, navigation }) => {
     const { venueId, venueName } = route.params;

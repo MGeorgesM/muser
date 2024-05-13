@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 
-import { setVenues } from '../store/Venues';
+import { setVenues } from '../../store/Venues';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { requestMethods, sendRequest } from '../core/tools/apiRequest';
+import { requestMethods, sendRequest } from '../../core/tools/apiRequest';
 
-import ModalHigh from '../components/Modals/ModalHigh';
-import ShowVenueCard from '../components/Cards/ShowVenueCards/ShowVenueCard';
-import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
+import ModalHigh from '../../components/Modals/ModalHigh';
+import ShowVenueCard from '../../components/Cards/ShowVenueCards/ShowVenueCard';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
 const Venues = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -32,14 +32,13 @@ const Venues = ({ navigation }) => {
             title="Venues"
             navigation={navigation}
             items={venues}
-            renderItem={({ item }) =>
-
+            renderItem={({ item }) => (
                 <ShowVenueCard
                     key={item.id}
                     entity={item}
                     handlePress={() => navigation.navigate('VenueDetails', { venue: item })}
                 />
-            }
+            )}
         />
     ) : (
         <LoadingScreen />

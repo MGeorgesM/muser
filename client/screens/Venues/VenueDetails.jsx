@@ -1,18 +1,18 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList, Pressable } from 'react-native';
 
-import { setSelectedVenue } from '../store/Venues';
-import { useUser } from '../contexts/UserContext';
+import { setSelectedVenue } from '../../store/Venues';
+import { useUser } from '../../contexts/UserContext';
 
-import { utilities, colors } from '../styles/utilities';
-import { formatDateString, truncateText } from '../core/tools/formatDate';
-import { profilePicturesUrl, showsPicturesUrl, sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { utilities, colors } from '../../styles/utilities';
+import { formatDateString, truncateText } from '../../core/tools/formatDate';
+import { profilePicturesUrl, showsPicturesUrl, sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
 import { ChevronLeft } from 'lucide-react-native';
 
-import PrimaryBtn from '../components/Elements/PrimaryBtn';
-import ShowCard from '../components/Cards/ShowCard/ShowCard';
-import BandMemberCard from '../components/Cards/BandMemberCard/BandMemberCard';
+import PrimaryBtn from '../../components/Elements/PrimaryBtn';
+import ShowCard from '../../components/Cards/ShowCard/ShowCard';
+import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
 
 const VenueDetails = ({ route, navigation }) => {
     const { venue, show, switchView } = route.params;

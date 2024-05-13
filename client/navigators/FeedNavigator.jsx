@@ -1,8 +1,8 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Feed from '../screens/Feed';
-import ProfileDetails from '../screens/ProfileDetails';
+import Feed from '../screens/Feed/Feed';
+import ProfileDetails from '../screens/Feed/ProfileDetails';
 
 const FeedStack = createStackNavigator();
 

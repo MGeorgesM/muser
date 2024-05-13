@@ -13,11 +13,11 @@ import StreamView from '../screens/StreamView';
 import { StreamVideo, StreamVideoClient } from '@stream-io/video-react-native-sdk';
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
-const LiveStreamStack = createStackNavigator();
+const ShowsStack = createStackNavigator();
 
 const streamApiKey = process.env.EXPO_PUBLIC_STREAM_ACCESS_KEY;
 
-const LiveStreamNavigator = () => {
+const ShowsNavigator = () => {
     const [client, setClient] = useState(null);
     const [initialRoute, setInitialRoute] = useState('Streams');
 
@@ -71,15 +71,15 @@ const LiveStreamNavigator = () => {
 
     return client ? (
         <StreamVideo client={client}>
-            <LiveStreamStack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
-                <LiveStreamStack.Screen name="Streams" component={Streams} />
-                <LiveStreamStack.Screen name="StreamBroadcast" component={StreamBroadcast} />
-                <LiveStreamStack.Screen name="StreamView" component={StreamView} />
-            </LiveStreamStack.Navigator>
+            <ShowsStack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
+                <ShowsStack.Screen name="Streams" component={Streams} />
+                <ShowsStack.Screen name="StreamBroadcast" component={StreamBroadcast} />
+                <ShowsStack.Screen name="StreamView" component={StreamView} />
+            </ShowsStack.Navigator>
         </StreamVideo>
     ) : (
         <LoadingScreen />
     );
 };
 
-export default LiveStreamNavigator;
+export default ShowsNavigator;
