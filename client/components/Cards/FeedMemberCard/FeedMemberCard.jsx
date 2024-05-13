@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { colors, utilities } from '../../../styles/utilities';
 import { profilePicturesUrl } from '../../../core/tools/apiRequest';
 
-import InstrumentIcon from '../../Elements/InstrumentIcon/InstrumentIcon';
+import InstrumentIcon from '../../Misc/InstrumentIcon/InstrumentIcon';
 
 const FeedMemberCard = ({ user, height = 256, navigation }) => {
     const imageUrl = `${profilePicturesUrl + user.picture}`;

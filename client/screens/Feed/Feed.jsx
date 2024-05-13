@@ -17,7 +17,7 @@ import PictureHeader from '../../components/PictureHeader/PictureHeader';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import AiMatchMakingModal from '../../components/Modals/AiMatchMakingModal';
 import FeedMemberCard from '../../components/Cards/FeedMemberCard/FeedMemberCard';
-import FloatingActionButton from '../../components/Elements/FloatingActionButton/FloatingActionButton';
+import FloatingActionButton from '../../components/Misc/FloatingActionButton/FloatingActionButton';
 
 const Feed = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +30,6 @@ const Feed = ({ navigation }) => {
     const dispatch = useDispatch();
 
     const users = useSelector((global) => global.usersSlice.feedUsers);
-
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -70,12 +69,11 @@ const Feed = ({ navigation }) => {
     });
 
     useEffect(() => {
-        getUsers();        
+        getUsers();
     }, [currentUser]);
 
-
     const getUsers = async () => {
-        console.log('Fetching users')
+        console.log('Fetching users');
         try {
             const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
             if (response.status !== 200) throw new Error('Failed to fetch users');
@@ -122,21 +120,22 @@ const Feed = ({ navigation }) => {
 
     const handleChatInititation = () => {
         const matchedUsersIds = matchedUsers.map((user) => user.id);
-        const chatId = [currentUser.id, ...matchedUsersIds].sort((a, b) => a - b).join('-');;
+        const chatId = [currentUser.id, ...matchedUsersIds].sort((a, b) => a - b).join('-');
         const participants = matchedUsers.map((user) => {
             return {
                 id: user.id,
                 name: user.name,
                 picture: user.picture,
-            }
-        })
+            };
+        });
 
-        navigation.navigate('Chat',  { screen: 'ChatDetails', params:
-            {
-                id:chatId,
-                participants
-            }
-          });
+        navigation.navigate('Chat', {
+            screen: 'ChatDetails',
+            params: {
+                id: chatId,
+                participants,
+            },
+        });
     };
 
     const renderItem = ({ item, index }) => {
@@ -167,7 +166,7 @@ const Feed = ({ navigation }) => {
         }
     };
 
-    return (users && users.length === 0) ? (
+    return users && users.length === 0 ? (
         <LoadingScreen />
     ) : (
         <>
@@ -202,7 +201,12 @@ const Feed = ({ navigation }) => {
             />
             <FloatingActionButton icon={BrainCog} handlePress={() => setModalVisible(true)} isLoading={isLoading} />
             {matchedUsers && matchedUsers.length > 0 && (
-                <FloatingActionButton icon={MessageCirclePlus} handlePress={handleChatInititation} bottom={88} primary={false}/>
+                <FloatingActionButton
+                    icon={MessageCirclePlus}
+                    handlePress={handleChatInititation}
+                    bottom={88}
+                    primary={false}
+                />
             )}
         </>
     );

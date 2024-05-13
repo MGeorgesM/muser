@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, TextInput } from 'react-native';
 
-import DetailsPill from '../Elements/DetailsPill/DetailsPill';
+import DetailsPill from '../Misc/DetailsPill/DetailsPill';
 import ProfileDetailsPicker from '../ProfileDetailsPicker/ProfileDetailsPicker';
 
 import { colors, utilities } from '../../styles/utilities';
@@ -17,7 +17,7 @@ const UserInfoForm = ({ userInfo, setUserInfo, handlePress, handlePickerChange, 
                 placeholder="Tell us about yourself!"
                 placeholderTextColor={colors.gray}
                 cursorColor={colors.primary}
-                style={[utilities.myFontRegular,{ marginBottom: 20, color: colors.lightGray }]}
+                style={[utilities.myFontRegular, { marginBottom: 20, color: colors.lightGray }]}
                 value={userInfo.about}
                 onChangeText={(text) => setUserInfo((prev) => ({ ...prev, about: text }))}
             />

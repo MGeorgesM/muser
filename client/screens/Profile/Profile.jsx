@@ -20,13 +20,13 @@ import { UserRoundCog, LockKeyhole, ChevronRight, Scroll } from 'lucide-react-na
 
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
-import DetailsPill from '../../components/Elements/DetailsPill/DetailsPill';
+import DetailsPill from '../../components/Misc/DetailsPill/DetailsPill';
 import SettingsCard from '../../components/Cards/SettingsCard/SettingsCard';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import ProfileDetailsPicker from '../../components/ProfileDetailsPicker/ProfileDetailsPicker';
 import { useUserInfoLogic } from '../Auth/userInfoLogic';
 import UserInfoForm from '../../components/AuthenticationForms/UserInfoForm';
-import PrimaryBtn from '../../components/Elements/PrimaryBtn';
+import PrimaryBtn from '../../components/Misc/PrimaryBtn';
 
 const Profile = ({ navigation }) => {
     const { currentUser, setCurrentUser } = useUser();

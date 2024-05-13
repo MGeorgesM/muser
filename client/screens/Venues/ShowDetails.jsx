@@ -10,7 +10,7 @@ import { generateHours, durations } from '../../core/data/generateDatetime';
 
 import ProfileDetailsPicker from '../../components/ProfileDetailsPicker/ProfileDetailsPicker';
 import VenueAvailabilityCard from '../../components/Cards/VenueAvailabilityCard/VenueAvailabilityCard';
-import PrimaryBtn from '../../components/Elements/PrimaryBtn';
+import PrimaryBtn from '../../components/Misc/PrimaryBtn';
 
 import { useDispatch } from 'react-redux';
 import { addShow } from '../../store/Shows';

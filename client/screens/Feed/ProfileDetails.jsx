@@ -8,10 +8,10 @@ import { colors, utilities } from '../../styles/utilities';
 import { profilePicturesUrl } from '../../core/tools/apiRequest';
 import { useSelector } from 'react-redux';
 
-import BackBtn from '../../components/Elements/BackBtn/BackBtn';
-import PrimaryBtn from '../../components/Elements/PrimaryBtn';
-import InstrumentIcon from '../../components/Elements/InstrumentIcon/InstrumentIcon';
-import DetailsPill from '../../components/Elements/DetailsPill/DetailsPill';
+import BackBtn from '../../components/Misc/BackBtn/BackBtn';
+import PrimaryBtn from '../../components/Misc/PrimaryBtn';
+import InstrumentIcon from '../../components/Misc/InstrumentIcon/InstrumentIcon';
+import DetailsPill from '../../components/Misc/DetailsPill/DetailsPill';
 
 const ProfileDetails = ({ route }) => {
     const { userId, onBackPress } = route.params;

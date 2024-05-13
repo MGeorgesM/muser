@@ -6,7 +6,7 @@ import inCallManager from 'react-native-incall-manager';
 
 import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop } from 'lucide-react-native';
 
-import { colors, utilities } from '../../../styles/utilities';
+import { colors, utilities } from '../../../../styles/utilities';
 
 import { useNavigation } from '@react-navigation/native';
 

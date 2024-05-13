@@ -6,11 +6,11 @@ import { useUserInfoLogic } from './userInfoLogic';
 import { colors } from '../../styles/utilities';
 import { CirclePlus, ChevronLeft } from 'lucide-react-native';
 
-import PrimaryBtn from '../../components/Elements/PrimaryBtn/PrimaryBtn';
-import DetailsPill from '../../components/Elements/DetailsPill/DetailsPill';
+import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
+import DetailsPill from '../../components/Misc/DetailsPill/DetailsPill';
 import ProfileDetailsPicker from '../../components/ProfileDetailsPicker/ProfileDetailsPicker';
 
-const { styles } = require('../../components/AuthenticationForms/styles');
+const { styles } = require('../../components/Forms/styles');
 
 const UserInfo = ({ navigation }) => {
     const {

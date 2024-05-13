@@ -12,7 +12,7 @@ import {
 
 import { colors, utilities } from '../../styles/utilities';
 
-import PrimaryBtn from '../Elements/PrimaryBtn';
+import PrimaryBtn from '../Misc/PrimaryBtn';
 
 const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible, setModalVisible }) => {
     return (
@@ -28,8 +28,10 @@ const AiMatchMakingModal = ({ userInput, handlePress, setUserInput, modalVisible
                 <View style={styles.bottomStickView}>
                     <View style={styles.modalView} onStartShouldSetResponder={() => true}>
                         <View>
-                            <Text style={[styles.modalTitle, { color: colors.primary, marginBottom:-3 }]}>Muser Ai</Text>
-                            <Text style={[utilities.textCenter, utilities.myFontRegular, {marginBottom:32}]}>
+                            <Text style={[styles.modalTitle, { color: colors.primary, marginBottom: -3 }]}>
+                                Muser Ai
+                            </Text>
+                            <Text style={[utilities.textCenter, utilities.myFontRegular, { marginBottom: 32 }]}>
                                 Your Band Formed Effortlessly
                             </Text>
                         </View>
@@ -63,7 +65,7 @@ const styles = StyleSheet.create({
         paddingTop: 32,
         height: 0.35 * height,
         paddingHorizontal: 20,
-        paddingBottom:32,
+        paddingBottom: 32,
         justifyContent: 'space-between',
         backgroundColor: colors.bgOffDark,
         borderTopLeftRadius: utilities.borderRadius.xl,
