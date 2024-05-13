@@ -9,6 +9,7 @@ import { CirclePlus, ChevronLeft } from 'lucide-react-native';
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 import DetailsPill from '../../components/Misc/DetailsPill/DetailsPill';
 import ProfileDetailsPicker from '../../components/Misc/ProfileDetailsPicker/ProfileDetailsPicker';
+import UserInfoForm from '../../components/Forms/UserInfoForm';
 
 const { styles } = require('../../components/Forms/styles');
 
@@ -49,7 +50,14 @@ const UserInfo = ({ navigation }) => {
                         <CirclePlus size={50} color={'white'} />
                     </TouchableOpacity>
                 </View>
-                <View>
+                <UserInfoForm
+                    handlePickerChange={handlePickerChange}
+                    handlePress={handlePress}
+                    setUserInfo={setUserInfo}
+                    userInfo={userInfo}
+                    profileProperties={profileProperties}
+                />
+                {/* <View>
                     <Text style={styles.inputTextProfile}>{userInfo.role_id == 2 ? 'Description' : 'Bio'}</Text>
                     <TextInput
                         key={'about'}
@@ -110,8 +118,8 @@ const UserInfo = ({ navigation }) => {
                                 />
                             );
                         })}
-                    </View>
-                </View>
+                    </View> */}
+                {/* </View> */}
             </View>
             <Text style={[styles.errorText, { marginTop: 24 }]}>{error || authError}</Text>
             <PrimaryBtn text="Register" handlePress={handleProceed} marginBottom={56} />

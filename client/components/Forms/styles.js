@@ -18,8 +18,8 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 32,
         fontFamily: 'Montserrat-Medium',
-        marginTop: 48,
-        marginBottom: 48,
+        marginTop: 24,
+        marginBottom: 72,
     },
     label: {
         fontSize: 16,
@@ -52,8 +52,8 @@ export const styles = StyleSheet.create({
         textDecorationLine: 'underline',
     },
     welcomeLogo: {
-        width: 155,
-        height: 155,
+        width: 150,
+        height: 150,
         alignSelf: 'center',
         objectFit: 'contain',
     },
@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
     userTypeText: {
         fontSize: 28,
         paddingRight: 12,
-        color: colors.white,
+        color: colors.primary,
         fontFamily: 'Montserrat-Regular',
         alignSelf: 'center',
     },

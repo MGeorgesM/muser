@@ -12,9 +12,21 @@ const AuthenticationStack = () => {
     return (
         <AuthStack.Navigator screenOptions={{ headerShown: false }}>
             <AuthStack.Screen name="Welcome" component={Welcome} />
-            <AuthStack.Screen name="Authentication" component={Authentication} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} />
-            <AuthStack.Screen name="UserRole" component={UserRole} />
-            <AuthStack.Screen name="UserInfo" component={UserInfo} />
+            <AuthStack.Screen
+                name="Authentication"
+                component={Authentication}
+                options={{ cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS }}
+            />
+            <AuthStack.Screen
+                name="UserRole"
+                component={UserRole}
+                options={{ cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS }}
+            />
+            <AuthStack.Screen
+                name="UserInfo"
+                component={UserInfo}
+                options={{ cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS }}
+            />
         </AuthStack.Navigator>
     );
 };

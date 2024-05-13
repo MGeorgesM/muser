@@ -22,9 +22,9 @@ export const UserProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [authError, setAuthError] = useState(null);
     const [userInfo, setUserInfo] = useState({
-        name: '',
-        email: '',
-        password: '',
+        name: 'Georges',
+        email: 'george@mail.com',
+        password: 'password',
         about: '',
         picture: '',
         location_id: '',

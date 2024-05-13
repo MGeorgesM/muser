@@ -11,7 +11,7 @@ import { ChevronDown } from 'lucide-react-native';
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 
 const logoImg = require('../../assets/appImages/logoOnboard.png');
-const imageSource = require('../../assets/appImages/onboard.jpg');
+const imageSource = require('../../assets/appImages/onboardBlurredMax.jpg');
 
 const { styles } = require('../../components/Forms/styles');
 
@@ -19,10 +19,13 @@ const UserRole = ({ navigation }) => {
     const { setUserInfo } = useUser();
     return (
         <ImageBackground source={imageSource} style={{ flex: 1 }} resizeMode="cover">
-            <View style={[utilities.photoOverlayL, utilities.container]}>
+            <View style={[utilities.photoOverlayM, utilities.container]}>
                 <View style={styles.topInnerContainer}>
                     <Image style={styles.welcomeLogo} source={logoImg} />
-                    <Text style={styles.header}>What Brings You to Muser?</Text>
+
+                    <Text style={styles.header}>
+                        What Brings You to <Text style={[utilities.myFontBold,{ color: colors.white }]}>Muser</Text>?
+                    </Text>
                     <View style={styles.userTypePrompt}>
                         <Text style={styles.userTypeText}>I'm a</Text>
                         <RNPickerSelect
@@ -36,8 +39,8 @@ const UserRole = ({ navigation }) => {
                             style={{
                                 inputAndroid: {
                                     fontSize: 28,
-                                    fontFamily: 'Montserrat-Bold',
-                                    color: colors.primary,
+                                    fontFamily: 'Montserrat-Regular',
+                                    color: colors.white,
                                 },
                                 viewContainer: {
                                     flex: 1,
