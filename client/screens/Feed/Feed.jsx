@@ -106,6 +106,9 @@ const Feed = ({ navigation }) => {
     };
 
     const handleProceed = async () => {
+        
+        if(isLoading) return;
+
         if (userInput === '') {
             setMatchedUsers([]);
             setModalVisible(false);
@@ -115,6 +118,8 @@ const Feed = ({ navigation }) => {
     };
 
     const handleChatInititation = () => {
+        if (isLoading) return;
+
         const matchedUsersIds = matchedUsers.map((user) => user.id);
         const chatId = [currentUser.id, ...matchedUsersIds].sort((a, b) => a - b).join('-');
         const participants = matchedUsers.map((user) => {

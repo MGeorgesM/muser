@@ -106,7 +106,6 @@ const Chat = ({ navigation, route }) => {
         setLocalChatTitle('');
 
         const setupChatTitleListener = async () => {
-
             if (chatTitle) {
                 console.log('Chat Title present returning');
                 return;
@@ -116,31 +115,28 @@ const Chat = ({ navigation, route }) => {
 
             chatTitleUnsubscribe = onSnapshot(chatRef, (doc) => {
                 const chatData = doc.data();
-                console.log('Chat Data:', chatData)
+
                 if (chatData.chatTitle) {
                     setLocalChatTitle(chatData.chatTitle);
-                } else if ( chatData.participantsIds.length > 1) {
-                    const chatParticipantsIds = chatData.participantsIds
+                    return;
+                }
+                if (chatData.participantsIds && chatData.participantsIds.length > 1) {
+                    const participantIds = chatData.participantsIds.filter((pid) => pid !== currentUser.id);
+                    const participantNames = participantIds
+                        .map((pid) => {
+                            const user =
+                                feedUsers.find((user) => user.id === pid) ||
+                                userConnections.find((user) => user.id === pid);
+                            return user ? user.name : null;
+                        })
+                        .filter((name) => name !== null);
 
-                    for (const id of chatParticipantsIds) {
-                        if (id !== currentUser.id) {
-                            let user = feedUsers.find((user) => user.id === participant) || userConnections.find((user) => user.id === participant);
-                            if (user) {
-                                setLocalChatTitle(user.name);
-                            }
-                        }
+                    if (participantNames.length > 0) {
+                        setLocalChatTitle(participantNames.join(', '));
                     }
                 }
             });
-
-            return () => {
-                if (unsubscribe) {
-                    unsubscribe();
-                }
-            };
-            
-        }
-            
+        };
 
         const setupMessagesListener = async () => {
             console.log('Starting listener');
