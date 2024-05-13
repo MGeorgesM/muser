@@ -14,7 +14,7 @@ const UserInfoForm = ({ userInfo, setUserInfo, handlePress, handlePickerChange, 
             <Text style={styles.inputTextProfile}>{userInfo.role_id == 2 ? 'Description' : 'Bio'}</Text>
             <TextInput
                 key={'about'}
-                placeholder="Tell us about yourself!"
+                placeholder={userInfo.role_id == 2 ? 'Tell us about your venue' : 'Tell us about yourself!'}
                 placeholderTextColor={colors.gray}
                 cursorColor={colors.primary}
                 style={[utilities.myFontRegular, { marginBottom: 20, color: colors.lightGray }]}

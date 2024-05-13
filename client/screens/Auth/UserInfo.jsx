@@ -1,15 +1,13 @@
 import React from 'react';
-import { Text, TextInput, Image, TouchableOpacity, View } from 'react-native';
+import { Text, Image, TouchableOpacity, View } from 'react-native';
 
 import { useUserInfoLogic } from './userInfoLogic';
 
-import { colors } from '../../styles/utilities';
 import { CirclePlus, ChevronLeft } from 'lucide-react-native';
 
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
-import DetailsPill from '../../components/Misc/DetailsPill/DetailsPill';
-import ProfileDetailsPicker from '../../components/Misc/ProfileDetailsPicker/ProfileDetailsPicker';
 import UserInfoForm from '../../components/Forms/UserInfoForm';
+import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
 
 const { styles } = require('../../components/Forms/styles');
 
@@ -26,6 +24,8 @@ const UserInfo = ({ navigation }) => {
         profileProperties,
         handlePickerChange,
     } = useUserInfoLogic();
+
+    useNavigationBarColor('translucent');
 
     return (
         <View style={styles.userInfoContainer}>
@@ -58,8 +58,8 @@ const UserInfo = ({ navigation }) => {
                     profileProperties={profileProperties}
                 />
             </View>
-            <Text style={[styles.errorText, { marginTop: 24 }]}>{error || authError}</Text>
-            <PrimaryBtn text="Register" handlePress={handleProceed} marginBottom={56} />
+            <Text style={[styles.errorText, { marginTop: 'auto' }]}>{error || authError}</Text>
+            <PrimaryBtn text="Register" handlePress={handleProceed} marginBottom={56} marginTop={12} />
         </View>
     );
 };
