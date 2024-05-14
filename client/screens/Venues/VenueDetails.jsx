@@ -51,10 +51,10 @@ const VenueDetails = ({ route, navigation }) => {
                   screen: 'StreamBroadcast',
                   params: {
                       showId: show.id,
-                      showName: `${show.band.name} @ ${show.venue.venueName}`,
+                      showName: `${show.band.name} @ ${show.venue.venue_name}`,
                   },
               })
-            : navigation.navigate('ShowDetails', { venueId: venue.id, venueName: venue.venueName });
+            : navigation.navigate('ShowDetails', { venueId: venue.id, venueName: venue.venue_name });
     };
 
     const handleBackBtn = () => {

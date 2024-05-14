@@ -26,6 +26,7 @@ import {
     addDoc,
     setDoc,
 } from 'firebase/firestore';
+import CommentsOverlay from '../../components/Misc/CommentsOverlay/CommentsOverlay';
 
 const ShowStream = ({ navigation, route }) => {
     const { show } = route.params;
@@ -115,7 +116,7 @@ const ShowStream = ({ navigation, route }) => {
     };
 
     const handleLike = async () => {
-        if(videoIsLiked) return;
+        if (videoIsLiked) return;
         setVideoIsLiked(!videoIsLiked);
         await onSend('❤');
     };
@@ -312,17 +313,21 @@ const ShowStream = ({ navigation, route }) => {
                             ))}
                         </ScrollView>
                     </View>
-                    <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
-                        {comments && comments.length > 0 ? (
-                            comments.map((comment) => (
-                                <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
-                            ))
-                        ) : (
-                            <Text style={[utilities.myFontRegular, { color: colors.gray, paddingLeft: 20 }]}>
-                                No comments yet
-                            </Text>
-                        )}
-                    </ScrollView>
+                    {!videoIsMaximized ? (
+                        <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
+                            {comments && comments.length > 0 ? (
+                                comments.map((comment) => (
+                                    <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
+                                ))
+                            ) : (
+                                <Text style={[utilities.myFontRegular, { color: colors.gray, paddingLeft: 20 }]}>
+                                    No comments yet
+                                </Text>
+                            )}
+                        </ScrollView>
+                    ) : (
+                        <CommentsOverlay comments={comments} />
+                    )}
                     <UserComposer
                         placeholder="Write a comment"
                         value={userComment}
