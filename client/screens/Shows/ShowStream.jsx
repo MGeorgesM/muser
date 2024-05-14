@@ -81,20 +81,18 @@ const ShowStream = ({ navigation, route }) => {
     }, [client, show.id]);
 
     useEffect(() => {
-        let unsubscribeComments = () => {};
-        let unsubscribeLikes = () => {};
+        let unsubscribeComments;
 
-        const initializeListeners = async () => {
-            const showId = show.id;
-            unsubscribeComments = await setupCommentsListener(showId);
-            unsubscribeLikes = await setupLikesListener(showId);
+        const fetchComments = async () => {
+            unsubscribeComments = await setupCommentsListener(show.id);
         };
 
-        initializeListeners();
+        fetchComments();
 
         return () => {
-            unsubscribeComments();
-            unsubscribeLikes();
+            if (unsubscribeComments) {
+                unsubscribeComments();
+            }
         };
     }, [show.id]);
 
@@ -116,46 +114,24 @@ const ShowStream = ({ navigation, route }) => {
         return unsubscribeComments;
     };
 
-    const setupLikesListener = async (showId) => {
-        const likesRef = collection(fireStoreDb, 'shows', showId.toString(), 'likes');
-        const q = query(likesRef, orderBy('createdAt', 'desc'));
+    // const setupLikesListener = async (showId) => {
+    //     const likesRef = collection(fireStoreDb, 'shows', showId.toString(), 'likes');
+    //     const q = query(likesRef, orderBy('createdAt', 'desc'));
 
-        const unsubscribeLikes = onSnapshot(q, (snapshot) => {
-            const fetchedLikes = snapshot.docs.map((doc) => ({
-                _id: doc.id,
-                userId: doc.data().userId,
-                createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
-            }));
-            setLikes(fetchedLikes);
-        });
+    //     const unsubscribeLikes = onSnapshot(q, (snapshot) => {
+    //         const fetchedLikes = snapshot.docs.map((doc) => ({
+    //             _id: doc.id,
+    //             userId: doc.data().userId,
+    //             createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
+    //         }));
+    //         setLikes(fetchedLikes);
+    //     });
 
-        return unsubscribeLikes;
-    };
+    //     return unsubscribeLikes;
+    // };
 
     const handleLike = async () => {
-        const showRef = doc(fireStoreDb, 'shows', show.id.toString());
-        const likesRef = collection(showRef, 'likes');
 
-        setVideoIsLiked(!videoIsLiked);
-
-        if (!videoIsLiked) {
-            try {
-                const likeDoc = await getDoc(likesRef);
-                const likeId = likeDoc.docs.find((doc) => doc.data().userId === currentUser.id).id;
-                await deleteDoc(doc(likesRef, likeId));
-            } catch (error) {
-                console.log('Error deleting like:', error);
-            }
-        } else {
-            try {
-                await addDoc(likesRef, {
-                    createdAt: serverTimestamp(),
-                    userId: currentUser.id,
-                });
-            } catch (error) {
-                console.log('Error adding like:', error);
-            }
-        }
     };
 
     const createShowAndComments = async (initialComment) => {
@@ -183,8 +159,7 @@ const ShowStream = ({ navigation, route }) => {
             const showSnapshot = await getDoc(showRef);
 
             if (!showRef) {
-                const initialComment = comment.trim();
-                showRef = await createShowAndComments(initialComment);
+                showRef = await createShowAndComments(comment);
             } else {
                 const commentsRef = collection(showRef, 'comments');
 
