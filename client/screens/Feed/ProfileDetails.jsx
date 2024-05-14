@@ -5,7 +5,7 @@ import { useUser } from '../../contexts/UserContext';
 import { useNavigation } from '@react-navigation/native';
 
 import { colors, utilities } from '../../styles/utilities';
-import { profilePicturesUrl } from '../../core/tools/apiRequest';
+import { profilePicturesUrl, requestMethods, sendRequest } from '../../core/tools/apiRequest';
 import { useSelector } from 'react-redux';
 
 import BackBtn from '../../components/Misc/BackBtn/BackBtn';
@@ -29,16 +29,31 @@ const ProfileDetails = ({ route }) => {
     const imageUrl = `${profilePicturesUrl + user.picture}`;
 
     useLayoutEffect(() => {
-        if (userId) {
-            const foundUser = feedUsers.find((user) => user.id === userId);
-            if (foundUser) return setUser(foundUser);
-            const foundConnectedUser = connectedUsers.find((user) => user.id === userId);
-            if (foundConnectedUser) {
-                setIsConnected(true);
-                return setUser(foundConnectedUser);
-            }
+        if (!userId) return;
+
+        const foundUser =
+            feedUsers.find((user) => user.id === userId) ||
+            connectedUsers.find((user) => user.id === userId) ||
+            (currentUser.id === userId ? currentUser : null);
+
+        if (foundUser) {
+            setUser(foundUser);
+            setIsConnected(connectedUsers.some((user) => user.id === userId));
+        } else {
+            getUserFromApi();
         }
-    }, [userId]);
+    }, [userId, feedUsers, connectedUsers, currentUser]);
+
+    const getUserFromApi = async () => {
+        console.log('Fetching user from API');
+        try {
+            const response = await sendRequest(requestMethods.GET, `users/${userId}`);
+            if (response.status !== 200) throw new Error('Failed to fetch user');
+            setUser(response.data);
+        } catch (error) {
+            console.log('Error fetching user:', error);
+        }
+    };
 
     if (user.name)
         return (
