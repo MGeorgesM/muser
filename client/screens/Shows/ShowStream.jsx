@@ -45,7 +45,7 @@ const ShowStream = ({ navigation, route }) => {
     const [call, setCall] = useState(null);
 
     // const showId = show.id.toString() + 'TEST78';
-    const showId = 'TEST1122334XX';
+    const showId = 'TEST1122334XXX';
     // client && console.log('Client Found!');
     // console.log('Show ID:', show.id);
     // console.log('Call:', call);
@@ -114,24 +114,10 @@ const ShowStream = ({ navigation, route }) => {
         return unsubscribeComments;
     };
 
-    // const setupLikesListener = async (showId) => {
-    //     const likesRef = collection(fireStoreDb, 'shows', showId.toString(), 'likes');
-    //     const q = query(likesRef, orderBy('createdAt', 'desc'));
-
-    //     const unsubscribeLikes = onSnapshot(q, (snapshot) => {
-    //         const fetchedLikes = snapshot.docs.map((doc) => ({
-    //             _id: doc.id,
-    //             userId: doc.data().userId,
-    //             createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
-    //         }));
-    //         setLikes(fetchedLikes);
-    //     });
-
-    //     return unsubscribeLikes;
-    // };
-
     const handleLike = async () => {
-
+        if(videoIsLiked) return;
+        setVideoIsLiked(!videoIsLiked);
+        await onSend('❤');
     };
 
     const createShowAndComments = async (initialComment) => {

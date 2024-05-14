@@ -9,7 +9,7 @@ import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop } f
 import { colors, utilities } from '../../../../styles/utilities';
 
 import { useNavigation } from '@react-navigation/native';
-import CommentCard from '../../../Cards/CommentCard/CommentCard';
+import CommentsOverlay from '../../CommentsOverlay/CommentsOverlay';
 
 const StreamViewer = ({ showName, setCall, comments }) => {
     const call = useCall();
@@ -136,18 +136,14 @@ const StreamViewer = ({ showName, setCall, comments }) => {
                     )}
                 </TouchableOpacity>
                 {isCallLive && (
-                    <TouchableOpacity onPress={handleStreamStatus}>
-                        {<CircleStop size={24} color={colors.primary} />}
-                    </TouchableOpacity>
+                    <>
+                        <TouchableOpacity onPress={handleStreamStatus}>
+                            {<CircleStop size={24} color={colors.primary} />}
+                        </TouchableOpacity>
+                        <CommentsOverlay comments={comments} />
+                    </>
                 )}
             </View>
-            {isCallLive && <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
-                {comments &&
-                    comments.length > 0 &&
-                    comments.map((comment) => (
-                        <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
-                    ))}
-            </ScrollView>}
         </View>
     );
 };
@@ -192,12 +188,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#12121250',
         borderRadius: 32,
         padding: 12,
-    },
-
-    commentsContainer: {
-        opacity: 0.8,
-        position: 'absolute',
-        height: 72,
-        bottom: 56,
     },
 });

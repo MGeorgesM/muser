@@ -15,7 +15,7 @@ import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 const ShowBroadcast = ({ route }) => {
     const { showId, showName } = route.params;
     // const showIdString = showId.toString() + 'TEST78' ?? {};
-    const showIdString = 'TEST1122334XX';
+    const showIdString = 'TEST1122334XXX';
 
     const [call, setCall] = useState(null);
     const [comments, setComments] = useState([]);
@@ -42,6 +42,7 @@ const ShowBroadcast = ({ route }) => {
     }, [showId]);
 
     const setupCommentsListener = async () => {
+        console.log('Setting up comments listener');
         const commentsRef = collection(fireStoreDb, 'shows', showId.toString(), 'comments');
         const q = query(commentsRef, orderBy('createdAt', 'desc'));
 
