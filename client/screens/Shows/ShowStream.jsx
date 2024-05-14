@@ -12,7 +12,7 @@ import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 import inCallManager from 'react-native-incall-manager';
 
 import { colors, utilities } from '../../styles/utilities';
-import { Heart, Play, Pause, Maximize } from 'lucide-react-native';
+import { Heart, Play, Pause, Maximize, MessageSquare, MessageSquareOff } from 'lucide-react-native';
 
 import { fireStoreDb } from '../../config/firebase';
 import {
@@ -40,7 +40,7 @@ const ShowStream = ({ navigation, route }) => {
     const [videoIsPlaying, setVideoIsPlaying] = useState(false);
     const [videoIsMaximized, setVideoIsMaximized] = useState(false);
     const [videoIsLiked, setVideoIsLiked] = useState(false);
-    const [likes, setLikes] = useState([]);
+    const [reactionsVisible, setReactionsVisible] = useState(false);
     const [controlsVisible, setControlsVisible] = useState(false);
 
     const [call, setCall] = useState(null);
@@ -109,6 +109,7 @@ const ShowStream = ({ navigation, route }) => {
                 userAvatar: doc.data().userAvatar,
                 userId: doc.data().userId,
             }));
+            console.log('Fetched Comments:', fetchedComments);
             setComments(fetchedComments);
         });
 
@@ -218,12 +219,13 @@ const ShowStream = ({ navigation, route }) => {
             <View style={{ flex: 1, position: 'relative' }}>
                 {call ? (
                     <StreamCall call={call}>
-                        <View style={{ height: videoIsMaximized ? height * 1 : height * 0.5 }}>
+                        <View style={{ height: videoIsMaximized ? height * 1 : height * 0.5, position: 'relative' }}>
                             <ViewerLivestream
                                 ViewerLeaveStreamButton={null}
                                 ViewerLivestreamTopView={null}
                                 ViewerLivestreamControls={null}
                             />
+                            {videoIsMaximized && reactionsVisible && <CommentsOverlay comments={comments} bottom={20}/>}
                         </View>
                     </StreamCall>
                 ) : (
@@ -258,17 +260,36 @@ const ShowStream = ({ navigation, route }) => {
                         )}
                     </Pressable>
                     {videoIsPlaying && controlsVisible && (
-                        <Pressable
-                            onPress={handleVideoSizeToggle}
-                            style={{
-                                position: 'absolute',
-                                bottom: 12,
-                                right: 12,
-                                marginTop: 12,
-                            }}
-                        >
-                            <Maximize size={24} color={'white'} />
-                        </Pressable>
+                        <>
+                            <Pressable
+                                onPress={handleVideoSizeToggle}
+                                style={{
+                                    position: 'absolute',
+                                    bottom: 12,
+                                    right: 12,
+                                    marginTop: 12,
+                                }}
+                            >
+                                <Maximize size={24} color={'white'} />
+                            </Pressable>
+                            {videoIsMaximized && (
+                                <Pressable
+                                    onPress={() => setReactionsVisible(!reactionsVisible)}
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: 42,
+                                        right: 12,
+                                        marginTop: 12,
+                                    }}
+                                >
+                                    {reactionsVisible ? (
+                                        <MessageSquare size={24} color={'white'} />
+                                    ) : (
+                                        <MessageSquareOff size={24} color={'white'} />
+                                    )}
+                                </Pressable>
+                            )}
+                        </>
                     )}
                 </Pressable>
             </View>
@@ -313,7 +334,7 @@ const ShowStream = ({ navigation, route }) => {
                             ))}
                         </ScrollView>
                     </View>
-                    {!videoIsMaximized ? (
+                    {!videoIsMaximized && (
                         <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
                             {comments && comments.length > 0 ? (
                                 comments.map((comment) => (
@@ -325,8 +346,6 @@ const ShowStream = ({ navigation, route }) => {
                                 </Text>
                             )}
                         </ScrollView>
-                    ) : (
-                        <CommentsOverlay comments={comments} />
                     )}
                     <UserComposer
                         placeholder="Write a comment"

@@ -3,9 +3,12 @@ import { StyleSheet, ScrollView } from 'react-native';
 
 import CommentCard from '../../Cards/CommentCard/CommentCard';
 
-const CommentsOverlay = ({ comments }) => {
+const CommentsOverlay = ({ comments, bottom = 42, left = 0 }) => {
     return (
-        <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
+        <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={[styles.commentsContainer, { bottom: comments.length > 1 ? bottom : 8, left: left }]}
+        >
             {comments &&
                 comments.length > 0 &&
                 comments.map((comment) => (
@@ -21,7 +24,7 @@ const styles = StyleSheet.create({
     commentsContainer: {
         opacity: 0.8,
         position: 'absolute',
-        height: 72,
-        bottom: 56,
+        height: 80,
+        zIndex: 999,
     },
 });
