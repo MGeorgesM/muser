@@ -48,7 +48,7 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, bu
                                     onChangeText={setUserInput}
                                     placeholderTextColor={colors.gray}
                                     value={userInput}
-                                    placeholder="As usual... be creative!"
+                                    placeholder="Your Band Name"
                                 />
                             </>
                         ) : data && data.length > 0 ? (

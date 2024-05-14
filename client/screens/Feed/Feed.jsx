@@ -29,7 +29,10 @@ const Feed = ({ navigation }) => {
     const { currentUser } = useUser();
 
     const dispatch = useDispatch();
-    const users = useSelector((global) => global.usersSlice.feedUsers);
+
+    const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
+    const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
+    const users = [...feedUsers, ...connectedUsers];
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -105,8 +108,7 @@ const Feed = ({ navigation }) => {
     };
 
     const handleProceed = async () => {
-        
-        if(isLoading) return;
+        if (isLoading) return;
 
         if (userInput === '') {
             setMatchedUsers([]);

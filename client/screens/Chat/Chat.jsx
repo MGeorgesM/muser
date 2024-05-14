@@ -189,6 +189,8 @@ const Chat = ({ navigation, route }) => {
                 console.log('Participants List:', participantsList);
 
                 setChatParticipants(participantsList);
+                setChatConnections((prev) => prev.filter((connection) => participantsList.every((participant) => participant.id !== connection.id)));
+
             });
         };
 
@@ -265,8 +267,6 @@ const Chat = ({ navigation, route }) => {
         try {
             const chatRef = doc(fireStoreDb, 'chats', id);
 
-            // const newParticipantsList = [...participants, newParticipant];
-
             const newParticipantsList =
                 chatParticipants.length > 0 ? [...chatParticipants, newParticipant] : [...participants, newParticipant];
 
@@ -277,6 +277,7 @@ const Chat = ({ navigation, route }) => {
                 participantsIds: newParticipantsIdsList,
             });
 
+            setChatConnections((prev) => prev.filter((connection) => connection.id !== newParticipantId));
             setChatParticipants(newParticipantsList);
             setConnectionModalVisible(false);
         } catch (error) {
