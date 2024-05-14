@@ -40,7 +40,6 @@ export const UserProvider = ({ children }) => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        console.log('User Info!:', userInfo);
         checkUser();
     }, []);
 
@@ -54,14 +53,8 @@ export const UserProvider = ({ children }) => {
     };
 
     const getAndSaveFcmToken = async () => {
-        // Register the device with FCM
         await messaging().registerDeviceForRemoteMessages();
-
-        // Get the token
         const token = await messaging().getToken();
-
-        // Save the token
-        console.log('FCM Token:', token);
         updateUserFcmtoken(token);
     };
 
@@ -79,7 +72,6 @@ export const UserProvider = ({ children }) => {
         try {
             const token = await AsyncStorage.getItem('token');
             if (token && currentUser === null) {
-                console.log('here');
                 const response = await sendRequest(requestMethods.GET, 'auth/me');
                 if (response.status === 200) {
                     await getAndSaveFcmToken();

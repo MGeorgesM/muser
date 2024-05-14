@@ -27,8 +27,8 @@ const Feed = ({ navigation }) => {
     const [matchedUsers, setMatchedUsers] = useState([]);
 
     const { currentUser } = useUser();
-    const dispatch = useDispatch();
 
+    const dispatch = useDispatch();
     const users = useSelector((global) => global.usersSlice.feedUsers);
 
     useLayoutEffect(() => {
@@ -73,7 +73,6 @@ const Feed = ({ navigation }) => {
     }, [currentUser]);
 
     const getUsers = async () => {
-        console.log('Fetching users');
         try {
             const response = await sendRequest(requestMethods.GET, 'users/type/musician', null);
             if (response.status !== 200) throw new Error('Failed to fetch users');

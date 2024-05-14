@@ -104,6 +104,7 @@ const Chat = ({ navigation, route }) => {
     useEffect(() => {
         let messagesUnsubscribe;
         let chatTitleUnsubscribe;
+        let participantsUnsubscribe;
 
         setChatMessages([]);
         setChatParticipants([]);
@@ -137,17 +138,67 @@ const Chat = ({ navigation, route }) => {
                         })
                         .filter((name) => name !== null);
 
-                    if (participantNames.length > 0) {
+                    if (participantNames.length > 1) {
                         setLocalChatTitle((prev) => ({ ...prev, participantsNames: participantNames.join(', ') }));
                     }
                 }
             });
         };
 
+        const setUpParticipantsListener = async () => {
+            const chatRef = doc(fireStoreDb, 'chats', id);
+
+            participantsUnsubscribe = onSnapshot(chatRef, (doc) => {
+                const chatData = doc.data();
+
+                if (!chatData) return;
+
+                const participantsIds = chatData.participantsIds;
+
+                console.log('currentuser', currentUser.name, currentUser.id);
+
+                console.log('Participants Ids from Firebase:', participantsIds);
+                console.log(
+                    'Participants from State:',
+                    chatParticipants.map((participant) => participant.id)
+                );
+                console.log(
+                    'Participants from navigation:',
+                    participants.map((participant) => participant.id)
+                );
+
+                console.log('lengths:', participantsIds.length, chatParticipants.length, participants.length);
+
+                if (
+                    participantsIds.length === chatParticipants.length + 1 ||
+                    participantsIds.length === participants.length + 1
+                )
+                    return;
+
+                console.log('Participants updating from firestore');
+
+                const participantsList = participantsIds
+                    .filter((pid) => pid !== currentUser.id)
+                    .map((pid) => {
+                        const user =
+                            feedUsers.find((user) => user.id === pid) ||
+                            userConnections.find((user) => user.id === pid);
+                        return user;
+                    });
+
+                console.log('Participants List:', participantsList);
+
+                setChatParticipants(participantsList);
+            });
+        };
+
         const setupMessagesListener = async () => {
             console.log('Starting listener');
             console.log('Chat ID:', id);
-            // console.log('Chat Participants:', participants);
+            console.log(
+                'Chat Participants:',
+                participants.map((participant) => participant.name)
+            );
 
             const newChatRef = doc(fireStoreDb, 'chats', id);
             const messagesRef = collection(newChatRef, 'messages');
@@ -169,13 +220,15 @@ const Chat = ({ navigation, route }) => {
         };
 
         setupMessagesListener();
+        setUpParticipantsListener();
         setupChatTitleListener();
         getRemainingConnections();
 
         return () => {
-            if (chatTitleUnsubscribe && messagesUnsubscribe) {
+            if (chatTitleUnsubscribe && messagesUnsubscribe && participantsUnsubscribe) {
                 chatTitleUnsubscribe();
                 messagesUnsubscribe();
+                participantsUnsubscribe();
             }
         };
     }, [id, participants]);
@@ -212,7 +265,10 @@ const Chat = ({ navigation, route }) => {
         try {
             const chatRef = doc(fireStoreDb, 'chats', id);
 
-            const newParticipantsList = [...participants, newParticipant];
+            // const newParticipantsList = [...participants, newParticipant];
+
+            const newParticipantsList =
+                chatParticipants.length > 0 ? [...chatParticipants, newParticipant] : [...participants, newParticipant];
 
             const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
             newParticipantsIdsList.push(currentUser.id);
@@ -359,10 +415,10 @@ const Chat = ({ navigation, route }) => {
             await updateDoc(chatRef, {
                 chatTitle: bandName,
             });
-            
+
             setLocalChatTitle((prev) => ({ ...prev, bandName }));
             setBandModalVisible(false);
-            
+
             const messageData = {
                 _id: `${currentUser.id}-${Date.now()}-${bandName}`,
                 text: `We have formed the band \'${bandName}\'!`,
@@ -372,9 +428,8 @@ const Chat = ({ navigation, route }) => {
                     avatar: getMessageAvatar(currentUser.id),
                 },
             };
-            
-            onSend([messageData]);            
 
+            onSend([messageData]);
         } catch (error) {
             console.log('Error processing band formation:', error);
         }
@@ -413,11 +468,17 @@ const Chat = ({ navigation, route }) => {
             />
             {bandModalVisible && (
                 <ChatModal
-                    title={chatTitle || localChatTitle || 'Your Band Name'}
-                    buttonText="Create Band"
-                    data={chatTitle || localChatTitle ? participants : null}
-                    input={chatTitle ? false : true}
-                    handlePress={(chatTitle || localChatTitle) && handleFormBand}
+                    title={chatTitle || localChatTitle.bandName || 'Your Band Name'}
+                    buttonText={chatTitle || localChatTitle.bandName ? null : 'Create Band'}
+                    data={
+                        chatTitle || localChatTitle.bandName
+                            ? chatParticipants.length > 0
+                                ? chatParticipants
+                                : participants
+                            : null
+                    }
+                    input={chatTitle || localChatTitle.bandName ? false : true}
+                    handlePress={(!localChatTitle.bandName || !chatTitle) && handleFormBand}
                     setModalVisible={setBandModalVisible}
                 />
             )}
