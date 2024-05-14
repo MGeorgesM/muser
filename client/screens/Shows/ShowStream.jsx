@@ -49,7 +49,7 @@ const ShowStream = ({ navigation, route }) => {
     // client && console.log('Client Found!');
     // console.log('Show ID:', show.id);
     // console.log('Call:', call);
-    console.log('Show:', show);
+    // console.log('Show:', show);
     useEffect(() => {
         if (!client || call) return;
 

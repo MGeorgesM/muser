@@ -23,6 +23,8 @@ const VenueDetails = ({ route, navigation }) => {
     const [shows, setShows] = useState([]);
     const [selectedShow, setSelectedShow] = useState(show);
 
+    console.log('Selected Show:', selectedShow);
+
     useLayoutEffect(() => {
         if (show) {
             setSelectedShow(show);
@@ -78,6 +80,11 @@ const VenueDetails = ({ route, navigation }) => {
                 <View style={[utilities.overlay, styles.borderRadiusBottom, { height: 96, gap: 2 }]}>
                     <Text style={[utilities.textL, utilities.myFontBold, { color: 'white' }]}>
                         {!switchHandler ? venue?.venueName : selectedShow?.band.name}
+                        {switchHandler && (
+                            <Text style={[utilities.myFontRegular, { color: colors.offWhite }]}>
+                                {` - ${selectedShow.genre.name}`}
+                            </Text>
+                        )}
                     </Text>
                     <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.offWhite }]}>
                         {switchHandler ? formatDateString(selectedShow.date) : `${venue?.location.name}, Lebanon`}
