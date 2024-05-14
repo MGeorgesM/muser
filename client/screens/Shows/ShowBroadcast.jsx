@@ -14,8 +14,8 @@ import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 
 const ShowBroadcast = ({ route }) => {
     const { showId, showName } = route.params;
-    // const showIdString = showId.toString() + 'TEST78' ?? {};
-    const showIdString = 'TEST1122334XXX';
+    const showIdString = showId.toString() + 'DEMO' ?? {};
+    // const showIdString = 'TEST1122334XXX';
 
     const [call, setCall] = useState(null);
     const [comments, setComments] = useState([]);
@@ -23,8 +23,7 @@ const ShowBroadcast = ({ route }) => {
     const client = useStreamVideoClient();
 
     client && console.log('Client Found!');
-    console.log('orifinal show id', showId);
-    console.log('Show ID:', showIdString);
+    console.log('Show ID Host:', showIdString);
 
     useEffect(() => {
         let unsubscribeComments = () => {};

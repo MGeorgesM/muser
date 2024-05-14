@@ -390,7 +390,7 @@ const Chat = ({ navigation, route }) => {
         try {
             const response = await sendRequest(requestMethods.POST, 'bands', {
                 name: bandName,
-                membersIds,
+                members: membersIds,
             });
             if (response.status !== 200) throw new Error('Failed to update band members');
         } catch (error) {

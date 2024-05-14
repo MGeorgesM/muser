@@ -57,8 +57,9 @@ const ShowStream = ({ navigation, route }) => {
 
     const keyboardVisible = useKeyboardVisibility();
 
-    // const showId = show.id.toString() + 'TEST78';
-    const showId = 'TEST1122334XXX';
+    const showId = show.id.toString() + 'DEMO' ?? {};
+    console.log('Show ID Viewer:', showId);
+    // const showId = 'TEST1122334XXX';
     // client && console.log('Client Found!');
     // console.log('Show ID:', show.id);
     // console.log('Call:', call);
