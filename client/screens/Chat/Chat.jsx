@@ -105,7 +105,7 @@ const Chat = ({ navigation, route }) => {
         let messagesUnsubscribe;
         let chatTitleUnsubscribe;
         let participantsUnsubscribe;
-    
+
         // Initialize states
         setChatMessages([]);
         setChatParticipants([]);
@@ -113,60 +113,71 @@ const Chat = ({ navigation, route }) => {
             bandName: '',
             participantsNames: '',
         });
-    
+
         const chatRef = doc(fireStoreDb, 'chats', id);
-    
+
         const setupChatTitleListener = () => {
             if (chatTitle) {
                 return;
             }
-    
+
             chatTitleUnsubscribe = onSnapshot(chatRef, (doc) => {
                 const chatData = doc.data();
-    
+
                 if (chatData?.chatTitle) {
                     setLocalChatTitle((prev) => ({ ...prev, bandName: chatData.chatTitle }));
                 } else if (chatData?.participantsIds?.length > 1) {
                     const participantIds = chatData.participantsIds.filter((pid) => pid !== currentUser.id);
                     const participantNames = participantIds
                         .map((pid) => {
-                            const user = feedUsers.find((user) => user.id === pid) ||
+                            const user =
+                                feedUsers.find((user) => user.id === pid) ||
                                 userConnections.find((user) => user.id === pid);
                             return user ? user.name : null;
                         })
                         .filter((name) => name !== null);
-    
+
                     if (participantNames.length > 1) {
                         setLocalChatTitle((prev) => ({ ...prev, participantsNames: participantNames.join(', ') }));
                     }
                 }
             });
         };
-    
+
         const setUpParticipantsListener = () => {
             participantsUnsubscribe = onSnapshot(chatRef, (doc) => {
                 const chatData = doc.data();
                 if (!chatData) return;
-    
+
                 const participantsIds = chatData.participantsIds;
                 console.log('Participants Ids from Firebase:', participantsIds);
-                console.log('Participants from State:', chatParticipants.map((participant) => participant.id));
-                console.log('Participants from navigation:', participants.map((participant) => participant.id));
+                console.log(
+                    'Participants from State:',
+                    chatParticipants.map((participant) => participant.id)
+                );
+                console.log(
+                    'Participants from navigation:',
+                    participants.map((participant) => participant.id)
+                );
                 console.log('lengths:', participantsIds.length, chatParticipants.length, participants.length);
-    
-                if (participantsIds.length === (chatParticipants.length + 1) || participantsIds.length === (participants.length + 1)) {
+
+                if (
+                    participantsIds.length === chatParticipants.length + 1 ||
+                    participantsIds.length === participants.length + 1
+                ) {
                     return;
                 }
-    
+
                 console.log('Participants updating from firestore');
                 const participantsList = participantsIds
                     .filter((pid) => pid !== currentUser.id)
                     .map((pid) => {
-                        const user = feedUsers.find((user) => user.id === pid) ||
+                        const user =
+                            feedUsers.find((user) => user.id === pid) ||
                             userConnections.find((user) => user.id === pid);
                         return user;
                     });
-    
+
                 console.log('Participants List:', participantsList);
                 setChatParticipants(participantsList);
                 setChatConnections((prev) =>
@@ -176,14 +187,14 @@ const Chat = ({ navigation, route }) => {
                 );
             });
         };
-    
+
         const setupMessagesListener = () => {
             console.log('Starting listener');
             console.log('Chat ID:', id);
-    
+
             const messagesRef = collection(chatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
-    
+
             messagesUnsubscribe = onSnapshot(q, (snapshot) => {
                 const fetchedMessages = snapshot.docs.map((doc) => ({
                     _id: doc.id,
@@ -194,23 +205,22 @@ const Chat = ({ navigation, route }) => {
                         avatar: getMessageAvatar(doc.data().userId),
                     },
                 }));
-    
+
                 setChatMessages(fetchedMessages);
             });
         };
-    
+
         setupMessagesListener();
         setUpParticipantsListener();
         setupChatTitleListener();
         getRemainingConnections();
-    
+
         return () => {
             chatTitleUnsubscribe && chatTitleUnsubscribe();
             messagesUnsubscribe && messagesUnsubscribe();
             participantsUnsubscribe && participantsUnsubscribe();
         };
     }, [id, participants]);
-    
 
     const getRemainingConnections = async () => {
         if (!userConnections) return;
@@ -256,6 +266,7 @@ const Chat = ({ navigation, route }) => {
 
             setChatConnections((prev) => prev.filter((connection) => connection.id !== newParticipantId));
             setChatParticipants(newParticipantsList);
+            (chatTitle || localChatTitle.bandName) && updateBandMembers(chatTitle || localChatTitle.bandName, newParticipantsIdsList);
             setConnectionModalVisible(false);
         } catch (error) {
             console.log('Error adding participant', error);
@@ -374,6 +385,18 @@ const Chat = ({ navigation, route }) => {
             }
         }
     });
+
+    const updateBandMembers = async (bandName, membersIds) => {
+        try {
+            const response = await sendRequest(requestMethods.POST, 'bands', {
+                name: bandName,
+                membersIds,
+            });
+            if (response.status !== 200) throw new Error('Failed to update band members');
+        } catch (error) {
+            console.log('Error updating band members:', error);
+        }
+    };
 
     const handleFormBand = async (bandName) => {
         if (bandName.length === 0 || participants.length === 0) return;

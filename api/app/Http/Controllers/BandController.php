@@ -37,13 +37,18 @@ class BandController extends Controller
             return response()->json(['message' => 'A band can only have musicians as members'], 400);
         }
 
-        $band = new Band();
-        $band->name = $request->name;
-        $band->save();
+        $band = Band::where('name', $request->name)->first();
 
-        $band->members()->attach($request->members);
-
-        return response()->json($band, 201);
+        if ($band) {
+            $band->members()->sync($request->members);
+            return response()->json($band, 200);
+        } else {
+            $band = new Band();
+            $band->name = $request->name;
+            $band->save();
+            $band->members()->attach($request->members);
+            return response()->json($band, 201);
+        }
     }
 
     public function getBand($bandId = null)
@@ -66,20 +71,19 @@ class BandController extends Controller
     public function getUserBands()
     {
         $user_id = auth()->user()->id;
-    
+
         if (!$user_id) {
             return response()->json(['message' => 'User not found'], 404);
         }
-    
+
         $bands = Band::with('members')
             ->whereHas('members', function ($query) use ($user_id) {
                 $query->where('users.id', $user_id);
             })
             ->get();
-    
+
         return response()->json($bands);
     }
-    
 
 
     public function deleteBand($bandId)
