@@ -189,18 +189,17 @@ const Chat = ({ navigation, route }) => {
                 console.log('Participants List:', participantsList);
 
                 setChatParticipants(participantsList);
-                setChatConnections((prev) => prev.filter((connection) => participantsList.every((participant) => participant.id !== connection.id)));
-
+                setChatConnections((prev) =>
+                    prev.filter((connection) =>
+                        participantsList.every((participant) => participant.id !== connection.id)
+                    )
+                );
             });
         };
 
         const setupMessagesListener = async () => {
             console.log('Starting listener');
             console.log('Chat ID:', id);
-            console.log(
-                'Chat Participants:',
-                participants.map((participant) => participant.name)
-            );
 
             const newChatRef = doc(fireStoreDb, 'chats', id);
             const messagesRef = collection(newChatRef, 'messages');
@@ -227,11 +226,9 @@ const Chat = ({ navigation, route }) => {
         getRemainingConnections();
 
         return () => {
-            if (chatTitleUnsubscribe && messagesUnsubscribe && participantsUnsubscribe) {
-                chatTitleUnsubscribe();
-                messagesUnsubscribe();
-                participantsUnsubscribe();
-            }
+            chatTitleUnsubscribe && chatTitleUnsubscribe();
+            messagesUnsubscribe && messagesUnsubscribe();
+            participantsUnsubscribe && participantsUnsubscribe();
         };
     }, [id, participants]);
 
