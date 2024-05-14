@@ -105,89 +105,69 @@ const Chat = ({ navigation, route }) => {
         let messagesUnsubscribe;
         let chatTitleUnsubscribe;
         let participantsUnsubscribe;
-
+    
+        // Initialize states
         setChatMessages([]);
         setChatParticipants([]);
         setLocalChatTitle({
             bandName: '',
             participantsNames: '',
         });
-
-        const setupChatTitleListener = async () => {
+    
+        const chatRef = doc(fireStoreDb, 'chats', id);
+    
+        const setupChatTitleListener = () => {
             if (chatTitle) {
                 return;
             }
-
-            const chatRef = doc(fireStoreDb, 'chats', id);
-
+    
             chatTitleUnsubscribe = onSnapshot(chatRef, (doc) => {
                 const chatData = doc.data();
-
-                if (chatData && chatData.chatTitle) {
+    
+                if (chatData?.chatTitle) {
                     setLocalChatTitle((prev) => ({ ...prev, bandName: chatData.chatTitle }));
-                    return;
-                }
-                if (chatData && chatData.participantsIds && chatData.participantsIds.length > 1) {
+                } else if (chatData?.participantsIds?.length > 1) {
                     const participantIds = chatData.participantsIds.filter((pid) => pid !== currentUser.id);
                     const participantNames = participantIds
                         .map((pid) => {
-                            const user =
-                                feedUsers.find((user) => user.id === pid) ||
+                            const user = feedUsers.find((user) => user.id === pid) ||
                                 userConnections.find((user) => user.id === pid);
                             return user ? user.name : null;
                         })
                         .filter((name) => name !== null);
-
+    
                     if (participantNames.length > 1) {
                         setLocalChatTitle((prev) => ({ ...prev, participantsNames: participantNames.join(', ') }));
                     }
                 }
             });
         };
-
-        const setUpParticipantsListener = async () => {
-            const chatRef = doc(fireStoreDb, 'chats', id);
-
+    
+        const setUpParticipantsListener = () => {
             participantsUnsubscribe = onSnapshot(chatRef, (doc) => {
                 const chatData = doc.data();
-
                 if (!chatData) return;
-
+    
                 const participantsIds = chatData.participantsIds;
-
-                console.log('currentuser', currentUser.name, currentUser.id);
-
                 console.log('Participants Ids from Firebase:', participantsIds);
-                console.log(
-                    'Participants from State:',
-                    chatParticipants.map((participant) => participant.id)
-                );
-                console.log(
-                    'Participants from navigation:',
-                    participants.map((participant) => participant.id)
-                );
-
+                console.log('Participants from State:', chatParticipants.map((participant) => participant.id));
+                console.log('Participants from navigation:', participants.map((participant) => participant.id));
                 console.log('lengths:', participantsIds.length, chatParticipants.length, participants.length);
-
-                if (
-                    participantsIds.length === chatParticipants.length + 1 ||
-                    participantsIds.length === participants.length + 1
-                )
+    
+                if (participantsIds.length === (chatParticipants.length + 1) || participantsIds.length === (participants.length + 1)) {
                     return;
-
+                }
+    
                 console.log('Participants updating from firestore');
-
                 const participantsList = participantsIds
                     .filter((pid) => pid !== currentUser.id)
                     .map((pid) => {
-                        const user =
-                            feedUsers.find((user) => user.id === pid) ||
+                        const user = feedUsers.find((user) => user.id === pid) ||
                             userConnections.find((user) => user.id === pid);
                         return user;
                     });
-
+    
                 console.log('Participants List:', participantsList);
-
                 setChatParticipants(participantsList);
                 setChatConnections((prev) =>
                     prev.filter((connection) =>
@@ -196,15 +176,14 @@ const Chat = ({ navigation, route }) => {
                 );
             });
         };
-
-        const setupMessagesListener = async () => {
+    
+        const setupMessagesListener = () => {
             console.log('Starting listener');
             console.log('Chat ID:', id);
-
-            const newChatRef = doc(fireStoreDb, 'chats', id);
-            const messagesRef = collection(newChatRef, 'messages');
+    
+            const messagesRef = collection(chatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
-
+    
             messagesUnsubscribe = onSnapshot(q, (snapshot) => {
                 const fetchedMessages = snapshot.docs.map((doc) => ({
                     _id: doc.id,
@@ -215,22 +194,23 @@ const Chat = ({ navigation, route }) => {
                         avatar: getMessageAvatar(doc.data().userId),
                     },
                 }));
-
+    
                 setChatMessages(fetchedMessages);
             });
         };
-
+    
         setupMessagesListener();
         setUpParticipantsListener();
         setupChatTitleListener();
         getRemainingConnections();
-
+    
         return () => {
             chatTitleUnsubscribe && chatTitleUnsubscribe();
             messagesUnsubscribe && messagesUnsubscribe();
             participantsUnsubscribe && participantsUnsubscribe();
         };
     }, [id, participants]);
+    
 
     const getRemainingConnections = async () => {
         if (!userConnections) return;

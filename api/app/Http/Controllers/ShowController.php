@@ -59,7 +59,7 @@ class ShowController extends Controller
     {
         if ($showId) {
             $show = Show::with([
-                'venue:id,name',
+                'venue:id,name,venue_name',
                 'genre:id,name',
                 'band.members' => function ($query) {
                     $query->select('users.id', 'users.name', 'users.picture', 'users.instrument_id')
@@ -78,7 +78,8 @@ class ShowController extends Controller
         $showStatus = $request->query('status');
 
         $query = Show::with([
-            'venue:id,name',
+            'venue:id,name,venue_name,location_id',
+            'venue.location:id,name',
             'genre:id,name',
             'band.members' => function ($query) {
                 $query->select('users.id', 'users.name', 'users.picture', 'users.instrument_id')

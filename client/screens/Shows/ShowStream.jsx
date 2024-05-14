@@ -49,7 +49,7 @@ const ShowStream = ({ navigation, route }) => {
     // client && console.log('Client Found!');
     // console.log('Show ID:', show.id);
     // console.log('Call:', call);
-
+    console.log('Show:', show);
     useEffect(() => {
         if (!client || call) return;
 
@@ -323,11 +323,11 @@ const ShowStream = ({ navigation, route }) => {
                         }}
                     >
                         <View>
-                            <Text style={[utilities.textCenter, utilities.textL, utilities.myFontBold]}>
+                            <Text style={[utilities.textLeft, utilities.textL, utilities.myFontBold]}>
                                 {`${show.band.name} - Live`}
                             </Text>
                             <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
-                                {show.venue.name}
+                                {`Live at ${show.venue.venue_name} - ${show.venue.location.name}`}
                             </Text>
                         </View>
                         <Pressable onPress={handleLike}>
