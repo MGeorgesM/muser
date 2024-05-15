@@ -1,13 +1,10 @@
 import React from 'react';
 import { Text, Image, TouchableOpacity, View } from 'react-native';
-
 import { useUserInfoLogic } from './userInfoLogic';
-
 import { CirclePlus, ChevronLeft } from 'lucide-react-native';
 
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 import UserInfoForm from '../../components/Forms/UserInfoForm';
-import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
 
 const { styles } = require('../../components/Forms/styles');
 
@@ -24,8 +21,6 @@ const UserInfo = ({ navigation }) => {
         profileProperties,
         handlePickerChange,
     } = useUserInfoLogic();
-
-    useNavigationBarColor('translucent');
 
     return (
         <View style={styles.userInfoContainer}>

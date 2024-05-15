@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
-
-import { useUser } from '../../contexts/UserContext';
+import { useEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
+import { useUser } from '../../contexts/UserContext';
+import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
+
 
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
 export const useUserInfoLogic = () => {
+    useNavigationBarColor('translucent');
     const [profileProperties, setProfileProperties] = useState({});
     const [selectedPicture, setSelectedPicture] = useState(null);
     const [error, setError] = useState(null);
-
     const { userInfo, setUserInfo, authError, setAuthError, handleSignUp } = useUser();
 
     useEffect(() => {
