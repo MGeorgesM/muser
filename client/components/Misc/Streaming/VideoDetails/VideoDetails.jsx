@@ -1,10 +1,10 @@
 import React from 'react';
 import { Heart } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
-import { colors, utilities } from '../../../styles/utilities';
+import { colors, utilities } from '../../../../styles/utilities';
 import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
 
-import BandMemberCard from '../../Cards/BandMemberCard/BandMemberCard';
+import BandMemberCard from '../../../Cards/BandMemberCard/BandMemberCard';
 
 const VideoDetails = ({ show, handleLike, videoIsLiked }) => {
     const navigation = useNavigation();

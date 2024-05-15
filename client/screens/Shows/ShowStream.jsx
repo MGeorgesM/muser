@@ -1,21 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
 import { colors, utilities } from '../../styles/utilities';
 
-import VideoControls from '../../components/Misc/VideoControls/VideoControls';
-import VideoDetails from '../../components/Misc/VideoDetails/VideoDetails';
+import VideoControls from '../../components/Misc/Streaming/VideoControls/VideoControls';
+import VideoDetails from '../../components/Misc/Streaming/VideoDetails/VideoDetails';
 import UserComposer from '../../components/Misc/UserComposer/UserComposer';
-import CommentCard from '../../components/Cards/CommentCard/CommentCard';
 import CommentsOverlay from '../../components/Misc/CommentsOverlay/CommentsOverlay';
 
 import useKeyboardVisibility from '../../core/tools/keyboardVisibility';
 import useShowStreamReactionsLogic from './showStreamReactionsLogic';
 import useShowStreamCallLogic from './showStreamCallLogic';
+import VideoComments from '../../components/Misc/Streaming/VideoComments/VideoComments';
 
 const ShowStream = ({ route }) => {
     const { show } = route.params;
-    // const showId = show.id.toString() + 'DEMO' ?? {};
     const keyboardVisible = useKeyboardVisibility();
     const { comments, handleLike, userComment, videoIsLiked, setUserComment, reactionsVisible, handlePostComment } =
         useShowStreamReactionsLogic(show.id);
@@ -61,23 +60,7 @@ const ShowStream = ({ route }) => {
                 {!videoIsMaximized && show && (
                     <View style={[!keyboardVisible && utilities.flexed, { backgroundColor: colors.bgDark }]}>
                         <VideoDetails show={show} handleLike={handleLike} videoIsLiked={videoIsLiked} />
-                        {!keyboardVisible && (
-                            <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
-                                {comments && comments.length > 0 ? (
-                                    comments.map((comment) => (
-                                        <CommentCard
-                                            key={comment._id}
-                                            avatar={comment.userAvatar}
-                                            text={comment.text}
-                                        />
-                                    ))
-                                ) : (
-                                    <Text style={[utilities.myFontRegular, { color: colors.gray, paddingLeft: 20 }]}>
-                                        No comments yet
-                                    </Text>
-                                )}
-                            </ScrollView>
-                        )}
+                        {!keyboardVisible && <VideoComments comments={comments} />}
                     </View>
                 )}
                 {(!videoIsMaximized || reactionsVisible) && (
@@ -102,13 +85,6 @@ export default ShowStream;
 const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-    commentsContainer: {
-        flex: 1,
-        paddingTop: 16,
-        borderTopWidth: 0.5,
-        borderTopColor: colors.lightGray,
-    },
-
     maximizedComposer: {
         borderTopWidth: 1,
         borderTopColor: colors.white,
