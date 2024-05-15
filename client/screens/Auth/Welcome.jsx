@@ -10,17 +10,7 @@ import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 const imageUrl = require('../../assets/appImages/onboard.jpg');
 
 const Welcome = ({ navigation }) => {
-    // useEffect(() => {
-    //     const setNavigationBarColor = async (color) => {
-    //         try {
-    //             await SystemNavigationBar.setNavigationColor(color);
-    //         } catch (error) {
-    //             console.log('Error setting navigation bar color:', error);
-    //         }
-    //     };
-    //     setNavigationBarColor('translucent');
-    // }, []);
-    
+
     useNavigationBarColor('translucent')
 
     return (

@@ -11,6 +11,8 @@ import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 import SignInForm from '../../components/Forms/SignInForm';
 import SignUpForm from '../../components/Forms/SignUpForm';
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
+import useKeyboardVisibility from '../../core/tools/keyboardVisibility';
+import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
 
 const logoImg = require('../../assets/appImages/logoOnboard.png');
 const imageSource = require('../../assets/appImages/onboardBlurred.jpg');
@@ -18,14 +20,15 @@ const imageSource = require('../../assets/appImages/onboardBlurred.jpg');
 const { styles } = require('../../components/Forms/styles');
 
 const Authentication = ({ navigation }) => {
-    const [keyboardVisible, setKeyboardVisible] = useState(false);
     const [switchHandler, setSwitchHandler] = useState(false);
     const [error, setError] = useState(null);
 
+    const keyboardVisible = useKeyboardVisibility();
+    
     const { userInfo, setUserInfo, authError, setAuthError, handleSignIn, handleGoogleSignIn } = useUser();
+    useNavigationBarColor(colors.bgDarkest)
 
     useEffect(() => {
-
         if ((!userInfo.email.includes('@') || !userInfo.email.includes('.')) && userInfo.email.length > 0) {
             setError('Please enter a valid email address');
         } else if (userInfo.password.length < 6 && userInfo.password.length > 0) {
@@ -35,26 +38,6 @@ const Authentication = ({ navigation }) => {
             setAuthError(null);
         }
     }, [userInfo, switchHandler]);
-
-    useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
-        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => setKeyboardVisible(false));
-        return () => {
-            keyboardDidShowListener.remove();
-            keyboardDidHideListener.remove();
-        };
-    }, []);
-
-    useEffect(() => {
-        const setNavigationBarColor = async (color) => {
-            try {
-                await SystemNavigationBar.setNavigationColor(color);
-            } catch (error) {
-                console.log('Error setting navigation bar color:', error);
-            }
-        };
-        setNavigationBarColor(colors.bgDarkest);
-    }, []);
 
     const checkEmail = async () => {
         try {
