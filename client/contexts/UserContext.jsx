@@ -43,9 +43,11 @@ export const UserProvider = ({ children }) => {
         checkUser();
     }, []);
 
-    const updateUserFcmtoken = async (token=null) => {
+    const updateUserFcmtoken = async (token) => {
         try {
-            const response = await sendRequest(requestMethods.POST, 'users', { fcmtoken: token });
+            const response = await sendRequest(requestMethods.POST, 'notifications/fcmtoken', {
+                fcmtoken: token,
+            });
             if (response.status !== 200) throw new Error('Failed to update user fcm token');
         } catch (error) {
             console.log('Error updating user fcm token:', error);
@@ -89,28 +91,27 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    const handleGoogleSignIn = async () => {
-        return;
-        // try {
-        //     await GoogleSignin.hasPlayServices();
-        //     const userInfo = await GoogleSignin.signIn();
-        //     const token = userInfo.idToken;
+    // const handleGoogleSignIn = async () => {
+    // try {
+    //     await GoogleSignin.hasPlayServices();
+    //     const userInfo = await GoogleSignin.signIn();
+    //     const token = userInfo.idToken;
 
-        //     const response = await sendRequest(requestMethods.POST, 'auth/google', { token });
-        //     if (response.status === 200 && response.data.userExists) {
-        //         await setupAuthenticatedUser();
-        //     } else {
-        //         setUserInfo((prevState) => ({
-        //             ...prevState,
-        //             name: userInfo.user.name,
-        //             email: userInfo.user.email,
-        //         }));
-        //         navigation.navigate('CompleteRegistration');
-        //     }
-        // } catch (error) {
-        //     console.log('Google Sign-In Error:', error);
-        // }
-    };
+    //     const response = await sendRequest(requestMethods.POST, 'auth/google', { token });
+    //     if (response.status === 200 && response.data.userExists) {
+    //         await setupAuthenticatedUser();
+    //     } else {
+    //         setUserInfo((prevState) => ({
+    //             ...prevState,
+    //             name: userInfo.user.name,
+    //             email: userInfo.user.email,
+    //         }));
+    //         navigation.navigate('CompleteRegistration');
+    //     }
+    // } catch (error) {
+    //     console.log('Google Sign-In Error:', error);
+    // }
+    // };
 
     const handleSignIn = async () => {
         setAuthError(null);
@@ -126,13 +127,11 @@ export const UserProvider = ({ children }) => {
     };
 
     const handleSignOut = async () => {
-        console.log(navigation.getState());
         try {
             const response = await sendRequest(requestMethods.POST, 'auth/logout');
             if (response.status !== 200) throw new authError('Failed to log out');
             setLoggedIn(false);
             setCurrentUser(null);
-            await updateUserFcmtoken(null);
             await AsyncStorage.clear();
 
             // navigation.dispatch(
@@ -172,7 +171,6 @@ export const UserProvider = ({ children }) => {
                 handleSignUp,
                 handleSignOut,
                 setCurrentUser,
-                handleGoogleSignIn,
             }}
         >
             {children}

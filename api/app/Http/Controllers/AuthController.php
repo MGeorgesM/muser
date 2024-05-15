@@ -132,6 +132,13 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        $user = auth()->user();
+
+        if ($user) {
+            $user->fcmtoken = null;
+            $user->save();
+        }
+
         auth()->logout();
 
         return response()->json(['message' => 'Successfully logged out']);

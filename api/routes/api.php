@@ -91,5 +91,10 @@ Route::middleware([AuthenticatedMiddleware::class])->group(function () {
 
     Route::get('genres/', [GenreController::class, 'getGenres']);
 
-    Route::post('notifications', [NotificationsController::class, 'sendNotification']);
+    Route::group(['prefix' => 'notifications'], function ($router) {
+
+        Route::post('/', [NotificationsController::class, 'sendNotification']);
+        Route::post('/fcmtoken', [NotificationsController::class, 'updateFcmtoken']);
+    });
+
 });

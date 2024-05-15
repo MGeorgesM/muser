@@ -11,6 +11,20 @@ use Kreait\Firebase\Messaging\Notification;
 
 class NotificationsController extends Controller
 {
+    public function updateFcmtoken(Request $request)
+    {
+        $user = User::find(auth()->id());
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user->fcmtoken = $request->fcmtoken;
+        $user->save();
+
+        return response()->json(['message' => 'FCM token updated successfully']);
+    }
+
     public function sendNotification(Request $request)
     {
         $userIds = $request->userIds;
