@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 
-const useShowBroadcastLogic = () => {
+const useShowBroadcastLogic = (showId) => {
     const [call, setCall] = useState(null);
     const client = useStreamVideoClient();
 
     const createCall = async () => {
         if (!client) return;
         try {
-            const call = client.call('livestream', showIdString);
+            const call = client.call('livestream', showId);
             await call.join({ create: true });
             setCall(call);
         } catch (error) {
@@ -18,6 +18,7 @@ const useShowBroadcastLogic = () => {
 
     return {
         call,
+        setCall,
         createCall,
     };
 };
