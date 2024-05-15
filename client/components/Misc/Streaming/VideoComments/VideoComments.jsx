@@ -2,6 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, ScrollView } from 'react-native';
 import { colors, utilities } from '../../../../styles/utilities';
 
+import CommentCard from '../../../Cards/CommentCard/CommentCard';
+
 const VideoComments = ({ comments }) => {
     return (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>

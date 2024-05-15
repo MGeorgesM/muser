@@ -4,14 +4,14 @@ import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk'
 import { colors, utilities } from '../../styles/utilities';
 
 import VideoControls from '../../components/Misc/Streaming/VideoControls/VideoControls';
+import VideoComments from '../../components/Misc/Streaming/VideoComments/VideoComments';
 import VideoDetails from '../../components/Misc/Streaming/VideoDetails/VideoDetails';
-import UserComposer from '../../components/Misc/UserComposer/UserComposer';
 import CommentsOverlay from '../../components/Misc/CommentsOverlay/CommentsOverlay';
+import UserComposer from '../../components/Misc/UserComposer/UserComposer';
 
 import useKeyboardVisibility from '../../core/tools/keyboardVisibility';
 import useShowStreamReactionsLogic from './showStreamReactionsLogic';
 import useShowStreamCallLogic from './showStreamCallLogic';
-import VideoComments from '../../components/Misc/Streaming/VideoComments/VideoComments';
 
 const ShowStream = ({ route }) => {
     const { show } = route.params;
