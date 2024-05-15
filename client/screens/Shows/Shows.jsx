@@ -13,28 +13,26 @@ import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 const Shows = ({ navigation }) => {
     const dispatch = useDispatch();
     const { currentUser } = useUser();
-
+    const userIsVenue = currentUser.role.id === 2;
     const shows = useSelector((global) => global.showsSlice.shows);
 
-    const [userIsVenue, setUserIsVenue] = useState(currentUser.role.id === 2);
-
     useEffect(() => {
-        const getShows = async () => {
-            try {
-                const response = await sendRequest(
-                    requestMethods.GET,
-                    `shows?status=set${userIsVenue ? `&venue_id=${currentUser.id}` : ''}`,
-                    null
-                );
-                if (response.status !== 200) throw new Error('Failed to fetch shows');
-                dispatch(setShows(response.data));
-            } catch (error) {
-                console.log('Error fetching shows:', error);
-            }
-        };
-
         getShows();
     }, [currentUser]);
+
+    const getShows = async () => {
+        try {
+            const response = await sendRequest(
+                requestMethods.GET,
+                `shows?status=set${userIsVenue ? `&venue_id=${currentUser.id}` : ''}`,
+                null
+            );
+            if (response.status !== 200) throw new Error('Failed to fetch shows');
+            dispatch(setShows(response.data));
+        } catch (error) {
+            console.log('Error fetching shows:', error);
+        }
+    };
 
     const handleCardPress = (show) => {
         userIsVenue
@@ -56,6 +54,7 @@ const Shows = ({ navigation }) => {
             renderItem={({ item }) => (
                 <ShowVenueCard key={item.id} entity={item} handlePress={() => handleCardPress(item)} />
             )}
+            handleRefresh={getShows}
         />
     ) : (
         <LoadingScreen />
