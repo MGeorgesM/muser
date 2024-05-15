@@ -24,6 +24,7 @@ import useKeyboardVisibility from '../../core/tools/keyboardVisibility';
 import useShowStreamReactionsLogic from './showStreamReactionsLogic';
 import useShowStreamCallLogic from './showStreamCallLogic';
 import VideoControls from '../../components/Misc/VideoControls/VideoControls';
+import VideoDetails from '../../components/Misc/VideoDetails/VideoDetails';
 
 const ShowStream = ({ navigation, route }) => {
     const { show } = route.params;
@@ -67,11 +68,7 @@ const ShowStream = ({ navigation, route }) => {
                             </View>
                         </StreamCall>
                     ) : (
-                        !videoIsMaximized && (
-                            <View
-                                style={styles.maximizedView}
-                            />
-                        )
+                        !videoIsMaximized && <View style={styles.maximizedView} />
                     )}
                     <VideoControls
                         videoIsPlaying={videoIsPlaying}
@@ -84,8 +81,7 @@ const ShowStream = ({ navigation, route }) => {
                 </View>
                 {!videoIsMaximized && show && (
                     <View style={[!keyboardVisible && utilities.flexed, { backgroundColor: colors.bgDark }]}>
-
-
+                        <VideoDetails show={show} />
                         {!keyboardVisible && (
                             <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
                                 {comments && comments.length > 0 ? (
@@ -159,5 +155,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
 });
