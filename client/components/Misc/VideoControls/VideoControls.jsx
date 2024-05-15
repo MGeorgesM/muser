@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Pressable } from 'react-native';
 import { Play, Pause, Maximize, MessageSquare, MessageSquareOff } from 'lucide-react-native';
 

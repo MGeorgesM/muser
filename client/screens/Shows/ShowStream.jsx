@@ -26,7 +26,7 @@ import useShowStreamCallLogic from './showStreamCallLogic';
 import VideoControls from '../../components/Misc/VideoControls/VideoControls';
 import VideoDetails from '../../components/Misc/VideoDetails/VideoDetails';
 
-const ShowStream = ({ navigation, route }) => {
+const ShowStream = ({ route }) => {
     const { show } = route.params;
     const showId = show.id.toString() + 'DEMO' ?? {};
     const keyboardVisible = useKeyboardVisibility();
@@ -81,7 +81,7 @@ const ShowStream = ({ navigation, route }) => {
                 </View>
                 {!videoIsMaximized && show && (
                     <View style={[!keyboardVisible && utilities.flexed, { backgroundColor: colors.bgDark }]}>
-                        <VideoDetails show={show} />
+                        <VideoDetails show={show} handleLike={handleLike} videoIsLiked={videoIsLiked} />
                         {!keyboardVisible && (
                             <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
                                 {comments && comments.length > 0 ? (

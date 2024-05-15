@@ -6,7 +6,7 @@ import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
 
 import BandMemberCard from '../../Cards/BandMemberCard/BandMemberCard';
 
-const VideoDetails = ({ show }) => {
+const VideoDetails = ({ show, handleLike, videoIsLiked }) => {
     const navigation = useNavigation();
     return (
         <>
