@@ -23,68 +23,28 @@ import inCallManager from 'react-native-incall-manager';
 import { colors, utilities } from '../../styles/utilities';
 import { Heart, Play, Pause, Maximize, MessageSquare, MessageSquareOff } from 'lucide-react-native';
 
-import { fireStoreDb } from '../../config/firebase';
-import {
-    collection,
-    query,
-    onSnapshot,
-    serverTimestamp,
-    orderBy,
-    doc,
-    getDoc,
-    addDoc,
-    setDoc,
-} from 'firebase/firestore';
 import CommentsOverlay from '../../components/Misc/CommentsOverlay/CommentsOverlay';
 import useKeyboardVisibility from '../../core/tools/keyboardVisibility';
 
 const ShowStream = ({ navigation, route }) => {
     const { show } = route.params;
-
     const { currentUser } = useUser();
     const client = useStreamVideoClient();
-
-    const [userComment, setUserComment] = useState('');
-    const [comments, setComments] = useState([]);
-
-    const [videoIsPlaying, setVideoIsPlaying] = useState(false);
-    const [videoIsMaximized, setVideoIsMaximized] = useState(false);
-    const [videoIsLiked, setVideoIsLiked] = useState(false);
-    const [reactionsVisible, setReactionsVisible] = useState(false);
-    const [controlsVisible, setControlsVisible] = useState(false);
-
-    const [call, setCall] = useState(null);
-
     const keyboardVisible = useKeyboardVisibility();
 
+    const [call, setCall] = useState(null);
+    const [comments, setComments] = useState([]);
+    const [userComment, setUserComment] = useState('');
+    const [videoIsLiked, setVideoIsLiked] = useState(false);
+    const [videoIsPlaying, setVideoIsPlaying] = useState(false);
+    const [controlsVisible, setControlsVisible] = useState(false);
+    const [reactionsVisible, setReactionsVisible] = useState(false);
+    const [videoIsMaximized, setVideoIsMaximized] = useState(false);
+
     const showId = show.id.toString() + 'DEMO' ?? {};
-    console.log('Show ID Viewer:', showId);
-    // const showId = 'TEST1122334XXX';
-    // client && console.log('Client Found!');
-    // console.log('Show ID:', show.id);
-    // console.log('Call:', call);
-    // console.log('Show:', show);
+
     useEffect(() => {
         if (!client || call) return;
-
-        const setupCall = async () => {
-            return;
-            // console.log('Setting up call');
-            // try {
-            //     const call = client.call('livestream', showId);
-            //     await call.get();
-            //     call && console.log('Call set up!');
-
-            //     setCall(call);
-            //     console.log(call);
-            // } catch (error) {
-            //     setVideoIsPlaying(false);
-            //     console.log('Error setting up Call', error);
-            // }
-        };
-
-        setupCall();
-
         return () => {
             if (call) {
                 call.leave();
@@ -94,108 +54,10 @@ const ShowStream = ({ navigation, route }) => {
         };
     }, [client, show.id]);
 
-    useEffect(() => {
-        let unsubscribeComments;
-
-        const fetchComments = async () => {
-            unsubscribeComments = await setupCommentsListener(show.id);
-        };
-
-        fetchComments();
-
-        return () => {
-            if (unsubscribeComments) {
-                unsubscribeComments();
-            }
-        };
-    }, [show.id]);
-
-    useEffect(() => {
-        console.log('keyboardVisible:', keyboardVisible);
-    }, [keyboardVisible]);
-
-    const setupCommentsListener = async (showId) => {
-        const commentsRef = collection(fireStoreDb, 'shows', showId.toString(), 'comments');
-        const q = query(commentsRef, orderBy('createdAt', 'desc'));
-
-        const unsubscribeComments = onSnapshot(q, (snapshot) => {
-            const fetchedComments = snapshot.docs.map((doc) => ({
-                _id: doc.id,
-                text: doc.data().text,
-                createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
-                userAvatar: doc.data().userAvatar,
-                userId: doc.data().userId,
-            }));
-            console.log('Fetched Comments:', fetchedComments);
-            setComments(fetchedComments);
-        });
-
-        return unsubscribeComments;
-    };
-
-    const handleLike = async () => {
-        if (videoIsLiked) return;
-        setVideoIsLiked(!videoIsLiked);
-        await onSend('❤');
-    };
-
-    const createShowAndComments = async (initialComment) => {
-        const newShowRef = doc(collection(fireStoreDb, 'shows'));
-        const commentsRef = collection(newShowRef, 'comments');
-
-        await addDoc(commentsRef, {
-            text: initialComment,
-            createdAt: serverTimestamp(),
-            userAvatar: currentUser.picture,
-            userId: currentUser.id,
-        });
-
-        await setDoc(newShowRef, {
-            showId: show.id,
-            createdAt: serverTimestamp(),
-        });
-
-        return newShowRef;
-    };
-
-    const onSend = useCallback(
-        async (comment) => {
-            let showRef = doc(fireStoreDb, 'shows', show.id.toString());
-            const showSnapshot = await getDoc(showRef);
-
-            if (!showRef) {
-                showRef = await createShowAndComments(comment);
-            } else {
-                const commentsRef = collection(showRef, 'comments');
-
-                await addDoc(commentsRef, {
-                    text: comment,
-                    createdAt: serverTimestamp(),
-                    userAvatar: currentUser.picture,
-                    userId: currentUser.id,
-                });
-            }
-        },
-        [fireStoreDb, show.id, currentUser.id]
-    );
-
-    const handlePostComment = () => {
-        if (userComment.trim()) {
-            onSend(userComment);
-            setUserComment('');
-        }
-    };
-
     const joinCall = async () => {
-        console.log('Joining call');
-
         if (!client) {
-            console.log('No client found');
             return;
         }
-        // setViewer(true);
-        console.log('Client Found!');
-
         try {
             const call = client.call('livestream', showId);
             await call.join({ create: false });
@@ -331,7 +193,11 @@ const ShowStream = ({ navigation, route }) => {
                                 </Text>
                             </View>
                             <Pressable onPress={handleLike}>
-                                <Heart size={24} color={colors.primary} fill={videoIsLiked ? colors.primary : colors.bgDark} />
+                                <Heart
+                                    size={24}
+                                    color={colors.primary}
+                                    fill={videoIsLiked ? colors.primary : colors.bgDark}
+                                />
                             </Pressable>
                         </View>
                         <View style={[{ paddingLeft: 20 }]}>
@@ -403,7 +269,7 @@ const styles = StyleSheet.create({
     maximizedComposer: {
         borderTopWidth: 1,
         borderTopColor: colors.white,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Transparent black background
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
         padding: 10,
         alignItems: 'center',
         justifyContent: 'space-between',
