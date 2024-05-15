@@ -23,6 +23,7 @@ import CommentsOverlay from '../../components/Misc/CommentsOverlay/CommentsOverl
 import useKeyboardVisibility from '../../core/tools/keyboardVisibility';
 import useShowStreamReactionsLogic from './showStreamReactionsLogic';
 import useShowStreamCallLogic from './showStreamCallLogic';
+import VideoControls from '../../components/Misc/VideoControls/VideoControls';
 
 const ShowStream = ({ navigation, route }) => {
     const { show } = route.params;
@@ -79,56 +80,7 @@ const ShowStream = ({ navigation, route }) => {
                             />
                         )
                     )}
-                    <Pressable style={StyleSheet.absoluteFill} onPress={handleUserTouches}>
-                        <Pressable
-                            onPress={handleUserStreamInteraction}
-                            style={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                marginTop: 24,
-                                transform: [{ translateX: -21 }, { translateY: -21 }],
-                            }}
-                        >
-                            {!videoIsPlaying ? (
-                                <Play size={42} color={'white'} />
-                            ) : (
-                                controlsVisible && <Pause size={42} color={'white'} />
-                            )}
-                        </Pressable>
-                        {videoIsPlaying && controlsVisible && (
-                            <>
-                                <Pressable
-                                    onPress={handleVideoSizeToggle}
-                                    style={{
-                                        position: 'absolute',
-                                        bottom: 12,
-                                        right: 12,
-                                        marginTop: 12,
-                                    }}
-                                >
-                                    <Maximize size={24} color={'white'} />
-                                </Pressable>
-                                {videoIsMaximized && (
-                                    <Pressable
-                                        onPress={() => setReactionsVisible(!reactionsVisible)}
-                                        style={{
-                                            position: 'absolute',
-                                            bottom: 42,
-                                            right: 12,
-                                            marginTop: 12,
-                                        }}
-                                    >
-                                        {reactionsVisible ? (
-                                            <MessageSquare size={24} color={'white'} />
-                                        ) : (
-                                            <MessageSquareOff size={24} color={'white'} />
-                                        )}
-                                    </Pressable>
-                                )}
-                            </>
-                        )}
-                    </Pressable>
+                    <VideoControls />
                 </View>
                 {!videoIsMaximized && show && (
                     <View style={[!keyboardVisible && utilities.flexed, { backgroundColor: colors.bgDark }]}>
