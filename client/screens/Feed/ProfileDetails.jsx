@@ -30,7 +30,6 @@ const ProfileDetails = ({ route }) => {
 
     useLayoutEffect(() => {
         if (!userId) return;
-
         const foundUser =
             feedUsers.find((user) => user.id === userId) ||
             connectedUsers.find((user) => user.id === userId) ||

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Mail } from 'lucide-react-native';
+import { View } from 'react-native';
 import { colors } from '../../styles/utilities';
 import { useUser } from '../../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +9,7 @@ import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
 import PictureHeader from '../../components/Misc/PictureHeader/PictureHeader';
 import FeedMemberCard from '../../components/Cards/FeedMemberCard/FeedMemberCard';
+import FeedHeaderRight from '../../components/Misc/FeedHeaderRight/FeedHeaderRight';
 
 const useFeedLogic = () => {
     const [loadingState, setLoadingState] = useState({
@@ -34,22 +34,7 @@ const useFeedLogic = () => {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: () => <PictureHeader name={currentUser?.name} picture={currentUser?.picture} welcome={true} />,
-            headerRight: () => (
-                <View
-                    style={{
-                        marginRight: 16,
-                        height: 42,
-                        width: 42,
-                        borderRadius: 21,
-                        borderColor: 'white',
-                        borderWidth: 1,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <Mail size={20} color="white" />
-                </View>
-            ),
+            headerRight: () => <FeedHeaderRight />,
             headerStyle: {
                 backgroundColor: colors.bgDark,
                 height: 128,
@@ -72,14 +57,13 @@ const useFeedLogic = () => {
         } catch (error) {
             console.log('Error fetching users:', error);
         } finally {
-            setIsLoading(false);
-            setRefreshing(false);
+            setLoadingState((prevState) => ({ ...prevState, isLoading: false, isRefreshing: false }));
         }
     };
 
     const handleAiMatchMaking = async () => {
         setModalVisible(false);
-        setIsAiLoading(true);
+        setLoadingState((prevState) => ({ ...prevState, isAiLoading: true }));
         try {
             const response = await sendRequest(requestMethods.POST, 'ai/', { message: userInput });
             if (response.status !== 200) throw new Error('Failed to fetch users');
@@ -90,7 +74,7 @@ const useFeedLogic = () => {
         } catch (error) {
             console.log('Error fetching users:', error);
         } finally {
-            setIsAiLoading(false);
+            setLoadingState((prevState) => ({ ...prevState, isAiLoading: false }));
         }
     };
 
@@ -170,5 +154,3 @@ const useFeedLogic = () => {
 };
 
 export default useFeedLogic;
-
-const styles = StyleSheet.create({});
