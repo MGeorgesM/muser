@@ -60,6 +60,7 @@ const ChatsOverview = ({ navigation }) => {
                 data={chats}
                 renderItem={({ item }) => <ChatCard chat={item} navigation={navigation} />}
                 keyExtractor={(item) => item.id}
+                showsVerticalScrollIndicator={false}
             />
         </View>
     ) : (

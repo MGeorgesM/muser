@@ -6,6 +6,7 @@ import inCallManager from 'react-native-incall-manager';
 
 import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop } from 'lucide-react-native';
 
+import { sendRequest, requestMethods } from '../../../../core/tools/apiRequest';
 import { colors, utilities } from '../../../../styles/utilities';
 
 import { useNavigation } from '@react-navigation/native';
@@ -58,6 +59,7 @@ const StreamViewer = ({ showName, setCall, comments }) => {
 
     const handleStart = async () => {
         await call?.goLive();
+        await sendNotification(showName, null, 'Live Now!');
     };
 
     const togglePauseStart = async () => {
@@ -70,6 +72,21 @@ const StreamViewer = ({ showName, setCall, comments }) => {
             await call.join();
         } else {
             console.log('Stream is in Backstage');
+        }
+    };
+
+    const sendNotification = async (body, userIds = null, title = null) => {
+        console.log('Sending Notification');
+        try {
+            const response = await sendRequest(requestMethods.POST, `notifications`, {
+                userIds,
+                title,
+                body,
+            });
+
+            if (response.status !== 200) throw new Error('Failed to send notification');
+        } catch (error) {
+            console.log('Error sending notification:', error);
         }
     };
 

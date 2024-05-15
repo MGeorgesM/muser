@@ -22,8 +22,8 @@ export const UserProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [authError, setAuthError] = useState(null);
     const [userInfo, setUserInfo] = useState({
-        name: 'Jane',
-        email: 'jane@mail.com',
+        name: 'Lara',
+        email: 'lara@mail.com',
         password: 'password',
         about: '',
         picture: '',
@@ -43,9 +43,9 @@ export const UserProvider = ({ children }) => {
         checkUser();
     }, []);
 
-    const updateUserFcmtoken = async (fcmtoken) => {
+    const updateUserFcmtoken = async (token=null) => {
         try {
-            const response = await sendRequest(requestMethods.POST, 'users', { fcmtoken });
+            const response = await sendRequest(requestMethods.POST, 'users', { fcmtoken: token });
             if (response.status !== 200) throw new Error('Failed to update user fcm token');
         } catch (error) {
             console.log('Error updating user fcm token:', error);
@@ -118,13 +118,6 @@ export const UserProvider = ({ children }) => {
             const response = await sendRequest(requestMethods.POST, 'auth/login', userInfo);
             if (response.status === 200) {
                 await setupAuthenticatedUser(response);
-                // await AsyncStorage.setItem('token', response.data.token);
-                // await AsyncStorage.setItem('streamToken', response.data.stream_token);
-                // await getAndSaveFcmToken();
-                // setLoggedIn(true);
-                // setCurrentUser(response.data.user);
-                // console.log('User login successful:', response.data.user);
-                // loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
             }
         } catch (authError) {
             console.log('authError signing in:', authError);
@@ -139,7 +132,9 @@ export const UserProvider = ({ children }) => {
             if (response.status !== 200) throw new authError('Failed to log out');
             setLoggedIn(false);
             setCurrentUser(null);
+            await updateUserFcmtoken(null);
             await AsyncStorage.clear();
+
             // navigation.dispatch(
             //     CommonActions.reset({
             //         index: 0,

@@ -62,7 +62,7 @@ const VenueDetails = ({ route, navigation }) => {
         switchView ? navigation.navigate('Live', { screen: 'Streams' }) : setSwitchHandler(!switchHandler);
     };
 
-    return shows && shows.length > 0 ? (
+    return (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
             {switchHandler && (
                 <Pressable style={styles.backBtn} onPress={handleBackBtn}>
@@ -140,8 +140,6 @@ const VenueDetails = ({ route, navigation }) => {
                 )}
             </View>
         </View>
-    ) : (
-        <LoadingScreen />
     );
 };
 

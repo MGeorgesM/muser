@@ -21,15 +21,15 @@ const MainTabs = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useLayoutEffect(() => {
-        const setNavigationBarColor = async (color) => {
+        const setNavigationBarColor = async () => {
             try {
-                await SystemNavigationBar.setNavigationColor(color);
+                await SystemNavigationBar.setNavigationColor('#121212');
                 setIsLoading(false);
             } catch (error) {
-                console.log('Error setting navigation bar color:', error);
+                console.log('Error setting navigation bar color !!:', error);
             }
         };
-        setNavigationBarColor(colors.bgDark);
+        setNavigationBarColor();
     }, []);
 
     return isLoading ? (
@@ -113,5 +113,3 @@ const MainTabs = () => {
 };
 
 export default MainTabs;
-
-const styles = StyleSheet.create({});

@@ -59,7 +59,7 @@ const Chat = ({ navigation, route }) => {
                 const title = chatTitle || localChatTitle.bandName || localChatTitle.participantsNames;
 
                 if (title)
-                    return <Text style={[utilities.textM, utilities.myFontMedium]}>{truncateText(title, 22)}</Text>;
+                    return <Text style={[utilities.textM, utilities.myFontMedium]}>{truncateText(title, 20)}</Text>;
                 else {
                     if (!participants) return;
                     const participantsList = chatParticipants.length > 0 ? chatParticipants : participants;
@@ -255,24 +255,24 @@ const Chat = ({ navigation, route }) => {
         try {
             const chatRef = doc(fireStoreDb, 'chats', id);
             const chatDoc = await getDoc(chatRef);
-
+            
             const newParticipantsList =
-                chatParticipants.length > 0 ? [...chatParticipants, newParticipant] : [...participants, newParticipant];
-
+            chatParticipants.length > 0 ? [...chatParticipants, newParticipant] : [...participants, newParticipant];
+            
             const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
             newParticipantsIdsList.push(currentUser.id);
-
+            
             if (chatDoc.exists()) {
+                setConnectionModalVisible(false);
                 await updateDoc(chatRef, {
                     participantsIds: newParticipantsIdsList,
                 });
             }
-
+            
             setChatConnections((prev) => prev.filter((connection) => connection.id !== newParticipantId));
             setChatParticipants(newParticipantsList);
             (chatTitle || localChatTitle.bandName) &&
                 updateBandMembers(chatTitle || localChatTitle.bandName, newParticipantsIdsList);
-            setConnectionModalVisible(false);
         } catch (error) {
             console.log('Error adding participant', error);
         }
@@ -408,14 +408,15 @@ const Chat = ({ navigation, route }) => {
 
         const participantsIds = participants.map((participant) => participant.id);
         participantsIds.push(currentUser.id);
-
+        
         try {
             const response = await sendRequest(requestMethods.POST, `bands`, {
                 name: bandName,
                 members: participantsIds,
             });
-
+            
             if (response.status !== 201) throw new Error('Failed to create band');
+            setBandModalVisible(false);
 
             const chatRef = doc(fireStoreDb, 'chats', id);
             await updateDoc(chatRef, {
@@ -423,7 +424,6 @@ const Chat = ({ navigation, route }) => {
             });
 
             setLocalChatTitle((prev) => ({ ...prev, bandName }));
-            setBandModalVisible(false);
 
             const messageData = {
                 _id: `${currentUser.id}-${Date.now()}-${bandName}`,

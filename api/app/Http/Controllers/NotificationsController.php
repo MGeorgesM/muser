@@ -17,7 +17,7 @@ class NotificationsController extends Controller
         $title = $request->title;
         $body = $request->body;
 
-        if (empty($userIds) || empty($body)) {
+        if (empty($body)) {
             return response()->json(['success' => false, 'error' => 'Missing parameters']);
         }
 
@@ -26,7 +26,21 @@ class NotificationsController extends Controller
             $title = "$currentUserName sent you a message";
         }
 
-        $users = User::whereIn('id', $userIds)->get();
+        $currentUser = auth()->user();
+
+        if (empty($userIds)) {
+            $users = User::whereNotNull('fcmtoken')
+                ->where('id', '!=', $currentUser->id)
+                ->get();
+        } else {
+            $users = User::whereIn('id', $userIds)
+                ->whereNotNull('fcmtoken')
+                ->get();
+        }
+
+        if ($users->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'No users found to send notifications']);
+        }
 
         $factory = (new Factory)->withServiceAccount(storage_path('app/muser_adminsdk_service.json'));
         $messaging = $factory->createMessaging();
@@ -50,16 +64,14 @@ class NotificationsController extends Controller
         ];
 
         foreach ($users as $user) {
-            if (!empty($user->fcmtoken)) {
-                $message = CloudMessage::withTarget('token', $user->fcmtoken)
-                    ->withNotification(Notification::create($title, $body))
-                    ->withData($data);
+            $message = CloudMessage::withTarget('token', $user->fcmtoken)
+                ->withNotification(Notification::create($title, $body))
+                ->withData($data);
 
-                try {
-                    $messaging->send($message);
-                } catch (\Throwable $e) {
-                    return response()->json(['success' => false, 'error' => $e->getMessage()]);
-                }
+            try {
+                $messaging->send($message);
+            } catch (\Throwable $e) {
+                return response()->json(['success' => false, 'error' => $e->getMessage()]);
             }
         }
 

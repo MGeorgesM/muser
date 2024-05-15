@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { StyleSheet, FlatList, View, RefreshControl } from 'react-native';
-import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 import { useUser } from '../../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,8 +34,14 @@ const Feed = ({ navigation }) => {
     const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
     const users = [...feedUsers, ...connectedUsers];
 
+
+    console.log('Feed Users:', users)
+    console.log('Connected Users:', connectedUsers)
+    console.log('Current User:', currentUser)
+
+
     useLayoutEffect(() => {
-        navigation.setOptions({
+        navigation?.setOptions({
             headerTitle: () => <PictureHeader name={currentUser?.name} picture={currentUser?.picture} welcome={true} />,
             headerRight: () => (
                 <View
