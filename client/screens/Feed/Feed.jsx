@@ -12,23 +12,21 @@ import useFeedLogic from './feedLogic';
 const Feed = () => {
     const {
         users,
-        isLoading,
-        isAiLoading,
-        refreshing,
-        modalVisible,
-        userInput,
-        matchedUsers,
-        getUsers,
-        handleProceed,
-        handleChatInititation,
-        renderItem,
         listData,
-        setModalVisible,
+        getUsers,
+        userInput,
+        renderItem,
+        loadingState,
+        modalVisible,
+        matchedUsers,
         setUserInput,
-        setRefreshing,
+        handleProceed,
+        setModalVisible,
+        setLoadingState,
+        handleChatInititation,
     } = useFeedLogic();
 
-    return (users && users.length === 0) || isLoading ? (
+    return (users && users.length === 0) || loadingState.isLoading ? (
         <LoadingScreen />
     ) : (
         <>
@@ -45,9 +43,9 @@ const Feed = () => {
                         <RefreshControl
                             colors={[colors.white]}
                             progressBackgroundColor={colors.primary}
-                            refreshing={refreshing}
+                            refreshing={loadingState.isRefreshing}
                             onRefresh={() => {
-                                setRefreshing(true);
+                                setLoadingState((prevState) => ({ ...prevState, isRefreshing: true }));
                                 getUsers();
                             }}
                         />
@@ -61,7 +59,11 @@ const Feed = () => {
                 handlePress={handleProceed}
                 setModalVisible={setModalVisible}
             />
-            <FloatingActionButton icon={BrainCog} handlePress={() => setModalVisible(true)} isLoading={isAiLoading} />
+            <FloatingActionButton
+                icon={BrainCog}
+                handlePress={() => setModalVisible(true)}
+                isLoading={loadingState.isAiLoading}
+            />
             {matchedUsers && matchedUsers.length > 0 && (
                 <FloatingActionButton
                     icon={MessageCirclePlus}

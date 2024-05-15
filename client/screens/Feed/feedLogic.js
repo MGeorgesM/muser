@@ -12,9 +12,12 @@ import PictureHeader from '../../components/Misc/PictureHeader/PictureHeader';
 import FeedMemberCard from '../../components/Cards/FeedMemberCard/FeedMemberCard';
 
 const useFeedLogic = () => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [isAiLoading, setIsAiLoading] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
+    const [loadingState, setLoadingState] = useState({
+        isLoading: true,
+        isAiLoading: false,
+        isRefreshing: false,
+    });
+
     const [modalVisible, setModalVisible] = useState(false);
     const [userInput, setUserInput] = useState('');
     const [matchedUsers, setMatchedUsers] = useState([]);
@@ -92,7 +95,7 @@ const useFeedLogic = () => {
     };
 
     const handleProceed = async () => {
-        if (isLoading) return;
+        if (loadingState.isLoading) return;
 
         if (userInput === '') {
             setMatchedUsers([]);
@@ -103,7 +106,7 @@ const useFeedLogic = () => {
     };
 
     const handleChatInititation = () => {
-        if (isLoading) return;
+        if (loadingState.isAiLoading) return;
         const matchedUsersIds = matchedUsers.map((user) => user.id);
         const chatId = [currentUser.id, ...matchedUsersIds].sort((a, b) => a - b).join('-');
         const participants = matchedUsers.map((user) => {
@@ -151,20 +154,18 @@ const useFeedLogic = () => {
     };
     return {
         users,
-        isLoading,
-        isAiLoading,
-        refreshing,
-        modalVisible,
-        userInput,
-        matchedUsers,
         getUsers,
-        handleProceed,
-        handleChatInititation,
-        renderItem,
         listData,
-        setModalVisible,
+        userInput,
+        renderItem,
         setUserInput,
-        setRefreshing
+        matchedUsers,
+        loadingState,
+        modalVisible,
+        handleProceed,
+        setLoadingState,
+        setModalVisible,
+        handleChatInititation,
     };
 };
 
