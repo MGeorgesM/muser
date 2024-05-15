@@ -6,7 +6,7 @@ import { ChevronLeft, CircleCheckBig } from 'lucide-react-native';
 import { colors, utilities } from '../../styles/utilities';
 
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
-import { generateHours, durations } from '../../core/data/generateDatetime';
+import { generateHours, durations } from '../../core/tools/generateDatetime';
 
 import ProfileDetailsPicker from '../../components/Misc/ProfileDetailsPicker/ProfileDetailsPicker';
 import VenueAvailabilityCard from '../../components/Cards/VenueAvailabilityCard/VenueAvailabilityCard';
