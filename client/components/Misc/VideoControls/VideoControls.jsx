@@ -2,7 +2,15 @@ import React from 'react';
 import { StyleSheet, Pressable } from 'react-native';
 import { Play, Pause, Maximize, MessageSquare, MessageSquareOff } from 'lucide-react-native';
 
-const VideoControls = () => {
+const VideoControls = ({
+    videoIsPlaying,
+    controlsVisible,
+    videoIsMaximized,
+    handleUserTouches,
+    handleVideoSizeToggle,
+    handleUserStreamInteraction,
+}) => {
+    const [reactionsVisible, setReactionsVisible] = useState(false);
     return (
         <Pressable style={StyleSheet.absoluteFill} onPress={handleUserTouches}>
             <Pressable onPress={handleUserStreamInteraction} style={styles.playButton}>
@@ -14,21 +22,13 @@ const VideoControls = () => {
             </Pressable>
             {videoIsPlaying && controlsVisible && (
                 <>
-                    <Pressable
-                        onPress={handleVideoSizeToggle}
-                        style={{
-                            position: 'absolute',
-                            bottom: 12,
-                            right: 12,
-                            marginTop: 12,
-                        }}
-                    >
+                    <Pressable onPress={handleVideoSizeToggle} style={[styles.reactionsButton, { bottom: 12 }]}>
                         <Maximize size={24} color={'white'} />
                     </Pressable>
                     {videoIsMaximized && (
                         <Pressable
                             onPress={() => setReactionsVisible(!reactionsVisible)}
-                            style={[styles.reactionsButton, { bottom: 12 }]}
+                            style={[styles.reactionsButton, { bottom: 42 }]}
                         >
                             {reactionsVisible ? (
                                 <MessageSquare size={24} color={'white'} />

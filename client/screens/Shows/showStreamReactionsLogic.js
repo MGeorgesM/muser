@@ -8,7 +8,7 @@ export const useShowStreamReactionsLogic = () => {
     const [comments, setComments] = useState([]);
     const [userComment, setUserComment] = useState('');
     const [videoIsLiked, setVideoIsLiked] = useState(false);
-    const [reactionsVisible, setReactionsVisible] = useState(false);
+
     
     useEffect(() => {
         let unsubscribeComments;
@@ -104,9 +104,9 @@ export const useShowStreamReactionsLogic = () => {
         userComment,
         videoIsLiked,
         setUserComment,
-        reactionsVisible,
+
         handlePostComment,
-        setReactionsVisible,
+
     };
 };
 
