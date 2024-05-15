@@ -1,45 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Dimensions,
-    ScrollView,
-    Pressable,
-    KeyboardAvoidingView,
-    Platform,
-} from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, Dimensions, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
+import { colors, utilities } from '../../styles/utilities';
 
+import VideoControls from '../../components/Misc/VideoControls/VideoControls';
+import VideoDetails from '../../components/Misc/VideoDetails/VideoDetails';
 import UserComposer from '../../components/Misc/UserComposer/UserComposer';
 import CommentCard from '../../components/Cards/CommentCard/CommentCard';
-import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
-
-import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
-
-import { colors, utilities } from '../../styles/utilities';
-import { Heart, Play, Pause, Maximize, MessageSquare, MessageSquareOff } from 'lucide-react-native';
-
 import CommentsOverlay from '../../components/Misc/CommentsOverlay/CommentsOverlay';
+
 import useKeyboardVisibility from '../../core/tools/keyboardVisibility';
 import useShowStreamReactionsLogic from './showStreamReactionsLogic';
 import useShowStreamCallLogic from './showStreamCallLogic';
-import VideoControls from '../../components/Misc/VideoControls/VideoControls';
-import VideoDetails from '../../components/Misc/VideoDetails/VideoDetails';
 
 const ShowStream = ({ route }) => {
     const { show } = route.params;
-    const showId = show.id.toString() + 'DEMO' ?? {};
+    // const showId = show.id.toString() + 'DEMO' ?? {};
     const keyboardVisible = useKeyboardVisibility();
-    const {
-        comments,
-        handleLike,
-        userComment,
-        videoIsLiked,
-        setUserComment,
-        reactionsVisible,
-        handlePostComment,
-        setReactionsVisible,
-    } = useShowStreamReactionsLogic(showId);
+    const { comments, handleLike, userComment, videoIsLiked, setUserComment, reactionsVisible, handlePostComment } =
+        useShowStreamReactionsLogic(show);
 
     const {
         call,
@@ -49,10 +28,10 @@ const ShowStream = ({ route }) => {
         handleUserTouches,
         handleVideoSizeToggle,
         handleUserStreamInteraction,
-    } = useShowStreamCallLogic(showId);
+    } = useShowStreamCallLogic(show);
 
     return (
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <View style={utilities.flexed}>
             <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
                 <View style={{ flex: 1, position: 'relative' }}>
                     {call ? (
@@ -114,7 +93,7 @@ const ShowStream = ({ route }) => {
                     </KeyboardAvoidingView>
                 )}
             </View>
-        </KeyboardAvoidingView>
+        </View>
     );
 };
 

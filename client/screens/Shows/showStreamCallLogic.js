@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 import inCallManager from 'react-native-incall-manager';
 
-export const useShowStreamCallLogic = () => {
+export const useShowStreamCallLogic = (show) => {
     const client = useStreamVideoClient();
     const [call, setCall] = useState(null);
     const [videoIsPlaying, setVideoIsPlaying] = useState(false);
@@ -25,7 +25,7 @@ export const useShowStreamCallLogic = () => {
             return;
         }
         try {
-            const call = client.call('livestream', showId);
+            const call = client.call('livestream', show.id);
             await call.join({ create: false });
             setCall(call);
             console.log('Call joined!', call);

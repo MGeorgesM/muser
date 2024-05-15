@@ -3,14 +3,12 @@ import { useUser } from '../../contexts/UserContext';
 import { fireStoreDb } from '../../config/firebase';
 import { collection, query, onSnapshot, serverTimestamp, orderBy, doc, addDoc, setDoc } from 'firebase/firestore';
 
-export const useShowStreamReactionsLogic = () => {    
-    
+export const useShowStreamReactionsLogic = (show) => {
     const { currentUser } = useUser();
     const [comments, setComments] = useState([]);
     const [userComment, setUserComment] = useState('');
     const [videoIsLiked, setVideoIsLiked] = useState(false);
 
-    
     useEffect(() => {
         let unsubscribeComments;
 
@@ -39,7 +37,6 @@ export const useShowStreamReactionsLogic = () => {
                 userAvatar: doc.data().userAvatar,
                 userId: doc.data().userId,
             }));
-            console.log('Fetched Comments:', fetchedComments);
             setComments(fetchedComments);
         });
 
@@ -105,9 +102,7 @@ export const useShowStreamReactionsLogic = () => {
         userComment,
         videoIsLiked,
         setUserComment,
-
         handlePostComment,
-
     };
 };
 
