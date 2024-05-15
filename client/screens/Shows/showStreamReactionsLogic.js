@@ -3,7 +3,7 @@ import { useUser } from '../../contexts/UserContext';
 import { fireStoreDb } from '../../config/firebase';
 import { collection, query, onSnapshot, serverTimestamp, orderBy, doc, addDoc, setDoc } from 'firebase/firestore';
 
-export const useShowStreamReactionsLogic = (show) => {
+export const useShowStreamReactionsLogic = (showId) => {
     const { currentUser } = useUser();
     const [comments, setComments] = useState([]);
     const [userComment, setUserComment] = useState('');
@@ -13,7 +13,7 @@ export const useShowStreamReactionsLogic = (show) => {
         let unsubscribeComments;
 
         const fetchComments = async () => {
-            unsubscribeComments = await setupCommentsListener(show.id);
+            unsubscribeComments = await setupCommentsListener(showId);
         };
 
         fetchComments();
@@ -23,7 +23,7 @@ export const useShowStreamReactionsLogic = (show) => {
                 unsubscribeComments();
             }
         };
-    }, [show.id]);
+    }, [showId]);
 
     const setupCommentsListener = async (showId) => {
         const commentsRef = collection(fireStoreDb, 'shows', showId.toString(), 'comments');
@@ -55,7 +55,7 @@ export const useShowStreamReactionsLogic = (show) => {
             });
 
             await setDoc(newShowRef, {
-                showId: show.id,
+                showId: showId,
                 createdAt: serverTimestamp(),
             });
         } catch (error) {}
@@ -63,7 +63,7 @@ export const useShowStreamReactionsLogic = (show) => {
 
     const onSend = useCallback(
         async (comment) => {
-            let showRef = doc(fireStoreDb, 'shows', show.id.toString());
+            let showRef = doc(fireStoreDb, 'shows', showId.toString());
 
             if (!showRef) {
                 await createShowAndComments(comment);
@@ -78,7 +78,7 @@ export const useShowStreamReactionsLogic = (show) => {
                 });
             }
         },
-        [fireStoreDb, show.id, currentUser.id]
+        [fireStoreDb, showId, currentUser.id]
     );
 
     const handleLike = async () => {

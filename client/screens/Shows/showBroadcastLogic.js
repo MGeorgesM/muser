@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 
 const useShowBroadcastLogic = (showId) => {
     const [call, setCall] = useState(null);
     const client = useStreamVideoClient();
+
+    useEffect(() => {
+        if (client && !call) {
+            createCall();
+        }
+    }, [client, call]);
 
     const createCall = async () => {
         if (!client) return;

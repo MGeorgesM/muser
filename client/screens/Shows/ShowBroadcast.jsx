@@ -11,7 +11,7 @@ import useShowStreamReactionsLogic from './showStreamReactionsLogic';
 const ShowBroadcast = ({ route }) => {
     const { showId, showName } = route.params;
     const { call, setCall } = useShowBroadcastLogic(showId);
-    const { comments } = useShowStreamReactionsLogic();
+    const { comments } = useShowStreamReactionsLogic(showId);
 
     return call ? (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>

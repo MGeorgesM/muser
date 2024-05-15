@@ -18,7 +18,7 @@ const ShowStream = ({ route }) => {
     // const showId = show.id.toString() + 'DEMO' ?? {};
     const keyboardVisible = useKeyboardVisibility();
     const { comments, handleLike, userComment, videoIsLiked, setUserComment, reactionsVisible, handlePostComment } =
-        useShowStreamReactionsLogic(show);
+        useShowStreamReactionsLogic(show.id);
 
     const {
         call,
@@ -28,7 +28,7 @@ const ShowStream = ({ route }) => {
         handleUserTouches,
         handleVideoSizeToggle,
         handleUserStreamInteraction,
-    } = useShowStreamCallLogic(show);
+    } = useShowStreamCallLogic(show.id);
 
     return (
         <View style={utilities.flexed}>

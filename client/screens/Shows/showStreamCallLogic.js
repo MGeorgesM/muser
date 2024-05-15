@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useStreamVideoClient } from '@stream-io/video-react-native-sdk';
 import inCallManager from 'react-native-incall-manager';
 
-export const useShowStreamCallLogic = (show) => {
+export const useShowStreamCallLogic = (showId) => {
     const client = useStreamVideoClient();
     const [call, setCall] = useState(null);
     const [videoIsPlaying, setVideoIsPlaying] = useState(false);
@@ -18,18 +18,17 @@ export const useShowStreamCallLogic = (show) => {
                 inCallManager.stop();
             }
         };
-    }, [client, show.id]);
+    }, [client, showId]);
 
     const joinCall = async () => {
         if (!client) {
             return;
         }
         try {
-            const call = client.call('livestream', show.id);
+            const call = client.call('livestream', showId);
             await call.join({ create: false });
             setCall(call);
-            console.log('Call joined!', call);
-            call && setVideoIsPlaying(true);
+            setVideoIsPlaying(true);
             setControlsVisible(false);
         } catch (error) {
             console.log('Error joining call:', error);
