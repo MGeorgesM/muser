@@ -1,7 +1,5 @@
 import React from 'react';
-
 import { StyleSheet, Text, View, ImageBackground, StatusBar } from 'react-native';
-
 import { utilities } from '../../styles/utilities';
 import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
 
