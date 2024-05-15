@@ -1,10 +1,16 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-
+import { useUser } from '../../contexts/UserContext';
 import { fireStoreDb } from '../../config/firebase';
 import { collection, query, onSnapshot, serverTimestamp, orderBy, doc, addDoc, setDoc } from 'firebase/firestore';
 
-export const useShowStreamReactionsLogic = () => {
+export const useShowStreamReactionsLogic = () => {    
+    
+    const { currentUser } = useUser();
+    const [comments, setComments] = useState([]);
+    const [userComment, setUserComment] = useState('');
+    const [videoIsLiked, setVideoIsLiked] = useState(false);
+    const [reactionsVisible, setReactionsVisible] = useState(false);
+    
     useEffect(() => {
         let unsubscribeComments;
 
@@ -94,8 +100,14 @@ export const useShowStreamReactionsLogic = () => {
 
     return {
         onSend,
+        comments,
         handleLike,
+        userComment,
+        videoIsLiked,
+        setUserComment,
+        reactionsVisible,
         handlePostComment,
+        setReactionsVisible,
     };
 };
 
