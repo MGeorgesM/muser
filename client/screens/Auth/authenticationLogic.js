@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '../../contexts/UserContext';
+import { colors } from '../../styles/utilities';
 import { useNavigation } from '@react-navigation/native';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
+import useKeyboardVisibility from '../../core/tools/keyboardVisibility';
 
 export const useAuthenticationLogic = () => {
     const navigation = useNavigation();
