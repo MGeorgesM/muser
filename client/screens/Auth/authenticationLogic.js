@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react';
 import { useUser } from '../../contexts/UserContext';
 import { useNavigation } from '@react-navigation/native';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
+import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
 
 export const useAuthenticationLogic = () => {
     const navigation = useNavigation();
+    useNavigationBarColor(colors.bgDarkest);
+    const keyboardVisible = useKeyboardVisibility();
     const [error, setError] = useState(null);
     const [switchHandler, setSwitchHandler] = useState(false);
     const { userInfo, setUserInfo, authError, setAuthError, handleSignIn } = useUser();
@@ -58,8 +61,9 @@ export const useAuthenticationLogic = () => {
         authError,
         setUserInfo,
         setAuthError,
-        handleProceed,
         switchHandler,
+        handleProceed,
+        keyboardVisible,
         setSwitchHandler,
     };
 };

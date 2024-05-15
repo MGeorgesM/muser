@@ -1,10 +1,8 @@
 import React from 'react';
 import { Image, ScrollView, Text, View} from 'react-native';
 
-import useKeyboardVisibility from '../../core/tools/keyboardVisibility';
 import useAuthenticationLogic from './authenticationLogic';
-import { colors, utilities } from '../../styles/utilities';
-import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
+import { utilities } from '../../styles/utilities';
 
 import SignInForm from '../../components/Forms/SignInForm';
 import SignUpForm from '../../components/Forms/SignUpForm';
@@ -12,7 +10,6 @@ import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 
 const logoImg = require('../../assets/appImages/logoOnboard.png');
 const imageSource = require('../../assets/appImages/onboardBlurred.jpg');
-
 const { styles } = require('../../components/Forms/styles');
 
 const Authentication = () => {
@@ -25,9 +22,8 @@ const Authentication = () => {
         handleProceed,
         switchHandler,
         setSwitchHandler,
+        keyboardVisible
     } = useAuthenticationLogic();
-    useNavigationBarColor(colors.bgDarkest);
-    const keyboardVisible = useKeyboardVisibility();
     return (
         <>
             <Image source={imageSource} style={styles.imageBackground} />
