@@ -1,58 +1,16 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
-
-import { useUser } from '../../contexts/UserContext';
-import { useNavigation } from '@react-navigation/native';
-
 import { colors, utilities } from '../../styles/utilities';
-import { profilePicturesUrl, requestMethods, sendRequest } from '../../core/tools/apiRequest';
-import { useSelector } from 'react-redux';
 
+import useProfileDetailsLogic from './profileDetailsLogic';
 import BackBtn from '../../components/Misc/BackBtn/BackBtn';
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
-import InstrumentIcon from '../../components/Misc/InstrumentIcon/InstrumentIcon';
 import DetailsPill from '../../components/Misc/DetailsPill/DetailsPill';
+import InstrumentIcon from '../../components/Misc/InstrumentIcon/InstrumentIcon';
 
 const ProfileDetails = ({ route }) => {
     const { userId, onBackPress } = route.params;
-    const { currentUser } = useUser();
-    const navigation = useNavigation();
-
-    const [user, setUser] = useState({});
-    const [isConnected, setIsConnected] = useState(false);
-
-    const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
-    const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
-
-    const chatId = [currentUser.id, userId].sort((a, b) => a - b).join('-');
-
-    const imageUrl = `${profilePicturesUrl + user.picture}`;
-
-    useLayoutEffect(() => {
-        if (!userId) return;
-        const foundUser =
-            feedUsers.find((user) => user.id === userId) ||
-            connectedUsers.find((user) => user.id === userId) ||
-            (currentUser.id === userId ? currentUser : null);
-
-        if (foundUser) {
-            setUser(foundUser);
-            setIsConnected(connectedUsers.some((user) => user.id === userId));
-        } else {
-            getUserFromApi();
-        }
-    }, [userId, feedUsers, connectedUsers, currentUser]);
-
-    const getUserFromApi = async () => {
-        console.log('Fetching user from API');
-        try {
-            const response = await sendRequest(requestMethods.GET, `users/${userId}`);
-            if (response.status !== 200) throw new Error('Failed to fetch user');
-            setUser(response.data);
-        } catch (error) {
-            console.log('Error fetching user:', error);
-        }
-    };
+    const { user, imageUrl, isConnected, handlePress, navigation } = useProfileDetailsLogic(userId);
 
     if (user.name)
         return (
@@ -99,26 +57,7 @@ const ProfileDetails = ({ route }) => {
                         text={isConnected ? 'Chat' : 'Say Hello!'}
                         marginTop={'auto'}
                         marginBottom={20}
-                        handlePress={() =>
-                            navigation.navigate('Chat', {
-                                screen: 'ChatDetails',
-                                params: {
-                                    id: chatId,
-                                    participants: [
-                                        {
-                                            id: user.id,
-                                            name: user.name,
-                                            picture: user.picture,
-                                            instrument: user.instrument,
-                                        },
-                                    ],
-                                    onBackPress: () =>
-                                        navigation.navigate('ProfileDetails', {
-                                            userId: user.id,
-                                        }),
-                                },
-                            })
-                        }
+                        handlePress={handlePress}
                     />
                 </View>
             </View>
