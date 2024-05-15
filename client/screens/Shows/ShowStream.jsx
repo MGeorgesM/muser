@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { StreamCall, ViewerLivestream } from '@stream-io/video-react-native-sdk';
 import { colors, utilities } from '../../styles/utilities';
 

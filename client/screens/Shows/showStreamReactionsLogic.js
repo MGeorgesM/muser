@@ -46,20 +46,19 @@ export const useShowStreamReactionsLogic = (show) => {
     const createShowAndComments = async (initialComment) => {
         const newShowRef = doc(collection(fireStoreDb, 'shows'));
         const commentsRef = collection(newShowRef, 'comments');
+        try {
+            await addDoc(commentsRef, {
+                text: initialComment,
+                createdAt: serverTimestamp(),
+                userAvatar: currentUser.picture,
+                userId: currentUser.id,
+            });
 
-        await addDoc(commentsRef, {
-            text: initialComment,
-            createdAt: serverTimestamp(),
-            userAvatar: currentUser.picture,
-            userId: currentUser.id,
-        });
-
-        await setDoc(newShowRef, {
-            showId: show.id,
-            createdAt: serverTimestamp(),
-        });
-
-        return newShowRef;
+            await setDoc(newShowRef, {
+                showId: show.id,
+                createdAt: serverTimestamp(),
+            });
+        } catch (error) {}
     };
 
     const onSend = useCallback(
@@ -67,7 +66,7 @@ export const useShowStreamReactionsLogic = (show) => {
             let showRef = doc(fireStoreDb, 'shows', show.id.toString());
 
             if (!showRef) {
-                showRef = await createShowAndComments(comment);
+                await createShowAndComments(comment);
             } else {
                 const commentsRef = collection(showRef, 'comments');
 
