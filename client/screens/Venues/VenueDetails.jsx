@@ -1,11 +1,10 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList, Pressable } from 'react-native';
 
-import { setSelectedVenue } from '../../store/Venues';
 import { useUser } from '../../contexts/UserContext';
 
 import { utilities, colors } from '../../styles/utilities';
-import { formatDateString, truncateText } from '../../core/tools/formatDate';
+import { formatDateString } from '../../core/tools/formatDate';
 import { profilePicturesUrl, showsPicturesUrl, sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
 import { ChevronLeft } from 'lucide-react-native';
@@ -13,6 +12,7 @@ import { ChevronLeft } from 'lucide-react-native';
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 import ShowCard from '../../components/Cards/ShowCard/ShowCard';
 import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
+import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 
 const VenueDetails = ({ route, navigation }) => {
     const { venue, show, switchView } = route.params;
@@ -24,6 +24,7 @@ const VenueDetails = ({ route, navigation }) => {
     const [selectedShow, setSelectedShow] = useState(show);
 
     console.log('Selected Show:', selectedShow);
+    console.log('Venue', venue);
 
     useLayoutEffect(() => {
         if (show) {
@@ -36,7 +37,7 @@ const VenueDetails = ({ route, navigation }) => {
             try {
                 const response = await sendRequest(requestMethods.GET, `shows?venue_id=${venue.id}&status=set`, null);
                 if (response.status !== 200) throw new Error('Failed to fetch venue shows');
-                console.log('venue shows', response.data);
+
                 setShows(response.data);
             } catch (error) {
                 console.log('Error fetching venue shows:', error);
@@ -54,14 +55,14 @@ const VenueDetails = ({ route, navigation }) => {
                       showName: `${show.band.name} @ ${show.venue.venue_name}`,
                   },
               })
-            : navigation.navigate('ShowDetails', { venueId: venue.id, venueName: venue.venue_name });
+            : navigation.navigate('ShowDetails', { venueId: venue.id, venueName: venue.venueName });
     };
 
     const handleBackBtn = () => {
         switchView ? navigation.navigate('Live', { screen: 'Streams' }) : setSwitchHandler(!switchHandler);
     };
 
-    return (
+    return shows && shows.length > 0 ? (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
             {switchHandler && (
                 <Pressable style={styles.backBtn} onPress={handleBackBtn}>
@@ -139,6 +140,8 @@ const VenueDetails = ({ route, navigation }) => {
                 )}
             </View>
         </View>
+    ) : (
+        <LoadingScreen />
     );
 };
 

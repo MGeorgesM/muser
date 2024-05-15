@@ -11,6 +11,7 @@ import {
     serverTimestamp,
     doc,
     setDoc,
+    getDoc,
     updateDoc,
 } from 'firebase/firestore';
 
@@ -57,12 +58,12 @@ const Chat = ({ navigation, route }) => {
             headerTitle: () => {
                 const title = chatTitle || localChatTitle.bandName || localChatTitle.participantsNames;
 
-                if (title) return <Text style={[utilities.textL, utilities.myFontMedium]}>{title}</Text>;
+                if (title)
+                    return <Text style={[utilities.textM, utilities.myFontMedium]}>{truncateText(title, 22)}</Text>;
                 else {
                     if (!participants) return;
-
                     const participantsList = chatParticipants.length > 0 ? chatParticipants : participants;
-                    const receiverName = participantsList.map((participant) => participant.name).join(', ');
+                    const receiverName = participantsList.map((participant) => participant?.name).join(', ');
                     const reciverPicture = participantsList[0].picture;
                     const receiverId = participantsList[0].id;
 
@@ -253,6 +254,7 @@ const Chat = ({ navigation, route }) => {
 
         try {
             const chatRef = doc(fireStoreDb, 'chats', id);
+            const chatDoc = await getDoc(chatRef);
 
             const newParticipantsList =
                 chatParticipants.length > 0 ? [...chatParticipants, newParticipant] : [...participants, newParticipant];
@@ -260,13 +262,16 @@ const Chat = ({ navigation, route }) => {
             const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
             newParticipantsIdsList.push(currentUser.id);
 
-            await updateDoc(chatRef, {
-                participantsIds: newParticipantsIdsList,
-            });
+            if (chatDoc.exists()) {
+                await updateDoc(chatRef, {
+                    participantsIds: newParticipantsIdsList,
+                });
+            }
 
             setChatConnections((prev) => prev.filter((connection) => connection.id !== newParticipantId));
             setChatParticipants(newParticipantsList);
-            (chatTitle || localChatTitle.bandName) && updateBandMembers(chatTitle || localChatTitle.bandName, newParticipantsIdsList);
+            (chatTitle || localChatTitle.bandName) &&
+                updateBandMembers(chatTitle || localChatTitle.bandName, newParticipantsIdsList);
             setConnectionModalVisible(false);
         } catch (error) {
             console.log('Error adding participant', error);

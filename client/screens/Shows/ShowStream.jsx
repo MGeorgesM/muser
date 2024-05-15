@@ -310,7 +310,7 @@ const ShowStream = ({ navigation, route }) => {
                         )}
                     </Pressable>
                 </View>
-                {!videoIsMaximized && (
+                {!videoIsMaximized && show && (
                     <View style={[!keyboardVisible && utilities.flexed, { backgroundColor: colors.bgDark }]}>
                         <View
                             style={{
@@ -324,18 +324,18 @@ const ShowStream = ({ navigation, route }) => {
                         >
                             <View>
                                 <Text style={[utilities.textLeft, utilities.textL, utilities.myFontBold]}>
-                                    {`${show.band.name} - Live`}
+                                    {`${show.band?.name}`}
                                 </Text>
                                 <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
-                                    {`Live at ${show.venue.venue_name} - ${show.venue.location.name}`}
+                                    {`Live at ${show.venue?.venue_name} - ${show.venue.location?.name}`}
                                 </Text>
                             </View>
                             <Pressable onPress={handleLike}>
-                                <Heart size={24} color={colors.primary} fill={videoIsLiked ? colors.primary : null} />
+                                <Heart size={24} color={colors.primary} fill={videoIsLiked ? colors.primary : colors.bgDark} />
                             </Pressable>
                         </View>
                         <View style={[{ paddingLeft: 20 }]}>
-                            <Text style={[utilities.textM, utilities.myFontBold, { marginBottom: 0 }]}>Band</Text>
+                            <Text style={[utilities.textM, utilities.myFontBold, { marginBottom: 8 }]}>Band</Text>
                             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                                 {show.band.members.map((member) => (
                                     <BandMemberCard

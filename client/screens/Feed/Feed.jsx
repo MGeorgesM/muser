@@ -21,6 +21,7 @@ import FloatingActionButton from '../../components/Misc/FloatingActionButton/Flo
 
 const Feed = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isAiLoading, setIsAiLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [userInput, setUserInput] = useState('');
@@ -60,16 +61,7 @@ const Feed = ({ navigation }) => {
                 elevation: 0,
             },
         });
-
-        const setNavigationBarColor = async () => {
-            try {
-                await SystemNavigationBar.setNavigationColor(colors.bgDark);
-            } catch (error) {
-                console.error('Failed to change system navigation bar color:', error);
-            }
-        };
-        setNavigationBarColor();
-    });
+    }, [currentUser]);
 
     useEffect(() => {
         getUsers();
@@ -91,7 +83,7 @@ const Feed = ({ navigation }) => {
 
     const handleAiMatchMaking = async () => {
         setModalVisible(false);
-        setIsLoading(true);
+        setIsAiLoading(true);
         console.log('Calling OpenAi');
         try {
             const response = await sendRequest(requestMethods.POST, 'ai/', { message: userInput });
@@ -103,7 +95,7 @@ const Feed = ({ navigation }) => {
         } catch (error) {
             console.log('Error fetching users:', error);
         } finally {
-            setIsLoading(false);
+            setIsAiLoading(false);
         }
     };
 
@@ -168,7 +160,7 @@ const Feed = ({ navigation }) => {
         }
     };
 
-    return users && users.length === 0 ? (
+    return (users && users.length === 0) || isLoading ? (
         <LoadingScreen />
     ) : (
         <>
@@ -201,7 +193,7 @@ const Feed = ({ navigation }) => {
                 handlePress={handleProceed}
                 setModalVisible={setModalVisible}
             />
-            <FloatingActionButton icon={BrainCog} handlePress={() => setModalVisible(true)} isLoading={isLoading} />
+            <FloatingActionButton icon={BrainCog} handlePress={() => setModalVisible(true)} isLoading={isAiLoading} />
             {matchedUsers && matchedUsers.length > 0 && (
                 <FloatingActionButton
                     icon={MessageCirclePlus}

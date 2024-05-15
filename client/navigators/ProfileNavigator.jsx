@@ -38,7 +38,7 @@ const ProfileNavigator = ({ navigation }) => {
 
                 headerRight: () => (
                     <TouchableOpacity onPress={() => handleSignOut(navigation)}>
-                        <LogOut size={30} color={'white'} style={{ marginEnd: 20 }} />
+                        <LogOut size={24} color={'white'} style={{ marginEnd: 20 }} />
                     </TouchableOpacity>
                 ),
             }}
