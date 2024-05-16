@@ -5,7 +5,7 @@ import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 import useShowsLogic from './showsLogic';
 
 const Shows = ({ navigation }) => {
-    const { shows, handleCardPress } = useShowsLogic();
+    const { shows, getShows, handleCardPress } = useShowsLogic();
     return shows && shows.length > 0 ? (
         <ModalHigh
             title="Upcoming Shows"

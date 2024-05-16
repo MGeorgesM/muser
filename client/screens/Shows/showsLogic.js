@@ -41,6 +41,7 @@ const useShowsLogic = () => {
     };
     return {
         shows,
+        getShows,
         handleCardPress,
     };
 };
