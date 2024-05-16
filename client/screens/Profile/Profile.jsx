@@ -79,6 +79,7 @@ const Profile = ({ navigation }) => {
             <View style={styles.profileDetailsSection}>
                 {!switchHandler ? (
                     <>
+                        <Text style={[utilities.textM, utilities.myFontMedium]}>About Me</Text>
                         <Text
                             style={[
                                 utilities.textM,
