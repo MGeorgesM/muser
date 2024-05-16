@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { generateHours, durations } from '../../core/tools/generateDatetime';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
-const useShowDetailsLogic = (venueName, venueId) => {
+const useShowDetailsLogic = (venueId) => {
     const [switchHandler, setSwitchHandler] = useState(false);
     const [validationError, setValidationError] = useState('');
     const [selectedCardId, setSelectedCardId] = useState(null);
@@ -21,6 +21,33 @@ const useShowDetailsLogic = (venueName, venueId) => {
     });
 
     const hours = generateHours();
+
+    const pickerConfig = [
+        {
+            items: userBands,
+            label: 'Band',
+            selectedValue: showBooking.band_id,
+            key: 'band_id',
+        },
+        {
+            items: genres,
+            label: 'Main Genre',
+            selectedValue: showBooking.genre_id,
+            key: 'genre_id',
+        },
+        {
+            items: hours,
+            label: 'Show Time',
+            selectedValue: showBooking.time,
+            key: 'time',
+        },
+        {
+            items: durations,
+            label: 'Duration',
+            selectedValue: showBooking.duration,
+            key: 'duration',
+        },
+    ];
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -99,11 +126,8 @@ const useShowDetailsLogic = (venueName, venueId) => {
         switchHandler ? navigation.goBack() : handleCreateShow();
     };
     return {
-        hours,
-        genres,
-        userBands,
-        durations,
         showBooking,
+        pickerConfig,
         handleProceed,
         switchHandler,
         setShowBooking,

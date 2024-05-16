@@ -11,11 +11,8 @@ import useShowDetailsLogic from './showDetailsLogic';
 const ShowDetails = ({ route, navigation }) => {
     const { venueId, venueName } = route.params;
     const {
-        hours,
-        genres,
-        userBands,
-        durations,
         showBooking,
+        pickerConfig,
         handleProceed,
         switchHandler,
         setShowBooking,
@@ -38,40 +35,20 @@ const ShowDetails = ({ route, navigation }) => {
                         <Text style={[utilities.textL, utilities.myFontBold]}>{venueName}</Text>
                     </View>
                     <View style={{ marginBottom: 'auto', marginTop: 16 }}>
-                        <ProfileDetailsPicker
-                            items={userBands}
-                            label={'Band'}
-                            selectedValue={showBooking.band_id}
-                            onValueChange={(value) =>
-                                setShowBooking((prev) => ({
-                                    ...prev,
-                                    band_id: value,
-                                }))
-                            }
-                        />
-                        <ProfileDetailsPicker
-                            items={genres}
-                            label={'Main Genre'}
-                            selectedValue={showBooking.genre_id}
-                            onValueChange={(value) =>
-                                setShowBooking((prev) => ({
-                                    ...prev,
-                                    genre_id: value,
-                                }))
-                            }
-                        />
-                        <ProfileDetailsPicker
-                            items={hours}
-                            label={'Show Time'}
-                            selectedValue={showBooking.time}
-                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, time: value }))}
-                        />
-                        <ProfileDetailsPicker
-                            items={durations}
-                            label={'Duration'}
-                            selectedValue={showBooking.duration}
-                            onValueChange={(value) => setShowBooking((prev) => ({ ...prev, duration: value }))}
-                        />
+                        {pickerConfig.map(({ items, label, selectedValue, key }) => (
+                            <ProfileDetailsPicker
+                                key={key}
+                                items={items}
+                                label={label}
+                                selectedValue={selectedValue}
+                                onValueChange={(value) =>
+                                    setShowBooking((prev) => ({
+                                        ...prev,
+                                        [key]: value,
+                                    }))
+                                }
+                            />
+                        ))}
                     </View>
                     <View style={validationError ? {} : { marginBottom: 32 }}>
                         {showBooking.duration && (
