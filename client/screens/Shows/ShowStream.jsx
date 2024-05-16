@@ -16,8 +16,16 @@ import useShowStreamCallLogic from './showStreamCallLogic';
 const ShowStream = ({ route }) => {
     const { show } = route.params;
     const keyboardVisible = useKeyboardVisibility();
-    const { comments, handleLike, userComment, videoIsLiked, setUserComment, reactionsVisible, handlePostComment } =
-        useShowStreamReactionsLogic(show.id);
+    const {
+        comments,
+        handleLike,
+        userComment,
+        videoIsLiked,
+        setUserComment,
+        reactionsVisible,
+        handlePostComment,
+        setReactionsVisible,
+    } = useShowStreamReactionsLogic(show.id);
 
     const {
         call,
@@ -49,6 +57,8 @@ const ShowStream = ({ route }) => {
                         !videoIsMaximized && <View style={styles.maximizedView} />
                     )}
                     <VideoControls
+                        reactionsVisible={reactionsVisible}
+                        setReactionsVisible={setReactionsVisible}
                         videoIsPlaying={videoIsPlaying}
                         controlsVisible={controlsVisible}
                         videoIsMaximized={videoIsMaximized}

@@ -5,12 +5,13 @@ import { Play, Pause, Maximize, MessageSquare, MessageSquareOff } from 'lucide-r
 const VideoControls = ({
     videoIsPlaying,
     controlsVisible,
+    reactionsVisible,
     videoIsMaximized,
     handleUserTouches,
+    setReactionsVisible,
     handleVideoSizeToggle,
     handleUserStreamInteraction,
 }) => {
-    const [reactionsVisible, setReactionsVisible] = useState(false);
     return (
         <Pressable style={StyleSheet.absoluteFill} onPress={handleUserTouches}>
             <Pressable onPress={handleUserStreamInteraction} style={styles.playButton}>

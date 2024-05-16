@@ -8,6 +8,7 @@ export const useShowStreamReactionsLogic = (showId) => {
     const [comments, setComments] = useState([]);
     const [userComment, setUserComment] = useState('');
     const [videoIsLiked, setVideoIsLiked] = useState(false);
+    const [reactionsVisible, setReactionsVisible] = useState(false);
 
     useEffect(() => {
         let unsubscribeComments;
@@ -27,7 +28,7 @@ export const useShowStreamReactionsLogic = (showId) => {
 
     const setupCommentsListener = async (showId) => {
         const commentsRef = collection(fireStoreDb, 'shows', showId.toString(), 'comments');
-        const q = query(commentsRef, orderBy('createdAt', 'desc'));
+        const q = query(commentsRef, orderBy('createdAt', 'asc'));
 
         const unsubscribeComments = onSnapshot(q, (snapshot) => {
             const fetchedComments = snapshot.docs.map((doc) => ({
@@ -84,7 +85,7 @@ export const useShowStreamReactionsLogic = (showId) => {
     const handleLike = async () => {
         if (videoIsLiked) return;
         setVideoIsLiked(!videoIsLiked);
-        await onSend('❤');
+        // await onSend('❤');
     };
 
     const handlePostComment = () => {
@@ -101,7 +102,9 @@ export const useShowStreamReactionsLogic = (showId) => {
         userComment,
         videoIsLiked,
         setUserComment,
+        reactionsVisible,
         handlePostComment,
+        setReactionsVisible,
     };
 };
 
