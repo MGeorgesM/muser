@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, Pressable, ScrollView, TouchableOpacity } from 'react-native';
 
 import { useUser } from '../../contexts/UserContext';
-import { ChevronLeft, LogOut } from 'lucide-react-native';
+import { Camera, ChevronLeft, LogOut } from 'lucide-react-native';
 import { colors, utilities } from '../../styles/utilities';
 import { profilePicturesUrl, sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
@@ -34,7 +34,6 @@ const Profile = ({ navigation }) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerShown: true,
             headerTitle: 'Profile',
             headerStyle: {
                 backgroundColor: colors.bgDarkest,
@@ -50,9 +49,14 @@ const Profile = ({ navigation }) => {
             },
 
             headerLeft: () => (
-                <Pressable onPress={() => navigation.goBack()} style={{ marginLeft: 20 }}>
-                    <ChevronLeft size={24} color="white" />
-                </Pressable>
+                <ChevronLeft
+                    size={24}
+                    color="white"
+                    onPress={() => {
+                        switchHandler ? setSwitchHandler(!switchHandler) : navigation.goBack();
+                    }}
+                    style={{ marginLeft: 20 }}
+                />
             ),
 
             headerRight: () => (
@@ -80,22 +84,31 @@ const Profile = ({ navigation }) => {
 
     return currentUser ? (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
-            {/* <View style={styles.topProfileView}> */}
-            <Pressable style={styles.profilePicture} onPress={handleImagePicker}>
-                <Image
-                    source={{
-                        uri: selectedPicture ? selectedPicture.assets[0].uri : profilePicturesUrl + userInfo.picture,
-                    }}
-                    style={styles.profileDetailsPicture}
-                />
-            </Pressable>
-            {/* </View> */}
-            <View style={styles.profileNameSecton}>
-                <Text style={[utilities.textL, utilities.myFontBold]}>{currentUser.name}</Text>
-                <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
-                    {currentUser.email}
-                </Text>
-            </View>
+            {!switchHandler && (
+                <>
+                    <View style={styles.profilePicture}>
+                        <View style={styles.imageContainer}>
+                            <Image
+                                source={{
+                                    uri: selectedPicture
+                                        ? selectedPicture.assets[0].uri
+                                        : profilePicturesUrl + userInfo.picture,
+                                }}
+                                style={styles.profileDetailsPicture}
+                            />
+                            <View style={styles.cameraIconContainer}>
+                                <Camera size={24} color={'white'} onPress={handleImagePicker} />
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.profileNameSecton}>
+                        <Text style={[utilities.textL, utilities.myFontBold]}>{currentUser.name}</Text>
+                        <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
+                            {currentUser.email}
+                        </Text>
+                    </View>
+                </>
+            )}
             <View style={styles.profileDetailsSection}>
                 {!switchHandler ? (
                     <>
@@ -158,26 +171,28 @@ export default Profile;
 const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-    // topProfileView: {
-    //     alignItems: 'center',
-    //     position: 'relative',
-    //     height: height * 0.11,
-    //     backgroundColor: colors.bgDarkest,
-    // },
-
     profilePicture: {
-        // position: 'absolute',
-        // bottom: -80,
-        // left: 0,
-        // right: 0,
         alignItems: 'center',
         marginTop: 16,
+    },
+
+    imageContainer: {
+        position: 'relative',
     },
 
     profileDetailsPicture: {
         height: 160,
         width: 160,
         borderRadius: 80,
+    },
+
+    cameraIconContainer: {
+        position: 'absolute',
+        bottom: 8,
+        right: 4,
+        backgroundColor: 'rgba(255, 255, 255, 0.15)',
+        borderRadius: 12,
+        padding: 4,
     },
 
     profileNameSecton: {
