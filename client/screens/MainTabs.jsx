@@ -23,7 +23,6 @@ const MainTabs = () => {
     useLayoutEffect(() => {
         const setNavigationBarColor = async () => {
             try {
-                await SystemNavigationBar.navigationShow();
                 await SystemNavigationBar.setNavigationColor('#121212');
                 setIsLoading(false);
             } catch (error) {

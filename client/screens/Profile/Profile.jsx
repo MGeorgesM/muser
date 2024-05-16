@@ -32,33 +32,21 @@ const Profile = ({ navigation }) => {
     } = useUserInfoLogic();
 
     useEffect(() => {
-        const getUserInfo = async () => {
-            try {
-                const response = await sendRequest(requestMethods.GET, 'auth/me?flat=true', null);
-                if (response.status !== 200) throw new Error('Error getting user info');
-                setUserInfo((prev) => ({ ...prev, ...response.data }));
-            } catch (error) {
-                console.log('Error getting user info:', error);
-            }
-        };
-
-        const genresArray = currentUser.genres.map((genre) => genre.id);
-        console.log('Genres Array:', genresArray);
-
         getUserInfo();
-        setUserInfo((prev) => ({ ...prev, genres: genresArray }));
-        setSelectedPicture(currentUser.picture);
-
         setSwitchHandler(false);
-        console.log('Current User:', currentUser);
-        console.log('User Info Profile:', userInfo);
+        console.log('Current User Info:', userInfo);
     }, [currentUser]);
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerTitle: 'Profile',
-        });
-    }, [navigation]);
+    const getUserInfo = async () => {
+        try {
+            const response = await sendRequest(requestMethods.GET, 'auth/me?flat=true', null);
+            if (response.status !== 200) throw new Error('Error getting user info');
+            console.log('User Info From Api:', response.data);
+            setUserInfo((prev) => ({ ...prev, ...response.data }));
+        } catch (error) {
+            console.log('Error getting user info:', error);
+        }
+    };
 
     const updateUser = async (formData) => {
         try {

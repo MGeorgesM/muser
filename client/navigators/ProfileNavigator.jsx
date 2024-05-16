@@ -17,6 +17,7 @@ const ProfileNavigator = ({ navigation }) => {
     return (
         <ProfileStack.Navigator
             screenOptions={{
+                headerTitle: 'Profile',
                 headerStyle: {
                     backgroundColor: colors.bgDarkest,
                     shadowColor: 'transparent',
