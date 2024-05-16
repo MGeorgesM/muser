@@ -34,6 +34,7 @@ const Profile = ({ navigation }) => {
     useEffect(() => {
         getUserInfo();
         setSwitchHandler(false);
+        console.log('Current User:', currentUser);
         console.log('Current User Info:', userInfo);
     }, [currentUser]);
 
@@ -41,7 +42,6 @@ const Profile = ({ navigation }) => {
         try {
             const response = await sendRequest(requestMethods.GET, 'auth/me?flat=true', null);
             if (response.status !== 200) throw new Error('Error getting user info');
-            console.log('User Info From Api:', response.data);
             setUserInfo((prev) => ({ ...prev, ...response.data }));
         } catch (error) {
             console.log('Error getting user info:', error);
@@ -62,14 +62,14 @@ const Profile = ({ navigation }) => {
 
     return currentUser ? (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
-            <View style={styles.topProfileView}>
-                <Pressable style={styles.profilePicture} onPress={handleImagePicker}>
-                    <Image
-                        source={{ uri: profilePicturesUrl + currentUser.picture }}
-                        style={[styles.profileDetailsPicture]}
-                    />
-                </Pressable>
-            </View>
+            {/* <View style={styles.topProfileView}> */}
+            <Pressable style={styles.profilePicture} onPress={handleImagePicker}>
+                <Image
+                    source={{ uri: profilePicturesUrl + currentUser.picture }}
+                    style={switchHandler ? styles.profileDetailsPictureEdit : styles.profileDetailsPicture}
+                />
+            </Pressable>
+            {/* </View> */}
             <View style={styles.profileNameSecton}>
                 <Text style={[utilities.textL, utilities.myFontBold]}>{currentUser.name}</Text>
                 <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
@@ -137,19 +137,20 @@ export default Profile;
 const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-    topProfileView: {
-        alignItems: 'center',
-        position: 'relative',
-        height: height * 0.11,
-        backgroundColor: colors.bgDarkest,
-    },
+    // topProfileView: {
+    //     alignItems: 'center',
+    //     position: 'relative',
+    //     height: height * 0.11,
+    //     backgroundColor: colors.bgDarkest,
+    // },
 
     profilePicture: {
-        position: 'absolute',
-        bottom: -80,
-        left: 0,
-        right: 0,
+        // position: 'absolute',
+        // bottom: -80,
+        // left: 0,
+        // right: 0,
         alignItems: 'center',
+        marginTop: 16,
     },
 
     profileDetailsPicture: {
@@ -158,9 +159,15 @@ const styles = StyleSheet.create({
         borderRadius: 80,
     },
 
+    profileDetailsPictureEdit: {
+        height: 100,
+        width: 100,
+        borderRadius: 50,
+    },
+
     profileNameSecton: {
         alignItems: 'center',
-        paddingTop: 96,
+        marginTop: 12,
     },
 
     profileDetailsSection: {

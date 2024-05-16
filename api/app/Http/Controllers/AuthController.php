@@ -98,9 +98,24 @@ class AuthController extends Controller
             $genreIds = $user->genres->pluck('id');
             $userArray = $user->toArray();
             $userArray['genres'] = $genreIds;
-
-            return response()->json(array_merge($userArray));
+    
+            $hiddenFields = [
+                'availability_id',
+                'role_id',
+                'is_active',
+                'fcmtoken',
+                'created_at',
+                'updated_at'
+            ];
+    
+            $user->makeHidden($hiddenFields);
+    
+            $userArray = $user->toArray();
+            $userArray['genres'] = $genreIds;
+    
+            return response()->json($userArray);
         }
+    
 
         return response()->json($user->full_details);
     }

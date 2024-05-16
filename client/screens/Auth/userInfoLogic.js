@@ -38,7 +38,7 @@ export const useUserInfoLogic = () => {
         } else {
             setUserInfo((prev) => ({ ...prev, [`${key.toLowerCase()}_id`]: value }));
         }
-        console.log('User Info:', userInfo);
+        console.log('User Info LOGIC:', userInfo);
     };
 
     const handleImagePicker = async () => {

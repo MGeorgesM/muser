@@ -1,13 +1,11 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { colors } from '../styles/utilities';
+import { useUser } from '../contexts/UserContext';
+import { TouchableOpacity } from 'react-native';
+import { ChevronLeft, LogOut } from 'lucide-react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { useUser } from '../contexts/UserContext';
-
 import Profile from '../screens/Profile/Profile';
-
-import { colors } from '../styles/utilities';
-import { ChevronLeft, LogOut } from 'lucide-react-native';
 
 const ProfileStack = createStackNavigator();
 
@@ -50,5 +48,3 @@ const ProfileNavigator = ({ navigation }) => {
 };
 
 export default ProfileNavigator;
-
-const styles = StyleSheet.create({});
