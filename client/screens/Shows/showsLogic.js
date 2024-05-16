@@ -3,11 +3,13 @@ import { setShows } from '../../store/Shows';
 import { useUser } from '../../contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
+import { useNavigation } from '@react-navigation/native';
 
 const useShowsLogic = () => {
     const dispatch = useDispatch();
     const { currentUser } = useUser();
-    const userIsVenue = currentUser?.role === 'venue';
+    const navigation = useNavigation();
+    const userIsVenue = currentUser?.role.id === 2;
     const shows = useSelector((global) => global.showsSlice.shows);
 
     useEffect(() => {

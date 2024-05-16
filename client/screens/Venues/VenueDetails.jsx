@@ -12,19 +12,13 @@ import { ChevronLeft } from 'lucide-react-native';
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 import ShowCard from '../../components/Cards/ShowCard/ShowCard';
 import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
-import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 
 const VenueDetails = ({ route, navigation }) => {
     const { venue, show, switchView } = route.params;
-
     const { currentUser } = useUser();
-
     const [switchHandler, setSwitchHandler] = useState(switchView ? true : false);
     const [shows, setShows] = useState([]);
     const [selectedShow, setSelectedShow] = useState(show);
-
-    console.log('Selected Show:', selectedShow);
-    console.log('Venue', venue);
 
     useLayoutEffect(() => {
         if (show) {
