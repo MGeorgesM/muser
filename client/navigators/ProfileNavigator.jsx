@@ -13,35 +13,7 @@ const ProfileNavigator = ({ navigation }) => {
     const { handleSignOut } = useUser();
 
     return (
-        <ProfileStack.Navigator
-            screenOptions={{
-                headerTitle: 'Profile',
-                headerStyle: {
-                    backgroundColor: colors.bgDarkest,
-                    shadowColor: 'transparent',
-                    elevation: 0,
-                    height: 128,
-                },
-
-                headerTitleStyle: {
-                    fontFamily: 'Montserrat-Regular',
-                    color: colors.white,
-                    fontSize: 20,
-                },
-
-                headerLeft: () => (
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 20 }}>
-                        <ChevronLeft size={24} color="white" />
-                    </TouchableOpacity>
-                ),
-
-                headerRight: () => (
-                    <TouchableOpacity onPress={() => handleSignOut(navigation)}>
-                        <LogOut size={24} color={'white'} style={{ marginEnd: 20 }} />
-                    </TouchableOpacity>
-                ),
-            }}
-        >
+        <ProfileStack.Navigator>
             <ProfileStack.Screen name="ProfileMain" component={Profile} />
         </ProfileStack.Navigator>
     );

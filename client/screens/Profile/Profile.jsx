@@ -1,8 +1,8 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, Pressable, ScrollView, TouchableOpacity } from 'react-native';
 
 import { useUser } from '../../contexts/UserContext';
-
+import { ChevronLeft, LogOut } from 'lucide-react-native';
 import { colors, utilities } from '../../styles/utilities';
 import { profilePicturesUrl, sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
@@ -17,7 +17,7 @@ import UserInfoForm from '../../components/Forms/UserInfoForm';
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 
 const Profile = ({ navigation }) => {
-    const { currentUser, authError } = useUser();
+    const { currentUser, authError, handleSignOut } = useUser();
     const [switchHandler, setSwitchHandler] = useState(false);
     const {
         error,
@@ -31,6 +31,35 @@ const Profile = ({ navigation }) => {
         profileProperties,
         handlePickerChange,
     } = useUserInfoLogic();
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerShown: true,
+            headerTitle: 'Profile',
+            headerStyle: {
+                backgroundColor: colors.bgDarkest,
+                shadowColor: 'transparent',
+                elevation: 0,
+                height: 128,
+            },
+
+            headerTitleStyle: {
+                fontFamily: 'Montserrat-Regular',
+                color: colors.white,
+                fontSize: 20,
+            },
+
+            headerLeft: () => (
+                <Pressable onPress={() => navigation.goBack()} style={{ marginLeft: 20 }}>
+                    <ChevronLeft size={24} color="white" />
+                </Pressable>
+            ),
+
+            headerRight: () => (
+                <LogOut size={24} color={'white'} style={{ marginEnd: 20 }} onPress={() => handleSignOut(navigation)} />
+            ),
+        });
+    }, []);
 
     useEffect(() => {
         getUserInfo();
@@ -57,7 +86,7 @@ const Profile = ({ navigation }) => {
                     source={{
                         uri: selectedPicture ? selectedPicture.assets[0].uri : profilePicturesUrl + userInfo.picture,
                     }}
-                    style={switchHandler ? styles.profileDetailsPictureEdit : styles.profileDetailsPicture}
+                    style={styles.profileDetailsPicture}
                 />
             </Pressable>
             {/* </View> */}
@@ -149,12 +178,6 @@ const styles = StyleSheet.create({
         height: 160,
         width: 160,
         borderRadius: 80,
-    },
-
-    profileDetailsPictureEdit: {
-        height: 100,
-        width: 100,
-        borderRadius: 50,
     },
 
     profileNameSecton: {

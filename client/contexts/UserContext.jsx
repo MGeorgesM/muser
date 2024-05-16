@@ -7,7 +7,6 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 const UserContext = createContext();
 
 const initialUserInfo = {
-    email:'',
     name: '',
     email: '',
     password: '',
@@ -110,6 +109,7 @@ export const UserProvider = ({ children }) => {
             if (response.status !== 200) throw new authError('Failed to log out');
             setLoggedIn(false);
             setCurrentUser(null);
+            setUserInfo(initialUserInfo);
             await AsyncStorage.clear();
 
             // navigation.dispatch(
