@@ -15,7 +15,7 @@ const ProfileDetails = ({ route }) => {
     if (user.name)
         return (
             <View style={utilities.flexed}>
-                <BackBtn navigation={navigation} onBackPress={onBackPress} backgroundColor={null} color="white" />
+                <BackBtn navigation={navigation} onBackPress={onBackPress} />
                 <Image source={{ uri: imageUrl }} style={[styles.profileDetailsPicture]} />
                 <View style={[styles.detailContainer]}>
                     <View

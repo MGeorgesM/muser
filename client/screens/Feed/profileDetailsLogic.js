@@ -6,7 +6,7 @@ import { profilePicturesUrl, requestMethods, sendRequest } from '../../core/tool
 
 const useProfileDetailsLogic = (userId) => {
     const { currentUser } = useUser();
-
+    
     const [user, setUser] = useState({});
     const [isConnected, setIsConnected] = useState(false);
 
@@ -18,6 +18,7 @@ const useProfileDetailsLogic = (userId) => {
 
     useLayoutEffect(() => {
         if (!userId) return;
+
         const foundUser =
             feedUsers.find((user) => user.id === userId) ||
             connectedUsers.find((user) => user.id === userId) ||
