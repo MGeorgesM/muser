@@ -129,7 +129,7 @@ class AiMatchMakingController extends Controller
 
         try {
             $result = $client->chat()->create([
-                'model' => 'gpt-4o',
+                'model' => 'gpt-4-turbo-preview',
                 // 'model' => 'gpt-3.5-turbo-0125',
                 'messages' => [
                     // [
