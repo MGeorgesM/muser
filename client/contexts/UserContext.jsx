@@ -7,6 +7,7 @@ import { sendRequest, requestMethods } from '../core/tools/apiRequest';
 const UserContext = createContext();
 
 const initialUserInfo = {
+    email:'',
     name: '',
     email: '',
     password: '',
@@ -134,6 +135,18 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+    const handleUpdate = async (formData) => {
+        console.log('Updating User:');
+        try {
+            const response = await sendRequest(requestMethods.POST, 'users/', formData);
+            if (response.status !== 200) throw new Error('Error updating user info');
+            setCurrentUser(response.data.user);
+            console.log('Updated User:', response.data.user);
+        } catch (error) {
+            console.log('Error updating user info:', error);
+        }
+    };
+
     return (
         <UserContext.Provider
             value={{
@@ -147,6 +160,7 @@ export const UserProvider = ({ children }) => {
                 handleSignIn,
                 handleSignUp,
                 handleSignOut,
+                handleUpdate,
                 setCurrentUser,
             }}
         >

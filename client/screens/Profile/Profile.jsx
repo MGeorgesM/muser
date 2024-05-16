@@ -17,9 +17,10 @@ import UserInfoForm from '../../components/Forms/UserInfoForm';
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 
 const Profile = ({ navigation }) => {
-    const { currentUser, setCurrentUser } = useUser();
+    const { currentUser, authError } = useUser();
     const [switchHandler, setSwitchHandler] = useState(false);
     const {
+        error,
         userInfo,
         setUserInfo,
         handlePress,
@@ -35,7 +36,7 @@ const Profile = ({ navigation }) => {
         getUserInfo();
         setSwitchHandler(false);
         console.log('Current User:', currentUser);
-        console.log('Current User Info:', userInfo);
+        console.log('Current User Ifo:', userInfo);
     }, [currentUser]);
 
     const getUserInfo = async () => {
@@ -48,24 +49,14 @@ const Profile = ({ navigation }) => {
         }
     };
 
-    const updateUser = async (formData) => {
-        try {
-            const response = await sendRequest(requestMethods.PUT, 'users/', formData);
-            if (response.status !== 200) throw new Error('Error updating user info');
-            setCurrentUser(response.data);
-            console.log('Updated User:', response.data);
-            setSwitchHandler(false);
-        } catch (error) {
-            console.log('Error updating user info:', error);
-        }
-    };
-
     return currentUser ? (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
             {/* <View style={styles.topProfileView}> */}
             <Pressable style={styles.profilePicture} onPress={handleImagePicker}>
                 <Image
-                    source={{ uri: profilePicturesUrl + currentUser.picture }}
+                    source={{
+                        uri: selectedPicture ? selectedPicture.assets[0].uri : profilePicturesUrl + userInfo.picture,
+                    }}
                     style={switchHandler ? styles.profileDetailsPictureEdit : styles.profileDetailsPicture}
                 />
             </Pressable>
@@ -91,7 +82,7 @@ const Profile = ({ navigation }) => {
                         </Text>
 
                         <Text style={[utilities.textM, utilities.myFontMedium]}>My Details</Text>
-                        {currentUser && currentUser.role.id === 1 && (
+                        {currentUser && currentUser.role?.id === 1 && (
                             <View style={[utilities.flexRow, utilities.flexWrap, { marginTop: 16, gap: 4 }]}>
                                 <DetailsPill item={currentUser?.instrument} />
                                 <DetailsPill item={currentUser?.experience} />
@@ -111,8 +102,9 @@ const Profile = ({ navigation }) => {
                                 handlePickerChange={handlePickerChange}
                             />
                         </ScrollView>
+                        <Text style={[styles.errorText, { marginTop: 'auto' }]}>{error || authError}</Text>
 
-                        <PrimaryBtn text={'Save'} marginTop={12} handlePress={() => handleProceed(updateUser)} />
+                        <PrimaryBtn text={'Save'} marginTop={12} handlePress={() => handleProceed(true)} />
                     </>
                 )}
             </View>

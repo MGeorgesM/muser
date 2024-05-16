@@ -3,7 +3,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { useUser } from '../../contexts/UserContext';
 import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
 
-
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
 export const useUserInfoLogic = () => {
@@ -11,7 +10,7 @@ export const useUserInfoLogic = () => {
     const [profileProperties, setProfileProperties] = useState({});
     const [selectedPicture, setSelectedPicture] = useState(null);
     const [error, setError] = useState(null);
-    const { userInfo, setUserInfo, authError, setAuthError, handleSignUp } = useUser();
+    const { userInfo, setUserInfo, authError, setAuthError, handleSignUp, handleUpdate } = useUser();
 
     useEffect(() => {
         const getProperties = async () => {
@@ -58,13 +57,13 @@ export const useUserInfoLogic = () => {
         if (result.canceled) return;
         setError(null);
         setSelectedPicture(result);
-        setUserInfo((prev) => ({ ...prev, picture: result.uri }));
+        setUserInfo((prev) => ({ ...prev, picture: result.assets[0].uri }));
     };
 
-    const validateForm = () => {
+    const validateForm = (update = false) => {
         setError(null);
 
-        if (!selectedPicture) {
+        if (!selectedPicture && !update) {
             setError('Please select a profile picture');
             return false;
         }
@@ -96,32 +95,35 @@ export const useUserInfoLogic = () => {
         }
     };
 
-    const handleUserInfoInput = () => {
-        setError(null);
-        const userInputValid = validateForm();
-
-        if (!userInputValid) return;
-        console.log('Signing up:', userInfo);
-
+    const handleUserPicture = (formData) => {
         const uri = selectedPicture.assets[0].uri;
         const filename = selectedPicture.assets[0].uri.split('/').pop();
         const match = /\.(\w+)$/.exec(filename);
         const ext = match?.[1];
         const type = match ? `picture/${match[1]}` : `picture`;
 
-        console.log('Selected Picture:', selectedPicture);
+        formData.append('picture', {
+            uri: selectedPicture.assets[0].uri,
+            name: `photo.${ext}`,
+            type: `image/${ext}`,
+        });
+    };
+
+    const handleUserInfoInput = (update = false) => {
+        setError(null);
+        const userInputValid = validateForm(update);
+
+        if (!userInputValid) return;
 
         const formData = new FormData();
 
+        console.log('Lat Step:', userInfo);
         for (const key in userInfo) {
-            if (userInfo[key] === '') continue;
+            if (!userInfo[key] || userInfo[key] === '') continue;
+            if (key === 'email' && update) continue;
             if (key === 'picture') {
-                console.log('here!');
-                formData.append('picture', {
-                    uri: selectedPicture.assets[0].uri,
-                    name: `photo.${ext}`,
-                    type: `image/${ext}`,
-                });
+                selectedPicture && handleUserPicture(formData);
+            
             } else if (Array.isArray(userInfo[key])) {
                 userInfo[key].forEach((item) => {
                     formData.append(`${key}[]`, item);
@@ -146,10 +148,10 @@ export const useUserInfoLogic = () => {
         setUserInfo((prev) => ({ ...prev, genres: newGenres }));
     };
 
-    const handleProceed = async () => {
-        const formData = handleUserInfoInput();
+    const handleProceed = async (update = false) => {
+        const formData = handleUserInfoInput(update);
         if (!formData) return;
-        handleSignUp(formData);
+        update ? handleUpdate(formData) : handleSignUp(formData);
     };
 
     return {
