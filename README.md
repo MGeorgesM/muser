@@ -5,19 +5,18 @@
 <!-- project philosophy -->
 <img src="./readme/title2.svg"/>
 
-> An app where musicians can discover new talents, showcase their skills, and make music together effortlessly.
->
-> Designed for musicians seeking seamless connections to form bands, play music and perform at nearby venues.
+> Muser is a mobile app designed for musicians to connect with each others, spontaneously form bands, book venues, and have their performances livestreamed.
+> Muser offers its user base live streaming, live messaging, and an AI-powered matchmaking system to form bands effortlessly.
 
 ### User Stories
 
--   As a user, I want to browse and message musicians to form a band so that I can connect with like-minded individuals and create music together easily.
--   As a user, I want to view and book available venues so that I can find suitable places to showcase my band's performances and reach a wider audience.
--   As a user, I want to live stream my band performance so that fans and potential collaborators can watch us play in real-time, regardless of their location.
+-   As a musician, I want to browse and message musicians to form a band so that I can connect with like-minded individuals.
+-   As a musician, I want to view and book available venues so that I can find suitable places to showcase my band's performances and reach a wider audience.
+-   As a musician, I want to have my performance livestreamed so that fans and potential collaborators can watch us play in real-time, regardless of their location.
 
 -   As a venue, I want to receive notifications and requests from bands interested in performing so that I can organize exiting events for my customers.
 -   As a venue, I want to easily manage bookings through the app so that I can streamline the process and focus on providing a great experience.
--   As a venue, I want feedback from bands so that I can continuously improve and offer better services to future performers.
+-   As a venue, I want to livestream any show happening on my premises, so I can reach a broader audience online and attract more shows in the future.
 
 <br><br>
 
@@ -26,11 +25,13 @@
 
 ### Muser is built using the following technologies:
 
--   This project uses the [Flutter app development framework](https://flutter.dev/). Flutter is a cross-platform hybrid app development platform which allows us to use a single codebase for apps on mobile, desktop, and the web.
--   For persistent storage (database), the app uses the [Hive](https://hivedb.dev/) package which allows the app to create a custom storage schema and save it to a local database.
--   To send local push notifications, the app uses the [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) package which supports Android, iOS, and macOS.
-    -   🚨 Currently, notifications aren't working on macOS. This is a known issue that we are working to resolve!
--   The app uses the font ["Work Sans"](https://fonts.google.com/specimen/Work+Sans) as its main font, and the design of the app adheres to the material design guidelines.
+-   [Laravel 11](https://laravel.com/). A PHP framework that provides a robust set of tools for web apps development.
+-   [React Native](https://reactnative.dev/). A popular framework for building mobile apps using JavaScript and React, allowing for cross-platform development with a single codebase.
+-   [Firebase Cloud Firestore](https://firebase.google.com/products/firestore/). A scalable database from Firebase and Google Cloud Platform. It provides real-time data synchronization, querying, and offline support, making it ideal for building Live applications.
+-   [Firebase Cloud Messaging](https://firebase.google.com/products/cloud-messaging/). A cross-platform messaging solution to send notifications reliably to users' devices.
+-   [OpenAI](https://openai.com/). Providing advanced artificial intelligence technologies and APIs, enabling the integration of powerful AI capabilities.
+-   [MySQL](https://www.mysql.com/). A widely-used open-source relational database management system. It is known for its reliability, performance, and ease of use, making it an excellent choice for managing and organizing data in web apps.
+
 
 <br><br>
 
@@ -39,7 +40,7 @@
 
 > We designed Muser using wireframes and mockups, iterating on the design until we reached the ideal layout for easy navigation and a seamless user experience.
 
--   Project Figma design [figma](https://www.figma.com/file/LsuOx5Wnh5YTGSEtrgvz4l/Purrfect-Pals?type=design&node-id=257%3A79&mode=design&t=adzbABt5hbb91ucZ-1)
+-   Project Figma design [figma](https://www.figma.com/design/Bg7RZIYS3dprGnSqn3273D/Muser?node-id=541%3A2275&t=VXzTQUURH5dCvkfB-1)
 
 ### Mockups
 
@@ -69,14 +70,6 @@
 | Home screen                               | Menu Screen                             | Order Screen                            | Checkout Screen                         |
 | ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
 
-### Admin Screens (Web)
-
-| Login screen                            | Register screen                       | Landing screen                        |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
-| Home screen                             | Menu Screen                           | Order Screen                          |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
-
 <br><br>
 
 <!-- Prompt Engineering -->
@@ -84,7 +77,7 @@
 
 ### Mastering AI Interaction: Unveiling the Power of Prompt Engineering:
 
--   This project uses advanced prompt engineering techniques to optimize the interaction with natural language processing models. By skillfully crafting input instructions, we tailor the behavior of the models to achieve precise and efficient language understanding and generation for various tasks and preferences.
+-   In my Laravel backend, I implemented an advanced AI-powered matchmaking system by integrating the latest OpenAI model. Through prompt engineering, I crafted detailed instructions for the AI to accurately extract and interpret any user input, considering musical genres, locations, instruments, and experience level, the system dynamically matches potential bandmates based on these criteria. This seamless integration transforms the user experience, making the process of finding and forming bands not only efficient but also exciting and intuitive.
 
 <br><br>
 
