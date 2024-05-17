@@ -24,6 +24,56 @@ class UserControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_can_get_user_details_by_id()
+    {
+        $anotherUser = User::factory()->withPictureAndGenres('https://via.placeholder.com/150', 1, [1, 2])->create();
+
+        $response = $this->getJson("/api/users/{$anotherUser->id}");
+
+        $response->assertStatus(200)
+            ->assertJsonStructure(['user' => ['id', 'name', 'email', 'about', 'picture', 'location', 'genres', 'instrument', 'role']]);
+    }
+
+    #[Test]
+    public function it_returns_404_if_user_not_found()
+    {
+        $response = $this->getJson('/api/users/9999');
+
+        $response->assertStatus(404)
+            ->assertJson(['message' => 'User not found']);
+    }
+
+    #[Test]
+    public function it_can_get_users_pictures_and_names()
+    {
+        $users = User::factory()->count(3)->withPictureAndGenres('https://via.placeholder.com/150', 1, [1, 2])->create();
+        $userIds = $users->pluck('id')->toArray();
+
+        $response = $this->getJson('/api/users/details?ids[]=' . implode(',', $userIds));
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([['id', 'picture', 'name']]);
+    }
+
+    #[Test]
+    public function it_returns_400_if_no_ids_provided()
+    {
+        $response = $this->getJson('/api/users/details');
+
+        $response->assertStatus(400)
+            ->assertJson(['message' => 'No IDs provided']);
+    }
+
+    #[Test]
+    public function it_returns_404_if_no_users_found()
+    {
+        $response = $this->getJson('/api/users/details?ids[]=9999');
+
+        $response->assertStatus(404)
+            ->assertJson(['message' => 'No users found']);
+    }
+
+    #[Test]
     public function it_can_get_feed_users_by_role()
     {
         $response = $this->getJson('/api/users/type/musician');
