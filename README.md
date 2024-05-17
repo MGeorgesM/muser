@@ -63,11 +63,11 @@
 
 ### User Screens (Mobile)
 
-| Login screen                              | Register screen                         | Landing screen                          | Loading screen                          |
+<!-- | Login screen                              | Register screen                         | Landing screen                          | Loading screen                          |
 | ----------------------------------------- | --------------------------------------- | --------------------------------------- | --------------------------------------- |
 | ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
 | Home screen                               | Menu Screen                             | Order Screen                            | Checkout Screen                         |
-| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
+| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | -->
 
 <br><br>
 
@@ -76,7 +76,7 @@
 
 ### Mastering AI Interaction: Unveiling the Power of Prompt Engineering:
 
--   In my Laravel backend, I implemented an advanced AI-powered matchmaking system by integrating the latest OpenAI model. Through prompt engineering, I crafted detailed instructions for the AI to accurately extract and interpret any user input, considering musical genres, locations, instruments, and experience level, the system dynamically matches potential bandmates based on these criteria. This seamless integration transforms the user experience, making the process of finding and forming bands not only efficient but also exciting and intuitive.
+-   The implementation of an AI-powered matchmaking system by integrating the latest OpenAI model. Through prompt engineering, we crafted detailed instructions for the AI to accurately extract and interpret any user input, considering musical genres, user locations, required instruments, and experience level, the system dynamically matches potential bandmates based on these criteria. This seamless integration transforms the user experience, making the process of finding and forming bands not only efficient but also exciting and intuitive.
 
 <br><br>
 
