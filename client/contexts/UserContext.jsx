@@ -141,9 +141,9 @@ export const UserProvider = ({ children }) => {
             const response = await sendRequest(requestMethods.POST, 'users/', formData);
             if (response.status !== 200) throw new Error('Error updating user info');
             setCurrentUser(response.data.user);
-            console.log('Updated User:', response.data.user);
         } catch (error) {
             console.log('Error updating user info:', error);
+            setAuthError(error.response.data.message);
         }
     };
 

@@ -1,5 +1,15 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, Pressable, ScrollView, TouchableOpacity } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Dimensions,
+    Image,
+    Pressable,
+    ScrollView,
+    TouchableOpacity,
+    TextInput,
+} from 'react-native';
 
 import { useUser } from '../../contexts/UserContext';
 import { Camera, ChevronLeft, LogOut } from 'lucide-react-native';
@@ -15,10 +25,14 @@ import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 import { useUserInfoLogic } from '../Auth/userInfoLogic';
 import UserInfoForm from '../../components/Forms/UserInfoForm';
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
+import UserCredentialsForm from '../../components/Forms/UserCredentialsForm';
 
 const Profile = ({ navigation }) => {
     const { currentUser, authError, handleSignOut } = useUser();
-    const [switchHandler, setSwitchHandler] = useState(false);
+    const [isEditing, setIsEditing] = useState({
+        details: false,
+        credentials: false,
+    });
     const {
         error,
         userInfo,
@@ -34,7 +48,11 @@ const Profile = ({ navigation }) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'Profile',
+            headerTitle: isEditing.credentials
+                ? 'Edit Login Details'
+                : isEditing.details
+                ? 'Edit your Profile'
+                : 'Profile',
             headerStyle: {
                 backgroundColor: colors.bgDarkest,
                 shadowColor: 'transparent',
@@ -49,27 +67,19 @@ const Profile = ({ navigation }) => {
             },
 
             headerLeft: () => (
-                <ChevronLeft
-                    size={24}
-                    color="white"
-                    onPress={() => {
-                        switchHandler ? setSwitchHandler(!switchHandler) : navigation.goBack();
-                    }}
-                    style={{ marginLeft: 20 }}
-                />
+                <ChevronLeft size={24} color="white" onPress={handleBackPress} style={{ marginLeft: 20 }} />
             ),
 
             headerRight: () => (
                 <LogOut size={24} color={'white'} style={{ marginEnd: 20 }} onPress={() => handleSignOut(navigation)} />
             ),
         });
-    }, []);
+    }, [isEditing]);
+
+    console.log('isEditing:', isEditing);
 
     useEffect(() => {
         getUserInfo();
-        setSwitchHandler(false);
-        console.log('Current User:', currentUser);
-        console.log('Current User Ifo:', userInfo);
     }, [currentUser]);
 
     const getUserInfo = async () => {
@@ -82,36 +92,44 @@ const Profile = ({ navigation }) => {
         }
     };
 
+    const handleBackPress = () => {
+        setIsEditing((prev) => {
+            if (prev.details || prev.credentials) {
+                return { details: false, credentials: false };
+            } else {
+                navigation.goBack();
+                return prev;
+            }
+        });
+    };
+
     return currentUser ? (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
-            {!switchHandler && (
-                <>
-                    <View style={styles.profilePicture}>
-                        <View style={styles.imageContainer}>
-                            <Image
-                                source={{
-                                    uri: selectedPicture
-                                        ? selectedPicture.assets[0].uri
-                                        : profilePicturesUrl + userInfo.picture,
-                                }}
-                                style={styles.profileDetailsPicture}
-                            />
-                            <View style={styles.cameraIconContainer}>
-                                <Camera size={24} color={'white'} onPress={handleImagePicker} />
+            <View style={styles.profileDetailsSection}>
+                {!isEditing.details && !isEditing.credentials && (
+                    <>
+                        <View style={styles.profilePicture}>
+                            <View style={styles.imageContainer}>
+                                <Image
+                                    source={{
+                                        uri: selectedPicture
+                                            ? selectedPicture.assets[0].uri
+                                            : profilePicturesUrl + userInfo.picture,
+                                    }}
+                                    style={styles.profileDetailsPicture}
+                                />
+                                <View style={styles.cameraIconContainer}>
+                                    <Camera size={24} color={'white'} onPress={handleImagePicker} />
+                                </View>
                             </View>
                         </View>
-                    </View>
-                    <View style={styles.profileNameSecton}>
-                        <Text style={[utilities.textL, utilities.myFontBold]}>{currentUser.name}</Text>
-                        <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
-                            {currentUser.email}
-                        </Text>
-                    </View>
-                </>
-            )}
-            <View style={styles.profileDetailsSection}>
-                {!switchHandler ? (
-                    <>
+                        <View style={styles.profileNameSecton}>
+                            <Text style={[utilities.textL, utilities.myFontBold]}>{currentUser.name}</Text>
+                            <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.gray }]}>
+                                {currentUser.email}
+                            </Text>
+                        </View>
+
                         <Text style={[utilities.textM, utilities.myFontMedium]}>About Me</Text>
                         <Text
                             style={[
@@ -133,31 +151,36 @@ const Profile = ({ navigation }) => {
                             </View>
                         )}
                     </>
-                ) : (
-                    <>
-                        <ScrollView>
-                            <UserInfoForm
-                                userInfo={userInfo}
-                                setUserInfo={setUserInfo}
-                                profileProperties={profileProperties}
-                                handlePress={handlePress}
-                                handlePickerChange={handlePickerChange}
-                            />
-                        </ScrollView>
-                        <Text style={[styles.errorText, { marginTop: 'auto' }]}>{error || authError}</Text>
-
-                        <PrimaryBtn text={'Save'} marginTop={12} handlePress={() => handleProceed(true)} />
-                    </>
                 )}
+                <View style={[utilities.flexed, {marginTop:12}]}>
+                    {isEditing?.details && (
+                        <UserInfoForm
+                            userInfo={userInfo}
+                            setUserInfo={setUserInfo}
+                            profileProperties={profileProperties}
+                            handlePress={handlePress}
+                            handlePickerChange={handlePickerChange}
+                        />
+                    )}
+
+                    {isEditing?.credentials && <UserCredentialsForm userInfo={userInfo} setUserInfo={setUserInfo} />}
+
+                </View>
+                <Text style={[styles.errorText, { marginTop: 'auto' }]}>{error || authError}</Text>
+                <PrimaryBtn text={'Save'} marginTop={12} handlePress={() => handleProceed(true)} />
             </View>
-            {!switchHandler && (
+            {!isEditing.credentials && !isEditing.details && (
                 <View style={styles.editProfileModal}>
                     <SettingsCard
                         iconComponent={<UserRoundCog color={'white'} />}
                         text={'Edit Profile'}
-                        onPress={() => setSwitchHandler(!switchHandler)}
+                        onPress={() => setIsEditing({ details: true, credentials: false })}
                     />
-                    <SettingsCard iconComponent={<LockKeyhole color={'white'} />} text={'Edit Login Details'} />
+                    <SettingsCard
+                        iconComponent={<LockKeyhole color={'white'} />}
+                        text={'Edit Login Details'}
+                        onPress={() => setIsEditing({ details: false, credentials: true })}
+                    />
                 </View>
             )}
         </View>
@@ -171,6 +194,12 @@ export default Profile;
 const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
+    profileDetailsSection: {
+        flex: 1,
+        paddingHorizontal: 20,
+        paddingBottom: 0,
+    },
+
     profilePicture: {
         alignItems: 'center',
         marginTop: 16,
@@ -197,14 +226,8 @@ const styles = StyleSheet.create({
 
     profileNameSecton: {
         alignItems: 'center',
-        marginTop: 12,
-    },
-
-    profileDetailsSection: {
-        flex: 1,
-        paddingTop: 24,
-        paddingHorizontal: 20,
-        paddingBottom: 0,
+        marginTop: 8,
+        marginBottom: 24,
     },
 
     editProfileModal: {
