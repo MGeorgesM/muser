@@ -43,22 +43,18 @@
 
 ### Mockups
 
-| Landing                                  | Feed                               | Musician Profile                              |
-| ---------------------------------- | ---------------------------------- | ---------------------------------- |
-| ![Landing](./readme/mockups/welcome.png) | ![Feed](./readme/mockups/feed.png) | ![Musician](./readme/mockups/userProfile.png) |
-
-| Venue Profile                               | Venues                                | Livestream                               |
-| ---------------------------------- | ---------------------------------- | ---------------------------------- |
-| ![Venue](./readme/mockups/venueProfile.png) | ![Venues](./readme/mockups/venue.png) | ![Livestream](./readme/mockups/show.png) |
+| Musician Profile                             | Venues                               | Venue Profile                               |
+| -------------------------------------------- | ------------------------------------ | ------------------------------------------- |
+| ![Landing](./readme/mockups/userProfile.png) | ![fsdaf](./readme/mockups/venue.png) | ![fsdaf](./readme/mockups/venueProfile.png) |
 
 <br><br>
 
 <!-- Database Design -->
-<img src="./readme/title5.svg" heigh='800'/>
+<img src="./readme/title5.svg"/>
 
 ### Database Design:
 
-<img src='./readme//erDiagram.jpg>
+<img src='./readme//erDiagram.jpg'  heigh='800'>
 
 <br><br>
 
