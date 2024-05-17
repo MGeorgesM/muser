@@ -136,14 +136,15 @@ export const UserProvider = ({ children }) => {
     };
 
     const handleUpdate = async (formData) => {
-        console.log('Updating User:');
         try {
             const response = await sendRequest(requestMethods.POST, 'users/', formData);
             if (response.status !== 200) throw new Error('Error updating user info');
             setCurrentUser(response.data.user);
+            setAuthError(null);
         } catch (error) {
             console.log('Error updating user info:', error);
-            setAuthError(error.response.data.message);
+            setAuthError(error.response?.data?.message);
+            throw error;
         }
     };
 

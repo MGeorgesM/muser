@@ -95,6 +95,23 @@ export const useUserInfoLogic = () => {
         }
     };
 
+    const validateCredentials = async () => {
+        if (!userInfo.email.length > 0 || !userInfo.email.includes('@') || !userInfo.email.includes('.')) {
+            setError('Please enter a valid email address');
+            return false;
+        } else if (userInfo.new_password && userInfo.new_password.length > 6 && !userInfo.current_password) {
+            setError('Please enter your current password');
+            return false;
+        } else if (userInfo.current_password && userInfo.new_password.length < 6) {
+            setError('Password must be at least 6 characters long');
+            return false;
+        } else {
+            setError(null);
+            setAuthError(null);
+            return true;
+        }
+    };
+
     const handleUserPicture = (formData) => {
         const uri = selectedPicture.assets[0].uri;
         const filename = selectedPicture.assets[0].uri.split('/').pop();
@@ -117,13 +134,11 @@ export const useUserInfoLogic = () => {
 
         const formData = new FormData();
 
-        console.log('Lat Step:', userInfo);
         for (const key in userInfo) {
             if (!userInfo[key] || userInfo[key] === '') continue;
             if (key === 'email' && update) continue;
             if (key === 'picture') {
                 selectedPicture && handleUserPicture(formData);
-            
             } else if (Array.isArray(userInfo[key])) {
                 userInfo[key].forEach((item) => {
                     formData.append(`${key}[]`, item);
@@ -132,9 +147,6 @@ export const useUserInfoLogic = () => {
                 formData.append(key, userInfo[key]);
             }
         }
-
-        console.log('UserInfo:', userInfo);
-
         return formData;
     };
 
@@ -150,8 +162,13 @@ export const useUserInfoLogic = () => {
 
     const handleProceed = async (update = false) => {
         const formData = handleUserInfoInput(update);
-        if (!formData) return;
-        update ? handleUpdate(formData) : handleSignUp(formData);
+        if (!formData) return false;
+        try {
+            // update ? await handleUpdate(formData) : await handleSignUp(formData);
+            return true;
+        } catch (error) {
+            return false;
+        }
     };
 
     return {

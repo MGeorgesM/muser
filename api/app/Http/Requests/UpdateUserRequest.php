@@ -34,7 +34,7 @@ class UpdateUserRequest extends FormRequest
             'genres' => 'array',
             'genres.*' => 'exists:genres,id',
             'current_password' => 'required_with:new_password|string',
-            'new_password' => 'nullable|string|min:8|confirmed',
+            'new_password' => 'nullable|string|min:6|confirmed',
             'new_password_confirmation' => 'nullable|string|min:8',
         ];
     }

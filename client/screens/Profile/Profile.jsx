@@ -40,7 +40,6 @@ const Profile = ({ navigation }) => {
         handlePress,
         handleProceed,
         selectedPicture,
-        setSelectedPicture,
         handleImagePicker,
         profileProperties,
         handlePickerChange,
@@ -76,8 +75,6 @@ const Profile = ({ navigation }) => {
         });
     }, [isEditing]);
 
-    console.log('isEditing:', isEditing);
-
     useEffect(() => {
         getUserInfo();
     }, [currentUser]);
@@ -102,6 +99,13 @@ const Profile = ({ navigation }) => {
             }
         });
     };
+
+    const handleSave = async () => {
+        const success = await handleProceed(true);
+        if (success) {
+            setIsEditing({ details: false, credentials: false });
+        }
+    };   
 
     return currentUser ? (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
@@ -152,7 +156,7 @@ const Profile = ({ navigation }) => {
                         )}
                     </>
                 )}
-                <View style={[utilities.flexed, {marginTop:12}]}>
+                <View style={[utilities.flexed, { marginTop: 12 }]}>
                     {isEditing?.details && (
                         <UserInfoForm
                             userInfo={userInfo}
@@ -164,10 +168,9 @@ const Profile = ({ navigation }) => {
                     )}
 
                     {isEditing?.credentials && <UserCredentialsForm userInfo={userInfo} setUserInfo={setUserInfo} />}
-
                 </View>
                 <Text style={[styles.errorText, { marginTop: 'auto' }]}>{error || authError}</Text>
-                <PrimaryBtn text={'Save'} marginTop={12} handlePress={() => handleProceed(true)} />
+                <PrimaryBtn text={'Save'} marginTop={12} handlePress={handleSave} />
             </View>
             {!isEditing.credentials && !isEditing.details && (
                 <View style={styles.editProfileModal}>
@@ -256,5 +259,11 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         alignItems: 'center',
         gap: 10,
+    },
+    errorText: {
+        color: colors.primary,
+        fontSize: 16,
+        fontFamily: 'Montserrat-Bold',
+        textAlign: 'center',
     },
 });
