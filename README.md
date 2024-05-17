@@ -43,12 +43,12 @@
 
 ### Mockups
 
-| Landing                                  | Feed                                | Musician Profile                           |
-| ---------------------------------------- | ----------------------------------- | ------------------------------------------ |
+| Landing                                  | Feed                               | Musician Profile                              |
+| ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | ![Landing](./readme/mockups/welcome.png) | ![Feed](./readme/mockups/feed.png) | ![Musician](./readme/mockups/userProfile.png) |
 
-| Venue Profile                                 | Venues                               | Livestream                          |
-| --------------------------------------------- | ------------------------------------ | ----------------------------------- |
+| Venue Profile                               | Venues                                | Livestream                               |
+| ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | ![Venue](./readme/mockups/venueProfile.png) | ![Venues](./readme/mockups/venue.png) | ![Livestream](./readme/mockups/show.png) |
 
 <br><br>
