@@ -45,11 +45,11 @@
 
 | Landing                                  | Feed                                | Musician Profile                           |
 | ---------------------------------------- | ----------------------------------- | ------------------------------------------ |
-| ![Landing](./readme/mockups/welcome.png) | ![fsdaf](./readme/mockups/feed.png) | ![fsdaf](./readme/mockups/userProfile.png) |
+| ![Landing](./readme/mockups/welcome.png) | ![Feed](./readme/mockups/feed.png) | ![Musician](./readme/mockups/userProfile.png) |
 
 | Venue Profile                                 | Venues                               | Livestream                          |
 | --------------------------------------------- | ------------------------------------ | ----------------------------------- |
-| ![Landing](./readme/mockups/venueProfile.png) | ![fsdaf](./readme/mockups/venue.png) | ![fsdaf](./readme/mockups/show.png) |
+| ![Venue](./readme/mockups/venueProfile.png) | ![Venues](./readme/mockups/venue.png) | ![Livestream](./readme/mockups/show.png) |
 
 <br><br>
 
