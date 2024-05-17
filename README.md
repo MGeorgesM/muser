@@ -32,7 +32,6 @@
 -   [OpenAI](https://openai.com/). Providing advanced artificial intelligence technologies and APIs, enabling the integration of powerful AI capabilities.
 -   [MySQL](https://www.mysql.com/). A widely-used open-source relational database management system. It is known for its reliability, performance, and ease of use, making it an excellent choice for managing and organizing data in web apps.
 
-
 <br><br>
 
 <!-- UI UX -->
@@ -44,9 +43,9 @@
 
 ### Mockups
 
-| Home screen                             | Menu Screen                           | Order Screen                          |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Musician Profile                             | Venues                               | Venue Profile                               |
+| -------------------------------------------- | ------------------------------------ | ------------------------------------------- |
+| ![Landing](./readme/mockups/userProfile.png) | ![fsdaf](./readme/mockups/venue.png) | ![fsdaf](./readme/mockups/venueProfile.png) |
 
 <br><br>
 
