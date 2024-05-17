@@ -1,113 +1,35 @@
-import React, { useLayoutEffect, useEffect, useState } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Dimensions,
-    Image,
-    Pressable,
-    ScrollView,
-    TouchableOpacity,
-    TextInput,
-} from 'react-native';
-
+import React from 'react';
+import { Camera } from 'lucide-react-native';
 import { useUser } from '../../contexts/UserContext';
-import { Camera, ChevronLeft, LogOut } from 'lucide-react-native';
+import { useUserInfoLogic } from '../Auth/userInfoLogic';
 import { colors, utilities } from '../../styles/utilities';
-import { profilePicturesUrl, sendRequest, requestMethods } from '../../core/tools/apiRequest';
-
+import { profilePicturesUrl } from '../../core/tools/apiRequest';
 import { UserRoundCog, LockKeyhole } from 'lucide-react-native';
+import { StyleSheet, Text, View, Dimensions, Image } from 'react-native';
 
 import DetailsPill from '../../components/Misc/DetailsPill/DetailsPill';
 import SettingsCard from '../../components/Cards/SettingsCard/SettingsCard';
-import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 
-import { useUserInfoLogic } from '../Auth/userInfoLogic';
 import UserInfoForm from '../../components/Forms/UserInfoForm';
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 import UserCredentialsForm from '../../components/Forms/UserCredentialsForm';
+import useProfileLogic from './profileLogic';
 
-const Profile = ({ navigation }) => {
-    const { currentUser, authError, handleSignOut } = useUser();
-    const [isEditing, setIsEditing] = useState({
-        details: false,
-        credentials: false,
-    });
+const Profile = () => {
+    const { currentUser, authError } = useUser();
+    const { isEditing, setIsEditing, handleSave } = useProfileLogic(currentUser);
     const {
         error,
         userInfo,
         setUserInfo,
         handlePress,
-        handleProceed,
         selectedPicture,
         handleImagePicker,
         profileProperties,
         handlePickerChange,
     } = useUserInfoLogic();
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerTitle: isEditing.credentials
-                ? 'Edit Login Details'
-                : isEditing.details
-                ? 'Edit your Profile'
-                : 'Profile',
-            headerStyle: {
-                backgroundColor: colors.bgDarkest,
-                shadowColor: 'transparent',
-                elevation: 0,
-                height: 128,
-            },
-
-            headerTitleStyle: {
-                fontFamily: 'Montserrat-Regular',
-                color: colors.white,
-                fontSize: 20,
-            },
-
-            headerLeft: () => (
-                <ChevronLeft size={24} color="white" onPress={handleBackPress} style={{ marginLeft: 20 }} />
-            ),
-
-            headerRight: () => (
-                <LogOut size={24} color={'white'} style={{ marginEnd: 20 }} onPress={() => handleSignOut(navigation)} />
-            ),
-        });
-    }, [isEditing]);
-
-    useEffect(() => {
-        getUserInfo();
-    }, [currentUser]);
-
-    const getUserInfo = async () => {
-        try {
-            const response = await sendRequest(requestMethods.GET, 'auth/me?flat=true', null);
-            if (response.status !== 200) throw new Error('Error getting user info');
-            setUserInfo((prev) => ({ ...prev, ...response.data }));
-        } catch (error) {
-            console.log('Error getting user info:', error);
-        }
-    };
-
-    const handleBackPress = () => {
-        setIsEditing((prev) => {
-            if (prev.details || prev.credentials) {
-                return { details: false, credentials: false };
-            } else {
-                navigation.goBack();
-                return prev;
-            }
-        });
-    };
-
-    const handleSave = async () => {
-        const success = await handleProceed(true);
-        if (success) {
-            setIsEditing({ details: false, credentials: false });
-        }
-    };   
-
-    return currentUser ? (
+    return (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
             <View style={styles.profileDetailsSection}>
                 {!isEditing.details && !isEditing.credentials && (
@@ -187,8 +109,6 @@ const Profile = ({ navigation }) => {
                 </View>
             )}
         </View>
-    ) : (
-        <LoadingScreen />
     );
 };
 
