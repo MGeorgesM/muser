@@ -28,8 +28,6 @@ class AiMatchMakingController extends Controller
         $band_name = json_encode($validatedData['bandname']);
         $music_genre = $this->getGenre($show_descrpition);
 
-        // dd($music_genre);
-
         $prompt = 'I have an app that displays music shows created by musicians, I want you to create an image for this music show poster. When generating the image, you should take in mind the band name: ' . $band_name . ', the show descripiton : ' . $show_descrpition . ' and the main music genre in this show: ' . $music_genre . 'The poster should include the band name, show description, and a background image that fits the show description, do not include people or animals in the design.';
 
         try {
@@ -97,11 +95,11 @@ class AiMatchMakingController extends Controller
             ]);
 
             $response = json_decode($result->choices[0]->message->content, true);
-            return $response['id'] ?? null;  // Extract and return only the genre ID
+            return $response['id'] ?? null;
 
         } catch (\Exception $e) {
             Log::error('Failed to generate response from OpenAI: ' . $e->getMessage());
-            return null;  // Return null on failure
+            return null; 
         }
     }
 
@@ -130,12 +128,7 @@ class AiMatchMakingController extends Controller
         try {
             $result = $client->chat()->create([
                 'model' => 'gpt-4-turbo-preview',
-                // 'model' => 'gpt-3.5-turbo-0125',
                 'messages' => [
-                    // [
-                    //     'role' => 'system',
-                    //     'content' => "Assist in extracting music preferences and user location details from the user's message. Utilize the lists provided to match closest genres, instruments, and locations. Ensure accurate matching for system integration."
-                    // ],
                     [
                         'role' => 'system',
                         'content' => "You're the music expert. You'll receive my message that is posted on a musicians app that let's the user spontaneously form bands, my message is intented to quickly find and filter users that match what i wrote, this message could be related to anything in music, something i'm thinking about or planning to do or just single words."
@@ -159,7 +152,6 @@ class AiMatchMakingController extends Controller
                     [
                         'role' => 'system',
                         'content' => "The response should be formatted as a JSON object with the keys: 'genreIds', 'locationIds', and 'instrumentIds' and 'experienceIds' with value of array of IDs that you return from my message. Ensure accuracy in matching and formatting."
-                        // 'content' => "The response should be formatted as a JSON object with the keys: 'genres', 'locations', and 'instruments' and 'experiences' with value of array of IDs that you return from my message and their respective names. Ensure accuracy in matching and formatting."
                     ],
                     [
                         'role' => 'system',
@@ -191,11 +183,7 @@ class AiMatchMakingController extends Controller
                 ],
             ]);
 
-            // return response($result->choices[0]->message->content);
-
             $response = json_decode($result->choices[0]->message->content, true);
-
-            // dd($response);
 
             if (!isset($response['genreIds'], $response['locationIds'], $response['instrumentIds'])) {
                 return response()->json(['error_OpenAi' => 'Invalid response format from AI'], 422);
@@ -216,43 +204,21 @@ class AiMatchMakingController extends Controller
     {
         $query = User::where('role_id', 1)->where('id', '!=', auth()->id());
 
-        // $lastValidResult = $query->get();
-
         if (!empty($genreIds)) {
             $userIdsFromGenres = MusicianGenre::whereIn('genre_id', $genreIds)->pluck('musician_id')->unique();
             $query = $query->whereIn('id', $userIdsFromGenres);
-            // $newResult = $updatedQuery->get();
-
-            // if ($newResult->isNotEmpty()) {
-            //     $lastValidResult = $newResult;
-            // }
         }
 
         if (!empty($locationIds)) {
             $query = $query->whereIn('location_id', $locationIds);
-            // $newResult = $updatedQuery->get();
-
-            // if ($newResult->isNotEmpty()) {
-            //     $lastValidResult = $newResult;
-            // }
         }
 
         if (!empty($instrumentIds)) {
             $query = $query->whereIn('instrument_id', $instrumentIds);
-            // $newResult = $updatedQuery->get();
-
-            // if ($newResult->isNotEmpty()) {
-            //     $lastValidResult = $newResult;
-            // }
         }
 
         if (!empty($experienceIds)) {
-            $query = $query->whereIn('experience_id', $experienceIds);
-            // $newResult = $updatedQuery->get();
 
-            // if ($newResult->isNotEmpty()) {
-            //     $lastValidResult = $newResult;
-            // }
         }
 
         $users = $query->get();

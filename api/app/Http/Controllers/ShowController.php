@@ -100,46 +100,6 @@ class ShowController extends Controller
         return response()->json($shows);
     }
 
-    // public function getShowsByVenue($venueId, $status = null)
-    // {
-    //     $venue = User::with([
-    //         'shows' => function ($query) {
-
-    //             $query->select('shows.id', 'shows.name', 'shows.date', 'shows.status', 'shows.band_id', 'shows.venue_id', 'shows.picture');
-    //         },
-    //         'shows.band' => function ($query) {
-
-    //             $query->select('bands.id', 'bands.name');
-    //         },
-    //         'shows.band.members' => function ($query) {
-
-    //             $query->join('users as members', 'band_members.user_id', '=', 'members.id',)
-    //                 ->select(
-    //                     'band_members.id',
-    //                     'band_members.band_id',
-    //                     'members.id as id',
-    //                     'members.name as name',
-    //                     'members.picture as picture',
-    //                     'members.instrument_id',
-    //                 )
-    //                 ->with('instrument:id,name');
-    //         }
-    //     ])->find($venueId);
-
-    //     if (!$venue) {
-    //         return response()->json(['error' => 'Venue not found'], 404);
-    //     }
-
-    //     if ($status) {
-    //         $venue->shows = $venue->shows->filter(function ($show) use ($status) {
-    //             return $show->status === $status;
-    //         });
-    //     }
-
-    //     return response()->json($venue->shows, 200);
-    // }
-
-
     public function updateShow(Request $request)
     {
         $request->validate([
@@ -152,12 +112,6 @@ class ShowController extends Controller
         if (!$show) {
             return response()->json(['message' => 'Show not found'], 404);
         }
-
-        // $show_venue_id = $show->venu_id;
-
-        // if ($show_venue_id !== auth()->user()->id) {
-        //     return response()->json(['message' => 'Unauthorized'], 401);
-        // }
 
         $show->status = $request->status;
 
