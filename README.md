@@ -43,18 +43,22 @@
 
 ### Mockups
 
-| Musician Profile                             | Venues                               | Venue Profile                               |
-| -------------------------------------------- | ------------------------------------ | ------------------------------------------- |
-| ![Landing](./readme/mockups/userProfile.png) | ![fsdaf](./readme/mockups/venue.png) | ![fsdaf](./readme/mockups/venueProfile.png) |
+| Landing                                  | Feed                                | Musician Profile                           |
+| ---------------------------------------- | ----------------------------------- | ------------------------------------------ |
+| ![Landing](./readme/mockups/welcome.png) | ![fsdaf](./readme/mockups/feed.png) | ![fsdaf](./readme/mockups/userProfile.png) |
+
+| Venue Profile                                 | Venues                               | Livestream                          |
+| --------------------------------------------- | ------------------------------------ | ----------------------------------- |
+| ![Landing](./readme/mockups/venueProfile.png) | ![fsdaf](./readme/mockups/venue.png) | ![fsdaf](./readme/mockups/show.png) |
 
 <br><br>
 
 <!-- Database Design -->
-<img src="./readme/title5.svg"/>
+<img src="./readme/title5.svg" heigh='800'/>
 
-### Architecting Data Excellence: Innovative Database Design Strategies:
+### Database Design:
 
--   Insert ER Diagram here
+<img src='./readme//erDiagram.jpg>
 
 <br><br>
 
