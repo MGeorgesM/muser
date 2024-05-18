@@ -7,11 +7,12 @@ import { useSelector } from 'react-redux';
 
 const useChatListenersLogic = (route) => {
     const { currentUser } = useUser();
-    const { id, participants, chatTitle } = route.params;
+    const { id, participants, chatTitle, chatAdminId } = route.params;
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
 
-    const [chatProperties, setChatProperties] = useState({
+    const chatPropertiesInitialState = {
+        isAdmin: chatAdminId ? chatAdminId === currentUser.id : false,
         chatMessages: [],
         chatParticipants: [],
         chatConnections: [],
@@ -19,21 +20,16 @@ const useChatListenersLogic = (route) => {
             bandName: '',
             participantsNames: '',
         },
-    });
+    };
+
+    const [chatProperties, setChatProperties] = useState(chatPropertiesInitialState);
 
     useEffect(() => {
         let messagesUnsubscribe;
         let chatTitleUnsubscribe;
         let participantsUnsubscribe;
 
-        setChatProperties({
-            chatMessages: [],
-            chatParticipants: [],
-            localChatTitle: {
-                bandName: '',
-                participantsNames: '',
-            },
-        });
+        setChatProperties(chatPropertiesInitialState);
 
         const chatRef = doc(fireStoreDb, 'chats', id);
 
@@ -44,7 +40,9 @@ const useChatListenersLogic = (route) => {
 
             chatTitleUnsubscribe = onSnapshot(chatRef, (doc) => {
                 const chatData = doc.data();
-
+                chatData &&
+                    chatData.adminId == currentUser.id &&
+                    setChatProperties((prev) => ({ ...prev, isAdmin: true }));
                 if (chatData?.chatTitle) {
                     setChatProperties((prev) => ({ ...prev, localChatTitle: { bandName: chatData.chatTitle } }));
                 } else if (chatData?.participantsIds?.length > 1) {

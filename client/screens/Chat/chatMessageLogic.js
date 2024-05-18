@@ -53,7 +53,7 @@ const useChatMessageLogic = (route, chatProperties, setChatProperties) => {
             });
 
             await setDoc(newChatRef, {
-                chatAdmin: currentUser.id,
+                adminId: currentUser.id,
                 participantsIds: participantsIds,
                 chatTitle: null,
                 lastMessage: {

@@ -17,18 +17,12 @@ const ChatCard = ({ chat, navigation }) => {
     const [participants, setParticipants] = useState(chat.participantsIds);
     const [title, setTitle] = useState(chat.chatTitle);
     const [avatar, setAvatar] = useState(null);
-
+  
     const connectedUsers = useSelector((global) => global.usersSlice.connectedUsers);
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
 
     useEffect(() => {
         chat && getUsersPicutresandNames();
-        // if (!chat.chatTitle) {
-        //     getUsersPicutresandNames();
-        // } else {
-        //     setTitle(chat.chatTitle);
-        //     setAvatar(defaultAvatar);
-        // }
     }, [chat]);
 
     const getUsersPicutresandNamesFromApi = async () => {
@@ -80,6 +74,7 @@ const ChatCard = ({ chat, navigation }) => {
                     id: chat.id,
                     participants: participants,
                     chatTitle: chat.chatTitle,
+                    chatAdminId: chat.adminId,
                 })
             }
         >

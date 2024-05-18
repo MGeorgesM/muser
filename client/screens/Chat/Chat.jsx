@@ -16,13 +16,15 @@ const Chat = ({ navigation, route }) => {
         useChatListenersLogic(route);
     const { modalsVisibility, setModalsVisibility } = useChatLayoutLogic(route, chatProperties);
     const { onSend } = useChatMessageLogic(route, chatProperties, setChatProperties);
-    const { addParticipant, handleFormBand } = useChatBandLogic(
+    const { addParticipant, handleFormBand, removeParticipant } = useChatBandLogic(
         route,
         onSend,
         chatProperties,
         setChatProperties,
-        setModalsVisibility,
+        setModalsVisibility
     );
+
+
     return (
         <View style={{ flex: 1, backgroundColor: colors.bgDark }}>
             <GiftedChat
@@ -59,7 +61,7 @@ const Chat = ({ navigation, route }) => {
             {modalsVisibility.bandModalVisible && (
                 <ChatModal
                     title={chatTitle || chatProperties.localChatTitle.bandName || 'Your Band Name'}
-                    buttonText={chatTitle || chatProperties.localChatTitle.bandName ? null : 'Create Band'}
+                    buttonText={chatTitle || chatProperties.localChatTitle.bandName ? 'Close' : 'Create Band'}
                     data={
                         chatTitle || chatProperties.localChatTitle.bandName
                             ? chatProperties.chatParticipants.length > 0
@@ -68,8 +70,15 @@ const Chat = ({ navigation, route }) => {
                             : null
                     }
                     input={chatTitle || chatProperties.localChatTitle.bandName ? false : true}
-                    handlePress={(!chatProperties.localChatTitle.bandName || !chatTitle) && handleFormBand}
+                    handlePress={(selectedMember) => {
+                        if (!chatProperties.localChatTitle.bandName && !chatTitle) {
+                            handleFormBand(selectedMember);
+                        } else {
+                            removeParticipant(selectedMember);
+                        }
+                    }}
                     setModalVisible={setModalsVisibility}
+                    isAdmin={chatProperties.isAdmin}
                 />
             )}
             {modalsVisibility.connectionModalVisible && (

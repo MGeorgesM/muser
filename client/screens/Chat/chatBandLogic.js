@@ -56,6 +56,47 @@ const useChatBandLogic = (route, onSend, chatProperties, setChatProperties, setM
         setModalsVisibility((prev) => ({ ...prev, connectionModalVisible: false }));
     };
 
+    const removeParticipant = async (participant) => {
+        setModalsVisibility((prev) => ({ ...prev, bandModalVisible: false }));
+        if (!chatProperties.isAdmin || chatProperties.chatParticipants.length === 1 || participants.length < 2) return;
+        console.log('GERE', chatProperties.isAdmin, chatProperties.chatParticipants.length, participants.length);
+        const participantId = participant.id;
+
+        try {
+            const chatRef = doc(fireStoreDb, 'chats', id);
+            const chatDoc = await getDoc(chatRef);
+
+            const newParticipantsList = participants.filter((p) => p.id !== participantId);
+            const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
+            newParticipantsIdsList.push(currentUser.id);
+
+            if (chatDoc.exists()) {
+                await updateDoc(chatRef, {
+                    participantsIds: newParticipantsIdsList,
+                });
+            }
+
+            const messageData = {
+                _id: `${currentUser.id}-${Date.now()}`,
+                text: `${currentUser.name} removed ${participant.name} from the chat`,
+                createdAt: serverTimestamp(),
+                system: true,
+            };
+
+            onSend([messageData]);
+
+            setChatProperties((prev) => ({
+                ...prev,
+                chatParticipants: newParticipantsList,
+            }));
+
+            (chatTitle || chatProperties.localChatTitle.bandName) &&
+                updateBandMembers(chatTitle || chatProperties.localChatTitle.bandName, newParticipantsIdsList);
+        } catch (error) {
+            console.log('Error removing participant', error);
+        }
+    };
+
     const updateBandMembers = async (bandName, membersIds) => {
         try {
             const response = await sendRequest(requestMethods.POST, 'bands', {
@@ -69,7 +110,7 @@ const useChatBandLogic = (route, onSend, chatProperties, setChatProperties, setM
     };
 
     const handleFormBand = async (bandName) => {
-        if (bandName.length === 0 || participants.length === 0) return;
+        if (!bandName || bandName.length === 0 || participants.length === 0) return;
 
         const participantsIds = participants.map((participant) => participant.id);
         participantsIds.push(currentUser.id);
@@ -109,6 +150,7 @@ const useChatBandLogic = (route, onSend, chatProperties, setChatProperties, setM
     return {
         addParticipant,
         handleFormBand,
+        removeParticipant,
     };
 };
 

@@ -6,12 +6,21 @@ import { colors, utilities } from '../../styles/utilities';
 import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
 import PrimaryBtn from '../Misc/PrimaryBtn/PrimaryBtn';
 
-const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, buttonText = null, input = false }) => {
+const ChatModal = ({
+    data,
+    title,
+    handlePress,
+    modalVisible,
+    setModalVisible,
+    buttonText = null,
+    input = false,
+    isAdmin = false,
+}) => {
     const [userInput, setUserInput] = useState('');
     const [selectedMember, setSelectedMember] = useState(null);
 
     const handleMemberSelect = (member) => {
-        setSelectedMember(member);
+        selectedMember?.id === member.id ? setSelectedMember(null) : setSelectedMember(member);
     };
 
     const handleSubmit = () => {
@@ -80,7 +89,12 @@ const ChatModal = ({ data, title, handlePress, modalVisible, setModalVisible, bu
                             </Text>
                         )}
                         {buttonText && (
-                            <PrimaryBtn text={buttonText} marginBottom={16} marginTop={16} handlePress={handleSubmit} />
+                            <PrimaryBtn
+                                text={(buttonText = 'Close' && isAdmin && selectedMember ? 'Remove' : buttonText)}
+                                marginBottom={16}
+                                marginTop={16}
+                                handlePress={handleSubmit}
+                            />
                         )}
                     </View>
                 </View>
