@@ -8,19 +8,24 @@ import { truncateText } from '../../core/tools/formatDate';
 import { PlusIcon, ChevronLeft } from 'lucide-react-native';
 import PictureHeader from '../../components/Misc/PictureHeader/PictureHeader';
 
-export const useChatLayoutHeader = (id, chatTitle, localChatTitle, participants, chatParticipants, onBackPress) => {
+export const useChatLayoutHeader = (id, chatTitle, participants, chatProperties, onBackPress, setModalsVisibility) => {
     const navigation = useNavigation();
-
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: () => {
-                const title = chatTitle || localChatTitle.bandName || localChatTitle.participantsNames;
-
+                const title = chatTitle || chatProperties.localChatTitle.bandName;
                 if (title)
                     return <Text style={[utilities.textM, utilities.myFontMedium]}>{truncateText(title, 20)}</Text>;
-                else {
+                else if (chatProperties.localChatTitle.participantsNames) {
+                    return (
+                        <Text style={[utilities.textM, utilities.myFontMedium]}>
+                            {`You, ${truncateText(chatProperties.localChatTitle.participantsNames, 20)}`}
+                        </Text>
+                    );
+                } else {
                     if (!participants) return;
-                    const participantsList = chatParticipants.length > 0 ? chatParticipants : participants;
+                    const participantsList =
+                        chatProperties.chatParticipants.length > 0 ? chatProperties.chatParticipants : participants;
                     const receiverName = participantsList.map((participant) => participant?.name).join(', ');
                     const reciverPicture = participantsList[0].picture;
                     const receiverId = participantsList[0].id;
@@ -49,16 +54,21 @@ export const useChatLayoutHeader = (id, chatTitle, localChatTitle, participants,
             ),
             headerRight: () => (
                 <View style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', gap: 8 }}>
-                    <Pressable style={styles.bandBtn} onPress={() => setBandModalVisible(true)}>
+                    <Pressable
+                        style={styles.bandBtn}
+                        onPress={() => setModalsVisibility((prev) => ({ ...prev, bandModalVisible: true }))}
+                    >
                         <Text style={styles.bandBtnText}>Band</Text>
                     </Pressable>
-                    <Pressable onPress={() => setConnectionModalVisible(true)}>
+                    <Pressable
+                        onPress={() => setModalsVisibility((prev) => ({ ...prev, connectionModalVisible: true }))}
+                    >
                         <PlusIcon size={24} color="white" />
                     </Pressable>
                 </View>
             ),
         });
-    }, [id, participants, chatParticipants, localChatTitle, chatTitle]);
+    }, [id, participants, chatProperties, chatTitle]);
 };
 
 const styles = StyleSheet.create({

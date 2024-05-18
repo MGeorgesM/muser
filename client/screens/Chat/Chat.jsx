@@ -32,11 +32,10 @@ import ChatModal from '../../components/Modals/ChatModal';
 const Chat = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const { currentUser } = useUser();
-
+    const { id, participants, chatTitle, onBackPress } = route.params;
+    
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
-
-    const { id, participants, chatTitle, onBackPress } = route.params;
 
     const [chatProperties, setChatProperties] = useState({
         chatMessages: [],
@@ -48,18 +47,23 @@ const Chat = ({ navigation, route }) => {
         },
     });
 
-    const [chatMessages, setChatMessages] = useState([]);
-    const [chatParticipants, setChatParticipants] = useState([]);
-    const [chatConnections, setChatConnections] = useState([]);
-    const [localChatTitle, setLocalChatTitle] = useState({
-        bandName: '',
-        participantsNames: '',
+    // const [chatMessages, setChatMessages] = useState([]);
+    // const [chatParticipants, setChatParticipants] = useState([]);
+    // const [chatConnections, setChatConnections] = useState([]);
+    // const [localChatTitle, setLocalChatTitle] = useState({
+    //     bandName: '',
+    //     participantsNames: '',
+    // });
+
+    const [modalsVisibility, setModalsVisibility] = useState({
+        connectionModalVisible: false,
+        bandModalVisible: false,
     });
 
-    const [connectionModalVisible, setConnectionModalVisible] = useState(false);
-    const [bandModalVisible, setBandModalVisible] = useState(false);
+    // const [connectionModalVisible, setConnectionModalVisible] = useState(false);
+    // const [bandModalVisible, setBandModalVisible] = useState(false);
 
-    useChatLayoutHeader(id, chatTitle, localChatTitle, participants, chatParticipants, onBackPress);
+    useChatLayoutHeader(id, chatTitle, participants, chatProperties, onBackPress, setModalsVisibility);
 
     useEffect(() => {
         let messagesUnsubscribe;
@@ -116,25 +120,25 @@ const Chat = ({ navigation, route }) => {
                 if (!chatData) return;
 
                 const participantsIds = chatData.participantsIds;
-                console.log('Participants Ids from Firebase:', participantsIds);
-                console.log(
-                    'Participants from State:',
-                    chatParticipants.map((participant) => participant.id)
-                );
-                console.log(
-                    'Participants from navigation:',
-                    participants.map((participant) => participant.id)
-                );
-                console.log('lengths:', participantsIds.length, chatParticipants.length, participants.length);
+                // console.log('Participants Ids from Firebase:', participantsIds);
+                // console.log(
+                //     'Participants from State:',
+                //     chatProperties.chatParticipants.map((participant) => participant.id)
+                // );
+                // console.log(
+                //     'Participants from navigation:',
+                //     participants.map((participant) => participant.id)
+                // );
+                // console.log('lengths:', participantsIds.length, chatProperties.chatParticipants.length, participants.length);
 
                 if (
-                    participantsIds.length === chatParticipants.length + 1 ||
+                    participantsIds.length === chatProperties.chatParticipants.length + 1 ||
                     participantsIds.length === participants.length + 1
                 ) {
                     return;
                 }
 
-                console.log('Participants updating from firestore');
+                // console.log('Participants updating from firestore');
                 const participantsList = participantsIds
                     .filter((pid) => pid !== currentUser.id)
                     .map((pid) => {
@@ -144,7 +148,7 @@ const Chat = ({ navigation, route }) => {
                         return user;
                     });
 
-                console.log('Participants List:', participantsList);
+                // console.log('Participants List:', participantsList);
                 // setChatParticipants(participantsList);
                 // setChatConnections((prev) =>
                 //     prev.filter((connection) =>
@@ -241,7 +245,8 @@ const Chat = ({ navigation, route }) => {
             newParticipantsIdsList.push(currentUser.id);
 
             if (chatDoc.exists()) {
-                setConnectionModalVisible(false);
+                // setConnectionModalVisible(false);
+                setModalsVisibility((prev) => ({ ...prev, connectionModalVisible: false }));
                 await updateDoc(chatRef, {
                     participantsIds: newParticipantsIdsList,
                 });
@@ -260,7 +265,8 @@ const Chat = ({ navigation, route }) => {
         } catch (error) {
             console.log('Error adding participant', error);
         }
-        setConnectionModalVisible(false);
+        // setConnectionModalVisible(false);
+        setModalsVisibility((prev) => ({ ...prev, connectionModalVisible: false }));
     };
 
     const sendNotification = async (userIds, body, title = null) => {
@@ -407,7 +413,8 @@ const Chat = ({ navigation, route }) => {
             });
 
             if (response.status !== 201) throw new Error('Failed to create band');
-            setBandModalVisible(false);
+            // setBandModalVisible(false);
+            setModalsVisibility((prev) => ({ ...prev, bandModalVisible: false }));
 
             const chatRef = doc(fireStoreDb, 'chats', id);
             await updateDoc(chatRef, {
@@ -464,7 +471,7 @@ const Chat = ({ navigation, route }) => {
                 messagesContainerStyle={{ backgroundColor: colors.bgDark, paddingVertical: 8 }}
                 alignTop={true}
             />
-            {bandModalVisible && (
+            {modalsVisibility.bandModalVisible && (
                 <ChatModal
                     title={chatTitle || chatProperties.localChatTitle.bandName || 'Your Band Name'}
                     buttonText={chatTitle || chatProperties.localChatTitle.bandName ? null : 'Create Band'}
@@ -477,15 +484,15 @@ const Chat = ({ navigation, route }) => {
                     }
                     input={chatTitle || chatProperties.localChatTitle.bandName ? false : true}
                     handlePress={(!chatProperties.localChatTitle.bandName || !chatTitle) && handleFormBand}
-                    setModalVisible={setBandModalVisible}
+                    setModalVisible={setModalsVisibility}
                 />
             )}
-            {connectionModalVisible && (
+            {modalsVisibility.connectionModalVisible && (
                 <ChatModal
                     title={'Your Connections'}
                     buttonText="Add"
                     data={chatProperties.chatConnections}
-                    setModalVisible={setConnectionModalVisible}
+                    setModalVisible={setModalsVisibility}
                     handlePress={addParticipant}
                 />
             )}
@@ -494,7 +501,7 @@ const Chat = ({ navigation, route }) => {
 };
 export default Chat;
 
-const height = Dimensions.get('window').height;
+// const height = Dimensions.get('window').height;
 
 // const styles = StyleSheet.create({
 //     chatModal: {
