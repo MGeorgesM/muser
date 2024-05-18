@@ -19,7 +19,7 @@ export const useChatLayoutHeader = (id, chatTitle, participants, chatProperties,
                 else if (chatProperties.localChatTitle.participantsNames) {
                     return (
                         <Text style={[utilities.textM, utilities.myFontMedium]}>
-                            {`You, ${truncateText(chatProperties.localChatTitle.participantsNames, 20)}`}
+                            {`You, ${truncateText(chatProperties.localChatTitle.participantsNames, 15)}`}
                         </Text>
                     );
                 } else {
@@ -131,6 +131,14 @@ export function renderBubble(props) {
         />
     );
 }
+
+export const renderSystemMessage = (props) => {
+    return (
+        <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 10 }}>
+            <Text style={{ color: '#b2b2b2', fontSize: 12, fontWeight: 600 }}>{props.currentMessage.text}</Text>
+        </View>
+    );
+};
 
 export function renderSend(props) {
     return (
