@@ -78,7 +78,6 @@ const useChatListenersLogic = (route) => {
                 ) {
                     return;
                 }
-
                 const participantsList = participantsIds
                     .filter((pid) => pid !== currentUser.id)
                     .map((pid) => {

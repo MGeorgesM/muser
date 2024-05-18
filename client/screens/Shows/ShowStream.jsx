@@ -75,7 +75,7 @@ const ShowStream = ({ route }) => {
                 )}
                 {(!videoIsMaximized || reactionsVisible) && (
                     <KeyboardAvoidingView>
-                        {videoIsMaximized && reactionsVisible && <CommentsOverlay comments={comments} bottom={48} />}
+                        {videoIsMaximized && reactionsVisible && <CommentsOverlay comments={comments} />}
                         <UserComposer
                             placeholder="Write a comment"
                             value={userComment}

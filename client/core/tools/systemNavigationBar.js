@@ -8,7 +8,7 @@ export const useNavigationBarColor = (color) => {
         const setNavigationBarColor = async (color) => {
             try {
                 await SystemNavigationBar.setNavigationColor(color);
-                setIsColorSet(true);  // Indicate that the color has been set
+                setIsColorSet(true);
             } catch (error) {
                 console.log('Error setting navigation bar color:', error);
             }

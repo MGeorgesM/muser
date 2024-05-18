@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, View } from 'react-native';
 
 import CommentCard from '../../Cards/CommentCard/CommentCard';
 
-const CommentsOverlay = ({ comments, bottom = 42, left = 0 }) => {
+const CommentsOverlay = ({ comments, bottom = 0, left = 0 }) => {
     const scrollViewRef = useRef();
 
     useEffect(() => {
@@ -13,7 +13,7 @@ const CommentsOverlay = ({ comments, bottom = 42, left = 0 }) => {
     }, [comments]);
 
     return (
-        <View style={[styles.commentsContainer, { bottom: comments.length > 1 ? bottom : 8, left: left }]}>
+        <View style={[styles.commentsContainer, { bottom: comments.length > 1 ? bottom : -32, left: left }]}>
             <ScrollView
                 ref={scrollViewRef}
                 showsVerticalScrollIndicator={false}

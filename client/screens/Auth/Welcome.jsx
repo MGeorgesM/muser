@@ -5,7 +5,7 @@ import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
 
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 
-const imageUrl = require('../../assets/appImages/onboard.jpg');
+const imageUrl = require('../../assets/appImages/onboardE.jpg');
 
 const Welcome = ({ navigation }) => {
 

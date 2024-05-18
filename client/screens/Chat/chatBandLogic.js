@@ -1,5 +1,5 @@
 import { fireStoreDb } from '../../config/firebase';
-import { serverTimestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useUser } from '../../core/data/contexts/UserContext';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
@@ -36,7 +36,7 @@ const useChatBandLogic = (route, onSend, chatProperties, setChatProperties, setM
             const messageData = {
                 _id: `${currentUser.id}-${Date.now()}`,
                 text: `${currentUser.name} added ${newParticipant.name} to the chat`,
-                createdAt: serverTimestamp(),
+                createdAt: new Date(),
                 system: true,
             };
 
@@ -58,8 +58,7 @@ const useChatBandLogic = (route, onSend, chatProperties, setChatProperties, setM
 
     const removeParticipant = async (participant) => {
         setModalsVisibility((prev) => ({ ...prev, bandModalVisible: false }));
-        if (!chatProperties.isAdmin || chatProperties.chatParticipants.length === 1 || participants.length < 2) return;
-        console.log('GERE', chatProperties.isAdmin, chatProperties.chatParticipants.length, participants.length);
+        if (!chatProperties.isAdmin || chatProperties.chatParticipants.length === 1) return;
         const participantId = participant.id;
 
         try {
@@ -79,7 +78,7 @@ const useChatBandLogic = (route, onSend, chatProperties, setChatProperties, setM
             const messageData = {
                 _id: `${currentUser.id}-${Date.now()}`,
                 text: `${currentUser.name} removed ${participant.name} from the chat`,
-                createdAt: serverTimestamp(),
+                createdAt: new Date(),
                 system: true,
             };
 
@@ -135,7 +134,7 @@ const useChatBandLogic = (route, onSend, chatProperties, setChatProperties, setM
             const messageData = {
                 _id: `${currentUser.id}-${Date.now()}-${bandName}`,
                 text: `We have formed the band \'${bandName}\'!`,
-                createdAt: serverTimestamp(),
+                createdAt: new Date(),
                 user: {
                     _id: currentUser.id,
                     // avatar: getMessageAvatar(currentUser.id),
