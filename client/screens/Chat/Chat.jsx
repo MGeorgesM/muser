@@ -1,5 +1,5 @@
-import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
-import { TouchableOpacity, View, StyleSheet, Dimensions, Text, Pressable } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, StyleSheet, Dimensions } from 'react-native';
 
 import { fireStoreDb } from '../../config/firebase';
 import {
@@ -15,9 +15,8 @@ import {
     updateDoc,
 } from 'firebase/firestore';
 
-import { PlusIcon, ChevronLeft } from 'lucide-react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
-import { renderBubble, renderSend, renderInputToolbar } from '../../core/tools/chatConfigurations';
+import { renderBubble, renderSend, renderInputToolbar, useChatLayoutHeader } from './chatLayoutConfig';
 
 import { addNewConnection } from '../../store/Users';
 import { useUser } from '../../core/data/contexts/UserContext';
@@ -25,22 +24,29 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { profilePicturesUrl } from '../../core/tools/apiRequest';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
-import { truncateText } from '../../core/tools/formatDate';
 
 import { colors, utilities } from '../../styles/utilities';
 
-import PictureHeader from '../../components/Misc/PictureHeader/PictureHeader';
 import ChatModal from '../../components/Modals/ChatModal';
 
 const Chat = ({ navigation, route }) => {
     const dispatch = useDispatch();
-
     const { currentUser } = useUser();
 
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
 
     const { id, participants, chatTitle, onBackPress } = route.params;
+
+    const [chatProperties, setChatProperties] = useState({
+        chatMessages: [],
+        chatParticipants: [],
+        chatConnections: [],
+        localChatTitle: {
+            bandName: '',
+            participantsNames: '',
+        },
+    });
 
     const [chatMessages, setChatMessages] = useState([]);
     const [chatParticipants, setChatParticipants] = useState([]);
@@ -53,66 +59,20 @@ const Chat = ({ navigation, route }) => {
     const [connectionModalVisible, setConnectionModalVisible] = useState(false);
     const [bandModalVisible, setBandModalVisible] = useState(false);
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerTitle: () => {
-                const title = chatTitle || localChatTitle.bandName || localChatTitle.participantsNames;
-
-                if (title)
-                    return <Text style={[utilities.textM, utilities.myFontMedium]}>{truncateText(title, 20)}</Text>;
-                else {
-                    if (!participants) return;
-                    const participantsList = chatParticipants.length > 0 ? chatParticipants : participants;
-                    const receiverName = participantsList.map((participant) => participant?.name).join(', ');
-                    const reciverPicture = participantsList[0].picture;
-                    const receiverId = participantsList[0].id;
-
-                    return (
-                        <PictureHeader
-                            picture={participantsList.length > 1 ? null : reciverPicture}
-                            name={truncateText(receiverName, 20)}
-                            handlePress={() =>
-                                navigation.navigate('Feed', {
-                                    screen: 'ProfileDetails',
-                                    params: { userId: receiverId },
-                                })
-                            }
-                        />
-                    );
-                }
-            },
-            headerLeft: () => (
-                <TouchableOpacity
-                    onPress={onBackPress || (() => navigation.navigate('ChatMain'))}
-                    style={{ marginLeft: 20 }}
-                >
-                    <ChevronLeft size={24} color="white" />
-                </TouchableOpacity>
-            ),
-            headerRight: () => (
-                <View style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', gap: 8 }}>
-                    <Pressable style={styles.bandBtn} onPress={() => setBandModalVisible(true)}>
-                        <Text style={styles.bandBtnText}>Band</Text>
-                    </Pressable>
-                    <Pressable onPress={() => setConnectionModalVisible(true)}>
-                        <PlusIcon size={24} color="white" />
-                    </Pressable>
-                </View>
-            ),
-        });
-    }, [id, participants, chatParticipants, localChatTitle, chatTitle]);
+    useChatLayoutHeader(id, chatTitle, localChatTitle, participants, chatParticipants, onBackPress);
 
     useEffect(() => {
         let messagesUnsubscribe;
         let chatTitleUnsubscribe;
         let participantsUnsubscribe;
 
-        // Initialize states
-        setChatMessages([]);
-        setChatParticipants([]);
-        setLocalChatTitle({
-            bandName: '',
-            participantsNames: '',
+        setChatProperties({
+            chatMessages: [],
+            chatParticipants: [],
+            localChatTitle: {
+                bandName: '',
+                participantsNames: '',
+            },
         });
 
         const chatRef = doc(fireStoreDb, 'chats', id);
@@ -126,7 +86,8 @@ const Chat = ({ navigation, route }) => {
                 const chatData = doc.data();
 
                 if (chatData?.chatTitle) {
-                    setLocalChatTitle((prev) => ({ ...prev, bandName: chatData.chatTitle }));
+                    // setLocalChatTitle((prev) => ({ ...prev, bandName: chatData.chatTitle }));
+                    setChatProperties((prev) => ({ ...prev, localChatTitle: { bandName: chatData.chatTitle } }));
                 } else if (chatData?.participantsIds?.length > 1) {
                     const participantIds = chatData.participantsIds.filter((pid) => pid !== currentUser.id);
                     const participantNames = participantIds
@@ -139,7 +100,11 @@ const Chat = ({ navigation, route }) => {
                         .filter((name) => name !== null);
 
                     if (participantNames.length > 1) {
-                        setLocalChatTitle((prev) => ({ ...prev, participantsNames: participantNames.join(', ') }));
+                        // setLocalChatTitle((prev) => ({ ...prev, participantsNames: participantNames.join(', ') }));
+                        setChatProperties((prev) => ({
+                            ...prev,
+                            localChatTitle: { participantsNames: participantNames.join(', ') },
+                        }));
                     }
                 }
             });
@@ -180,18 +145,25 @@ const Chat = ({ navigation, route }) => {
                     });
 
                 console.log('Participants List:', participantsList);
-                setChatParticipants(participantsList);
-                setChatConnections((prev) =>
-                    prev.filter((connection) =>
+                // setChatParticipants(participantsList);
+                // setChatConnections((prev) =>
+                //     prev.filter((connection) =>
+                //         participantsList.every((participant) => participant.id !== connection.id)
+                //     )
+                // );
+                setChatProperties((prev) => ({
+                    ...prev,
+                    chatParticipants: participantsList,
+                    chatConnections: prev.chatConnections.filter((connection) =>
                         participantsList.every((participant) => participant.id !== connection.id)
-                    )
-                );
+                    ),
+                }));
             });
         };
 
         const setupMessagesListener = () => {
-            console.log('Starting listener');
-            console.log('Chat ID:', id);
+            // console.log('Starting listener');
+            // console.log('Chat ID:', id);
 
             const messagesRef = collection(chatRef, 'messages');
             const q = query(messagesRef, orderBy('createdAt', 'desc'));
@@ -207,7 +179,8 @@ const Chat = ({ navigation, route }) => {
                     },
                 }));
 
-                setChatMessages(fetchedMessages);
+                // setChatMessages(fetchedMessages);
+                setChatProperties((prev) => ({ ...prev, chatMessages: fetchedMessages }));
             });
         };
 
@@ -230,7 +203,8 @@ const Chat = ({ navigation, route }) => {
             participants.every((participant) => participant.id !== connection.id)
         );
 
-        setChatConnections(remainingConnections);
+        // setChatConnections(remainingConnections);
+        setChatProperties((prev) => ({ ...prev, chatConnections: remainingConnections }));
     };
 
     const getMessageAvatar = (userId) => {
@@ -248,7 +222,6 @@ const Chat = ({ navigation, route }) => {
         const newParticipantId = newParticipant.id;
 
         if (newParticipantId && participants.some((participant) => participant.id === newParticipantId)) {
-            console.log('Participant already exists in chat!');
             return;
         }
 
@@ -256,8 +229,13 @@ const Chat = ({ navigation, route }) => {
             const chatRef = doc(fireStoreDb, 'chats', id);
             const chatDoc = await getDoc(chatRef);
 
+            // const newParticipantsList =
+            //     chatParticipants.length > 0 ? [...chatParticipants, newParticipant] : [...participants, newParticipant];
+
             const newParticipantsList =
-                chatParticipants.length > 0 ? [...chatParticipants, newParticipant] : [...participants, newParticipant];
+                chatProperties.chatParticipants.length > 0
+                    ? [...chatProperties.chatParticipants, newParticipant]
+                    : [...participants, newParticipant];
 
             const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
             newParticipantsIdsList.push(currentUser.id);
@@ -269,10 +247,16 @@ const Chat = ({ navigation, route }) => {
                 });
             }
 
-            setChatConnections((prev) => prev.filter((connection) => connection.id !== newParticipantId));
-            setChatParticipants(newParticipantsList);
-            (chatTitle || localChatTitle.bandName) &&
-                updateBandMembers(chatTitle || localChatTitle.bandName, newParticipantsIdsList);
+            // setChatConnections((prev) => prev.filter((connection) => connection.id !== newParticipantId));
+            // setChatParticipants(newParticipantsList);
+            setChatProperties((prev) => ({
+                ...prev,
+                chatConnections: prev.chatConnections.filter((connection) => connection.id !== newParticipantId),
+                chatParticipants: newParticipantsList,
+            }));
+
+            (chatTitle || chatProperties.localChatTitle.bandName) &&
+                updateBandMembers(chatTitle || chatProperties.localChatTitle.bandName, newParticipantsIdsList);
         } catch (error) {
             console.log('Error adding participant', error);
         }
@@ -294,7 +278,10 @@ const Chat = ({ navigation, route }) => {
     };
 
     const getChatParticipantsAndNotify = async (body, title = null) => {
-        const participantsSource = chatParticipants.length > 0 ? chatParticipants : participants;
+        // const participantsSource = chatParticipants.length > 0 ? chatParticipants : participants;
+        const participantsSource =
+            chatProperties.chatParticipants.length > 0 ? chatProperties.chatParticipants : participants;
+
         const participantsIds = participantsSource.map((participant) => participant.id);
 
         await sendNotification(participantsIds, body, title);
@@ -332,6 +319,7 @@ const Chat = ({ navigation, route }) => {
             });
 
             await setDoc(newChatRef, {
+                chatAdmin: currentUser.id,
                 participantsIds: participantsIds,
                 chatTitle: null,
                 lastMessage: {
@@ -350,16 +338,18 @@ const Chat = ({ navigation, route }) => {
     };
 
     const onSend = useCallback(async (messages = []) => {
-        setChatMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
+        // setChatMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
+        setChatProperties((prev) => ({ ...prev, chatMessages: GiftedChat.append(prev.chatMessages, messages) }));
 
-        if (chatMessages.length === 0) {
+        if (chatProperties.chatMessages.length === 0) {
             try {
                 const firstMessage = messages[0];
                 await createChat(firstMessage);
                 await addConnection();
             } catch (error) {
                 console.error('Error sending first message:', error);
-                setChatMessages((previousMessages) => previousMessages.slice(0, -1));
+                // setChatMessages((previousMessages) => previousMessages.slice(0, -1));
+                setChatProperties((prev) => ({ ...prev, chatMessages: prev.chatMessages.slice(0, -1) }));
             }
         } else {
             try {
@@ -386,7 +376,8 @@ const Chat = ({ navigation, route }) => {
                 });
             } catch (error) {
                 console.log('Error sending message:', error);
-                setChatMessages((previousMessages) => previousMessages.slice(0, -messages.length));
+                // setChatMessages((previousMessages) => previousMessages.slice(0, -messages.length));
+                setChatProperties((prev) => ({ ...prev, chatMessages: prev.chatMessages.slice(0, -messages.length) }));
             }
         }
     });
@@ -423,7 +414,8 @@ const Chat = ({ navigation, route }) => {
                 chatTitle: bandName,
             });
 
-            setLocalChatTitle((prev) => ({ ...prev, bandName }));
+            // setLocalChatTitle((prev) => ({ ...prev, bandName }));
+            setChatProperties((prev) => ({ ...prev, localChatTitle: { bandName } }));
 
             const messageData = {
                 _id: `${currentUser.id}-${Date.now()}-${bandName}`,
@@ -444,7 +436,7 @@ const Chat = ({ navigation, route }) => {
     return (
         <View style={{ flex: 1, backgroundColor: colors.bgDark }}>
             <GiftedChat
-                messages={chatMessages}
+                messages={chatProperties.chatMessages}
                 onSend={(messages) => onSend(messages)}
                 user={{
                     _id: currentUser.id,
@@ -474,17 +466,17 @@ const Chat = ({ navigation, route }) => {
             />
             {bandModalVisible && (
                 <ChatModal
-                    title={chatTitle || localChatTitle.bandName || 'Your Band Name'}
-                    buttonText={chatTitle || localChatTitle.bandName ? null : 'Create Band'}
+                    title={chatTitle || chatProperties.localChatTitle.bandName || 'Your Band Name'}
+                    buttonText={chatTitle || chatProperties.localChatTitle.bandName ? null : 'Create Band'}
                     data={
-                        chatTitle || localChatTitle.bandName
-                            ? chatParticipants.length > 0
-                                ? chatParticipants
+                        chatTitle || chatProperties.localChatTitle.bandName
+                            ? chatProperties.chatParticipants.length > 0
+                                ? chatProperties.chatParticipants
                                 : participants
                             : null
                     }
-                    input={chatTitle || localChatTitle.bandName ? false : true}
-                    handlePress={(!localChatTitle.bandName || !chatTitle) && handleFormBand}
+                    input={chatTitle || chatProperties.localChatTitle.bandName ? false : true}
+                    handlePress={(!chatProperties.localChatTitle.bandName || !chatTitle) && handleFormBand}
                     setModalVisible={setBandModalVisible}
                 />
             )}
@@ -492,7 +484,7 @@ const Chat = ({ navigation, route }) => {
                 <ChatModal
                     title={'Your Connections'}
                     buttonText="Add"
-                    data={chatConnections}
+                    data={chatProperties.chatConnections}
                     setModalVisible={setConnectionModalVisible}
                     handlePress={addParticipant}
                 />
@@ -504,64 +496,64 @@ export default Chat;
 
 const height = Dimensions.get('window').height;
 
-const styles = StyleSheet.create({
-    chatModal: {
-        height: height * 0.2,
-        paddingHorizontal: 20,
-        paddingVertical: 24,
-        justifyContent: 'space-between',
-        borderTopLeftRadius: utilities.borderRadius.xl,
-        borderTopEndRadius: utilities.borderRadius.xl,
-        backgroundColor: colors.bglight,
-    },
+// const styles = StyleSheet.create({
+//     chatModal: {
+//         height: height * 0.2,
+//         paddingHorizontal: 20,
+//         paddingVertical: 24,
+//         justifyContent: 'space-between',
+//         borderTopLeftRadius: utilities.borderRadius.xl,
+//         borderTopEndRadius: utilities.borderRadius.xl,
+//         backgroundColor: colors.bglight,
+//     },
 
-    bandBtn: {
-        backgroundColor: colors.primary,
-        paddingHorizontal: 16,
-        paddingVertical: 4,
-        borderRadius: utilities.borderRadius.m,
-        marginRight: 8,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+//     bandBtn: {
+//         backgroundColor: colors.primary,
+//         paddingHorizontal: 16,
+//         paddingVertical: 4,
+//         borderRadius: utilities.borderRadius.m,
+//         marginRight: 8,
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//     },
 
-    bandBtnText: {
-        fontSize: 16,
-        fontFamily: 'Montserrat-Bold',
-        marginBottom: 1,
-        color: colors.white,
-    },
+//     bandBtnText: {
+//         fontSize: 16,
+//         fontFamily: 'Montserrat-Bold',
+//         marginBottom: 1,
+//         color: colors.white,
+//     },
 
-    bandInputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottomColor: colors.lightGray,
-        borderBottomWidth: 0.5,
-        marginBottom: 10,
-    },
+//     bandInputContainer: {
+//         flexDirection: 'row',
+//         alignItems: 'center',
+//         justifyContent: 'space-between',
+//         borderBottomColor: colors.lightGray,
+//         borderBottomWidth: 0.5,
+//         marginBottom: 10,
+//     },
 
-    formBandInput: {
-        fontSize: 18,
-        color: colors.white,
-        height: 48,
-        textAlign: 'left',
-        width: '80%',
-        marginBottom: -8,
-    },
+//     formBandInput: {
+//         fontSize: 18,
+//         color: colors.white,
+//         height: 48,
+//         textAlign: 'left',
+//         width: '80%',
+//         marginBottom: -8,
+//     },
 
-    headerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
+//     headerContainer: {
+//         flexDirection: 'row',
+//         alignItems: 'center',
+//     },
 
-    avatar: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        marginRight: 8,
+//     avatar: {
+//         width: 48,
+//         height: 48,
+//         borderRadius: 24,
+//         marginRight: 8,
 
-        borderColor: 'white',
-        borderWidth: 0.5,
-    },
-});
+//         borderColor: 'white',
+//         borderWidth: 0.5,
+//     },
+// });
