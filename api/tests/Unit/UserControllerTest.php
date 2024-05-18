@@ -15,10 +15,7 @@ class UserControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = User::where('email', 'lloyd@mail.com')->first();
-        if (!$this->user) {
-            $this->markTestSkipped('User not found in the database.');
-        }
+        $this->user = User::factory()->withPictureAndGenres('picture1.jpg', 1, [1, 2])->create();
 
         $this->actingAs($this->user, 'api');
     }
@@ -47,6 +44,7 @@ class UserControllerTest extends TestCase
     public function it_can_get_users_pictures_and_names()
     {
         $users = User::factory()->count(3)->withPictureAndGenres('https://via.placeholder.com/150', 1, [1, 2])->create();
+
         $userIds = $users->pluck('id')->toArray();
 
         $response = $this->getJson('/api/users/details?ids[]=' . implode(',', $userIds));

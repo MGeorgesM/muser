@@ -12,15 +12,14 @@ class ShowControllerTest extends TestCase
 {
     // use RefreshDatabase;
 
+    protected $user;
+
     protected function setUp(): void
     {
         parent::setUp();
         
-        $this->user = User::where('email', 'lloyd@mail.com')->first();
-        if (!$this->user) {
-            $this->markTestSkipped('User not found in the database.');
-        }
-        
+        $this->user = User::factory()->withPictureAndGenres('picture1.jpg', 1, [1, 2])->create();
+
         $this->actingAs($this->user, 'api');
     }
 
