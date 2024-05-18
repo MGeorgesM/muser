@@ -30,7 +30,7 @@ const Authentication = () => {
             <View style={[utilities.container, utilities.photoOverlayM]}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={[styles.topInnerContainer]}>
-                        <Image style={styles.welcomeLogo} source={logoImg} />
+                        {!keyboardVisible && <Image style={styles.welcomeLogo} source={logoImg} />}
                         <Text style={styles.header}>{switchHandler ? 'Join Muser' : 'Welcome Back'}</Text>
                         {switchHandler ? (
                             <SignUpForm userInfo={userInfo} setUserInfo={setUserInfo} />

@@ -8,8 +8,8 @@ const UserContext = createContext();
 
 const initialUserInfo = {
     name: '',
-    email: '',
-    password: '',
+    email: 'ariana@mail.com',
+    password: 'password',
     about: '',
     picture: '',
     location_id: '',
@@ -136,6 +136,8 @@ export const UserProvider = ({ children }) => {
     };
 
     const handleUpdate = async (formData) => {
+        console.log('here');
+
         try {
             const response = await sendRequest(requestMethods.POST, 'users/', formData);
             if (response.status !== 200) throw new Error('Error updating user info');

@@ -5,13 +5,10 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Show;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 
 class ShowControllerTest extends TestCase
 {
-    // use RefreshDatabase;
-
     protected $user;
 
     protected function setUp(): void

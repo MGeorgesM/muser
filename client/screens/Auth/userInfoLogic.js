@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { useUser } from '../../contexts/UserContext';
-import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
 
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
 export const useUserInfoLogic = () => {
-    useNavigationBarColor('translucent');
     const [profileProperties, setProfileProperties] = useState({});
     const [selectedPicture, setSelectedPicture] = useState(null);
     const [error, setError] = useState(null);
@@ -62,12 +60,10 @@ export const useUserInfoLogic = () => {
 
     const validateForm = (update = false) => {
         setError(null);
-
         if (!selectedPicture && !update) {
             setError('Please select a profile picture');
             return false;
         }
-
         if (
             (userInfo.role_id == 1 && userInfo.about.length > 40) ||
             (userInfo.role_id == 2 && userInfo.venue_name.length > 40)
@@ -129,9 +125,8 @@ export const useUserInfoLogic = () => {
     const handleUserInfoInput = (update = false) => {
         setError(null);
         const userInputValid = validateForm(update);
-
         if (!userInputValid) return;
-
+        
         const formData = new FormData();
 
         for (const key in userInfo) {
@@ -147,6 +142,7 @@ export const useUserInfoLogic = () => {
                 formData.append(key, userInfo[key]);
             }
         }
+
         return formData;
     };
 
@@ -163,10 +159,17 @@ export const useUserInfoLogic = () => {
     const handleProceed = async (update = false) => {
         const formData = handleUserInfoInput(update);
         if (!formData) return false;
+    
         try {
-            // update ? await handleUpdate(formData) : await handleSignUp(formData);
+            if (update) {
+                await handleUpdate(formData);
+            } else {
+                await handleSignUp(formData);
+            }
+            console.log('Success');
             return true;
         } catch (error) {
+            console.error('Error:', error);
             return false;
         }
     };
