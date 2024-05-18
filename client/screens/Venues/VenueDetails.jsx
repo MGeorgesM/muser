@@ -1,74 +1,32 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, FlatList, Pressable } from 'react-native';
-
-import { useUser } from '../../contexts/UserContext';
-
+import React from 'react';
+import { useUser } from '../../core/data/contexts/UserContext';
+import { StyleSheet, Text, View, Image, Dimensions, FlatList } from 'react-native';
 import { utilities, colors } from '../../styles/utilities';
 import { formatDateString } from '../../core/tools/formatDate';
-import { profilePicturesUrl, showsPicturesUrl, sendRequest, requestMethods } from '../../core/tools/apiRequest';
-
-import { ChevronLeft } from 'lucide-react-native';
+import { profilePicturesUrl, showsPicturesUrl } from '../../core/tools/apiRequest';
 
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 import ShowCard from '../../components/Cards/ShowCard/ShowCard';
 import BandMemberCard from '../../components/Cards/BandMemberCard/BandMemberCard';
-import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
+import BackBtn from '../../components/Misc/BackBtn/BackBtn';
+import useVenueDetailsLogic from './venueDetailsLogic';
 
 const VenueDetails = ({ route, navigation }) => {
     const { venue, show, switchView } = route.params;
-
     const { currentUser } = useUser();
-
-    const [switchHandler, setSwitchHandler] = useState(switchView ? true : false);
-    const [shows, setShows] = useState([]);
-    const [selectedShow, setSelectedShow] = useState(show);
-
-    console.log('Selected Show:', selectedShow);
-    console.log('Venue', venue);
-
-    useLayoutEffect(() => {
-        if (show) {
-            setSelectedShow(show);
-        }
-    }, [show, switchView]);
-
-    useEffect(() => {
-        const getVenueShows = async () => {
-            try {
-                const response = await sendRequest(requestMethods.GET, `shows?venue_id=${venue.id}&status=set`, null);
-                if (response.status !== 200) throw new Error('Failed to fetch venue shows');
-
-                setShows(response.data);
-            } catch (error) {
-                console.log('Error fetching venue shows:', error);
-            }
-        };
-        venue && getVenueShows();
-    }, [venue]);
-
-    const handleProceed = () => {
-        switchView
-            ? navigation.navigate('Live', {
-                  screen: 'StreamBroadcast',
-                  params: {
-                      showId: show.id,
-                      showName: `${show.band.name} @ ${show.venue.venue_name}`,
-                  },
-              })
-            : navigation.navigate('ShowDetails', { venueId: venue.id, venueName: venue.venueName });
-    };
-
-    const handleBackBtn = () => {
-        switchView ? navigation.navigate('Live', { screen: 'Streams' }) : setSwitchHandler(!switchHandler);
-    };
-
+    const {
+        shows,
+        selectedShow,
+        switchHandler,
+        handleProceed,
+        handleBackBtn,
+        setSelectedShow,
+        setSwitchHandler,
+        handleMemberCardPress,
+    } = useVenueDetailsLogic(show, venue, switchView);
     return (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
-            {switchHandler && (
-                <Pressable style={styles.backBtn} onPress={handleBackBtn}>
-                    <ChevronLeft size={24} color={colors.white} style={styles.backBtnIcon} />
-                </Pressable>
-            )}
+            {switchHandler && <BackBtn onBackPress={handleBackBtn} />}
             <View>
                 <Image
                     source={{
@@ -81,11 +39,6 @@ const VenueDetails = ({ route, navigation }) => {
                 <View style={[utilities.overlay, styles.borderRadiusBottom, { height: 96, gap: 2 }]}>
                     <Text style={[utilities.textL, utilities.myFontBold, { color: 'white' }]}>
                         {!switchHandler ? venue?.venueName : selectedShow?.band.name}
-                        {switchHandler && (
-                            <Text style={[utilities.myFontRegular, { color: colors.offWhite }]}>
-                                {` - ${selectedShow.genre.name}`}
-                            </Text>
-                        )}
                     </Text>
                     <Text style={[utilities.textS, utilities.myFontRegular, { color: colors.offWhite }]}>
                         {switchHandler ? formatDateString(selectedShow.date) : `${venue?.location.name}, Lebanon`}
@@ -99,6 +52,7 @@ const VenueDetails = ({ route, navigation }) => {
                 {shows.length > 0 || switchHandler ? (
                     <FlatList
                         style={{ marginBottom: 4 }}
+                        showsVerticalScrollIndicator={false}
                         data={!switchHandler ? shows : selectedShow.band.members}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) =>
@@ -106,12 +60,7 @@ const VenueDetails = ({ route, navigation }) => {
                                 <BandMemberCard
                                     entity={item}
                                     navigation={navigation}
-                                    handlePress={() => {
-                                        navigation.navigate('Feed', {
-                                            screen: 'ProfileDetails',
-                                            params: { userId: item.id },
-                                        });
-                                    }}
+                                    handlePress={() => handleMemberCardPress(item.id)}
                                 />
                             ) : (
                                 <ShowCard
@@ -124,7 +73,6 @@ const VenueDetails = ({ route, navigation }) => {
                                 />
                             )
                         }
-                        showsVerticalScrollIndicator={false}
                     />
                 ) : (
                     <Text style={[utilities.textM, utilities.myFontRegular, { color: colors.offWhite }]}>

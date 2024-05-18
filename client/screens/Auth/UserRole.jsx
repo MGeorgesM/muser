@@ -1,18 +1,15 @@
 import React from 'react';
 import RNPickerSelect from 'react-native-picker-select';
+
 import { Image, View, Text, ImageBackground } from 'react-native';
-
-import { useUser } from '../../contexts/UserContext';
-
+import { useUser } from '../../core/data/contexts/UserContext';
 import { colors, utilities } from '../../styles/utilities';
-
 import { ChevronDown } from 'lucide-react-native';
 
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 
 const logoImg = require('../../assets/appImages/logoOnboard.png');
 const imageSource = require('../../assets/appImages/onboardBlurredMax.jpg');
-
 const { styles } = require('../../components/Forms/styles');
 
 const UserRole = ({ navigation }) => {
@@ -24,13 +21,16 @@ const UserRole = ({ navigation }) => {
                     <Image style={styles.welcomeLogo} source={logoImg} />
 
                     <Text style={styles.header}>
-                        What Brings You to <Text style={[utilities.myFontBold,{ color: colors.white }]}>Muser</Text>?
+                        What Brings You to <Text style={[utilities.myFontBold, { color: colors.white }]}>Muser</Text>?
                     </Text>
                     <View style={styles.userTypePrompt}>
                         <Text style={styles.userTypeText}>I'm a</Text>
                         <RNPickerSelect
                             value={userInfo.role_id}
-                            onValueChange={(value) => setUserInfo((prev) => ({ ...prev, role_id: value }))}
+                            onValueChange={(value) => {
+                                setRole(value);
+                                setUserInfo((prev) => ({ ...prev, role_id: value }));
+                            }}
                             items={[
                                 { label: 'Musician', value: '1', color: 'black' },
                                 { label: 'Venue', value: '2', color: 'black' },

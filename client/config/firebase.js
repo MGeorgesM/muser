@@ -20,8 +20,6 @@ const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage)
 });
 
-// persistence: Platform.OS === 'web' ? inMemoryPersistence : getReactNativePersistence(AsyncStorage),
-
 const fireStoreDb = getFirestore(app);
 
 export { auth, fireStoreDb };

@@ -1,26 +1,14 @@
 import React from 'react';
-
 import { StyleSheet, Text, View, ImageBackground, StatusBar } from 'react-native';
-
 import { utilities } from '../../styles/utilities';
 import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
 
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
 
-const imageUrl = require('../../assets/appImages/onboard.jpg');
+const imageUrl = require('../../assets/appImages/onboardE.jpg');
 
 const Welcome = ({ navigation }) => {
-    // useEffect(() => {
-    //     const setNavigationBarColor = async (color) => {
-    //         try {
-    //             await SystemNavigationBar.setNavigationColor(color);
-    //         } catch (error) {
-    //             console.log('Error setting navigation bar color:', error);
-    //         }
-    //     };
-    //     setNavigationBarColor('translucent');
-    // }, []);
-    
+
     useNavigationBarColor('translucent')
 
     return (

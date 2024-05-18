@@ -1,41 +1,32 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-
-// import { GoogleSignin } from '@react-native-google-signin/google-signin';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-
 import messaging from '@react-native-firebase/messaging';
-
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { sendRequest, requestMethods } from '../../tools/apiRequest';
 
 const UserContext = createContext();
 
-// GoogleSignin.configure({
-//     webClientId: '346495985297-4t75dva7hb428hbs85d4olpvapsh5j7m.apps.googleusercontent.com',
-//     offlineAccess: true,
-//     forceCodeForRefreshToken: true,
-// });
+const initialUserInfo = {
+    name: '',
+    email: 'ariana@mail.com',
+    password: 'password',
+    about: '',
+    picture: '',
+    location_id: '',
+    availability_id: '',
+    experience_id: '',
+    instrument_id: '',
+    venue_type_id: '',
+    venue_name: '',
+    role_id: '1',
+    genres: [],
+};
 
 export const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
     const [authError, setAuthError] = useState(null);
-    const [userInfo, setUserInfo] = useState({
-        name: 'Lara',
-        email: 'lara@mail.com',
-        password: 'password',
-        about: '',
-        picture: '',
-        location_id: '',
-        availability_id: '',
-        experience_id: '',
-        instrument_id: '',
-        venue_type_id: '',
-        venue_name: '',
-        role_id: '1',
-        genres: [],
-    });
+    const [userInfo, setUserInfo] = useState(initialUserInfo);
 
     const navigation = useNavigation();
 
@@ -55,19 +46,27 @@ export const UserProvider = ({ children }) => {
     };
 
     const getAndSaveFcmToken = async () => {
-        await messaging().registerDeviceForRemoteMessages();
-        const token = await messaging().getToken();
-        updateUserFcmtoken(token);
+        try {
+            await messaging().registerDeviceForRemoteMessages();
+            const token = await messaging().getToken();
+            updateUserFcmtoken(token);
+        } catch (error) {
+            console.log('Error getting fcm token:', error);
+        }
     };
 
     const setupAuthenticatedUser = async (response) => {
-        await AsyncStorage.setItem('token', response.data.token);
-        await AsyncStorage.setItem('streamToken', response.data.stream_token);
-        await getAndSaveFcmToken();
-        setLoggedIn(true);
-        setCurrentUser(response.data.user);
-        console.log('User login successful:', response.data.user);
-        // loggedIn && navigation.navigate('Feed', { screen: 'FeedMain' });
+        try {
+            await AsyncStorage.setItem('token', response.data.token);
+            await AsyncStorage.setItem('streamToken', response.data.stream_token);
+            await getAndSaveFcmToken();
+            setLoggedIn(true);
+            setAuthError(null);
+            setUserInfo(initialUserInfo);
+            setCurrentUser(response.data.user);
+        } catch (error) {
+            console.log('Error setting up authenticated user:', error);
+        }
     };
 
     const checkUser = async () => {
@@ -91,28 +90,6 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    // const handleGoogleSignIn = async () => {
-    // try {
-    //     await GoogleSignin.hasPlayServices();
-    //     const userInfo = await GoogleSignin.signIn();
-    //     const token = userInfo.idToken;
-
-    //     const response = await sendRequest(requestMethods.POST, 'auth/google', { token });
-    //     if (response.status === 200 && response.data.userExists) {
-    //         await setupAuthenticatedUser();
-    //     } else {
-    //         setUserInfo((prevState) => ({
-    //             ...prevState,
-    //             name: userInfo.user.name,
-    //             email: userInfo.user.email,
-    //         }));
-    //         navigation.navigate('CompleteRegistration');
-    //     }
-    // } catch (error) {
-    //     console.log('Google Sign-In Error:', error);
-    // }
-    // };
-
     const handleSignIn = async () => {
         setAuthError(null);
         try {
@@ -132,6 +109,7 @@ export const UserProvider = ({ children }) => {
             if (response.status !== 200) throw new authError('Failed to log out');
             setLoggedIn(false);
             setCurrentUser(null);
+            setUserInfo(initialUserInfo);
             await AsyncStorage.clear();
 
             // navigation.dispatch(
@@ -157,6 +135,21 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+    const handleUpdate = async (formData) => {
+        console.log('here');
+
+        try {
+            const response = await sendRequest(requestMethods.POST, 'users/', formData);
+            if (response.status !== 200) throw new Error('Error updating user info');
+            setCurrentUser(response.data.user);
+            setAuthError(null);
+        } catch (error) {
+            console.log('Error updating user info:', error);
+            setAuthError(error.response?.data?.message);
+            throw error;
+        }
+    };
+
     return (
         <UserContext.Provider
             value={{
@@ -170,6 +163,7 @@ export const UserProvider = ({ children }) => {
                 handleSignIn,
                 handleSignUp,
                 handleSignOut,
+                handleUpdate,
                 setCurrentUser,
             }}
         >

@@ -33,7 +33,17 @@ class UpdateUserRequest extends FormRequest
             'venue_type_id' => 'exists:venue_types,id',
             'genres' => 'array',
             'genres.*' => 'exists:genres,id',
-            // 'fcmtoken' => 'nullable|string',
+            'current_password' => 'required_with:new_password|string',
+            'new_password' => 'nullable|string|min:6|confirmed',
+            'new_password_confirmation' => 'nullable|string|min:8',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'current_password.required_with' => 'The current password is required when changing the password.',
+            'new_password.confirmed' => 'The new password confirmation does not match.',
         ];
     }
 }

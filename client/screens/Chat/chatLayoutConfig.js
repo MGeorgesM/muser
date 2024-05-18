@@ -1,7 +1,6 @@
-import { TouchableOpacity } from 'react-native';
-
 import { Send as SendIcon } from 'lucide-react-native';
-import { Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
+import { Bubble, Send, InputToolbar, Composer, Day } from 'react-native-gifted-chat';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { colors } from '../../styles/utilities';
 
 export function renderBubble(props) {
@@ -9,20 +8,17 @@ export function renderBubble(props) {
         <Bubble
             {...props}
             wrapperStyle={{
-    
                 right: {
-
                     backgroundColor: colors.bgOffDark,
                     borderRadius: 12,
                     borderTopEndRadius: 0,
-                    marginBottom:2,
-
+                    marginBottom: 2,
                 },
                 left: {
                     backgroundColor: colors.bglighter,
                     borderRadius: 12,
                     borderTopLeftRadius: 0,
-                    marginBottom:2,
+                    marginBottom: 2,
                 },
             }}
             textStyle={{
@@ -48,6 +44,29 @@ export function renderBubble(props) {
         />
     );
 }
+
+export const renderSystemMessage = (props) => {
+    return (
+        <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 10 }}>
+            <Text style={{ marginBottom: 14, color: colors.gray, fontSize: 12, fontFamily: 'Montserrat-Regular' }}>
+                {props.currentMessage.text}
+            </Text>
+        </View>
+    );
+};
+
+export const renderDay = (props) => {
+    return (
+        <Day
+            {...props}
+            textStyle={{
+                color: colors.gray,
+                fontSize: 12,
+                fontFamily: 'Montserrat-Regular',
+            }}
+        />
+    );
+};
 
 export function renderSend(props) {
     return (

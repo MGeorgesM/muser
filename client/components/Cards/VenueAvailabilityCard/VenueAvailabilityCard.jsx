@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, Pressable } from 'react-native';
 import { utilities, colors } from '../../../styles/utilities';
-import { generateRandomDates, generateHours } from '../../../core/data/generateDatetime';
+import { generateRandomDates, generateHours } from '../../../core/tools/generateDatetime';
 
 const VenueAvailabilityCard = ({ duration, setShowBooking, isSelected, onSelect }) => {
     const [randomDate, setRandomDate] = useState('');

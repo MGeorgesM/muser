@@ -1,10 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
-import { colors } from '../../../styles/utilities';
 
-const BackBtn = ({ navigation, onBackPress, color = colors.black, backgroundColor = colors.lightGrayTrsp }) => {
+const BackBtn = ({ navigation, onBackPress, backgroundColor = null, color = 'white' }) => {
     return (
         <TouchableOpacity
             style={[styles.backBtn, { backgroundColor: backgroundColor }]}
@@ -28,7 +26,6 @@ const styles = StyleSheet.create({
         top: 60,
         left: 20,
         zIndex: 1,
-        backgroundColor: colors.lightGrayTrsp,
     },
 
     backBtnIcon: {

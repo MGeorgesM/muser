@@ -11,7 +11,5 @@ class UserOptionsController extends Controller
     {
         $genres = Genre::all();
         return response()->json($genres);
-    }
-
-    
+    }    
 }

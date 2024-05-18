@@ -57,5 +57,5 @@ export function formatDateString(inputDate) {
 
     const suffix = ['th', 'st', 'nd', 'rd'][day % 100 >= 11 && day % 100 <= 13 ? 0 : day % 10] || 'th';
 
-    return `${dayName} ${day}${suffix} of ${monthName}`;
+    return `${dayName}, ${monthName} ${day}${suffix} `;
 }

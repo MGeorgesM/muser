@@ -1,8 +1,6 @@
 import React from 'react';
 import { Text, Image, TouchableOpacity, View } from 'react-native';
-
 import { useUserInfoLogic } from './userInfoLogic';
-
 import { CirclePlus, ChevronLeft } from 'lucide-react-native';
 
 import PrimaryBtn from '../../components/Misc/PrimaryBtn/PrimaryBtn';
@@ -59,7 +57,7 @@ const UserInfo = ({ navigation }) => {
                 />
             </View>
             <Text style={[styles.errorText, { marginTop: 'auto' }]}>{error || authError}</Text>
-            <PrimaryBtn text="Register" handlePress={handleProceed} marginBottom={56} marginTop={12} />
+            <PrimaryBtn text="Register" handlePress={() => handleProceed(false)} marginBottom={56} marginTop={12} />
         </View>
     );
 };

@@ -1,36 +1,18 @@
-import React, { useEffect } from 'react';
-
-import { setVenues } from '../../store/Venues';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { requestMethods, sendRequest } from '../../core/tools/apiRequest';
-
+import React from 'react';
 import ModalHigh from '../../components/Modals/ModalHigh';
 import ShowVenueCard from '../../components/Cards/ShowVenueCards/ShowVenueCard';
 import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
+import useVenuesLogic from './venuesLogic';
 
 const Venues = ({ navigation }) => {
-    const dispatch = useDispatch();
-    const venues = useSelector((global) => global.venuesSlice.venues);
-
-    useEffect(() => {
-        const getVenues = async () => {
-            try {
-                const response = await sendRequest(requestMethods.GET, 'users/type/venue', null);
-                if (response.status !== 200) throw new Error('Failed to fetch venues');
-                dispatch(setVenues(response.data.feedUsers));
-            } catch (error) {
-                console.log('Error fetching venues:', error);
-            }
-        };
-        getVenues();
-    }, []);
+    const { venues, getVenues } = useVenuesLogic();
 
     return venues && venues.length > 0 ? (
         <ModalHigh
             title="Venues"
-            navigation={navigation}
             items={venues}
+            handleRefresh={getVenues}
+            navigation={navigation}
             renderItem={({ item }) => (
                 <ShowVenueCard
                     key={item.id}

@@ -1,10 +1,11 @@
-import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, FlatList, RefreshControl } from 'react-native';
 
 import { ChevronLeft } from 'lucide-react-native';
 import { colors, utilities } from '../../styles/utilities';
 
-const ModalHigh = ({ title, navigation, items, renderItem }) => {
+const ModalHigh = ({ title, navigation, items, renderItem, handleRefresh }) => {
+    const [refreshing, setRefreshing] = useState(false);
     return (
         <View style={styles.main}>
             <View style={[utilities.container, styles.overviewContainer]}>
@@ -23,6 +24,19 @@ const ModalHigh = ({ title, navigation, items, renderItem }) => {
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl
+                            colors={[colors.white]}
+                            progressBackgroundColor={colors.primary}
+                            refreshing={refreshing}
+                            onRefresh={() => {
+                                setRefreshing(true);
+                                handleRefresh().then(() => {
+                                    setRefreshing(false);
+                                });
+                            }}
+                        />
+                    }
                 ></FlatList>
             </View>
         </View>

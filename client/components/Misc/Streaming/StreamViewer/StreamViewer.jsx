@@ -1,33 +1,25 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Pressable, ScrollView } from 'react-native';
-import { CallingState, SfuEvents, useCall, useCallStateHooks, VideoRenderer } from '@stream-io/video-react-native-sdk';
-
-import inCallManager from 'react-native-incall-manager';
-
+import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
+import { SfuEvents, useCall, useCallStateHooks, VideoRenderer } from '@stream-io/video-react-native-sdk';
 import { Play, SwitchCamera, VideoOff, Video, Radio, Mic, MicOff, CircleStop } from 'lucide-react-native';
-
-import { sendRequest, requestMethods } from '../../../../core/tools/apiRequest';
+import { sendNotification } from '../../../../core/tools/apiRequest';
 import { colors, utilities } from '../../../../styles/utilities';
-
 import { useNavigation } from '@react-navigation/native';
+import inCallManager from 'react-native-incall-manager';
 import CommentsOverlay from '../../CommentsOverlay/CommentsOverlay';
 
 const StreamViewer = ({ showName, setCall, comments }) => {
     const call = useCall();
     const navigation = useNavigation();
 
-    const { useCameraState, useMicrophoneState, useCallCallingState, useHasOngoingScreenShare, useParticipants } =
-        useCallStateHooks();
-    const { useParticipantCount, useLocalParticipant, useRemoteParticipants, useIsCallLive } = useCallStateHooks();
+    const { useCameraState, useMicrophoneState } = useCallStateHooks();
+    const { useParticipantCount, useLocalParticipant, useIsCallLive } = useCallStateHooks();
 
     const { status: microphoneStatus } = useMicrophoneState();
     const { status: cameraStatus } = useCameraState();
 
     const totalParticipants = useParticipantCount();
     const localParticipant = useLocalParticipant();
-    const remoteParticipants = useRemoteParticipants();
-
-    const callingState = useCallCallingState();
     const isCallLive = useIsCallLive();
 
     useEffect(() => {
@@ -59,43 +51,11 @@ const StreamViewer = ({ showName, setCall, comments }) => {
 
     const handleStart = async () => {
         await call?.goLive();
-        await sendNotification(showName, null, 'Live Now!');
-    };
-
-    const togglePauseStart = async () => {
-        console.log('Calling State:', callingState);
-        if (callingState === CallingState.JOINED) {
-            console.log('Calling state is Joined, Leaving');
-            await call.leave();
-        } else if (isCallLive) {
-            const call = client.call('livestream', showId);
-            await call.join();
-        } else {
-            console.log('Stream is in Backstage');
-        }
-    };
-
-    const sendNotification = async (body, userIds = null, title = null) => {
-        console.log('Sending Notification');
-        try {
-            const response = await sendRequest(requestMethods.POST, `notifications`, {
-                userIds,
-                title,
-                body,
-            });
-
-            if (response.status !== 200) throw new Error('Failed to send notification');
-        } catch (error) {
-            console.log('Error sending notification:', error);
-        }
+        await sendNotification(null, showName, 'Live Now');
     };
 
     const handleExit = async () => {
         inCallManager.stop();
-        // if (viewer) {
-        //     togglePauseStart();
-        //     return;
-        // }
         await call?.stopLive();
         await call?.stopPublish(SfuEvents.HealthCheckRequest, true);
         await call?.leave();
