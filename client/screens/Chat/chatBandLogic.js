@@ -35,7 +35,7 @@ const useChatBandLogic = (route, onSend, chatProperties, setChatProperties, setM
 
             const messageData = {
                 _id: `${currentUser.id}-${Date.now()}`,
-                text: `${newParticipant.name} has joined the chat!`,
+                text: `${currentUser.name} added ${newParticipant.name} to the chat`,
                 createdAt: serverTimestamp(),
                 system: true,
             };

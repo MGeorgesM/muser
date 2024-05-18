@@ -14,6 +14,7 @@ import { useNavigationBarColor } from '../core/tools/systemNavigationBar';
 const Tab = createBottomTabNavigator();
 
 const MainTabs = () => {
+    
     useNavigationBarColor(colors.bgDark);
     return (
         <Tab.Navigator

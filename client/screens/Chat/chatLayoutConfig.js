@@ -1,5 +1,5 @@
 import { Send as SendIcon } from 'lucide-react-native';
-import { Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
+import { Bubble, Send, InputToolbar, Composer, Day } from 'react-native-gifted-chat';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { colors } from '../../styles/utilities';
 
@@ -48,8 +48,23 @@ export function renderBubble(props) {
 export const renderSystemMessage = (props) => {
     return (
         <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 10 }}>
-            <Text style={{ color: '#b2b2b2', fontSize: 12, fontWeight: 600 }}>{props.currentMessage.text}</Text>
+            <Text style={{ marginBottom: 14, color: colors.gray, fontSize: 12, fontFamily: 'Montserrat-Regular' }}>
+                {props.currentMessage.text}
+            </Text>
         </View>
+    );
+};
+
+export const renderDay = (props) => {
+    return (
+        <Day
+            {...props}
+            textStyle={{
+                color: colors.gray,
+                fontSize: 12,
+                fontFamily: 'Montserrat-Regular',
+            }}
+        />
     );
 };
 

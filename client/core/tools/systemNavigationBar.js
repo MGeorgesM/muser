@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 export const useNavigationBarColor = (color) => {
-    useEffect(() => {
+    useLayoutEffect(() => {
         const setNavigationBarColor = async (color) => {
             try {
                 await SystemNavigationBar.setNavigationColor(color);

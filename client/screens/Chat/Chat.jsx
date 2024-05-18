@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { useChatLayoutLogic } from './chatLayoutLogic';
-import { renderBubble, renderSend, renderInputToolbar, renderSystemMessage } from './chatLayoutConfig';
+import { renderBubble, renderSend, renderInputToolbar, renderSystemMessage, renderDay } from './chatLayoutConfig';
 
 import { colors } from '../../styles/utilities';
 
@@ -47,13 +47,14 @@ const Chat = ({ navigation, route }) => {
                         },
                     });
                 }}
+                alignTop={true}
                 showUserAvatar={false}
-                renderBubble={renderBubble}
+                renderDay={renderDay}
                 renderSend={renderSend}
+                renderBubble={renderBubble}
                 renderInputToolbar={renderInputToolbar}
                 renderSystemMessage={renderSystemMessage}
                 messagesContainerStyle={{ backgroundColor: colors.bgDark, paddingVertical: 8 }}
-                alignTop={true}
             />
             {modalsVisibility.bandModalVisible && (
                 <ChatModal
