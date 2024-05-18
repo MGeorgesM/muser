@@ -34,6 +34,20 @@ export const requestMethods = {
     DELETE: 'DELETE',
 };
 
+export const sendNotification = async (userIds, body, title = null) => {
+    try {
+        const response = await sendRequest(requestMethods.POST, `notifications`, {
+            userIds,
+            title,
+            body,
+        });
+
+        if (response.status !== 200) throw new Error('Failed to send notification');
+    } catch (error) {
+        console.log('Error sending notification:', error);
+    }
+};
+
 export const defaultAvatar = 'http://192.168.1.102:8000/default/logowhite.png';
 export const showsPicturesUrl = 'http://192.168.1.102:8000/show_pictures/';
 export const profilePicturesUrl = 'http://192.168.1.102:8000/profile_pictures/';

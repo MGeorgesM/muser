@@ -27,11 +27,9 @@ const ShowsNavigator = () => {
     useLayoutEffect(() => {
         const initializeClient = async () => {
             if (loggedIn && currentUser && Object.keys(currentUser).length !== 0) {
-                // const initialRoute = currentUser.role.id === 1 ? 'Streams' : 'StreamBroadcast'
                 setInitialRoute(initialRoute);
 
                 const token = await AsyncStorage.getItem('streamToken');
-
                 if (!token) return;
 
                 const user = {
@@ -39,8 +37,6 @@ const ShowsNavigator = () => {
                     name: currentUser.name,
                     image: profilePicturesUrl + currentUser.picture,
                 };
-
-                console.log('Initialized Client', user);
 
                 try {
                     const client = new StreamVideoClient({
@@ -52,7 +48,6 @@ const ShowsNavigator = () => {
                         },
                     });
                     setClient(client);
-                    console.log('Connected to GET stream client!');
                 } catch (error) {
                     console.error('Error setting up Stream client:', error);
                 }

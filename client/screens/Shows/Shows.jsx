@@ -8,13 +8,13 @@ const Shows = ({ navigation }) => {
     const { shows, getShows, handleCardPress } = useShowsLogic();
     return shows && shows.length > 0 ? (
         <ModalHigh
+            items={shows}
             title="Upcoming Shows"
             navigation={navigation}
-            items={shows}
+            handleRefresh={getShows}
             renderItem={({ item }) => (
                 <ShowVenueCard key={item.id} entity={item} handlePress={() => handleCardPress(item)} />
             )}
-            handleRefresh={getShows}
         />
     ) : (
         <LoadingScreen />
