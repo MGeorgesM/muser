@@ -5,13 +5,14 @@ import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 import useVenuesLogic from './venuesLogic';
 
 const Venues = ({ navigation }) => {
-    const { venues } = useVenuesLogic();
+    const { venues, getVenues } = useVenuesLogic();
 
     return venues && venues.length > 0 ? (
         <ModalHigh
             title="Venues"
-            navigation={navigation}
             items={venues}
+            handleRefresh={getVenues}
+            navigation={navigation}
             renderItem={({ item }) => (
                 <ShowVenueCard
                     key={item.id}

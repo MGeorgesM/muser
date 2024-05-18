@@ -95,6 +95,7 @@ class ShowController extends Controller
             $query->where('status', $showStatus);
         }
 
+        $query->orderBy('date');
         $shows = $query->get();
 
         return response()->json($shows);
