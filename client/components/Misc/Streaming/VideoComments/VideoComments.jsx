@@ -8,9 +8,12 @@ const VideoComments = ({ comments }) => {
     return (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.commentsContainer}>
             {comments && comments.length > 0 ? (
-                comments.map((comment) => (
-                    <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
-                ))
+                comments
+                    .slice()
+                    .reverse()
+                    .map((comment) => (
+                        <CommentCard key={comment._id} avatar={comment.userAvatar} text={comment.text} />
+                    ))
             ) : (
                 <Text style={[utilities.myFontRegular, { color: colors.gray, paddingLeft: 20 }]}>No comments yet</Text>
             )}
