@@ -10,13 +10,14 @@ import ProfileNavigator from '../navigators/ProfileNavigator';
 
 import { colors } from '../styles/utilities';
 import { useNavigationBarColor } from '../core/tools/systemNavigationBar';
+import LoadingScreen from '../components/Misc/LoadingScreen/LoadingScreen';
 
 const Tab = createBottomTabNavigator();
 
 const MainTabs = () => {
-    
-    useNavigationBarColor(colors.bgDark);
-    return (
+    const isColorSet = useNavigationBarColor(colors.bgDark);
+
+    return isColorSet ? (
         <Tab.Navigator
             initialRouteName="Feed"
             screenOptions={({ route }) => ({
@@ -91,6 +92,8 @@ const MainTabs = () => {
             <Tab.Screen name="Live" component={ShowsNavigator} />
             <Tab.Screen name="Profile" component={ProfileNavigator} />
         </Tab.Navigator>
+    ) : (
+        <LoadingScreen />
     );
 };
 
