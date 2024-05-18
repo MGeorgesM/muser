@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../core/data/contexts/UserContext';
 import { colors } from '../../styles/utilities';
 import { useNavigation } from '@react-navigation/native';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';

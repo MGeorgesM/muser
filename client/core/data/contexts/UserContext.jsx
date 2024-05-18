@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { sendRequest, requestMethods } from '../core/tools/apiRequest';
+import { sendRequest, requestMethods } from '../../tools/apiRequest';
 
 const UserContext = createContext();
 

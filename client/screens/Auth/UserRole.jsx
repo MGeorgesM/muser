@@ -2,7 +2,7 @@ import React from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 
 import { Image, View, Text, ImageBackground } from 'react-native';
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../core/data/contexts/UserContext';
 import { colors, utilities } from '../../styles/utilities';
 import { ChevronDown } from 'lucide-react-native';
 

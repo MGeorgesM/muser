@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { setShows } from '../../store/Shows';
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../core/data/contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 import { useNavigation } from '@react-navigation/native';

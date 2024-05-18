@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View } from 'react-native';
 import { colors } from '../../styles/utilities';
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../core/data/contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { setConnectedUsers, setFeedUsers } from '../../store/Users';

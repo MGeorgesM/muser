@@ -1,5 +1,5 @@
 import { useEffect, useState, useLayoutEffect } from 'react';
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../core/data/contexts/UserContext';
 import { fireStoreDb } from '../../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
@@ -18,10 +18,10 @@ const useChatOverviewLogic = () => {
 
     useEffect(() => {
         if (!currentUser) return;
-    
+
         const chatRef = collection(fireStoreDb, 'chats');
         const q = query(chatRef, where('participantsIds', 'array-contains', currentUser.id));
-    
+
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const chatsArray = [];
             querySnapshot.forEach((doc) => {
@@ -33,18 +33,18 @@ const useChatOverviewLogic = () => {
                 }
                 return 0;
             });
-    
+
             setChats(chatsArray);
             setIsLoading(false);
         });
-    
+
         return () => unsubscribe();
     }, [currentUser]);
 
-  return {
-    chats,
-    isLoading
-  }
-}
+    return {
+        chats,
+        isLoading,
+    };
+};
 
-export default useChatOverviewLogic
+export default useChatOverviewLogic;

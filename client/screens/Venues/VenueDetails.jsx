@@ -1,5 +1,5 @@
 import React from 'react';
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../core/data/contexts/UserContext';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList } from 'react-native';
 import { utilities, colors } from '../../styles/utilities';
 import { formatDateString } from '../../core/tools/formatDate';

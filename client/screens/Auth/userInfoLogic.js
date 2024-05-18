@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../core/data/contexts/UserContext';
 
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
@@ -126,7 +126,7 @@ export const useUserInfoLogic = () => {
         setError(null);
         const userInputValid = validateForm(update);
         if (!userInputValid) return;
-        
+
         const formData = new FormData();
 
         for (const key in userInfo) {
@@ -159,7 +159,7 @@ export const useUserInfoLogic = () => {
     const handleProceed = async (update = false) => {
         const formData = handleUserInfoInput(update);
         if (!formData) return false;
-    
+
         try {
             if (update) {
                 await handleUpdate(formData);

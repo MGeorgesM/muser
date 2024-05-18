@@ -2,10 +2,9 @@ import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { ChevronLeft, LogOut } from 'lucide-react-native';
 import { colors } from '../../styles/utilities';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../core/data/contexts/UserContext';
 import { useUserInfoLogic } from '../Auth/userInfoLogic';
 import { useNavigation } from '@react-navigation/native';
-import { useNavigationBarColor } from '../../core/tools/systemNavigationBar';
 
 const useProfileLogic = (currentUser) => {
     const [isEditing, setIsEditing] = useState({

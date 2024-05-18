@@ -1,6 +1,6 @@
 import React from 'react';
 import { Camera } from 'lucide-react-native';
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../core/data/contexts/UserContext';
 import { useUserInfoLogic } from '../Auth/userInfoLogic';
 import { colors, utilities } from '../../styles/utilities';
 import { profilePicturesUrl } from '../../core/tools/apiRequest';

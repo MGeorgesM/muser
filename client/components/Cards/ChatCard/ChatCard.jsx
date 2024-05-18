@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
-import { useUser } from '../../../contexts/UserContext';
+import { useUser } from '../../../core/data/contexts/UserContext';
 import { useSelector } from 'react-redux';
 
 import { formatDate, truncateText } from '../../../core/tools/formatDate';

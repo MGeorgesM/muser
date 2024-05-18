@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { StreamVideo, StreamVideoClient } from '@stream-io/video-react-native-sdk';
 
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../core/data/contexts/UserContext';
 
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 

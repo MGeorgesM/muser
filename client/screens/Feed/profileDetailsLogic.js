@@ -1,12 +1,12 @@
 import { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../core/data/contexts/UserContext';
 import { useNavigation } from '@react-navigation/native';
 import { profilePicturesUrl, requestMethods, sendRequest } from '../../core/tools/apiRequest';
 
 const useProfileDetailsLogic = (userId) => {
     const { currentUser } = useUser();
-    
+
     const [user, setUser] = useState({});
     const [isConnected, setIsConnected] = useState(false);
 
@@ -68,7 +68,7 @@ const useProfileDetailsLogic = (userId) => {
         imageUrl,
         isConnected,
         handlePress,
-        navigation
+        navigation,
     };
 };
 

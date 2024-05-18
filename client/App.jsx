@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { store } from './store/store';
 import { Provider } from 'react-redux';
-import { UserProvider, useUser } from './contexts/UserContext';
+import { UserProvider, useUser } from './core/data/contexts/UserContext';
 
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
