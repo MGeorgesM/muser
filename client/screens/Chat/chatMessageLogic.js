@@ -5,10 +5,13 @@ import { fireStoreDb } from '../../config/firebase';
 import { collection, addDoc, serverTimestamp, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { requestMethods, sendRequest } from '../../core/tools/apiRequest';
 import { useUser } from '../../core/data/contexts/UserContext';
+import { GiftedChat } from 'react-native-gifted-chat';
 
-const useChatMessageLogic = (id, participants, chatProperties, setChatProperties) => {
+
+const useChatMessageLogic = (route, chatProperties, setChatProperties) => {
     const dispatch = useDispatch();
     const { currentUser } = useUser();
+    const { id, participants } = route.params;
 
     const sendNotification = async (userIds, body, title = null) => {
         try {

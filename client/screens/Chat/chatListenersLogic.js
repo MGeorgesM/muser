@@ -1,16 +1,25 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
 import { fireStoreDb } from '../../config/firebase';
 import { collection, query, orderBy, onSnapshot, doc } from 'firebase/firestore';
 import { useUser } from '../../core/data/contexts/UserContext';
 import { profilePicturesUrl } from '../../core/tools/apiRequest';
 import { useSelector } from 'react-redux';
 
-const useChatListenersLogic = (id, chatTitle, participants, chatProperties, setChatProperties) => {
+const useChatListenersLogic = (route) => {
     const { currentUser } = useUser();
+    const { id, participants, chatTitle } = route.params;
     const userConnections = useSelector((global) => global.usersSlice.connectedUsers);
     const feedUsers = useSelector((global) => global.usersSlice.feedUsers);
 
+    const [chatProperties, setChatProperties] = useState({
+        chatMessages: [],
+        chatParticipants: [],
+        chatConnections: [],
+        localChatTitle: {
+            bandName: '',
+            participantsNames: '',
+        },
+    });
 
     useEffect(() => {
         let messagesUnsubscribe;
@@ -144,13 +153,14 @@ const useChatListenersLogic = (id, chatTitle, participants, chatProperties, setC
         setChatProperties((prev) => ({ ...prev, chatConnections: remainingConnections }));
     };
 
-    return (
-        <View>
-            <Text>useChatListenersLogic</Text>
-        </View>
-    );
+    return {
+        id,
+        chatTitle,
+        currentUser,
+        participants,
+        chatProperties,
+        setChatProperties,
+    };
 };
 
 export default useChatListenersLogic;
-
-const styles = StyleSheet.create({});

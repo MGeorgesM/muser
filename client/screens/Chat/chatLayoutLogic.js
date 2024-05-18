@@ -6,9 +6,9 @@ import { truncateText } from '../../core/tools/formatDate';
 import { PlusIcon, ChevronLeft } from 'lucide-react-native';
 import PictureHeader from '../../components/Misc/PictureHeader/PictureHeader';
 
-export const useChatLayoutLogic = (id, chatTitle, participants, chatProperties, onBackPress) => {
+export const useChatLayoutLogic = (route, chatProperties) => {
     const navigation = useNavigation();
-    
+    const { id, participants, chatTitle, onBackPress } = route.params;
     const [modalsVisibility, setModalsVisibility] = useState({
         connectionModalVisible: false,
         bandModalVisible: false,
@@ -17,19 +17,19 @@ export const useChatLayoutLogic = (id, chatTitle, participants, chatProperties, 
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: () => {
-                const title = chatTitle || chatProperties.localChatTitle.bandName;
+                const title = chatTitle || chatProperties?.localChatTitle.bandName;
                 if (title)
                     return <Text style={[utilities.textM, utilities.myFontMedium]}>{truncateText(title, 20)}</Text>;
-                else if (chatProperties.localChatTitle.participantsNames) {
+                else if (chatProperties?.localChatTitle.participantsNames) {
                     return (
                         <Text style={[utilities.textM, utilities.myFontMedium]}>
-                            {`You, ${truncateText(chatProperties.localChatTitle.participantsNames, 15)}`}
+                            {`You, ${truncateText(chatProperties?.localChatTitle.participantsNames, 15)}`}
                         </Text>
                     );
                 } else {
                     if (!participants) return;
                     const participantsList =
-                        chatProperties.chatParticipants.length > 0 ? chatProperties.chatParticipants : participants;
+                        chatProperties?.chatParticipants.length > 0 ? chatProperties?.chatParticipants : participants;
                     const receiverName = participantsList.map((participant) => participant?.name).join(', ');
                     const reciverPicture = participantsList[0].picture;
                     const receiverId = participantsList[0].id;
