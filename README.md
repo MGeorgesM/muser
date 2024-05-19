@@ -60,36 +60,37 @@
 | Home screen                               | Menu Screen                             | Order Screen                            | Checkout Screen                         |
 | ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | -->
 
-<div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
+<table>
+  <tr>
+    <td style="text-align: center;">
+      <h3>Browsing Muser</h3>
+      <a href="https://1drv.ms/v/c/84fd3718045c4e7d/IQNeRVmpWktyRYvtwmsKAqdjATqKqOp5gFPwDdMFthZ-EyA">
+        <img src="./readme/thumbnails/browsingLoadingPlay.jpg" alt="Browsing Muser" width="481" height="1042">
+      </a>
+    </td>
+    <td style="text-align: center;">
+      <h3>Forming Bands with Muser Ai</h3>
+      <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EV5FWalaS3JFi-3CawoCp2MBpwGcqujol0hUr9rKQEnklA?e=O0FheT">
+        <img src="./readme/thumbnails/aiMatchThumbnailPlay.jpg" alt="Forming Bands with Muser Ai" width="481" height="1042">
+      </a>
+    </td>
+  </tr>
+</table>
 
+<div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 32px;">
   <div style="text-align: center;">
-    <h3>Browsing Muser</h3>
-    <a href="https://1drv.ms/v/c/84fd3718045c4e7d/IQNeRVmpWktyRYvtwmsKAqdjATqKqOp5gFPwDdMFthZ-EyA">
-      <img src="./readme/thumbnails/browsingLoadingPlay.jpg" alt="Browsing Muser" width="481" height="1042">
+    <h3>Chatting & Forming Bands</h3>
+    <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EfrfbkNIPylIkw539nBJLLABIi46Vp2xF-QzmVR1VdCxig?e=Jxc5vw">
+      <img src="./readme/thumbnails/chattingThumbnail2Play.jpg" alt="Chatting & Forming Bands" width="480">
     </a>
   </div>
 
   <div style="text-align: center;">
-    <h3>Forming Bands with Muser Ai</h3>
-    <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EV5FWalaS3JFi-3CawoCp2MBpwGcqujol0hUr9rKQEnklA?e=O0FheT">
-      <img src="./readme/thumbnails/aiMatchThumbnailPlay.jpg" alt="Forming Bands with Muser Ai" width="481" height="1042">
+    <h3>Live Streaming</h3>
+    <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EYh-wVOJyGJFrwQsWQXrMjQB8IE_3UCfZ3A1W8avAl9abw?e=eAubdC">
+      <img src="./readme/thumbnails/streamingThumbnailPlay.jpg" alt="Live Streaming" width="480">
     </a>
   </div>
-
-</div>
-
-<div style="text-align: center; margin-top: 32px;">
-  <h3>Chatting & Forming Bands</h3>
-  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EfrfbkNIPylIkw539nBJLLABIi46Vp2xF-QzmVR1VdCxig?e=Jxc5vw">
-    <img src="./readme/thumbnails/chattingThumbnail2Play.jpg" alt="Chatting & Forming Bands" width="1112">
-  </a>
-</div>
-
-<div style="text-align: center; margin-top: 32px;">
-  <h3>Live Streaming</h3>
-  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EYh-wVOJyGJFrwQsWQXrMjQB8IE_3UCfZ3A1W8avAl9abw?e=eAubdC">
-    <img src="./readme/thumbnails/streamingThumbnailPlay.jpg" alt="Live Streaming" width="1112">
-  </a>
 </div>
 
 <br><br>
@@ -99,7 +100,7 @@
 
 ### Mastering AI Interaction: Unveiling the Power of Prompt Engineering:
 
--   We implemented an AI-powered matchmaking system using the latest OpenAI model. By crafting detailed prompts, the AI accurately interprets user input—considering musical genres, locations, required instruments, and experience levels—to dynamically match potential bandmates. This integration enhances the user experience, making finding and forming bands efficient and exciting.
+We implemented an AI-powered matchmaking system using the latest OpenAI model. By crafting detailed prompts, the AI accurately interprets user input—considering musical genres, locations, required instruments, and experience levels—to dynamically match potential bandmates. This integration enhances the user experience, making finding and forming bands efficient and exciting.
 
 <br><br>
 
@@ -108,14 +109,12 @@
 
 ### Unleashing the Potential with AWS Integration:
 
--   This project leverages AWS deployment strategies to seamlessly integrate and deploy natural language processing models. With a focus on scalability, reliability, and performance, we ensure that AI applications powered by these models deliver robust and responsive solutions for diverse use cases.
+This project leverages AWS deployment strategies to seamlessly integrate and deploy natural language processing models. With a focus on scalability, reliability, and performance, we ensure that AI applications powered by these models deliver robust and responsive solutions for diverse use cases.
 
 <br><br>
 
 <!-- Database Design -->
 <img src="./readme/title5.svg"/>
-
-### Database Design:
 
 <img src='./readme//erDiagramD.jpg' width='1080'>
 
@@ -123,8 +122,6 @@
 
 <!-- Unit Testing -->
 <img src="./readme/title9.svg"/>
-
-### Precision in Development: Harnessing the Power of Unit Testing:.
 
 <img src="./readme/unitTesting.jpg"/>
 
