@@ -7,6 +7,25 @@ const useChatBandLogic = (route, onSend, chatProperties, setChatProperties, setM
     const { currentUser } = useUser();
     const { id, chatTitle, participants } = route.params;
 
+    const getParticipants = (newParticipant, add = true) => {
+        let newParticipantsList =
+            chatProperties.chatParticipants.length > 0 ? chatProperties.chatParticipants : participants;
+
+        if (add) {
+            newParticipantsList =
+                newParticipantsList.length > 0 ? [...newParticipantsList, newParticipant] : [newParticipant];
+        } else {
+            newParticipantsList = newParticipantsList.filter((participant) => participant.id !== newParticipant.id);
+        }
+
+        const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
+        if (!newParticipantsIdsList.includes(currentUser.id)) {
+            newParticipantsIdsList.push(currentUser.id);
+        }
+
+        return [newParticipantsList, newParticipantsIdsList];
+    };
+
     const addParticipant = async (newParticipant) => {
         const newParticipantId = newParticipant.id;
 
@@ -14,24 +33,19 @@ const useChatBandLogic = (route, onSend, chatProperties, setChatProperties, setM
             return;
         }
 
+        const [newParticipantsList, newParticipantsIdsList] = getParticipants(newParticipant);
+
         try {
             const chatRef = doc(fireStoreDb, 'chats', id);
             const chatDoc = await getDoc(chatRef);
 
-            const newParticipantsList =
-                chatProperties.chatParticipants.length > 0
-                    ? [...chatProperties.chatParticipants, newParticipant]
-                    : [...participants, newParticipant];
-
-            const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
-            newParticipantsIdsList.push(currentUser.id);
-
             if (chatDoc.exists()) {
-                setModalsVisibility((prev) => ({ ...prev, connectionModalVisible: false }));
                 await updateDoc(chatRef, {
                     participantsIds: newParticipantsIdsList,
                 });
             }
+
+            setModalsVisibility((prev) => ({ ...prev, connectionModalVisible: false }));
 
             const messageData = {
                 _id: `${currentUser.id}-${Date.now()}`,
@@ -59,15 +73,11 @@ const useChatBandLogic = (route, onSend, chatProperties, setChatProperties, setM
     const removeParticipant = async (participant) => {
         setModalsVisibility((prev) => ({ ...prev, bandModalVisible: false }));
         if (!chatProperties.isAdmin || chatProperties.chatParticipants.length === 1) return;
-        const participantId = participant.id;
+        const [newParticipantsList, newParticipantsIdsList] = getParticipants(participant, false);
 
         try {
             const chatRef = doc(fireStoreDb, 'chats', id);
             const chatDoc = await getDoc(chatRef);
-
-            const newParticipantsList = participants.filter((p) => p.id !== participantId);
-            const newParticipantsIdsList = newParticipantsList.map((participant) => participant.id);
-            newParticipantsIdsList.push(currentUser.id);
 
             if (chatDoc.exists()) {
                 await updateDoc(chatRef, {

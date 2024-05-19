@@ -4,7 +4,7 @@ import { colors } from '../../styles/utilities';
 import { useUser } from '../../core/data/contexts/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { setConnectedUsers, setFeedUsers } from '../../store/Users';
+import { setConnectedUsers, setFeedUsers } from '../../core/data/store/Users';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';
 
 import PictureHeader from '../../components/Misc/PictureHeader/PictureHeader';

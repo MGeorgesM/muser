@@ -72,12 +72,12 @@ const useChatListenersLogic = (route) => {
                 if (!chatData) return;
 
                 const participantsIds = chatData.participantsIds;
-                if (
-                    participantsIds.length === chatProperties.chatParticipants.length + 1 ||
-                    participantsIds.length === participants.length + 1
-                ) {
-                    return;
-                }
+                // if (
+                //     participantsIds.length === chatProperties.chatParticipants.length + 1 ||
+                //     participantsIds.length === participants.length + 1
+                // ) {
+                //     return;
+                // }
                 const participantsList = participantsIds
                     .filter((pid) => pid !== currentUser.id)
                     .map((pid) => {

@@ -6,7 +6,7 @@
 <img src="./readme/title2.svg"/>
 
 > Muser is a mobile app designed for musicians to connect with each others, spontaneously form bands, book venues, and have their performances livestreamed.
-> Muser offers its user base live streaming, live messaging, and an AI-powered matchmaking system to form bands effortlessly.
+> Muser offers its user base Live streaming, Live messaging, and an AI-powered matchmaking system to form bands effortlessly.
 
 ### User Stories
 
@@ -25,12 +25,12 @@
 
 ### Muser is built using the following technologies:
 
--   [Laravel 11](https://laravel.com/). A PHP framework that provides a robust set of tools for web apps development.
--   [React Native](https://reactnative.dev/). A popular framework for building mobile apps using JavaScript and React, allowing for cross-platform development with a single codebase.
--   [Firebase Cloud Firestore](https://firebase.google.com/products/firestore/). A scalable database from Firebase and Google Cloud Platform. It provides real-time data synchronization, querying, and offline support, making it ideal for building Live applications.
--   [Firebase Cloud Messaging](https://firebase.google.com/products/cloud-messaging/). A cross-platform messaging solution to send notifications reliably to users' devices.
--   [OpenAI](https://openai.com/). Providing advanced artificial intelligence technologies and APIs, enabling the integration of powerful AI capabilities.
--   [MySQL](https://www.mysql.com/). A widely-used open-source relational database management system. It is known for its reliability, performance, and ease of use, making it an excellent choice for managing and organizing data in web apps.
+-   [Laravel 11](https://laravel.com/), a PHP framework that provides a robust set of tools for web apps development.
+-   [React Native](https://reactnative.dev/), a popular framework for building mobile apps using JavaScript and React, allowing for cross-platform development with a single codebase.
+-   [Firebase Cloud Firestore](https://firebase.google.com/products/firestore/), a scalable database from Firebase and Google Cloud Platform. It provides real-time data synchronization, querying, and offline support, making it ideal for building Live applications.
+-   [Firebase Cloud Messaging](https://firebase.google.com/products/cloud-messaging/), a cross-platform messaging solution to send notifications reliably to users' devices.
+-   [OpenAI](https://openai.com/), a provider of advanced artificial intelligence technologies and APIs. OpenAI powers our AI-driven matchmaking system, enhancing the user experience.
+-   [MySQL](https://www.mysql.com/), a widely-used open-source relational database management system. It is known for its reliability, performance, and ease of use, making it an excellent choice for managing and organizing data in web apps.
 
 <br><br>
 
@@ -54,20 +54,23 @@
 
 ### Database Design:
 
-<img src='./readme//erDiagram.jpg'  heigh='800'>
+<img src='./readme//erDiagramD.jpg' width='1080'>
 
 <br><br>
 
 <!-- Implementation -->
 <img src="./readme/title6.svg"/>
 
-### User Screens (Mobile)
+### User Screens and Videos (Mobile)
+<iframe src="https://1drv.ms/v/c/84fd3718045c4e7d/IQNeRVmpWktyRYvtwmsKAqdjATqKqOp5gFPwDdMFthZ-EyA" width="540" height="1168" frameborder="0" scrolling="no" allowfullscreen></iframe>
 
 <!-- | Login screen                              | Register screen                         | Landing screen                          | Loading screen                          |
 | ----------------------------------------- | --------------------------------------- | --------------------------------------- | --------------------------------------- |
 | ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
 | Home screen                               | Menu Screen                             | Order Screen                            | Checkout Screen                         |
 | ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | -->
+
+<iframe src="https://1drv.ms/v/c/84fd3718045c4e7d/IQN9lqDt-P5SQarSFtqckOcoAQMPsLIK2CMvF0bd1pg_yy4" width="540" height="540" frameborder="0" scrolling="no" allowfullscreen></iframe>
 
 <br><br>
 
@@ -92,9 +95,10 @@
 <!-- Unit Testing -->
 <img src="./readme/title9.svg"/>
 
-### Precision in Development: Harnessing the Power of Unit Testing:
+### Precision in Development: Harnessing the Power of Unit Testing:.
 
--   This project employs rigorous unit testing methodologies to ensure the reliability and accuracy of code components. By systematically evaluating individual units of the software, we guarantee a robust foundation, identifying and addressing potential issues early in the development process.
+<img src="./readme/unitTesting.jpg"/>
+
 
 <br><br>
 
@@ -103,29 +107,23 @@
 
 > To set up Muser locally, follow these steps:
 
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-
--   npm
-    ```sh
-    npm install npm@latest -g
-    ```
-
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [example](https://example.com)
-2. Clone the repo
-   git clone [github](https://github.com/your_username_/Project-Name.git)
-3. Install NPM packages
+1. Clone the repository:
+   git clone https://github.com/MGeorgesM/muser.git
+2. Navigate to the project directory and install NPM packages:
     ```sh
+    cd muser
     npm install
     ```
-4. Enter your API in `config.js`
-    ```js
-    const API_KEY = 'ENTER YOUR API';
+3. Connect your phone to your computer using a USB cable and ensure that your device is set up for development.
+4. Build and run the app on your connected device:
+    ```sh
+    # Build for Android
+    - npx expo run:android
+    # Build for iOS
+    - npx expo run:ios
+
     ```
 
 Now, you should be able to run Muser locally and explore its features.

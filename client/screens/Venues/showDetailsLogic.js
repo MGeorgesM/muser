@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { addShow } from '../../store/Shows';
+import { addShow } from '../../core/data/store/Shows';
 import { useDispatch } from 'react-redux';
 import { generateHours, durations } from '../../core/tools/generateDatetime';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';

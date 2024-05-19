@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
-import { store } from './store/store';
+import { store } from './core/data/store/store';
 import { Provider } from 'react-redux';
 import { UserProvider, useUser } from './core/data/contexts/UserContext';
 

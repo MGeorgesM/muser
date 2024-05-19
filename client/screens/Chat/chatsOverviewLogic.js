@@ -4,7 +4,7 @@ import { fireStoreDb } from '../../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
-const useChatOverviewLogic = () => {
+const useChatsOverviewLogic = () => {
     const { currentUser } = useUser();
     const navigation = useNavigation();
     const [chats, setChats] = useState([]);
@@ -47,4 +47,4 @@ const useChatOverviewLogic = () => {
     };
 };
 
-export default useChatOverviewLogic;
+export default useChatsOverviewLogic;

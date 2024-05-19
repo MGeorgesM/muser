@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { setVenues } from '../../store/Venues';
+import { setVenues } from '../../core/data/store/Venues';
 import { useSelector, useDispatch } from 'react-redux';
 import { requestMethods, sendRequest } from '../../core/tools/apiRequest';
 
@@ -20,7 +20,7 @@ const useVenuesLogic = () => {
             console.log('Error fetching venues:', error);
         }
     };
-    
+
     return {
         venues,
         getVenues,
