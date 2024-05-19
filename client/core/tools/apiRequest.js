@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-axios.defaults.baseURL = 'http://192.168.1.102:8000/api/';
+axios.defaults.baseURL = 'http://13.37.46.115/api/';
 
 export const sendRequest = async (method, route, body) => {
     const token = await AsyncStorage.getItem('token');
@@ -48,6 +48,6 @@ export const sendNotification = async (userIds, body, title = null) => {
     }
 };
 
-export const defaultAvatar = 'http://192.168.1.102:8000/default/logowhite.png';
-export const showsPicturesUrl = 'http://192.168.1.102:8000/show_pictures/';
-export const profilePicturesUrl = 'http://192.168.1.102:8000/profile_pictures/';
+export const defaultAvatar = 'http://13.37.46.115/default/logowhite.png';
+export const showsPicturesUrl = 'http://13.37.46.115/show_pictures/';
+export const profilePicturesUrl = 'http://13.37.46.115/profile_pictures/';

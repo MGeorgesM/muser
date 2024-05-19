@@ -64,7 +64,7 @@
   <tr>
     <td style="text-align: center; width: 50%;">
       <h3>Browsing Muser</h3>
-      <a href="https://1drv.ms/v/c/84fd3718045c4e7d/IQNeRVmpWktyRYvtwmsKAqdjATqKqOp5gFPwDdMFthZ-EyA">
+      <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EZyxsDqYX1tCmkZw5y2k3UUBfcb3pegU6-wPXRoncaugNw?e=DRGXMp">
         <img src="./readme/thumbnails/browsingLoadingPlay.jpg" alt="Browsing Muser" width="380" height="823">
       </a>
     </td>
@@ -94,20 +94,6 @@
   </tr>
 </table>
 
-
-<!-- <div style="text-align: center; margin-top: 32px;">
-  <h3>Chatting & Forming Bands</h3>
-  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EfrfbkNIPylIkw539nBJLLABIi46Vp2xF-QzmVR1VdCxig?e=Jxc5vw">
-    <img src="./readme/thumbnails/chattingThumbnail2Play.jpg" alt="Chatting & Forming Bands" width="400">
-  </a>
-</div>
-
-<div style="text-align: center; margin-top: 32px;">
-  <h3>Live Streaming</h3>
-  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EYh-wVOJyGJFrwQsWQXrMjQB8IE_3UCfZ3A1W8avAl9abw?e=eAubdC">
-    <img src="./readme/thumbnails/streamingThumbnailPlay.jpg" alt="Live Streaming" width="1112">
-  </a>
-</div> -->
 
 <br><br>
 
