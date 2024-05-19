@@ -60,37 +60,40 @@
 | Home screen                               | Menu Screen                             | Order Screen                            | Checkout Screen                         |
 | ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | -->
 
-<table>
+<table style="width: 100%; max-width: 971px; margin: auto;">
   <tr>
-    <td style="text-align: center;">
+    <td style="text-align: center; width: 50%;">
       <h3>Browsing Muser</h3>
       <a href="https://1drv.ms/v/c/84fd3718045c4e7d/IQNeRVmpWktyRYvtwmsKAqdjATqKqOp5gFPwDdMFthZ-EyA">
-        <img src="./readme/thumbnails/browsingLoadingPlay.jpg" alt="Browsing Muser" width="400" height="867">
+        <img src="./readme/thumbnails/browsingLoadingPlay.jpg" alt="Browsing Muser" width="380" height="823">
       </a>
     </td>
-    <td style="text-align: center;">
-      <h3>Forming Bands with Muser Ai</h3>
+    <td style="text-align: center; width: 50%;">
+      <h3>Forming Bands with Muser AI</h3>
       <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EV5FWalaS3JFi-3CawoCp2MBpwGcqujol0hUr9rKQEnklA?e=O0FheT">
-        <img src="./readme/thumbnails/aiMatchThumbnailPlay.jpg" alt="Forming Bands with Muser Ai" width="400" height="867">
+        <img src="./readme/thumbnails/aiMatchThumbnailPlay.jpg" alt="Forming Bands with Muser AI" width="380" height="823">
       </a>
     </td>
   </tr>
 </table>
+
+<table style="width: 100%; max-width: 971px; margin: auto; margin-top: 32px;">
   <tr>
-    <td style="text-align: center;">
-  <h3>Chatting & Forming Bands</h3>
-  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EfrfbkNIPylIkw539nBJLLABIi46Vp2xF-QzmVR1VdCxig?e=Jxc5vw">
-    <img src="./readme/thumbnails/chattingThumbnail2Play.jpg" alt="Chatting & Forming Bands" width="400">
-  </a>
+    <td style="text-align: center; width: 50%;">
+      <h3>Chatting & Forming Bands</h3>
+      <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EfrfbkNIPylIkw539nBJLLABIi46Vp2xF-QzmVR1VdCxig?e=Jxc5vw">
+        <img src="./readme/thumbnails/chattingThumbnail2Play.jpg" alt="Chatting & Forming Bands" width="380">
+      </a>
     </td>
-    <td style="text-align: center;">
-  <h3>Live Streaming</h3>
-  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EYh-wVOJyGJFrwQsWQXrMjQB8IE_3UCfZ3A1W8avAl9abw?e=eAubdC">
-    <img src="./readme/thumbnails/streamingThumbnailPlay.jpg" alt="Live Streaming" width="400">
-  </a>
+    <td style="text-align: center; width: 50%;">
+      <h3>Live Streaming</h3>
+      <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EYh-wVOJyGJFrwQsWQXrMjQB8IE_3UCfZ3A1W8avAl9abw?e=eAubdC">
+        <img src="./readme/thumbnails/streamingThumbnailPlay.jpg" alt="Live Streaming" width="380">
+      </a>
     </td>
   </tr>
 </table>
+
 
 <!-- <div style="text-align: center; margin-top: 32px;">
   <h3>Chatting & Forming Bands</h3>
