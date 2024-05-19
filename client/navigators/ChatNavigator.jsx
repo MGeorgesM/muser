@@ -6,12 +6,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { colors } from '../styles/utilities';
 import { ChevronLeft } from 'lucide-react-native';
 
-import Chat from '../screens/Chat/Chat';
-import ChatsOverview from '../screens/Chat/ChatsOverview';
+import Chat from '../screens/Chat/ChatMain/Chat';
+import ChatsOverview from '../screens/Chat/ChatsOverview/ChatsOverview';
 
 const ChatStack = createStackNavigator();
 
-const ChatNavigator = ({navigation}) => {
+const ChatNavigator = ({ navigation }) => {
     return (
         <ChatStack.Navigator
             initialRouteName="ChatMain"
@@ -37,7 +37,7 @@ const ChatNavigator = ({navigation}) => {
                 ),
             }}
         >
-            <ChatStack.Screen name="ChatMain" component={ChatsOverview}/>
+            <ChatStack.Screen name="ChatMain" component={ChatsOverview} />
             <ChatStack.Screen name="ChatDetails" component={Chat} />
         </ChatStack.Navigator>
     );

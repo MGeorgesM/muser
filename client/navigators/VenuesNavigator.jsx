@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Venues from '../screens/Venues/Venues';
-import VenueDetails from '../screens/Venues/VenueDetails';
-import ShowDetails from '../screens/Venues/ShowDetails';
+import Venues from '../screens/Venues/VenuesMain/Venues';
+import VenueDetails from '../screens/Venues/VenueDetails/VenueDetails';
+import ShowDetails from '../screens/Venues/ShowDetails/ShowDetails';
 
 const VenuesStack = createStackNavigator();
 

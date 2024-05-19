@@ -1,10 +1,10 @@
 import React from 'react';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
-import Welcome from '../screens/Auth/Welcome';
-import UserRole from '../screens/Auth/UserRole';
-import UserInfo from '../screens/Auth/UserInfo';
-import Authentication from '../screens/Auth/Authentication';
+import Welcome from '../screens/Auth/Welcome/Welcome';
+import UserRole from '../screens/Auth/UserRole/UserRole';
+import UserInfo from '../screens/Auth/UserInfo/UserInfo';
+import Authentication from '../screens/Auth/Authentication/Authentication';
 
 const AuthStack = createStackNavigator();
 

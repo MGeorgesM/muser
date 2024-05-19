@@ -7,9 +7,9 @@ const DetailsPill = ({ item, handlePress = null, isSelected }) => {
     return (
         <TouchableOpacity
             style={[styles.detailPill, { backgroundColor: isSelected ? colors.lightGray : 'transparent' }]}
-            onPress={() => handlePress && handlePress(item.id)}
+            onPress={() => handlePress && handlePress(item?.id)}
         >
-            <Text style={[styles.detail, { color: isSelected ? colors.black : 'white' }]}>{item.name ?? item.id}</Text>
+            <Text style={[styles.detail, { color: isSelected ? colors.black : 'white' }]}>{item?.name ?? item?.id}</Text>
         </TouchableOpacity>
     );
 };

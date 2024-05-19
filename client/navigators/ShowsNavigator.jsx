@@ -9,9 +9,9 @@ import { useUser } from '../core/data/contexts/UserContext';
 
 import { profilePicturesUrl } from '../core/tools/apiRequest';
 
-import Shows from '../screens/Shows/Shows';
-import ShowStream from '../screens/Shows/ShowStream';
-import ShowBroadcast from '../screens/Shows/ShowBroadcast';
+import Shows from '../screens/Shows/ShowsMain/Shows';
+import ShowStream from '../screens/Shows/ShowStream/ShowStream';
+import ShowBroadcast from '../screens/Shows/ShowBroadcast/ShowBroadcast';
 import LoadingScreen from '../components/Misc/LoadingScreen/LoadingScreen';
 
 const ShowsStack = createStackNavigator();

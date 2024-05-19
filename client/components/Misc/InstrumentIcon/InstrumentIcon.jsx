@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet} from 'react-native';
 
-import { Guitar, Drum, MicVocal, Piano, KeyboardMusic, TestTubeDiagonal, Speaker } from 'lucide-react-native';
+import { Guitar, Drum, MicVocal, Piano, KeyboardMusic, TestTubeDiagonal} from 'lucide-react-native';
 
 const InstrumentIcon = ({ instrument, color = 'white', size = 24 }) => {
-    switch (instrument.name.toLowerCase()) {
+    switch (instrument?.name?.toLowerCase()) {
         case 'strings':
         case 'guitar':
         case 'bass':

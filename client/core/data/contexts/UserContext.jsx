@@ -8,8 +8,8 @@ const UserContext = createContext();
 
 const initialUserInfo = {
     name: '',
-    email: 'ariana@mail.com',
-    password: 'password',
+    email: '',
+    password: '',
     about: '',
     picture: '',
     location_id: '',
