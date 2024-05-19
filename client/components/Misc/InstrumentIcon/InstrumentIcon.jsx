@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet} from 'react-native';
 
 import { Guitar, Drum, MicVocal, Piano, KeyboardMusic, TestTubeDiagonal} from 'lucide-react-native';
 
@@ -24,5 +23,3 @@ const InstrumentIcon = ({ instrument, color = 'white', size = 24 }) => {
 };
 
 export default InstrumentIcon;
-
-const styles = StyleSheet.create({});

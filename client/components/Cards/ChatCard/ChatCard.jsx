@@ -26,7 +26,6 @@ const ChatCard = ({ chat, navigation }) => {
     }, [chat]);
 
     const getUsersPicutresandNamesFromApi = async () => {
-        console.log('Calling api');
         const otherParticipantIds = chat.participantsIds.filter((id) => id !== currentUser.id);
         if (otherParticipantIds.length === 0) return;
 

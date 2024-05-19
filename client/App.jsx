@@ -24,6 +24,7 @@ const App = () => {
         const unsubscribe = messaging().onMessage(async (remoteMessage) => {
             notifee.displayNotification(JSON.parse(remoteMessage.data.notifee));
         });
+        LogBox.ignoreAllLogs(true);
         return unsubscribe;
     }, []);
     return (
