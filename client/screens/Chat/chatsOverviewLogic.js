@@ -1,6 +1,6 @@
 import { useEffect, useState, useLayoutEffect } from 'react';
 import { useUser } from '../../core/data/contexts/UserContext';
-import { fireStoreDb } from '../../config/firebase';
+import { fireStoreDb } from '../../core/config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 

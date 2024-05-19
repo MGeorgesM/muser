@@ -62,7 +62,6 @@
 <img src="./readme/title6.svg"/>
 
 ### User Screens and Videos (Mobile)
-<iframe src="https://1drv.ms/v/c/84fd3718045c4e7d/IQNeRVmpWktyRYvtwmsKAqdjATqKqOp5gFPwDdMFthZ-EyA" width="540" height="1168" frameborder="0" scrolling="no" allowfullscreen></iframe>
 
 <!-- | Login screen                              | Register screen                         | Landing screen                          | Loading screen                          |
 | ----------------------------------------- | --------------------------------------- | --------------------------------------- | --------------------------------------- |
@@ -70,7 +69,38 @@
 | Home screen                               | Menu Screen                             | Order Screen                            | Checkout Screen                         |
 | ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | -->
 
-<iframe src="https://1drv.ms/v/c/84fd3718045c4e7d/IQN9lqDt-P5SQarSFtqckOcoAQMPsLIK2CMvF0bd1pg_yy4" width="540" height="540" frameborder="0" scrolling="no" allowfullscreen></iframe>
+
+<div style="display: flex; justify-content: center; align-items: center; gap:32px;">
+
+  <div style="text-align: center;">
+    <h3>Browsing Muser</h3>
+    <a href="https://1drv.ms/v/c/84fd3718045c4e7d/IQNeRVmpWktyRYvtwmsKAqdjATqKqOp5gFPwDdMFthZ-EyA">
+      <img src="./readme/thumbnails/browsingLoading.jpg" alt="Browsing Muser" width="540" height="1170">
+    </a>
+  </div>
+
+  <div style="text-align: center;">
+    <h3>Forming Band with AI</h3>
+    <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EV5FWalaS3JFi-3CawoCp2MBpwGcqujol0hUr9rKQEnklA?e=O0FheT">
+      <img src="./readme/thumbnails/aiMatchThumbnailPlay.jpg" alt="Forming Bands with Muser Ai" width="540" height="1170">
+    </a>
+  </div>
+
+</div>
+
+<div style="text-align: center; margin-top: 32px;">
+  <h3>Chatting & Forming Bands</h3>
+  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EfrfbkNIPylIkw539nBJLLABIi46Vp2xF-QzmVR1VdCxig?e=Jxc5vw">
+    <img src="./readme/thumbnails/chattingThumbnail2Play.jpg" alt="Chatting & Forming Bands" width="1112">
+  </a>
+</div>
+
+<div style="text-align: center; margin-top: 32px;">
+  <h3>Live Streaming</h3>
+  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EYh-wVOJyGJFrwQsWQXrMjQB8IE_3UCfZ3A1W8avAl9abw?e=eAubdC">
+    <img src="./readme/thumbnails/streamingThumbnailPlay.jpg" alt="Live Streaming" width="1112">
+  </a>
+</div>
 
 <br><br>
 
@@ -79,14 +109,14 @@
 
 ### Mastering AI Interaction: Unveiling the Power of Prompt Engineering:
 
--   The implementation of an AI-powered matchmaking system by integrating the latest OpenAI model. Through prompt engineering, we crafted detailed instructions for the AI to accurately extract and interpret any user input, considering musical genres, user locations, required instruments, and experience level, the system dynamically matches potential bandmates based on these criteria. This seamless integration transforms the user experience, making the process of finding and forming bands not only efficient but also exciting and intuitive.
+-   We implemented an AI-powered matchmaking system using the latest OpenAI model. By crafting detailed prompts, the AI accurately interprets user input—considering musical genres, locations, required instruments, and experience levels—to dynamically match potential bandmates. This integration enhances the user experience, making finding and forming bands efficient and exciting.
 
 <br><br>
 
 <!-- AWS Deployment -->
 <img src="./readme/title8.svg"/>
 
-### Efficient AI Deployment: Unleashing the Potential with AWS Integration:
+### Unleashing the Potential with AWS Integration:
 
 -   This project leverages AWS deployment strategies to seamlessly integrate and deploy natural language processing models. With a focus on scalability, reliability, and performance, we ensure that AI applications powered by these models deliver robust and responsive solutions for diverse use cases.
 
@@ -98,7 +128,6 @@
 ### Precision in Development: Harnessing the Power of Unit Testing:.
 
 <img src="./readme/unitTesting.jpg"/>
-
 
 <br><br>
 
@@ -118,6 +147,7 @@
     ```
 3. Connect your phone to your computer using a USB cable and ensure that your device is set up for development.
 4. Build and run the app on your connected device:
+
     ```sh
     # Build for Android
     - npx expo run:android
