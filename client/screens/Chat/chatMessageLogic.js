@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { addNewConnection } from '../../core/data/store/Users';
-import { fireStoreDb } from '../../config/firebase';
+import { fireStoreDb } from '../../core/config/firebase';
 import { collection, addDoc, serverTimestamp, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { requestMethods, sendRequest, sendNotification } from '../../core/tools/apiRequest';
 import { useUser } from '../../core/data/contexts/UserContext';
@@ -44,16 +44,16 @@ const useChatMessageLogic = (route, chatProperties, setChatProperties) => {
 
             const participantsIds = participants.map((participant) => participant.id);
             participantsIds.push(currentUser.id);
-            
+
             const messageDocRef = await addDoc(messageRef, {
                 _id: initialMessage._id,
                 text: initialMessage.text,
                 createdAt: initialMessage.createdAt,
                 userId: initialMessage.user._id,
             });
-            
+
             getChatParticipantsAndNotify(initialMessage.text);
-            
+
             await setDoc(newChatRef, {
                 adminId: currentUser.id,
                 participantsIds: participantsIds,
@@ -69,7 +69,6 @@ const useChatMessageLogic = (route, chatProperties, setChatProperties) => {
         } catch (error) {
             console.log('Error creating chat:', error);
         }
-
     };
 
     const onSend = useCallback(async (messages = []) => {

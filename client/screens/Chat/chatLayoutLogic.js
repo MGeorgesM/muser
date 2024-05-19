@@ -17,26 +17,23 @@ export const useChatLayoutLogic = (route, chatProperties) => {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: () => {
-                const title = chatTitle || chatProperties?.localChatTitle.bandName;
-                if (title)
+                const title = chatTitle || chatProperties.localChatTitle.bandName;
+                if (title && title.length > 0) {
                     return <Text style={[utilities.textM, utilities.myFontMedium]}>{truncateText(title, 20)}</Text>;
-                else if (chatProperties?.localChatTitle.participantsNames) {
+                } else if (chatProperties.localChatTitle.participantsNames) {
                     return (
                         <Text style={[utilities.textM, utilities.myFontMedium]}>
                             {`You, ${truncateText(chatProperties?.localChatTitle.participantsNames, 15)}`}
                         </Text>
                     );
                 } else {
-                    if (!participants) return;
-                    const participantsList =
-                        chatProperties?.chatParticipants.length > 0 ? chatProperties?.chatParticipants : participants;
-                    const receiverName = participantsList.map((participant) => participant?.name).join(', ');
-                    const reciverPicture = participantsList[0].picture;
-                    const receiverId = participantsList[0].id;
+                    const receiverName = participants.map((participant) => participant.name);
+                    const reciverPicture = participants[0].picture;
+                    const receiverId = participants[0].id;
 
                     return (
                         <PictureHeader
-                            picture={participantsList.length > 1 ? null : reciverPicture}
+                            picture={participants.length > 1 ? null : reciverPicture}
                             name={truncateText(receiverName, 20)}
                             handlePress={() =>
                                 navigation.navigate('Feed', {

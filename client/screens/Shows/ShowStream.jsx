@@ -10,7 +10,7 @@ import CommentsOverlay from '../../components/Misc/CommentsOverlay/CommentsOverl
 import UserComposer from '../../components/Misc/UserComposer/UserComposer';
 
 import useKeyboardVisibility from '../../core/tools/keyboardVisibility';
-import useShowStreamReactionsLogic from './showStreamReactionsLogic';
+import useShowStreamCommentsLogic from './showStreamCommentsLogic';
 import useShowStreamCallLogic from './showStreamCallLogic';
 
 const ShowStream = ({ route }) => {
@@ -25,7 +25,7 @@ const ShowStream = ({ route }) => {
         reactionsVisible,
         handlePostComment,
         setReactionsVisible,
-    } = useShowStreamReactionsLogic(show.id);
+    } = useShowStreamCommentsLogic(show.id);
 
     const {
         call,

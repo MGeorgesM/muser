@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { useChatLayoutLogic } from './chatLayoutLogic';
-import { renderBubble, renderSend, renderInputToolbar, renderSystemMessage, renderDay } from './chatLayoutConfig';
+import { renderBubble, renderSend, renderInputToolbar, renderSystemMessage, renderDay } from '../../core/config/chatLayoutConfig';
 
 import { colors } from '../../styles/utilities';
 

@@ -3,7 +3,7 @@ import { useUser } from '../../core/data/contexts/UserContext';
 import { fireStoreDb } from '../../config/firebase';
 import { collection, query, onSnapshot, serverTimestamp, orderBy, doc, addDoc, setDoc } from 'firebase/firestore';
 
-export const useShowStreamReactionsLogic = (showId) => {
+export const useShowStreamCommentsLogic = (showId) => {
     const { currentUser } = useUser();
     const [comments, setComments] = useState([]);
     const [userComment, setUserComment] = useState('');
@@ -108,4 +108,4 @@ export const useShowStreamReactionsLogic = (showId) => {
     };
 };
 
-export default useShowStreamReactionsLogic;
+export default useShowStreamCommentsLogic;

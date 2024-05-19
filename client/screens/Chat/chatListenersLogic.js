@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fireStoreDb } from '../../config/firebase';
+import { fireStoreDb } from '../../core/config/firebase';
 import { collection, query, orderBy, onSnapshot, doc } from 'firebase/firestore';
 import { useUser } from '../../core/data/contexts/UserContext';
 import { profilePicturesUrl } from '../../core/tools/apiRequest';
@@ -28,7 +28,6 @@ const useChatListenersLogic = (route) => {
         let messagesUnsubscribe;
         let chatTitleUnsubscribe;
         let participantsUnsubscribe;
-
         setChatProperties(chatPropertiesInitialState);
 
         const chatRef = doc(fireStoreDb, 'chats', id);

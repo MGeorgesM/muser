@@ -1,4 +1,4 @@
-import { fireStoreDb } from '../../config/firebase';
+import { fireStoreDb } from '../../core/config/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useUser } from '../../core/data/contexts/UserContext';
 import { sendRequest, requestMethods } from '../../core/tools/apiRequest';

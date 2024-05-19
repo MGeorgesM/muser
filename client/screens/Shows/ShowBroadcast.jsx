@@ -6,12 +6,12 @@ import { colors, utilities } from '../../styles/utilities';
 import StreamViewer from '../../components/Misc/Streaming/StreamViewer/StreamViewer';
 import LoadingScreen from '../../components/Misc/LoadingScreen/LoadingScreen';
 import useShowBroadcastLogic from './showBroadcastLogic';
-import useShowStreamReactionsLogic from './showStreamReactionsLogic';
+import useShowStreamCommentsLogic from './showStreamCommentsLogic';
 
 const ShowBroadcast = ({ route }) => {
     const { showId, showName } = route.params;
     const { call, setCall } = useShowBroadcastLogic(showId);
-    const { comments } = useShowStreamReactionsLogic(showId);
+    const { comments } = useShowStreamCommentsLogic(showId);
 
     return call ? (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDark }]}>
