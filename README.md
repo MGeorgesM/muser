@@ -37,24 +37,15 @@
 <!-- UI UX -->
 <img src="./readme/title4.svg"/>
 
-> We designed Muser using wireframes and mockups, iterating on the design until we reached the ideal layout for easy navigation and a seamless user experience.
+> Muser was designed using wireframes and mockups, iterating on the design until reaching the ideal layout for easy navigation and a seamless user experience.
 
--   Project Figma design [figma](https://www.figma.com/design/Bg7RZIYS3dprGnSqn3273D/Muser?node-id=541%3A2275&t=VXzTQUURH5dCvkfB-1)
+-   Project design [Figma](https://www.figma.com/design/Bg7RZIYS3dprGnSqn3273D/Muser?node-id=541%3A2275&t=VXzTQUURH5dCvkfB-1)
 
 ### Mockups
 
 | Musician Profile                             | Venues                               | Venue Profile                               |
 | -------------------------------------------- | ------------------------------------ | ------------------------------------------- |
 | ![Landing](./readme/mockups/userProfile.png) | ![fsdaf](./readme/mockups/venue.png) | ![fsdaf](./readme/mockups/venueProfile.png) |
-
-<br><br>
-
-<!-- Database Design -->
-<img src="./readme/title5.svg"/>
-
-### Database Design:
-
-<img src='./readme//erDiagramD.jpg' width='1080'>
 
 <br><br>
 
@@ -69,20 +60,19 @@
 | Home screen                               | Menu Screen                             | Order Screen                            | Checkout Screen                         |
 | ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | -->
 
-
-<div style="display: flex; justify-content: center; align-items: center; gap:32px;">
+<div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
 
   <div style="text-align: center;">
     <h3>Browsing Muser</h3>
     <a href="https://1drv.ms/v/c/84fd3718045c4e7d/IQNeRVmpWktyRYvtwmsKAqdjATqKqOp5gFPwDdMFthZ-EyA">
-      <img src="./readme/thumbnails/browsingLoading.jpg" alt="Browsing Muser" width="540" height="1170">
+      <img src="./readme/thumbnails/browsingLoadingPlay.jpg" alt="Browsing Muser" width="481" height="1042">
     </a>
   </div>
 
   <div style="text-align: center;">
-    <h3>Forming Band with AI</h3>
+    <h3>Forming Bands with Muser Ai</h3>
     <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EV5FWalaS3JFi-3CawoCp2MBpwGcqujol0hUr9rKQEnklA?e=O0FheT">
-      <img src="./readme/thumbnails/aiMatchThumbnailPlay.jpg" alt="Forming Bands with Muser Ai" width="540" height="1170">
+      <img src="./readme/thumbnails/aiMatchThumbnailPlay.jpg" alt="Forming Bands with Muser Ai" width="481" height="1042">
     </a>
   </div>
 
@@ -122,6 +112,15 @@
 
 <br><br>
 
+<!-- Database Design -->
+<img src="./readme/title5.svg"/>
+
+### Database Design:
+
+<img src='./readme//erDiagramD.jpg' width='1080'>
+
+<br><br>
+
 <!-- Unit Testing -->
 <img src="./readme/title9.svg"/>
 
@@ -139,7 +138,9 @@
 ### Installation
 
 1. Clone the repository:
-   git clone https://github.com/MGeorgesM/muser.git
+    ```sh
+    git clone https://github.com/MGeorgesM/muser.git
+    ```
 2. Navigate to the project directory and install NPM packages:
     ```sh
     cd muser
