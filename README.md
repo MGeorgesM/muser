@@ -65,33 +65,46 @@
     <td style="text-align: center;">
       <h3>Browsing Muser</h3>
       <a href="https://1drv.ms/v/c/84fd3718045c4e7d/IQNeRVmpWktyRYvtwmsKAqdjATqKqOp5gFPwDdMFthZ-EyA">
-        <img src="./readme/thumbnails/browsingLoadingPlay.jpg" alt="Browsing Muser" width="481" height="1042">
+        <img src="./readme/thumbnails/browsingLoadingPlay.jpg" alt="Browsing Muser" width="400" height="867">
       </a>
     </td>
     <td style="text-align: center;">
       <h3>Forming Bands with Muser Ai</h3>
       <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EV5FWalaS3JFi-3CawoCp2MBpwGcqujol0hUr9rKQEnklA?e=O0FheT">
-        <img src="./readme/thumbnails/aiMatchThumbnailPlay.jpg" alt="Forming Bands with Muser Ai" width="481" height="1042">
+        <img src="./readme/thumbnails/aiMatchThumbnailPlay.jpg" alt="Forming Bands with Muser Ai" width="400" height="867">
       </a>
     </td>
   </tr>
 </table>
+  <tr>
+    <td style="text-align: center;">
+  <h3>Chatting & Forming Bands</h3>
+  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EfrfbkNIPylIkw539nBJLLABIi46Vp2xF-QzmVR1VdCxig?e=Jxc5vw">
+    <img src="./readme/thumbnails/chattingThumbnail2Play.jpg" alt="Chatting & Forming Bands" width="400">
+  </a>
+    </td>
+    <td style="text-align: center;">
+  <h3>Live Streaming</h3>
+  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EYh-wVOJyGJFrwQsWQXrMjQB8IE_3UCfZ3A1W8avAl9abw?e=eAubdC">
+    <img src="./readme/thumbnails/streamingThumbnailPlay.jpg" alt="Live Streaming" width="400">
+  </a>
+    </td>
+  </tr>
+</table>
 
-<div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 32px;">
-  <div style="text-align: center;">
-    <h3>Chatting & Forming Bands</h3>
-    <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EfrfbkNIPylIkw539nBJLLABIi46Vp2xF-QzmVR1VdCxig?e=Jxc5vw">
-      <img src="./readme/thumbnails/chattingThumbnail2Play.jpg" alt="Chatting & Forming Bands" width="480">
-    </a>
-  </div>
-
-  <div style="text-align: center;">
-    <h3>Live Streaming</h3>
-    <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EYh-wVOJyGJFrwQsWQXrMjQB8IE_3UCfZ3A1W8avAl9abw?e=eAubdC">
-      <img src="./readme/thumbnails/streamingThumbnailPlay.jpg" alt="Live Streaming" width="480">
-    </a>
-  </div>
+<!-- <div style="text-align: center; margin-top: 32px;">
+  <h3>Chatting & Forming Bands</h3>
+  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EfrfbkNIPylIkw539nBJLLABIi46Vp2xF-QzmVR1VdCxig?e=Jxc5vw">
+    <img src="./readme/thumbnails/chattingThumbnail2Play.jpg" alt="Chatting & Forming Bands" width="400">
+  </a>
 </div>
+
+<div style="text-align: center; margin-top: 32px;">
+  <h3>Live Streaming</h3>
+  <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EYh-wVOJyGJFrwQsWQXrMjQB8IE_3UCfZ3A1W8avAl9abw?e=eAubdC">
+    <img src="./readme/thumbnails/streamingThumbnailPlay.jpg" alt="Live Streaming" width="1112">
+  </a>
+</div> -->
 
 <br><br>
 
