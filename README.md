@@ -43,12 +43,9 @@ Venue:
 
 > Using wireframes and mockups, Muser was crafted through iterative design improvements to achieve an easy-to-navigate, and seamless user experience.
 
-<img src='./readme/mockups/MuserCover.jpg' width='1080'>
-
-
 ### Mockups
 
--   Project design [Figma](https://www.figma.com/design/Bg7RZIYS3dprGnSqn3273D/Muser?node-id=541%3A2275&t=VXzTQUURH5dCvkfB-1)
+<img src='./readme/mockups/MuserCover.jpg' width='1080'>
 
 <table style="width: 100%; text-align: center;">
   <tr>
@@ -58,7 +55,7 @@ Venue:
   </tr>
   <tr>
     <td>
-      <img src="./readme/mockups/userProfile.png" alt="Musician Profile" width="250" height="511">
+      <img src="./readme/mockups/musicianProfile.png" alt="Musician Profile" width="250" height="511">
     </td>
     <td>
       <img src="./readme/mockups/venue.png" alt="Venues" width="250" height="511">
@@ -68,6 +65,8 @@ Venue:
     </td>
   </tr>
 </table>
+
+-   Project design [Figma](https://www.figma.com/design/Bg7RZIYS3dprGnSqn3273D/Muser?node-id=541%3A2275&t=VXzTQUURH5dCvkfB-1)
 
 <br><br>
 
