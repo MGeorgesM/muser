@@ -18,7 +18,7 @@ Musician:
 
 Venue:
 
--   As a venue, I want to receive notifications and requests from bands interested in performing so that I can organize exiting events for my customers.
+-   As a venue, I want to receive notifications and requests from bands interested in performing so that I can organize exciting events for my customers.
 -   As a venue, I want to easily manage bookings through the app so that I can streamline the process and focus on providing a great experience.
 -   As a venue, I want to livestream any show happening on my premises, so I can reach a broader audience online and attract more shows in the future.
 
@@ -43,11 +43,9 @@ Venue:
 
 > Using wireframes and mockups, Muser was crafted through iterative design improvements to achieve an easy-to-navigate, and seamless user experience.
 
-### Mockups
+<img src='./readme/mockups/MuserCoverLarge.jpg'>
 
-<img src='./readme/mockups/MuserCover.jpg' width='1080'>
-
-<table style="width: 100%; text-align: center;">
+<!-- <table style="width: 100%; text-align: center;">
   <tr>
     <th>Musician Profile</th>
     <th>Venues</th>
@@ -64,7 +62,7 @@ Venue:
       <img src="./readme/mockups/venueProfile.png" alt="Venue Profile" width="250" height="511">
     </td>
   </tr>
-</table>
+</table> -->
 
 -   Project design [Figma](https://www.figma.com/design/Bg7RZIYS3dprGnSqn3273D/Muser?node-id=541%3A2275&t=VXzTQUURH5dCvkfB-1)
 
@@ -280,7 +278,7 @@ Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Clou
 
 ### Precision in Development: Harnessing the Power of Unit Testing:
 
--   By systematically evaluating our API, we ensure a robust foundation, allowing potential issues to be identified and addressed early in the development process. Laravel's unit testing was used to test the API controllers, ensuring an accurate and reliable functionality.
+-   By evaluating our API, we ensure a robust foundation, allowing potential issues to be identified and addressed early in the development process. Laravel's unit testing was used to test the API controllers, ensuring an accurate and reliable functionality.
 
 <img src='./readme/unitTesting.jpg' width='1080'>
 
