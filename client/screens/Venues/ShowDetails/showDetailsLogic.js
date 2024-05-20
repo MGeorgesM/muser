@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { addShow } from '../../../core/data/store/Shows';
 import { useDispatch } from 'react-redux';
 import { generateHours, durations } from '../../../core/tools/generateDatetime';
 import { sendRequest, requestMethods } from '../../../core/tools/apiRequest';
+import { useNavigation } from '@react-navigation/native';
 
 const useShowDetailsLogic = (venueId) => {
     const [switchHandler, setSwitchHandler] = useState(false);
@@ -20,6 +21,7 @@ const useShowDetailsLogic = (venueId) => {
         genre_id: '',
     });
 
+    const navigation = useNavigation();
     const hours = generateHours();
 
     const pickerConfig = [

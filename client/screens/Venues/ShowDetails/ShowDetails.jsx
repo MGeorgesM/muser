@@ -19,7 +19,7 @@ const ShowDetails = ({ route, navigation }) => {
         selectedCardId,
         validationError,
         handleSelectCard,
-    } = useShowDetailsLogic(venueName, venueId);
+    } = useShowDetailsLogic(venueId);
 
     return (
         <View style={[utilities.flexed, { backgroundColor: colors.bgDarkest }]}>
