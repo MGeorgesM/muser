@@ -6,7 +6,7 @@
 <img src="./readme/title2.svg"/>
 
 
-> Muser is a mobile app designed for musicians to connect, spontaneously form bands, book venues, and livestream their performances. It offers live streaming, live messaging, and an AI-powered matchmaking system to effortlessly form bands.
+>Muser is a mobile app designed for musicians to connect, spontaneously form bands, book venues, and livestream their performances. It offers live streaming, live messaging, and an AI-powered matchmaking system to effortlessly form bands.
 
 ### User Stories
 
@@ -40,13 +40,15 @@ Venue:
 
 <!-- UI UX -->
 <img src="./readme/title4.svg"/>
+
 > Using wireframes and mockups, Muser was crafted through iterative design improvements to achieve an easy-to-navigate, and seamless user experience.
 
 <img src='./readme/mockups/MuserCover.jpg' width='1080'>
 
--   Project design [Figma](https://www.figma.com/design/Bg7RZIYS3dprGnSqn3273D/Muser?node-id=541%3A2275&t=VXzTQUURH5dCvkfB-1)
 
 ### Mockups
+
+-   Project design [Figma](https://www.figma.com/design/Bg7RZIYS3dprGnSqn3273D/Muser?node-id=541%3A2275&t=VXzTQUURH5dCvkfB-1)
 
 <table style="width: 100%; text-align: center;">
   <tr>
@@ -116,10 +118,10 @@ https://github.com/georges-mouawad/muser/assets/43368919/c5b4cc9c-f7ea-4569-a44e
 
 ### Integrating the Best of Both Worlds:
 
-Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Cloud Firestore) for a seamless user experience.
+Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Cloud Firestore).
 
 -   With the power of Laravel Eloquent ORM and the reliability of MySQL, Muser efficiently handles structured data, complex queries, and relationships.
--   Utilizing Google's Firebase Cloud Firestore, Muser ensures real-time data synchronization, ensuring users have up-to-date information instantly whether they are chatting, forming bands, or live streaming.
+-   Utilizing Google's Firebase Cloud Firestore, Muser offers real-time data synchronization, ensuring users have up-to-date information instantly whether they are chatting, forming bands, or live streaming.
 
 <img src='./readme//erDiagramD.jpg' width='1080'>
 
@@ -130,7 +132,7 @@ Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Clou
 
 ### Mastering AI Interaction: Unveiling the Power of Prompt Engineering:
 
--   We implemented an AI-powered matchmaking system using the latest OpenAI model. By crafting detailed prompts, the AI accurately interprets user input —considering musical genres, locations, required instruments and experience levels— to dynamically match potential bandmates. This integration enhances the user experience, making finding and forming bands efficient and exciting.
+-   We implemented an AI-powered matchmaking system using the latest OpenAI model. By crafting detailed prompts, the AI accurately interprets user input—considering musical genres, locations, required instruments and experience levels—to dynamically match potential bandmates. This integration enhances the user experience, making finding and forming bands efficient and exciting.
 
 <img src='./readme/aiPrompt.jpg' width='1080'>
 
@@ -145,7 +147,7 @@ Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Clou
 
 <img src='./readme/awsGet.jpg' width='1080'>
 
-By following these steps, we deployed our Laravel server on an AWS EC2 instance, ensuring a scalable and robust environment.
+<!-- By following these steps, we deployed our Laravel server on an AWS EC2 instance, ensuring a scalable and robust environment.
 
 1. **Launch an EC2 Instance:**
 
@@ -270,7 +272,7 @@ By following these steps, we deployed our Laravel server on an AWS EC2 instance,
         ```
 
 9. **Accessing the Laravel Application:**
-    - Open browser and navigate to the public IP or domain of our EC2 instance to see our Laravel application in action.
+    - Open browser and navigate to the public IP or domain of our EC2 instance to see our Laravel application in action. -->
 
 <br><br>
 
@@ -279,7 +281,9 @@ By following these steps, we deployed our Laravel server on an AWS EC2 instance,
 
 ### Precision in Development: Harnessing the Power of Unit Testing:
 
--   By systematically evaluating our API, we ensure a robust foundation, allowing potential issues to be identified and addressed early in the development process. Specifically, Laravel's unit testing feature was used to test the API controllers, ensuring accurate and reliable functionality.
+-   By systematically evaluating our API, we ensure a robust foundation, allowing potential issues to be identified and addressed early in the development process. Laravel's unit testing was used to test the API controllers, ensuring an accurate and reliable functionality.
+
+<img src='./readme/unitTesting.jpg' width='1080'>
 
 <br><br>
 
@@ -292,7 +296,7 @@ To set up Muser locally, follow these steps:
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/MGeorgesM/muser.git
+    git clone https://github.com/georges-mouawad/muser.git
     ```
 2. Navigate to the project directory and install NPM packages:
     ```sh
