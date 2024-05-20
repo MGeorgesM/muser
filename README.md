@@ -5,16 +5,16 @@
 <!-- project philosophy -->
 <img src="./readme/title2.svg"/>
 
-> Muser is a mobile app designed for musicians to connect with each others, spontaneously form bands, book venues, and have their performances livestreamed.
-> Muser offers its user base Live streaming, Live messaging, and an AI-powered matchmaking system to form bands effortlessly.
+
+> Muser is a mobile app designed for musicians to connect, spontaneously form bands, book venues, and livestream their performances. It offers live streaming, live messaging, and an AI-powered matchmaking system to effortlessly form bands.
 
 ### User Stories
 
 Musician:
 
--   As a musician, I want to browse and message musicians to form a band so that I can connect with like-minded individuals.
--   As a musician, I want to view and book available venues so that I can find suitable places to showcase my band's performances and reach a wider audience.
--   As a musician, I want to have my performance livestreamed so that fans and potential collaborators can watch us play in real-time, regardless of their location.
+-   As a musician, I want to browse and message musicians to form a band and connect with like-minded individuals.
+-   As a musician, I want to book available venues so that I can find suitable places to showcase my band's performances and reach a wider audience.
+-   As a musician, I want to have my performance livestreamed so that fans and potential collaborators can watch in real-time, regardless of their location.
 
 Venue:
 
@@ -29,18 +29,18 @@ Venue:
 
 ### Muser is built using the following technologies:
 
--   [Laravel 11](https://laravel.com/), a PHP framework that provides a robust set of tools for web apps development.
--   [React Native](https://reactnative.dev/), a popular framework for building mobile apps using JavaScript and React, allowing for cross-platform development with a single codebase.
--   [Firebase Cloud Firestore](https://firebase.google.com/products/firestore/), a scalable database from Firebase and Google Cloud Platform. It provides real-time data synchronization, querying, and offline support, making it ideal for building Live applications.
--   [Firebase Cloud Messaging](https://firebase.google.com/products/cloud-messaging/), a cross-platform messaging solution to send notifications reliably to users' devices.
--   [OpenAI](https://openai.com/), a provider of advanced artificial intelligence technologies and APIs. OpenAI powers our AI-driven matchmaking system, enhancing the user experience.
--   [MySQL](https://www.mysql.com/), a widely-used open-source relational database management system. It is known for its reliability, performance, and ease of use, making it an excellent choice for managing and organizing data in web apps.
+-   [Laravel 11](https://laravel.com/): A PHP framework that provides a robust set of tools for web apps development.
+-   [React Native](https://reactnative.dev/): A popular framework for building mobile apps using JavaScript and React, allowing for cross-platform development with a single codebase.
+-   [Firebase Cloud Firestore](https://firebase.google.com/products/firestore/): A scalable database from Firebase and Google Cloud Platform. It provides real-time data synchronization, querying, and offline support, making it ideal for building Live applications.
+-   [Firebase Cloud Messaging](https://firebase.google.com/products/cloud-messaging/): A cross-platform messaging solution to send notifications reliably to users' devices.
+-   [OpenAI](https://openai.com/): A provider of advanced artificial intelligence technologies and APIs. OpenAI powers our AI-driven matchmaking system, enhancing the user experience.
+-   [MySQL](https://www.mysql.com/): A widely-used open-source relational database management system. It is known for its reliability, performance, and ease of use, making it an excellent choice for managing and organizing data in web apps.
 
 <br><br>
 
 <!-- UI UX -->
 <img src="./readme/title4.svg"/>
-> Muser was designed using wireframes and mockups, iterating on the design until reaching the ideal layout for easy navigation and a seamless user experience.
+> Using wireframes and mockups, Muser was crafted through iterative design improvements to achieve an easy-to-navigate, and seamless user experience.
 
 <img src='./readme/mockups/MuserCover.jpg' width='1080'>
 
@@ -72,37 +72,37 @@ Venue:
 <!-- Implementation -->
 <img src="./readme/title6.svg"/>
 
-### User Screens and Videos
+### Screens and Videos
 
-<table style="margin: auto; width: 100%; margin-top: 32px;">
+<table>
   <tr>
       <td align="center">
 
-https://github.com/georges-mouawad/muser/assets/43368919/8fbc0e5e-f394-45e1-ab8f-43483eabbdf0
+https://github.com/georges-mouawad/muser/assets/43368919/50501832-b3d4-4142-afc3-e2ac338fc1dd
 
 </td>
       <td align="center">
 
-https://github.com/georges-mouawad/muser/assets/43368919/8fbc0e5e-f394-45e1-ab8f-43483eabbdf0
+https://github.com/georges-mouawad/muser/assets/43368919/b540332e-8411-4284-8de2-e244801d9c7f
 
 </td>
       <td align="center">
-
-https://github.com/georges-mouawad/muser/assets/43368919/37f9158c-711e-425c-8c46-93be3afcfec3
+        
+https://github.com/georges-mouawad/muser/assets/43368919/aaca19f1-d876-4a5b-a15e-2f2382c5c793
 
 </td>
 </table>
 
-<table style="margin: auto; width: 100%; margin-top: 32px;">
+<table>
   <tr>
       <td align="center">
 
-https://github.com/georges-mouawad/muser/assets/43368919/2140566d-4c1a-4e56-a44e-f20d1fbcb5a4
+https://github.com/georges-mouawad/muser/assets/43368919/fb7f43eb-c74e-42c7-b295-7be098275fe2
 
 </td>
       <td align="center">
-    
-https://github.com/georges-mouawad/muser/assets/43368919/fe739bb3-50ac-4eff-a627-98f8fe433801
+  
+https://github.com/georges-mouawad/muser/assets/43368919/c5b4cc9c-f7ea-4569-a44e-9dc36140272e
 
 </td>
 </table>
@@ -117,8 +117,8 @@ https://github.com/georges-mouawad/muser/assets/43368919/fe739bb3-50ac-4eff-a627
 
 Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Cloud Firestore) for a seamless user experience.
 
--   MySQL: with the power of Laravel Eloquent ORM and the reliability of MySQL, Muser efficiently handles structured data, complex queries, and relationships.
--   Cloud Firestore: Provides real-time data synchronization, ensuring users have up-to-date information instantly. It supports live messaging, band forming, streaming, and user reactions.
+-   With the power of Laravel Eloquent ORM and the reliability of MySQL, Muser efficiently handles structured data, complex queries, and relationships.
+-   Utilizing Google's Firebase Cloud Firestore, Muser ensures real-time data synchronization, ensuring users have up-to-date information instantly whether they are chatting, forming bands, or live streaming.
 
 <img src='./readme//erDiagramD.jpg' width='1080'>
 
@@ -129,7 +129,7 @@ Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Clou
 
 ### Mastering AI Interaction: Unveiling the Power of Prompt Engineering:
 
--   We implemented an AI-powered matchmaking system using the latest OpenAI model. By crafting detailed prompts, the AI accurately interprets user input—considering musical genres, locations, required instruments, and experience levels—to dynamically match potential bandmates. This integration enhances the user experience, making finding and forming bands efficient and exciting.
+-   We implemented an AI-powered matchmaking system using the latest OpenAI model. By crafting detailed prompts, the AI accurately interprets user input —considering musical genres, locations, required instruments and experience levels— to dynamically match potential bandmates. This integration enhances the user experience, making finding and forming bands efficient and exciting.
 
 <img src='./readme/aiPrompt.jpg' width='1080'>
 
@@ -140,7 +140,7 @@ Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Clou
 
 ### Unleashing the Potential with AWS Integration:
 
--   This project utilizes AWS deployment strategies to seamlessly integrate and deploy backend services. Focusing on scalability, reliability, and performance, the Laravel backend for Muser delivers robust and responsive solutions for diverse use cases. By deploying the Laravel backend on AWS, Muser benefits from the comprehensive suite of services and tools that AWS offers, providing a solid foundation for future growth and enhancements.
+-   By deploying the Laravel backend on AWS, Muser benefits from the comprehensive suite of services and tools that AWS offers, providing a solid foundation for future growth and enhancements.
 
 <img src='./readme/awsGet.jpg' width='1080'>
 
@@ -278,18 +278,16 @@ By following these steps, we deployed our Laravel server on an AWS EC2 instance,
 
 ### Precision in Development: Harnessing the Power of Unit Testing:
 
--   This project employs rigorous unit testing methodologies to ensure the reliability and accuracy of code components. By systematically evaluating individual units of the software, a robust foundation is guaranteed, allowing potential issues to be identified and addressed early in the development process. Specifically, Laravel's unit testing feature was used to test the API controllers, ensuring they function correctly and efficiently.
-
-<img src="./readme/unitTesting.jpg"/>
+-   By systematically evaluating our API, we ensure a robust foundation, allowing potential issues to be identified and addressed early in the development process. Specifically, Laravel's unit testing feature was used to test the API controllers, ensuring accurate and reliable functionality.
 
 <br><br>
 
 <!-- How to run -->
 <img src="./readme/title10.svg"/>
 
-> To set up Muser locally, follow these steps:
-
 ### Installation
+
+To set up Muser locally, follow these steps:
 
 1. Clone the repository:
     ```sh
