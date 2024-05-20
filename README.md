@@ -83,12 +83,13 @@ https://github.com/georges-mouawad/muser/assets/43368919/50501832-b3d4-4142-afc3
 </td>
       <td align="center">
 
-https://github.com/georges-mouawad/muser/assets/43368919/b540332e-8411-4284-8de2-e244801d9c7f
+https://github.com/georges-mouawad/muser/assets/43368919/aaca19f1-d876-4a5b-a15e-2f2382c5c793
 
 </td>
       <td align="center">
         
-https://github.com/georges-mouawad/muser/assets/43368919/aaca19f1-d876-4a5b-a15e-2f2382c5c793
+https://github.com/georges-mouawad/muser/assets/43368919/b540332e-8411-4284-8de2-e244801d9c7f
+
 
 </td>
 </table>
@@ -97,7 +98,7 @@ https://github.com/georges-mouawad/muser/assets/43368919/aaca19f1-d876-4a5b-a15e
   <tr>
       <td align="center">
 
-https://github.com/georges-mouawad/muser/assets/43368919/fb7f43eb-c74e-42c7-b295-7be098275fe2
+https://github.com/georges-mouawad/muser/assets/43368919/44171dbe-5585-4618-9b07-fd31e88dc75c
 
 </td>
       <td align="center">
