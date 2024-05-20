@@ -40,14 +40,11 @@ Venue:
 
 <!-- UI UX -->
 <img src="./readme/title4.svg"/>
+> Muser was designed using wireframes and mockups, iterating on the design until reaching the ideal layout for easy navigation and a seamless user experience.
 
 <img src='./readme/mockups/MuserCover.jpg' width='1080'>
 
-> Muser was designed using wireframes and mockups, iterating on the design until reaching the ideal layout for easy navigation and a seamless user experience.
-
 -   Project design [Figma](https://www.figma.com/design/Bg7RZIYS3dprGnSqn3273D/Muser?node-id=541%3A2275&t=VXzTQUURH5dCvkfB-1)
-
-### Mockups
 
 ### Mockups
 
@@ -59,13 +56,13 @@ Venue:
   </tr>
   <tr>
     <td>
-      <img src="./readme/mockups/userProfile.png" alt="Musician Profile" width="501" height="1024">
+      <img src="./readme/mockups/userProfile.png" alt="Musician Profile" width="250" height="511">
     </td>
     <td>
-      <img src="./readme/mockups/venue.png" alt="Venues" width="501" height="1024">
+      <img src="./readme/mockups/venue.png" alt="Venues" width="250" height="511">
     </td>
     <td>
-      <img src="./readme/mockups/venueProfile.png" alt="Venue Profile" width="501" height="1024">
+      <img src="./readme/mockups/venueProfile.png" alt="Venue Profile" width="250" height="511">
     </td>
   </tr>
 </table>
@@ -77,45 +74,53 @@ Venue:
 
 ### User Screens and Videos
 
-<!-- | Login screen                              | Register screen                         | Landing screen                          | Loading screen                          |
-| ----------------------------------------- | --------------------------------------- | --------------------------------------- | --------------------------------------- |
-| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
-| Home screen                               | Menu Screen                             | Order Screen                            | Checkout Screen                         |
-| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | -->
-
-<table style="width: 100%; max-width: 971px; margin: auto; text-align: center;">
+<table style="margin: auto; width: 100%; margin-top: 32px;">
   <tr>
-    <td style="width: 50%;">
-      <h3>Browsing Muser</h3>
-      <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EZyxsDqYX1tCmkZw5y2k3UUBfcb3pegU6-wPXRoncaugNw?e=DRGXMp">
-        <img src="./readme/thumbnails/browsingLoadingPlay.jpg" alt="Browsing Muser" width="380" height="823">
-      </a>
-    </td>
-    <td style="width: 50%;">
-      <h3>Forming Bands with Muser AI</h3>
-      <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EV5FWalaS3JFi-3CawoCp2MBpwGcqujol0hUr9rKQEnklA?e=O0FheT">
-        <img src="./readme/thumbnails/aiMatchThumbnailPlay.jpg" alt="Forming Bands with Muser AI" width="380" height="823">
-      </a>
-    </td>
-  </tr>
+      <td align="center">
+
+https://github.com/georges-mouawad/muser/assets/43368919/8fbc0e5e-f394-45e1-ab8f-43483eabbdf0
+
+</td>
+      <td align="center">
+
+https://github.com/georges-mouawad/muser/assets/43368919/8fbc0e5e-f394-45e1-ab8f-43483eabbdf0
+
+</td>
+      <td align="center">
+
+https://github.com/georges-mouawad/muser/assets/43368919/37f9158c-711e-425c-8c46-93be3afcfec3
+
+</td>
 </table>
 
-<table style="width: 100%; max-width: 971px; margin: auto; margin-top: 32px; text-align: center;">
+<table style="margin: auto; width: 100%; margin-top: 32px;">
   <tr>
-    <td style="width: 50%;">
-      <h3>Chatting & Forming Bands</h3>
-      <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EfrfbkNIPylIkw539nBJLLABIi46Vp2xF-QzmVR1VdCxig?e=Jxc5vw">
-        <img src="./readme/thumbnails/chattingThumbnail2Play.jpg" alt="Chatting & Forming Bands" width="380">
-      </a>
-    </td>
-    <td style="width: 50%;">
-      <h3>Live Streaming</h3>
-      <a href="https://1drv.ms/v/c/84fd3718045c4e7d/EYh-wVOJyGJFrwQsWQXrMjQB8IE_3UCfZ3A1W8avAl9abw?e=eAubdC">
-        <img src="./readme/thumbnails/streamingThumbnailPlay.jpg" alt="Live Streaming" width="380">
-      </a>
-    </td>
-  </tr>
+      <td align="center">
+
+https://github.com/georges-mouawad/muser/assets/43368919/2140566d-4c1a-4e56-a44e-f20d1fbcb5a4
+
+</td>
+      <td align="center">
+    
+https://github.com/georges-mouawad/muser/assets/43368919/fe739bb3-50ac-4eff-a627-98f8fe433801
+
+</td>
 </table>
+
+<br><br>
+
+<!-- Database Design -->
+
+<img src="./readme/title5.svg"/>
+
+### Integrating the Best of Both Worlds:
+
+Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Cloud Firestore) for a seamless user experience.
+
+-   MySQL: with the power of Laravel Eloquent ORM and the reliability of MySQL, Muser efficiently handles structured data, complex queries, and relationships.
+-   Cloud Firestore: Provides real-time data synchronization, ensuring users have up-to-date information instantly. It supports live messaging, band forming, streaming, and user reactions.
+
+<img src='./readme//erDiagramD.jpg' width='1080'>
 
 <br><br>
 
@@ -136,6 +141,8 @@ Venue:
 ### Unleashing the Potential with AWS Integration:
 
 -   This project utilizes AWS deployment strategies to seamlessly integrate and deploy backend services. Focusing on scalability, reliability, and performance, the Laravel backend for Muser delivers robust and responsive solutions for diverse use cases. By deploying the Laravel backend on AWS, Muser benefits from the comprehensive suite of services and tools that AWS offers, providing a solid foundation for future growth and enhancements.
+
+<img src='./readme/awsGet.jpg' width='1080'>
 
 By following these steps, we deployed our Laravel server on an AWS EC2 instance, ensuring a scalable and robust environment.
 
@@ -261,18 +268,8 @@ By following these steps, we deployed our Laravel server on an AWS EC2 instance,
         php artisan migrate --seed
         ```
 
-9. **Access Your Laravel Application:**
+9. **Accessing the Laravel Application:**
     - Open browser and navigate to the public IP or domain of our EC2 instance to see our Laravel application in action.
-
-<br><br>
-
-<!-- Database Design -->
-
-<img src="./readme/title5.svg"/>
-
-### Architecting Data Excellence: Innovative Database Design Strategies:
-
-<img src='./readme//erDiagramD.jpg' width='1080'>
 
 <br><br>
 
@@ -281,7 +278,7 @@ By following these steps, we deployed our Laravel server on an AWS EC2 instance,
 
 ### Precision in Development: Harnessing the Power of Unit Testing:
 
-- This project employs rigorous unit testing methodologies to ensure the reliability and accuracy of code components. By systematically evaluating individual units of the software, a robust foundation is guaranteed, allowing potential issues to be identified and addressed early in the development process. Specifically, Laravel's unit testing feature was used to test the API controllers, ensuring they function correctly and efficiently.
+-   This project employs rigorous unit testing methodologies to ensure the reliability and accuracy of code components. By systematically evaluating individual units of the software, a robust foundation is guaranteed, allowing potential issues to be identified and addressed early in the development process. Specifically, Laravel's unit testing feature was used to test the API controllers, ensuring they function correctly and efficiently.
 
 <img src="./readme/unitTesting.jpg"/>
 
