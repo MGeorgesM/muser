@@ -8,7 +8,7 @@
 
 >Muser is a mobile app designed for musicians to connect, spontaneously form bands, book venues, and livestream their performances. It offers live streaming, live messaging, and an AI-powered matchmaking system to effortlessly form bands.
 
-### User Stories
+### User Stories:
 
 Musician:
 
@@ -27,7 +27,7 @@ Venue:
 <!-- Tech stack -->
 <img src="./readme/title3.svg"/>
 
-### Muser is built using the following technologies:
+### Muser is Built Using the Following Technologies:
 
 -   [Laravel 11](https://laravel.com/): A PHP framework that provides a robust set of tools for web apps development.
 -   [React Native](https://reactnative.dev/): A popular framework for building mobile apps using JavaScript and React, allowing for cross-platform development with a single codebase.
@@ -41,7 +41,13 @@ Venue:
 <!-- UI UX -->
 <img src="./readme/title4.svg"/>
 
-> Using wireframes and mockups, Muser was crafted through iterative design improvements to achieve an easy-to-navigate, and seamless user experience.
+### Crafting Muser's UI. By Musicians, For Musicians:
+
+We selected madder red for its bold, energetic appeal. Paired with the Montserrat typeface, known for its modern and clean look, we used wireframes and mockups to iteratively refine Muser's design. The result is an easy-to-navigate, upscale user experience.
+
+-   Project [Figma](https://www.figma.com/design/Bg7RZIYS3dprGnSqn3273D/Muser?node-id=541%3A2275&t=VXzTQUURH5dCvkfB-1)
+
+
 
 <img src='./readme/mockups/MuserCoverLarge.jpg'>
 
@@ -64,7 +70,6 @@ Venue:
   </tr>
 </table> -->
 
--   Project design [Figma](https://www.figma.com/design/Bg7RZIYS3dprGnSqn3273D/Muser?node-id=541%3A2275&t=VXzTQUURH5dCvkfB-1)
 
 <br><br>
 
@@ -86,8 +91,6 @@ Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Clou
 <!-- Implementation -->
 <img src="./readme/title6.svg"/>
 
-### Screens and Videos
-
 <table>
   <tr>
       <td align="center">
@@ -97,12 +100,12 @@ https://github.com/georgesMouawad/muser/assets/43368919/e0d27b16-d610-4480-86f3-
 </td>
       <td align="center">
 
-https://github.com/georgesMouawad/muser/assets/43368919/305afe1d-e20f-4200-a86f-3b112cd6c539
+https://github.com/georgesMouawad/muser/assets/43368919/cb899002-3b8e-4049-b52b-deb6c75e024d
 
 </td>
       <td align="center">
         
-https://github.com/georgesMouawad/muser/assets/43368919/55471724-74e1-4416-b6cc-0b87d6a395f7
+https://github.com/georgesMouawad/muser/assets/43368919/231012af-852c-476b-9c1b-1b38af5c0808
 
 
 </td>
@@ -112,12 +115,12 @@ https://github.com/georgesMouawad/muser/assets/43368919/55471724-74e1-4416-b6cc-
   <tr>
       <td align="center">
 
-https://github.com/georgesMouawad/muser/assets/43368919/ac8934be-a56e-4649-87ae-c7c6425fa66b
+https://github.com/georgesMouawad/muser/assets/43368919/1378b7ea-2055-47c9-9ef1-4c9380fc8266
 
 </td>
       <td align="center">
   
-https://github.com/georgesMouawad/muser/assets/43368919/9541efbe-6312-4713-8a66-3fb935296364
+https://github.com/georgesMouawad/muser/assets/43368919/4c605a21-31e3-4c7d-a6e1-2aeb5f31c39c
 
 </td>
 </table>
@@ -127,7 +130,7 @@ https://github.com/georgesMouawad/muser/assets/43368919/9541efbe-6312-4713-8a66-
 <!-- Prompt Engineering -->
 <img src="./readme/title7.svg"/>
 
-### Mastering AI Interaction: Unveiling the Power of Prompt Engineering:
+### Mastering AI Interaction, Unveiling the Power of Prompt Engineering:
 
 -   We implemented an AI-powered matchmaking system using the latest OpenAI model. By crafting detailed prompts, the AI accurately interprets user input—considering musical genres, locations, required instruments and experience levels—to dynamically match potential bandmates. This integration enhances the user experience, making finding and forming bands efficient and exciting.
 
@@ -138,7 +141,7 @@ https://github.com/georgesMouawad/muser/assets/43368919/9541efbe-6312-4713-8a66-
 <!-- AWS Deployment -->
 <img src="./readme/title8.svg"/>
 
-### Unleashing the Potential with AWS Integration:
+### Future Proofing with AWS:
 
 -   By deploying the Laravel backend on AWS, Muser benefits from the comprehensive suite of services and tools that AWS offers, providing a solid foundation for future growth and enhancements.
 
@@ -276,7 +279,7 @@ https://github.com/georgesMouawad/muser/assets/43368919/9541efbe-6312-4713-8a66-
 <!-- Unit Testing -->
 <img src="./readme/title9.svg"/>
 
-### Precision in Development: Harnessing the Power of Unit Testing:
+### Precision in Development, Unit Testing:
 
 -   By evaluating our API, we ensure a robust foundation, allowing potential issues to be identified and addressed early in the development process. Laravel's unit testing was used to test the API controllers, providing accurate and reliable functionality.
 
@@ -287,21 +290,21 @@ https://github.com/georgesMouawad/muser/assets/43368919/9541efbe-6312-4713-8a66-
 <!-- How to run -->
 <img src="./readme/title10.svg"/>
 
-### Installation
+### Installation:
 
 To set up Muser locally, follow these steps:
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/georges-mouawad/muser.git
+    git clone https://github.com/georgesMouawad/muser.git
     ```
 2. Navigate to the project directory and install NPM packages:
     ```sh
     cd muser
     npm install
     ```
-3. Connect our phone to our computer using a USB cable and ensure that our device is set up for development.
-4. Build and run the app on our connected device:
+3. Connect your phone to your computer using a USB cable and ensure that your device is set up for development.
+4. Build and run the app on your connected device:
 
     ```sh
     # Build for Android
