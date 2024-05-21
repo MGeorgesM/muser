@@ -68,47 +68,6 @@ Venue:
 
 <br><br>
 
-<!-- Implementation -->
-<img src="./readme/title6.svg"/>
-
-### Screens and Videos
-
-<table>
-  <tr>
-      <td align="center">
-
-https://github.com/georges-mouawad/muser/assets/43368919/50501832-b3d4-4142-afc3-e2ac338fc1dd
-
-</td>
-      <td align="center">
-
-https://github.com/georges-mouawad/muser/assets/43368919/aaca19f1-d876-4a5b-a15e-2f2382c5c793
-
-</td>
-      <td align="center">
-        
-https://github.com/georges-mouawad/muser/assets/43368919/b540332e-8411-4284-8de2-e244801d9c7f
-
-
-</td>
-</table>
-
-<table>
-  <tr>
-      <td align="center">
-
-https://github.com/georges-mouawad/muser/assets/43368919/44171dbe-5585-4618-9b07-fd31e88dc75c
-
-</td>
-      <td align="center">
-  
-https://github.com/georges-mouawad/muser/assets/43368919/c5b4cc9c-f7ea-4569-a44e-9dc36140272e
-
-</td>
-</table>
-
-<br><br>
-
 <!-- Database Design -->
 
 <img src="./readme/title5.svg"/>
@@ -121,6 +80,47 @@ Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Clou
 -   Utilizing Google's Firebase Cloud Firestore, Muser offers real-time data synchronization, ensuring users have up-to-date information instantly whether they are chatting, forming bands, or live streaming.
 
 <img src='./readme//erDiagramD.jpg' width='1080'>
+
+<br><br>
+
+<!-- Implementation -->
+<img src="./readme/title6.svg"/>
+
+### Screens and Videos
+
+<table>
+  <tr>
+      <td align="center">
+
+https://github.com/georgesMouawad/muser/assets/43368919/e0d27b16-d610-4480-86f3-38b9dd14f38c
+
+</td>
+      <td align="center">
+
+https://github.com/georgesMouawad/muser/assets/43368919/305afe1d-e20f-4200-a86f-3b112cd6c539
+
+</td>
+      <td align="center">
+        
+https://github.com/georgesMouawad/muser/assets/43368919/55471724-74e1-4416-b6cc-0b87d6a395f7
+
+
+</td>
+</table>
+
+<table>
+  <tr>
+      <td align="center">
+
+https://github.com/georgesMouawad/muser/assets/43368919/ac8934be-a56e-4649-87ae-c7c6425fa66b
+
+</td>
+      <td align="center">
+  
+https://github.com/georgesMouawad/muser/assets/43368919/9541efbe-6312-4713-8a66-3fb935296364
+
+</td>
+</table>
 
 <br><br>
 
@@ -278,7 +278,7 @@ Muser utilizes a relational database (MySQL) and a NoSQL database (Firebase Clou
 
 ### Precision in Development: Harnessing the Power of Unit Testing:
 
--   By evaluating our API, we ensure a robust foundation, allowing potential issues to be identified and addressed early in the development process. Laravel's unit testing was used to test the API controllers, ensuring an accurate and reliable functionality.
+-   By evaluating our API, we ensure a robust foundation, allowing potential issues to be identified and addressed early in the development process. Laravel's unit testing was used to test the API controllers, providing accurate and reliable functionality.
 
 <img src='./readme/unitTesting.jpg' width='1080'>
 
